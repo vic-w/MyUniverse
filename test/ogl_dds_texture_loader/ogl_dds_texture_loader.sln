@@ -1,0 +1,20 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual C++ Express 2010
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ogl_dds_texture_loader", "ogl_dds_texture_loader.vcxproj", "{652E84DA-D99C-44E4-83E7-5CB30ED395F7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{652E84DA-D99C-44E4-83E7-5CB30ED395F7}.Debug|Win32.ActiveCfg = Debug|Win32
+		{652E84DA-D99C-44E4-83E7-5CB30ED395F7}.Debug|Win32.Build.0 = Debug|Win32
+		{652E84DA-D99C-44E4-83E7-5CB30ED395F7}.Release|Win32.ActiveCfg = Release|Win32
+		{652E84DA-D99C-44E4-83E7-5CB30ED395F7}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
