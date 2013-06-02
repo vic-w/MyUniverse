@@ -41,7 +41,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <LibraryPath>E:\MyUniverse\trunk\lib;$(LibraryPath)</LibraryPath>
+    <LibraryPath>E:\MyUniverse\trunk\lib;..\Debug;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -56,7 +56,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>cxcore.lib;cv.lib;highgui.lib</AdditionalDependencies>
+      <AdditionalDependencies>cxcore.lib;cv.lib;highgui.lib;GlbCore.lib</AdditionalDependencies>
     </Link>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>
@@ -101,8 +101,6 @@
     <None Include="res\MyUniverse.rc2" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="dds.h" />
-    <ClInclude Include="draw.h" />
     <ClInclude Include="GLShow.h" />
     <ClInclude Include="image.h" />
     <ClInclude Include="MyUniverse.h" />
@@ -113,8 +111,6 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="dds.cpp" />
-    <ClCompile Include="draw.cpp" />
     <ClCompile Include="GLShow.cpp" />
     <ClCompile Include="image.cpp" />
     <ClCompile Include="MyUniverse.cpp" />

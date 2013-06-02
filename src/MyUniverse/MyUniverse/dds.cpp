@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "dds.h"
 #include "gl/gl.h"
 

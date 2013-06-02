@@ -5,6 +5,7 @@
 #include "image.h"
 #include "draw.h"
 #include "rotation.h"
+#include "..\..\GlbCore\GlbCore.h"
 
 extern GlbRotmat g_GlobeRotMat;
 
@@ -416,6 +417,18 @@ void DrawCalib()
 
 DWORD WINAPI DrawGLScene(LPVOID lpParam)
 {
-	CreateGLWindow("MyUniverse",200,200,16,false);//glOrtho的参数与此对应
-	return 1;
+    CreateGLWindow("MyUniverse",200,200,16,false);//glOrtho的参数与此对应
+    glbCreateWindow(0);
+
+    GlbImage Image = glbLoadImage("a001.dds");
+
+    do
+    {
+        glbDrawImage(Image);
+        glbUpdateWindow(0);
+    }while(1);
+
+    glbReleaseImage(&Image);
+    glbDestoryWindow(0);
+    return 1;
 }
