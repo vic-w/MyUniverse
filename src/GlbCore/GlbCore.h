@@ -1,4 +1,5 @@
 #pragma once
+#include "windows.h"
 
 #ifdef GLBCORE_EXPORTS
 #define GLBCORE_API __declspec(dllexport)
