@@ -101,21 +101,15 @@
     <None Include="res\MyUniverse.rc2" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="GLShow.h" />
-    <ClInclude Include="image.h" />
     <ClInclude Include="MyUniverse.h" />
     <ClInclude Include="MyUniverseDlg.h" />
     <ClInclude Include="Resource.h" />
-    <ClInclude Include="rotation.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="GLShow.cpp" />
-    <ClCompile Include="image.cpp" />
     <ClCompile Include="MyUniverse.cpp" />
     <ClCompile Include="MyUniverseDlg.cpp" />
-    <ClCompile Include="rotation.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>

@@ -6,7 +6,7 @@
 #include "MyUniverse.h"
 #include "MyUniverseDlg.h"
 #include "afxdialogex.h"
-#include "GLShow.h"
+#include "..\..\GlbCore\GlbCore.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -16,10 +16,10 @@
 #pragma comment( linker, "/subsystem:console /entry:WinMainCRTStartup" )
 #endif
 
-extern int g_rot_x;
-extern int g_rot_y;
-extern int g_rot_z;
-
+//extern int g_rot_x;
+//extern int g_rot_y;
+//extern int g_rot_z;
+DWORD WINAPI GlobeThread(LPVOID lpParam);
 
 // 用于应用程序“关于”菜单项的 CAboutDlg 对话框
 
@@ -126,7 +126,7 @@ BOOL CMyUniverseDlg::OnInitDialog()
 
 	// TODO: 在此添加额外的初始化代码
 	
-	CreateThread(0, 0, DrawGLScene, 0,0,0);//启动OpenGL显示线程
+	CreateThread(0, 0, GlobeThread, 0,0,0);//启动OpenGL显示线程
 
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
@@ -185,7 +185,7 @@ void CMyUniverseDlg::OnNMCustomdrawSliderRotX(NMHDR *pNMHDR, LRESULT *pResult)
 {
 	LPNMCUSTOMDRAW pNMCD = reinterpret_cast<LPNMCUSTOMDRAW>(pNMHDR);
 	// TODO: 在此添加控件通知处理程序代码
-	g_rot_x = m_edit_rot_x_value = (m_slide_rot_x.GetPos());
+	m_edit_rot_x_value = (m_slide_rot_x.GetPos());
 	UpdateData(FALSE);
 	//printf("%d\n", m_edit_rot_x_value);
 	*pResult = 0;
@@ -196,7 +196,7 @@ void CMyUniverseDlg::OnNMCustomdrawSliderRotY(NMHDR *pNMHDR, LRESULT *pResult)
 {
 	LPNMCUSTOMDRAW pNMCD = reinterpret_cast<LPNMCUSTOMDRAW>(pNMHDR);
 	// TODO: 在此添加控件通知处理程序代码
-	g_rot_y = m_edit_rot_y_value = (m_slide_rot_y.GetPos());
+	m_edit_rot_y_value = (m_slide_rot_y.GetPos());
 	UpdateData(FALSE);
 	*pResult = 0;
 }
@@ -207,7 +207,7 @@ void CMyUniverseDlg::OnNMCustomdrawSliderRotZ(NMHDR *pNMHDR, LRESULT *pResult)
 {
 	LPNMCUSTOMDRAW pNMCD = reinterpret_cast<LPNMCUSTOMDRAW>(pNMHDR);
 	// TODO: 在此添加控件通知处理程序代码
-	g_rot_z = m_edit_rot_z_value = (m_slide_rot_z.GetPos());
+	m_edit_rot_z_value = (m_slide_rot_z.GetPos());
 	UpdateData(FALSE);
 	*pResult = 0;
 }
@@ -229,4 +229,23 @@ void CMyUniverseDlg::OnBnClickedCancel()
 	{
 		CDialogEx::OnCancel();
 	}
+}
+
+DWORD WINAPI GlobeThread(LPVOID lpParam)
+{
+    //CreateGLWindow("MyUniverse",200,200,16,false);//glOrtho的参数与此对应
+    glbCreateWindow(0);
+
+    //GlbImage Image = glbLoadImage("a001.dds");
+    GlbImage Image = glbLoadImage("earth.jpg");
+
+    do
+    {
+        glbDrawImage(Image);
+        glbUpdateWindow(0);
+    }while(1);
+
+    glbReleaseImage(&Image);
+    glbDestoryWindow(0);
+    return 1;
 }

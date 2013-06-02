@@ -2,6 +2,9 @@
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MyUniverse", "MyUniverse\MyUniverse.vcxproj", "{40C78A8C-861C-4E34-8B89-4E44BE42EBAA}"
+	ProjectSection(ProjectDependencies) = postProject
+		{6C0DF790-FA8E-451B-9250-F8CF00581BB8} = {6C0DF790-FA8E-451B-9250-F8CF00581BB8}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GlbCore", "..\GlbCore\GlbCore.vcxproj", "{6C0DF790-FA8E-451B-9250-F8CF00581BB8}"
 EndProject
