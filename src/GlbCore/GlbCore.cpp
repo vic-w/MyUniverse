@@ -4,6 +4,7 @@
 #include "GlbType.h"
 #include <stdio.h>
 #include <malloc.h>
+#include "opencv.hpp"
 
 DDS_IMAGE_DATA* glbLoadDDSFile(const char* filename);
 PFNGLCOMPRESSEDTEXIMAGE2DARBPROC glCompressedTexImage2DARB;
@@ -34,67 +35,119 @@ Vertex g_quadVertices[] =
 
 GlbImage glbLoadImage(const char* filename)  //载入图像（支持dds,jpg,png）
 {
-    printf("filename = %s, size = %d\n", filename, sizeof(filename));
+    int fileNameLen = strlen(filename);
+    const char* suffix = filename + fileNameLen - 3;
+    //printf("filename = %s, suffix = %s\n", filename, suffix);
 
-    GLuint TextureID = -1;
-    DDS_IMAGE_DATA *pDDSImageData = glbLoadDDSFile(filename);
-
-    if( pDDSImageData != NULL )
+    if(_stricmp(suffix,"dds") == 0)
     {
-        int nHeight     = pDDSImageData->height;
-        int nWidth      = pDDSImageData->width;
-        int nNumMipMaps = pDDSImageData->numMipMaps;
+        GLuint TextureID = -1;
+        DDS_IMAGE_DATA *pDDSImageData = glbLoadDDSFile(filename);
 
-        int nBlockSize;
-
-        if( pDDSImageData->format == GL_COMPRESSED_RGBA_S3TC_DXT1_EXT )
-            nBlockSize = 8;
-        else
-            nBlockSize = 16;
-
-        glGenTextures( 1, &TextureID );
-        glBindTexture( GL_TEXTURE_2D, TextureID );
-
-        glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
-        glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
-
-        int nSize;
-        int nOffset = 0;
-
-        // Load the mip-map levels
-
-        for( int i = 0; i < nNumMipMaps; ++i )
+        if( pDDSImageData != NULL )
         {
-            if( nWidth  == 0 ) nWidth  = 1;
-            if( nHeight == 0 ) nHeight = 1;
+            int nHeight     = pDDSImageData->height;
+            int nWidth      = pDDSImageData->width;
+            int nNumMipMaps = pDDSImageData->numMipMaps;
 
-            nSize = ((nWidth+3)/4) * ((nHeight+3)/4) * nBlockSize;
+            int nBlockSize;
 
-            glCompressedTexImage2DARB( GL_TEXTURE_2D,
-                                       i,
-                                       pDDSImageData->format,
-                                       nWidth,
-                                       nHeight,
-                                       0,
-                                       nSize,
-                                       pDDSImageData->pixels + nOffset );
+            if( pDDSImageData->format == GL_COMPRESSED_RGBA_S3TC_DXT1_EXT )
+                nBlockSize = 8;
+            else
+                nBlockSize = 16;
 
-            nOffset += nSize;
+            glGenTextures( 1, &TextureID );
+            glBindTexture( GL_TEXTURE_2D, TextureID );
 
-            // Half the image size for the next mip-map level...
-            nWidth  = (nWidth  / 2);
-            nHeight = (nHeight / 2);
+            glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
+            glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+
+            int nSize;
+            int nOffset = 0;
+
+            // Load the mip-map levels
+
+            for( int i = 0; i < nNumMipMaps; ++i )
+            {
+                if( nWidth  == 0 ) nWidth  = 1;
+                if( nHeight == 0 ) nHeight = 1;
+
+                nSize = ((nWidth+3)/4) * ((nHeight+3)/4) * nBlockSize;
+
+                glCompressedTexImage2DARB( GL_TEXTURE_2D,
+                                           i,
+                                           pDDSImageData->format,
+                                           nWidth,
+                                           nHeight,
+                                           0,
+                                           nSize,
+                                           pDDSImageData->pixels + nOffset );
+
+                nOffset += nSize;
+
+                // Half the image size for the next mip-map level...
+                nWidth  = (nWidth  / 2);
+                nHeight = (nHeight / 2);
+            }
         }
-    }
 
-    if( pDDSImageData != NULL )
+        if( pDDSImageData != NULL )
+        {
+            if( pDDSImageData->pixels != NULL )
+                free( pDDSImageData->pixels );
+
+            free( pDDSImageData );
+        }
+        return TextureID;
+    }
+    else if(_stricmp(suffix,"jpg") == 0 
+         || _stricmp(suffix,"bmp") == 0 
+         || _stricmp(suffix,"png") == 0)
     {
-        if( pDDSImageData->pixels != NULL )
-            free( pDDSImageData->pixels );
+        GLuint TextureID = -1;
+        IplImage *image = cvLoadImage(filename);
 
-        free( pDDSImageData );
+        if(!image)
+        {
+            MessageBox(0, "读取图像错误！", NULL, MB_OK);
+            return false;
+        }
+
+        int sizeX,sizeY;
+        sizeX = image->width;
+        sizeY = image->height;
+
+        float texAspectRatio = (float)sizeX / (float)sizeY;
+
+        // Generate a texture with the associative texture ID stored in the array
+        glGenTextures(1, &TextureID);
+
+        // This sets the alignment requirements for the start of each pixel row in memory.
+        // glPixelStorei (GL_UNPACK_ALIGNMENT, 1);
+
+        // Bind the texture to the texture arrays index and init the texture
+        glBindTexture(GL_TEXTURE_2D, TextureID);
+
+        //Assign the mip map levels and texture info
+        // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
+        glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+        // Build Mipmaps (builds different versions of the picture for distances - looks better)
+
+        gluBuild2DMipmaps(GL_TEXTURE_2D, 3, sizeX, sizeY, GL_BGR_EXT, GL_UNSIGNED_BYTE, image->imageData);
+
+        //glEnable(GL_TEXTURE_2D);
+        // Now we need to free the image data that we loaded since openGL stored it as a texture
+        cvReleaseImage(&image);
+        return TextureID;
     }
-    return TextureID;
+    else
+    {
+        MessageBox(0, "图像格式不支持！", NULL, MB_OK);
+        return 0;
+    }
 }
 
 void glbReleaseImage(GlbImage* pImage)            //释放图像
