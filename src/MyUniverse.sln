@@ -2,10 +2,16 @@
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MyUniverse", "MyUniverse\MyUniverse.vcxproj", "{3D2415B1-2BED-4E62-8733-400936764CFF}"
+	ProjectSection(ProjectDependencies) = postProject
+		{6C0DF790-FA8E-451B-9250-F8CF00581BB8} = {6C0DF790-FA8E-451B-9250-F8CF00581BB8}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GlbCore", "GlbCore\GlbCore.vcxproj", "{6C0DF790-FA8E-451B-9250-F8CF00581BB8}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ConsoleTest", "ConsoleTest\ConsoleTest.vcxproj", "{74733630-1FAF-4829-8634-36F1B34783D3}"
+	ProjectSection(ProjectDependencies) = postProject
+		{6C0DF790-FA8E-451B-9250-F8CF00581BB8} = {6C0DF790-FA8E-451B-9250-F8CF00581BB8}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
