@@ -34,7 +34,6 @@ Vertex g_quadVertices[] =
 
 GlbRotmat g_GlobeRotMat;
 
-
 #define FACET_SCACLE_IN_ANGLE (6) //每个面片占的最小角度
 #define MAX_FACET_SHOW_THRESHOLD (0.4f)//能显示的最大面片的size
 
@@ -449,6 +448,8 @@ int glbCreateWindow(HINSTANCE   hInstance)
     UpdateWindow( g_hWnd );
 
     GL_Init(g_hWnd);
+
+    CreateGlbRotmat(g_GlobeRotMat);
     return 1;
 }//*/
 
@@ -640,9 +641,11 @@ void DrawTexture(
 
     for(int x=0; x<=nRow; x++)
     {
-        delete [] PointArr[x];
+        delete [nCol+1] (PointArr[x]);
+        PointArr[x] = NULL;
     }
-    delete [] PointArr;
+    delete [nRow+1] PointArr;
+    PointArr = NULL;
 
     //输出pClose
     PivotRotPoint(pRect, pivot_v, height/2.0f, pClose);
