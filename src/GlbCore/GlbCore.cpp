@@ -480,7 +480,7 @@ void glbDrawImage( GlbImage image )
 
     glDisable(GL_BLEND);
 
-    SwapBuffers( g_hDC );
+    //SwapBuffers( g_hDC );
 }
 
 void glbDestoryWindow( HINSTANCE   hInstance )   
@@ -507,6 +507,7 @@ int glbUpdateWindow(int ms)
     MSG uMsg;
     memset(&uMsg,0,sizeof(uMsg));
 
+    SwapBuffers( g_hDC );
     if( PeekMessage( &uMsg, NULL, 0, 0, PM_REMOVE ) )
     {
         TranslateMessage( &uMsg );
@@ -661,7 +662,7 @@ void DrawTexture(
     PivotRotPoint(pRect, pivot_v, height/2.0f, pClose);
     PivotRotPoint(pClose, pivot_h, width/2.0f, pClose);
 
-    SwapBuffers( g_hDC );
+    //SwapBuffers( g_hDC );
 }
 
 void DrawLineOnGlobe(GlbPointGeo geoStartPoint, GlbPointGeo geoEndPoint, int layer)

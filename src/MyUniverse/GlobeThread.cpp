@@ -10,8 +10,8 @@ DWORD WINAPI GlobeThread(LPVOID lpParam)
 
     do
     {
-        //glbDrawImage(Image);
-        glbClearWindow();
+        glbClearWindow();        
+        glbDrawImage(Image);
         DrawGlobe(Image);
     }while(glbUpdateWindow(30));
 
