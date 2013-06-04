@@ -41,7 +41,7 @@
     <LinkIncremental>true</LinkIncremental>
     <ReferencePath>$(ReferencePath)</ReferencePath>
     <IncludePath>..\..\3rdparty\OpenGL;..\..\3rdparty\opencv231\include;$(IncludePath)</IncludePath>
-    <LibraryPath>..\..\3rdparty\OpenGL;$(LibraryPath)</LibraryPath>
+    <LibraryPath>..\..\3rdparty\OpenGL;..\..\3rdparty\opencv231\lib\Release;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
