@@ -453,6 +453,16 @@ int glbCreateWindow(HINSTANCE   hInstance)
     return 1;
 }//*/
 
+void glbClearWindow()
+{
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);			// 清除屏幕和深度缓存
+	glLoadIdentity();							// 重置当前的模型观察矩阵
+	glMatrixMode( GL_PROJECTION );
+	glLoadIdentity();
+	float W_H_Rate = 1;
+	glOrtho( -W_H_Rate, W_H_Rate, -1, 1, -10, 20);
+	glMatrixMode( GL_MODELVIEW );
+}
 void glbDrawImage( GlbImage image )
 {
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
@@ -650,6 +660,8 @@ void DrawTexture(
     //输出pClose
     PivotRotPoint(pRect, pivot_v, height/2.0f, pClose);
     PivotRotPoint(pClose, pivot_h, width/2.0f, pClose);
+
+    SwapBuffers( g_hDC );
 }
 
 void DrawLineOnGlobe(GlbPointGeo geoStartPoint, GlbPointGeo geoEndPoint, int layer)
