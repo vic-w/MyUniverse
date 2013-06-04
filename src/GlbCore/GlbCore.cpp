@@ -32,6 +32,11 @@ Vertex g_quadVertices[] =
     { 0.0f,1.0f, -1.0f, 1.0f, 0.0f }
 };
 
+GlbRotmat g_GlobeRotMat;
+
+
+#define FACET_SCACLE_IN_ANGLE (6) //每个面片占的最小角度
+#define MAX_FACET_SHOW_THRESHOLD (0.4f)//能显示的最大面片的size
 
 GlbImage glbLoadImage(const char* filename)  //载入图像（支持dds,jpg,png）
 {
@@ -76,13 +81,13 @@ GlbImage glbLoadImage(const char* filename)  //载入图像（支持dds,jpg,png）
                 nSize = ((nWidth+3)/4) * ((nHeight+3)/4) * nBlockSize;
 
                 glCompressedTexImage2DARB( GL_TEXTURE_2D,
-                                           i,
-                                           pDDSImageData->format,
-                                           nWidth,
-                                           nHeight,
-                                           0,
-                                           nSize,
-                                           pDDSImageData->pixels + nOffset );
+                    i,
+                    pDDSImageData->format,
+                    nWidth,
+                    nHeight,
+                    0,
+                    nSize,
+                    pDDSImageData->pixels + nOffset );
 
                 nOffset += nSize;
 
@@ -102,8 +107,8 @@ GlbImage glbLoadImage(const char* filename)  //载入图像（支持dds,jpg,png）
         return TextureID;
     }
     else if(_stricmp(suffix,"jpg") == 0 
-         || _stricmp(suffix,"bmp") == 0 
-         || _stricmp(suffix,"png") == 0)
+        || _stricmp(suffix,"bmp") == 0 
+        || _stricmp(suffix,"png") == 0)
     {
         GLuint TextureID = -1;
         IplImage *image = cvLoadImage(filename);
@@ -202,30 +207,30 @@ DDS_IMAGE_DATA* glbLoadDDSFile( const char *filename )
 
     switch( ddsd.ddpfPixelFormat.dwFourCC )
     {
-        case FOURCC_DXT1:
-            // DXT1's compression ratio is 8:1
-            pDDSImageData->format = GL_COMPRESSED_RGBA_S3TC_DXT1_EXT;
-            factor = 2;
-            break;
+    case FOURCC_DXT1:
+        // DXT1's compression ratio is 8:1
+        pDDSImageData->format = GL_COMPRESSED_RGBA_S3TC_DXT1_EXT;
+        factor = 2;
+        break;
 
-        case FOURCC_DXT3:
-            // DXT3's compression ratio is 4:1
-            pDDSImageData->format = GL_COMPRESSED_RGBA_S3TC_DXT3_EXT;
-            factor = 4;
-            break;
+    case FOURCC_DXT3:
+        // DXT3's compression ratio is 4:1
+        pDDSImageData->format = GL_COMPRESSED_RGBA_S3TC_DXT3_EXT;
+        factor = 4;
+        break;
 
-        case FOURCC_DXT5:
-            // DXT5's compression ratio is 4:1
-            pDDSImageData->format = GL_COMPRESSED_RGBA_S3TC_DXT5_EXT;
-            factor = 4;
-            break;
+    case FOURCC_DXT5:
+        // DXT5's compression ratio is 4:1
+        pDDSImageData->format = GL_COMPRESSED_RGBA_S3TC_DXT5_EXT;
+        factor = 4;
+        break;
 
-        default:
-            char str[255];
-            sprintf_s( str, 255, "The file \"%s\" doesn't appear to be compressed "
-                "using DXT1, DXT3, or DXT5!", filename );
-            MessageBox( NULL, str, "ERROR", MB_OK|MB_ICONEXCLAMATION );
-            return NULL;
+    default:
+        char str[255];
+        sprintf_s( str, 255, "The file \"%s\" doesn't appear to be compressed "
+            "using DXT1, DXT3, or DXT5!", filename );
+        MessageBox( NULL, str, "ERROR", MB_OK|MB_ICONEXCLAMATION );
+        return NULL;
     }
 
     //
@@ -265,9 +270,9 @@ DDS_IMAGE_DATA* glbLoadDDSFile( const char *filename )
 
 //*
 LRESULT CALLBACK WinProc( HWND   hWnd, 
-                             UINT   msg, 
-                             WPARAM wParam, 
-                             LPARAM lParam )
+    UINT   msg, 
+    WPARAM wParam, 
+    LPARAM lParam )
 {
     static POINT ptLastMousePosit;
     static POINT ptCurrentMousePosit;
@@ -275,22 +280,22 @@ LRESULT CALLBACK WinProc( HWND   hWnd,
 
     switch( msg )
     {
-        case WM_KEYDOWN:
+    case WM_KEYDOWN:
         {
             switch( wParam )
             {
-                case VK_ESCAPE:
-                    PostQuitMessage(0);
+            case VK_ESCAPE:
+                PostQuitMessage(0);
                 break;
 
-                case VK_F1:
-                    //g_bUseCompressedTexture = !g_bUseCompressedTexture;
+            case VK_F1:
+                //g_bUseCompressedTexture = !g_bUseCompressedTexture;
                 break;
             }
         }
         break;
 
-        case WM_LBUTTONDOWN:
+    case WM_LBUTTONDOWN:
         {
             ptLastMousePosit.x = ptCurrentMousePosit.x = LOWORD (lParam);
             ptLastMousePosit.y = ptCurrentMousePosit.y = HIWORD (lParam);
@@ -298,13 +303,13 @@ LRESULT CALLBACK WinProc( HWND   hWnd,
         }
         break;
 
-        case WM_LBUTTONUP:
+    case WM_LBUTTONUP:
         {
             bMousing = false;
         }
         break;
 
-        case WM_MOUSEMOVE:
+    case WM_MOUSEMOVE:
         {
             ptCurrentMousePosit.x = LOWORD (lParam);
             ptCurrentMousePosit.y = HIWORD (lParam);
@@ -314,13 +319,13 @@ LRESULT CALLBACK WinProc( HWND   hWnd,
                 g_fSpinX -= (ptCurrentMousePosit.x - ptLastMousePosit.x);
                 g_fSpinY -= (ptCurrentMousePosit.y - ptLastMousePosit.y);
             }
-            
+
             ptLastMousePosit.x = ptCurrentMousePosit.x;
             ptLastMousePosit.y = ptCurrentMousePosit.y;
         }
         break;
 
-        case WM_SIZE:
+    case WM_SIZE:
         {
             int nWidth  = LOWORD(lParam); 
             int nHeight = HIWORD(lParam);
@@ -332,18 +337,18 @@ LRESULT CALLBACK WinProc( HWND   hWnd,
         }
         break;
 
-        case WM_CLOSE:
+    case WM_CLOSE:
         {
             PostQuitMessage(0); 
         }
 
-        case WM_DESTROY:
+    case WM_DESTROY:
         {
             PostQuitMessage(0);
         }
         break;
-        
-        default:
+
+    default:
         {
             return DefWindowProc( hWnd, msg, wParam, lParam );
         }
@@ -367,7 +372,7 @@ void GL_Init( HWND hWnd )
     pfd.iPixelType = PFD_TYPE_RGBA;
     pfd.cColorBits = 16;
     pfd.cDepthBits = 16;
-    
+
     g_hDC = GetDC( hWnd );
     PixelFormat = ChoosePixelFormat( g_hDC, &pfd );
     SetPixelFormat( g_hDC, PixelFormat, &pfd);
@@ -424,16 +429,16 @@ int glbCreateWindow(HINSTANCE   hInstance)
     winClass.lpszMenuName  = NULL;
     winClass.cbClsExtra    = 0;
     winClass.cbWndExtra    = 0;
-    
+
     if( !RegisterClassEx(&winClass) )
     {
         return 0;
     }
 
     g_hWnd = CreateWindowEx( NULL, "GLB_WINDOWS_CLASS", //倒数第二个参数应该是hInstance
-                             "MyUniverse",
-                             WS_OVERLAPPEDWINDOW | WS_VISIBLE,
-                             0, 0, 640, 480, NULL, NULL, NULL, NULL );
+        "MyUniverse",
+        WS_OVERLAPPEDWINDOW | WS_VISIBLE,
+        0, 0, 640, 480, NULL, NULL, NULL, NULL );
 
     if( g_hWnd == NULL )
     {
@@ -507,4 +512,243 @@ int glbUpdateWindow(int ms)
     {
         return 1;
     }
+}
+
+void DrawTexture(
+                    GlbImage Image, 
+                    GlbPointGeo pGeo,
+                    bool bPointOnGlobe,
+                    GlbPointGeo pGeoDirect,
+                    bool bDirOnGlobe,
+                    bool bHeadDirect,
+                    float width,
+                    float height,
+                    float layer,
+                    GlbTexMode mode,
+                    GlbPoint3d &pClose
+    )
+{
+    int nRow = (int)(height/FACET_SCACLE_IN_ANGLE)+1;
+    int nCol = (int)(width/FACET_SCACLE_IN_ANGLE)+1;
+
+
+    float mHeight = height/nRow;
+    float mWidth = width/nCol;
+
+    //计算当前城市的位置
+    GlbPoint3d pRect;
+    GlbPoint2d r_pRound;
+    Geo2Rect(pGeo, pRect);
+    if(bPointOnGlobe)
+    {
+        Sphere2Sphere(pRect, g_GlobeRotMat, pRect);
+    }
+
+    GlbPoint3d pivot_v, pivot_h;
+    GlbPoint3d pRectDirect;
+    Geo2Rect(pGeoDirect, pRectDirect);
+    if(bDirOnGlobe)
+    {
+        Sphere2Sphere(pRectDirect, g_GlobeRotMat, pRectDirect);
+    }
+
+    CreateNormPivot( pRect, pRectDirect, bHeadDirect, pivot_h, pivot_v);
+    if(mode == GLB_TEX_BELT)
+    {
+        pivot_h = pRectDirect;
+    }
+
+    GlbPoint3d **PointArr = new GlbPoint3d*[nRow+1];
+    for(int x=0; x<=nRow; x++)
+    {
+        PointArr[x] = new GlbPoint3d[nCol+1];
+    }
+
+    float angle_h0 = -width/2.0f;
+    float angle_v0 = -height/2.0f;
+    glPointSize(1.0f);
+
+    for(int x=0; x<=nCol; x++)
+    {
+        for(int y=0; y<=nRow; y++)
+        {
+            float angle_h = angle_h0 + x * mWidth;
+            float angle_v = angle_v0 + y * mHeight;
+
+            GlbPoint3d p_img;
+            PivotRotPoint(pRect, pivot_v, angle_v, p_img);
+            PivotRotPoint(p_img, pivot_h, angle_h, p_img);
+            Sphere2Round(p_img, 1.0f, r_pRound);
+
+            PointArr[y][x].m_x = r_pRound.m_x;
+            PointArr[y][x].m_y = r_pRound.m_y;
+        }
+    }
+
+    glLoadIdentity();	
+    glColor3f(1.0f,1.0f,1.0f);
+    glBindTexture(GL_TEXTURE_2D, Image);	
+
+    float mRectWidth = 1.0f/nCol;
+    float mRectHeight = 1.0f/nRow;
+
+    for(int x=0; x<nCol; x++)
+    {
+        for(int y=0; y<nRow; y++)
+        {
+            float th = 0.4f;
+
+            GlbPoint2d pRound[4];
+            pRound[0].m_x = PointArr[y][x].m_x;
+            pRound[0].m_y = PointArr[y][x].m_y;
+            pRound[1].m_x = PointArr[y][x+1].m_x;
+            pRound[1].m_y = PointArr[y][x+1].m_y;
+            pRound[2].m_x = PointArr[y+1][x+1].m_x;
+            pRound[2].m_y = PointArr[y+1][x+1].m_y;
+            pRound[3].m_x = PointArr[y+1][x].m_x;
+            pRound[3].m_y = PointArr[y+1][x].m_y;
+
+
+            if( fabs(pRound[0].m_x-pRound[1].m_x) < th &&
+                fabs(pRound[0].m_x-pRound[2].m_x) < th &&
+                fabs(pRound[1].m_x-pRound[3].m_x) < th &&
+                fabs(pRound[2].m_x-pRound[3].m_x) < th &&
+
+                fabs(pRound[0].m_y-pRound[1].m_y) < th &&
+                fabs(pRound[0].m_y-pRound[2].m_y) < th &&
+                fabs(pRound[1].m_y-pRound[3].m_y) < th &&
+                fabs(pRound[2].m_y-pRound[3].m_y) < th)
+            {
+                glBegin(GL_QUADS);						// 绘制正方形
+
+                glTexCoord2f((x) * mRectWidth, (y) * mRectHeight); 
+                glVertex3f(pRound[0].m_x, pRound[0].m_y, layer);				// 左上
+
+                glTexCoord2f((x+1) * mRectWidth, (y) * mRectHeight); 
+                glVertex3f(pRound[1].m_x, pRound[1].m_y, layer);				// 右上
+                glTexCoord2f((x+1) * mRectWidth, (y+1) * mRectHeight); 
+                glVertex3f(pRound[2].m_x, pRound[2].m_y, layer);				// 右下
+
+
+                glTexCoord2f((x) * mRectWidth, (y+1) * mRectHeight); 
+                glVertex3f(pRound[3].m_x, pRound[3].m_y, layer);				// 左下
+                glEnd();
+            }
+        }
+    }
+
+
+    for(int x=0; x<=nRow; x++)
+    {
+        delete [] PointArr[x];
+    }
+    delete [] PointArr;
+
+    //输出pClose
+    PivotRotPoint(pRect, pivot_v, height/2.0f, pClose);
+    PivotRotPoint(pClose, pivot_h, width/2.0f, pClose);
+}
+
+void DrawLineOnGlobe(GlbPointGeo geoStartPoint, GlbPointGeo geoEndPoint, int layer)
+{
+	GlbPoint3d rectStartPoint, rectEndPoint;
+	Geo2Rect(geoStartPoint, rectStartPoint);
+	Geo2Rect(geoEndPoint, rectEndPoint);
+	Sphere2Sphere(rectStartPoint, g_GlobeRotMat, rectStartPoint);
+	Sphere2Sphere(rectEndPoint, g_GlobeRotMat, rectEndPoint);
+	GlbPointGeo geoStartPoint2, geoEndPoint2;
+	Rect2Geo(rectStartPoint, geoStartPoint2);
+	Rect2Geo(rectEndPoint, geoEndPoint2);
+	DrawLineOnScreen(geoStartPoint2, geoEndPoint2, layer);
+}
+
+void DrawLineOnScreen(GlbPointGeo geoStartPoint, GlbPointGeo geoEndPoint, int layer)
+{
+	GlbPoint3d rectStartPoint, rectEndPoint;
+	Geo2Rect(geoStartPoint, rectStartPoint);
+	Geo2Rect(geoEndPoint, rectEndPoint);
+
+	float angle = Point2Angle(rectStartPoint, rectEndPoint);
+	GlbPoint3d pivot;
+	Point2Pivot(rectStartPoint, rectEndPoint, pivot, true);
+
+	int nStep = (int)(angle/FACET_SCACLE_IN_ANGLE)+1;
+	float mAngle = angle/nStep;
+
+	glLoadIdentity();											// 重置当前的模型观察矩阵
+	glBindTexture(GL_TEXTURE_2D, 0);
+	glColor3f(1.0f,1.0f,0.0f);
+	glLineWidth(0.5);//设置不闭合折线大小  
+
+	//抗锯齿
+	glEnable(GL_LINE_SMOOTH);
+	//glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
+	//glEnable(GL_BLEND);
+
+	for(int i=0; i<nStep; i++)
+	{
+		GlbPoint3d p3d1,p3d2;
+		GlbPoint2d p2d1,p2d2;
+		PivotRotPoint(rectStartPoint, pivot, mAngle*i, p3d1);
+		Sphere2Round(p3d1, 1.0f, p2d1);
+		PivotRotPoint(rectStartPoint, pivot, mAngle*(i+1), p3d2);
+		Sphere2Round(p3d2, 1.0f, p2d2);
+		if(fabs(p2d1.m_x-p2d2.m_x)<MAX_FACET_SHOW_THRESHOLD && fabs(p2d1.m_y-p2d2.m_y)<MAX_FACET_SHOW_THRESHOLD)
+		{
+			glBegin(GL_LINES);//画不闭合折线 
+			glVertex3f(p2d1.m_x,p2d1.m_y, (GLfloat)layer);
+			glVertex3f(p2d2.m_x,p2d2.m_y, (GLfloat)layer);
+			glEnd();
+		}
+	}
+}
+
+void DrawGlobe(GlbImage Image)
+{
+	GlbPoint3d pClose;
+	GlbPointGeo pGeo,pGeoDirect;
+	pGeo.m_lat = 0;
+	pGeo.m_lng = 0;
+	pGeoDirect.m_lat = 90;
+	pGeoDirect.m_lng = 0;
+
+	DrawTexture(
+		Image,	//材质的编号
+		pGeo,			//贴图的中心点
+		true,	//中心点坐标是在 globe坐标系(true) or screen坐标系(false)
+		pGeoDirect,	//贴图方向的参考点
+		true,		//方向参考点实在 globe坐标系(true) or screen坐标系(false)
+		true,		//图片朝向参考点(ture) or 背向参考点(false)
+		360,			//贴图的宽度(单位:角度)
+		180,			//贴图的高度(单位:角度)
+		0,			//贴图所在的层
+		GLB_TEX_BELT,
+		pClose		//返回贴图右上角的坐标
+		);
+}
+
+void DrawBelt(GlbImage Image, 
+			  GlbPointGeo pGeo, 
+			  bool bPointOnGlobe, 
+			  GlbPointGeo pGeoDirect, 
+			  bool bDirOnGlobe, 
+			  bool bHeadDirect, 
+			  float width, 
+			  float height, 
+			  float layer )
+{
+	GlbPoint3d pClose;
+	DrawTexture(
+		Image,	//材质的编号
+		pGeo,			//贴图的中心点
+		bPointOnGlobe,	//中心点坐标是在 globe坐标系(true) or screen坐标系(false)
+		pGeoDirect,	//贴图方向的参考点
+		bDirOnGlobe,		//方向参考点实在 globe坐标系(true) or screen坐标系(false)
+		bHeadDirect,		//图片朝向参考点(ture) or 背向参考点(false)
+		width,			//贴图的宽度(单位:角度)
+		height,			//贴图的高度(单位:角度)
+		layer,			//贴图所在的层
+		GLB_TEX_BELT,
+		pClose		//返回贴图右上角的坐标
+		);
 }

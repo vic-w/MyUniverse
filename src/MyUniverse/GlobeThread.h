@@ -1,5 +1,5 @@
 #pragma once
 
-#include "..\GlbCore\GlbCore.h"
+#include "GlbCore.h"
 
 DWORD WINAPI GlobeThread(LPVOID lpParam);
