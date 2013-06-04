@@ -1,4 +1,4 @@
-#include "..\GlbCore\GlbCore.h"
+#include "GlbCore.h"
 
 void main()
 {
