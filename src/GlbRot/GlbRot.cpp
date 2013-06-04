@@ -1,9 +1,8 @@
 #include "stdafx.h"
 #include "GlbRot.h"
-
 #include <math.h>
 #include "opencv.hpp"
-#include "glut.h"
+
 
 float VectorNorm(GlbPoint3d Vec)
 {
@@ -12,7 +11,7 @@ float VectorNorm(GlbPoint3d Vec)
 void VectorNormalize(GlbPoint3d Vec, GlbPoint3d &Vec_dst)
 {
 	float norm = VectorNorm(Vec);
-	if (norm<0.00001) norm=0.00001;
+	if (norm<0.00001f) norm=0.00001f;
 
 	Vec_dst.m_x = Vec.m_x / norm;
 	Vec_dst.m_y = Vec.m_y / norm;
