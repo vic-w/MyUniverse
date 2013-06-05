@@ -21,6 +21,10 @@ public:
 
 
 // й╣ож
+private:
+    void ReadChapterStruct();
+    void ReadPageStruct();
+    void ReadOnePage();
 protected:
 	HICON m_hIcon;
 
@@ -45,15 +49,12 @@ public:
     afx_msg void OnEnChangeEditRotx();
     afx_msg void OnEnChangeEditRoty();
     afx_msg void OnEnChangeEditRotz();
+    afx_msg void OnCbnSelchangeComboChapter();
     CString story_path;
     afx_msg void OnBnClickedButtonBrowse();
     CComboBox chapter_select;
     CString chapter_value;
     CComboBox page_select;
     CString page_value;
-private:
-    void ReadChapterStruct();
-    void ReadPageStruct();
-public:
-    afx_msg void OnCbnSelchangeComboChapter();
+    afx_msg void OnCbnSelchangeComboPage();
 };

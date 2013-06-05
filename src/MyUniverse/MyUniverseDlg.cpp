@@ -100,6 +100,7 @@ BEGIN_MESSAGE_MAP(CMyUniverseDlg, CDialogEx)
     //ON_EN_CHANGE(IDC_EDIT1, &CMyUniverseDlg::OnEnChangeEdit1)
     ON_BN_CLICKED(IDC_BUTTON_BROWSE, &CMyUniverseDlg::OnBnClickedButtonBrowse)
     ON_CBN_SELCHANGE(IDC_COMBO_CHAPTER, &CMyUniverseDlg::OnCbnSelchangeComboChapter)
+    ON_CBN_SELCHANGE(IDC_COMBO_PAGE, &CMyUniverseDlg::OnCbnSelchangeComboPage)
 END_MESSAGE_MAP()
 
 
@@ -135,6 +136,14 @@ BOOL CMyUniverseDlg::OnInitDialog()
     SetIcon(m_hIcon, FALSE);		// 设置小图标
 
     // TODO: 在此添加额外的初始化代码
+
+    //读取ini文件中的配置
+    char lpStoryPath[512];
+    GetPrivateProfileString("MyUniverseCfg", "StoryPath", "", lpStoryPath, 512, ".\\config.ini");
+    story_path = lpStoryPath;
+    UpdateData(0);
+    ReadChapterStruct();
+
     CreateThread(0, 0, GlobeThread, 0,0,0);//启动OpenGL显示线程
 
     return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
@@ -290,6 +299,7 @@ void CMyUniverseDlg::OnBnClickedButtonBrowse()
     }
     UpdateData(0);
     ReadChapterStruct();
+    ::WritePrivateProfileString("MyUniverseCfg","StoryPath",szPath,".\\config.ini");
 }
 
 void CMyUniverseDlg::ReadChapterStruct()
@@ -298,12 +308,14 @@ void CMyUniverseDlg::ReadChapterStruct()
 	HANDLE hFind = INVALID_HANDLE_VALUE;
 
     chapter_select.ResetContent();
+    if(story_path.GetLength() != 0)
+    story_path += "\\*";
 
-	hFind = FindFirstFile(story_path+"\\*", &FindFileData);
+	hFind = FindFirstFile(story_path, &FindFileData);
 	
 	if(hFind == INVALID_HANDLE_VALUE)
 	{
-		AfxMessageBox ("Invalid file handle.\n");
+		//AfxMessageBox ("Invalid file handle.\n");
 	}
 	else
 	{
@@ -325,7 +337,7 @@ void CMyUniverseDlg::ReadChapterStruct()
 		if (dwError != ERROR_NO_MORE_FILES) 
 		{
 			//printf ("FindNextFile error. Error is %u\n", dwError);
-            AfxMessageBox("ERROR_NO_MORE_FILES");
+            //AfxMessageBox("ERROR_NO_MORE_FILES");
 		}
 	}
     chapter_select.SetCurSel(0);
@@ -352,7 +364,7 @@ void CMyUniverseDlg::ReadPageStruct()
 	
 	if(hFind == INVALID_HANDLE_VALUE)
 	{
-		AfxMessageBox ("Invalid file handle.\n");
+		//AfxMessageBox ("Invalid file handle.\n");
 	}
 	else
 	{
@@ -375,13 +387,23 @@ void CMyUniverseDlg::ReadPageStruct()
 		if (dwError != ERROR_NO_MORE_FILES) 
 		{
 			//printf ("FindNextFile error. Error is %u\n", dwError);
-            AfxMessageBox("ERROR_NO_MORE_FILES");
+            //AfxMessageBox("ERROR_NO_MORE_FILES");
 		}
 	}
     page_select.SetCurSel(0);
 }
 
+void CMyUniverseDlg::ReadOnePage()
+{
+}
+
 void CMyUniverseDlg::OnCbnSelchangeComboChapter()
 {
     ReadPageStruct();
+}
+
+
+void CMyUniverseDlg::OnCbnSelchangeComboPage()
+{
+    ReadOnePage();
 }
