@@ -91,6 +91,7 @@ BEGIN_MESSAGE_MAP(CMyUniverseDlg, CDialogEx)
     ON_EN_CHANGE(IDC_EDIT_ROTY, &CMyUniverseDlg::OnEnChangeEditRoty)
     ON_EN_CHANGE(IDC_EDIT_ROTZ, &CMyUniverseDlg::OnEnChangeEditRotz)
     ON_EN_CHANGE(IDC_EDIT1, &CMyUniverseDlg::OnEnChangeEdit1)
+    ON_BN_CLICKED(IDC_BUTTON_BROWSE, &CMyUniverseDlg::OnBnClickedButtonBrowse)
 END_MESSAGE_MAP()
 
 
@@ -266,4 +267,30 @@ void CMyUniverseDlg::OnEnChangeEdit1()
     // 同时将 ENM_CHANGE 标志“或”运算到掩码中。
 
     // TODO:  在此添加控件通知处理程序代码
+}
+
+
+void CMyUniverseDlg::OnBnClickedButtonBrowse()
+{
+    char szPath[MAX_PATH];     //存放选择的目录路径
+    CString str;
+    ZeroMemory(szPath, sizeof(szPath));  
+ 
+    BROWSEINFO bi;  
+    bi.hwndOwner = m_hWnd;  
+    bi.pidlRoot = NULL;  
+    bi.pszDisplayName = szPath;  
+    bi.lpszTitle = "请选择课程目录：";  
+    bi.ulFlags = 0;  
+    bi.lpfn = NULL;  
+    bi.lParam = 0;  
+    bi.iImage = 0;  
+
+    //弹出选择目录对话框
+    LPITEMIDLIST lp = SHBrowseForFolder(&bi);  
+    if(lp && SHGetPathFromIDList(lp, szPath))  
+    {
+       story_path = szPath;
+    }
+    UpdateData(0);
 }
