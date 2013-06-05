@@ -57,6 +57,7 @@ CMyUniverseDlg::CMyUniverseDlg(CWnd* pParent /*=NULL*/)
     , slider_rotx(0)
     , slider_roty(0)
     , slider_rotz(0)
+    , story_path(_T(""))
 {
     m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
@@ -73,6 +74,8 @@ void CMyUniverseDlg::DoDataExchange(CDataExchange* pDX)
     DDX_Slider(pDX, IDC_SLIDER_ROTX, slider_rotx);
     DDX_Slider(pDX, IDC_SLIDER_ROTY, slider_roty);
     DDX_Slider(pDX, IDC_SLIDER_ROTZ, slider_rotz);
+    DDX_Text(pDX, IDC_EDIT_SOTRY_PATH, story_path);
+	DDV_MaxChars(pDX, story_path, 512);
 }
 
 BEGIN_MESSAGE_MAP(CMyUniverseDlg, CDialogEx)
@@ -87,6 +90,7 @@ BEGIN_MESSAGE_MAP(CMyUniverseDlg, CDialogEx)
     ON_EN_CHANGE(IDC_EDIT_ROTX, &CMyUniverseDlg::OnEnChangeEditRotx)
     ON_EN_CHANGE(IDC_EDIT_ROTY, &CMyUniverseDlg::OnEnChangeEditRoty)
     ON_EN_CHANGE(IDC_EDIT_ROTZ, &CMyUniverseDlg::OnEnChangeEditRotz)
+    ON_EN_CHANGE(IDC_EDIT1, &CMyUniverseDlg::OnEnChangeEdit1)
 END_MESSAGE_MAP()
 
 
@@ -251,4 +255,15 @@ void CMyUniverseDlg::OnEnChangeEditRotz()
     UpdateData(TRUE);
     slider_rotz = (int)(edit_rotz/360.0*100);
     UpdateData(FALSE);
+}
+
+
+void CMyUniverseDlg::OnEnChangeEdit1()
+{
+    // TODO:  如果该控件是 RICHEDIT 控件，它将不
+    // 发送此通知，除非重写 CDialogEx::OnInitDialog()
+    // 函数并调用 CRichEditCtrl().SetEventMask()，
+    // 同时将 ENM_CHANGE 标志“或”运算到掩码中。
+
+    // TODO:  在此添加控件通知处理程序代码
 }

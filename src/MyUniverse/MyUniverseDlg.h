@@ -44,4 +44,6 @@ public:
     afx_msg void OnEnChangeEditRotx();
     afx_msg void OnEnChangeEditRoty();
     afx_msg void OnEnChangeEditRotz();
+    afx_msg void OnEnChangeEdit1();
+    CString story_path;
 };
