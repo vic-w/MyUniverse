@@ -323,7 +323,11 @@ void CMyUniverseDlg::ReadChapterStruct()
 			if (FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
             {
 				//printf ("这是一个目录\n");
-                chapter_select.AddString(FindFileData.cFileName);
+                CString chapterName = FindFileData.cFileName;
+                if(chapterName != "." && chapterName != "..")
+                {
+                    chapter_select.AddString(FindFileData.cFileName);
+                }
 			}
 		}while (FindNextFile(hFind, &FindFileData) != 0);
 
@@ -336,4 +340,54 @@ void CMyUniverseDlg::ReadChapterStruct()
 		}
 	}
     chapter_select.SetCurSel(0);
+    ReadPageStruct();
+}
+
+void CMyUniverseDlg::ReadPageStruct()
+{
+    WIN32_FIND_DATA FindFileData;
+	HANDLE hFind = INVALID_HANDLE_VALUE;
+
+    page_select.ResetContent();
+
+    UpdateData(1);
+    CString pagePath = story_path;
+    int pathLength = pagePath.GetLength();
+    char lastChar = *(pagePath.GetBuffer(0)+pathLength-1);
+    if(lastChar != '\\')
+    pagePath +="\\";
+    pagePath += chapter_value;
+    pagePath += "\\*";
+
+	hFind = FindFirstFile(pagePath, &FindFileData);
+	
+	if(hFind == INVALID_HANDLE_VALUE)
+	{
+		AfxMessageBox ("Invalid file handle.\n");
+	}
+	else
+	{
+		do
+		{
+            CString chapterName = FindFileData.cFileName;
+            if(chapterName != "." && chapterName != "..")
+            {
+                page_select.AddString(FindFileData.cFileName);
+			    if (FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
+                {
+				    //printf ("这是一个目录\n");
+                    //page_select.AddString(FindFileData.cFileName);
+			    }
+            }
+		}while (FindNextFile(hFind, &FindFileData) != 0);
+
+		DWORD dwError = GetLastError();
+		FindClose(hFind);
+		if (dwError != ERROR_NO_MORE_FILES) 
+		{
+			//printf ("FindNextFile error. Error is %u\n", dwError);
+            AfxMessageBox("ERROR_NO_MORE_FILES");
+		}
+	}
+    page_select.SetCurSel(0);
 }
