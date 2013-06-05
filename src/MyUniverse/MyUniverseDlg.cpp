@@ -344,7 +344,7 @@ void CMyUniverseDlg::ReadChapterStruct()
     ReadPageStruct();
 }
 
-void CMyUniverseDlg::ReadPageStruct()
+void CMyUniverseDlg::ReadPageStruct()//次处支持：folder，dds，jpg，avi，wma
 {
     WIN32_FIND_DATA FindFileData;
 	HANDLE hFind = INVALID_HANDLE_VALUE;
@@ -354,7 +354,7 @@ void CMyUniverseDlg::ReadPageStruct()
     UpdateData(1);
     CString pagePath = story_path;
     int pathLength = pagePath.GetLength();
-    char lastChar = *(pagePath.GetBuffer(0)+pathLength-1);
+    char lastChar = *(pagePath.GetBuffer()+pathLength-1);
     if(lastChar != '\\')
     pagePath +="\\";
     pagePath += chapter_value;
@@ -373,12 +373,20 @@ void CMyUniverseDlg::ReadPageStruct()
             CString chapterName = FindFileData.cFileName;
             if(chapterName != "." && chapterName != "..")
             {
-                page_select.AddString(FindFileData.cFileName);
+                char* suffix = chapterName.GetBuffer() + chapterName.GetLength() -3;
 			    if (FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
                 {
 				    //printf ("这是一个目录\n");
-                    //page_select.AddString(FindFileData.cFileName);
+                    page_select.AddString(FindFileData.cFileName);
 			    }
+                else if( _stricmp(suffix,"jpg") ==0
+                      || _stricmp(suffix,"dds") ==0
+                      || _stricmp(suffix,"avi") ==0
+                      || _stricmp(suffix,"wma") ==0
+                      )
+                {
+                    page_select.AddString(FindFileData.cFileName);
+                }
             }
 		}while (FindNextFile(hFind, &FindFileData) != 0);
 
