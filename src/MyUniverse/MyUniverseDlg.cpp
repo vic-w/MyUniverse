@@ -58,6 +58,8 @@ CMyUniverseDlg::CMyUniverseDlg(CWnd* pParent /*=NULL*/)
     , slider_roty(0)
     , slider_rotz(0)
     , story_path(_T(""))
+    , chapter_value(_T(""))
+    , page_value(_T(""))
 {
     m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
@@ -75,7 +77,12 @@ void CMyUniverseDlg::DoDataExchange(CDataExchange* pDX)
     DDX_Slider(pDX, IDC_SLIDER_ROTY, slider_roty);
     DDX_Slider(pDX, IDC_SLIDER_ROTZ, slider_rotz);
     DDX_Text(pDX, IDC_EDIT_SOTRY_PATH, story_path);
-	DDV_MaxChars(pDX, story_path, 512);
+    DDV_MaxChars(pDX, story_path, 512);
+    DDX_Control(pDX, IDC_COMBO_CHAPTER, chapter_select);
+    DDX_CBString(pDX, IDC_COMBO_CHAPTER, chapter_value);
+    DDV_MaxChars(pDX, chapter_value, 512);
+    DDX_Control(pDX, IDC_COMBO_PAGE, page_select);
+    DDX_CBString(pDX, IDC_COMBO_PAGE, page_value);
 }
 
 BEGIN_MESSAGE_MAP(CMyUniverseDlg, CDialogEx)
@@ -90,7 +97,7 @@ BEGIN_MESSAGE_MAP(CMyUniverseDlg, CDialogEx)
     ON_EN_CHANGE(IDC_EDIT_ROTX, &CMyUniverseDlg::OnEnChangeEditRotx)
     ON_EN_CHANGE(IDC_EDIT_ROTY, &CMyUniverseDlg::OnEnChangeEditRoty)
     ON_EN_CHANGE(IDC_EDIT_ROTZ, &CMyUniverseDlg::OnEnChangeEditRotz)
-    ON_EN_CHANGE(IDC_EDIT1, &CMyUniverseDlg::OnEnChangeEdit1)
+    //ON_EN_CHANGE(IDC_EDIT1, &CMyUniverseDlg::OnEnChangeEdit1)
     ON_BN_CLICKED(IDC_BUTTON_BROWSE, &CMyUniverseDlg::OnBnClickedButtonBrowse)
 END_MESSAGE_MAP()
 
@@ -293,4 +300,40 @@ void CMyUniverseDlg::OnBnClickedButtonBrowse()
        story_path = szPath;
     }
     UpdateData(0);
+    ReadChapterStruct();
+}
+
+void CMyUniverseDlg::ReadChapterStruct()
+{
+    WIN32_FIND_DATA FindFileData;
+	HANDLE hFind = INVALID_HANDLE_VALUE;
+
+    chapter_select.ResetContent();
+
+	hFind = FindFirstFile(story_path+"\\*", &FindFileData);
+	
+	if(hFind == INVALID_HANDLE_VALUE)
+	{
+		AfxMessageBox ("Invalid file handle.\n");
+	}
+	else
+	{
+		do
+		{
+			if (FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
+            {
+				//printf ("这是一个目录\n");
+                chapter_select.AddString(FindFileData.cFileName);
+			}
+		}while (FindNextFile(hFind, &FindFileData) != 0);
+
+		DWORD dwError = GetLastError();
+		FindClose(hFind);
+		if (dwError != ERROR_NO_MORE_FILES) 
+		{
+			//printf ("FindNextFile error. Error is %u\n", dwError);
+            AfxMessageBox("ERROR_NO_MORE_FILES");
+		}
+	}
+    chapter_select.SetCurSel(0);
 }

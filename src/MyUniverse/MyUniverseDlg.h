@@ -3,6 +3,7 @@
 //
 
 #pragma once
+#include "afxwin.h"
 
 
 // CMyUniverseDlg ¶Ô»°¿ò
@@ -47,4 +48,11 @@ public:
     afx_msg void OnEnChangeEdit1();
     CString story_path;
     afx_msg void OnBnClickedButtonBrowse();
+    CComboBox chapter_select;
+    CString chapter_value;
+    CComboBox page_select;
+    CString page_value;
+private:
+    void ReadChapterStruct();
+    void ReadPageStruct();
 };
