@@ -99,6 +99,7 @@ BEGIN_MESSAGE_MAP(CMyUniverseDlg, CDialogEx)
     ON_EN_CHANGE(IDC_EDIT_ROTZ, &CMyUniverseDlg::OnEnChangeEditRotz)
     //ON_EN_CHANGE(IDC_EDIT1, &CMyUniverseDlg::OnEnChangeEdit1)
     ON_BN_CLICKED(IDC_BUTTON_BROWSE, &CMyUniverseDlg::OnBnClickedButtonBrowse)
+    ON_CBN_SELCHANGE(IDC_COMBO_CHAPTER, &CMyUniverseDlg::OnCbnSelchangeComboChapter)
 END_MESSAGE_MAP()
 
 
@@ -265,18 +266,6 @@ void CMyUniverseDlg::OnEnChangeEditRotz()
     UpdateData(FALSE);
 }
 
-
-void CMyUniverseDlg::OnEnChangeEdit1()
-{
-    // TODO:  如果该控件是 RICHEDIT 控件，它将不
-    // 发送此通知，除非重写 CDialogEx::OnInitDialog()
-    // 函数并调用 CRichEditCtrl().SetEventMask()，
-    // 同时将 ENM_CHANGE 标志“或”运算到掩码中。
-
-    // TODO:  在此添加控件通知处理程序代码
-}
-
-
 void CMyUniverseDlg::OnBnClickedButtonBrowse()
 {
     char szPath[MAX_PATH];     //存放选择的目录路径
@@ -390,4 +379,9 @@ void CMyUniverseDlg::ReadPageStruct()
 		}
 	}
     page_select.SetCurSel(0);
+}
+
+void CMyUniverseDlg::OnCbnSelchangeComboChapter()
+{
+    ReadPageStruct();
 }

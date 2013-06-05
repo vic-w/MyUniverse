@@ -45,7 +45,6 @@ public:
     afx_msg void OnEnChangeEditRotx();
     afx_msg void OnEnChangeEditRoty();
     afx_msg void OnEnChangeEditRotz();
-    afx_msg void OnEnChangeEdit1();
     CString story_path;
     afx_msg void OnBnClickedButtonBrowse();
     CComboBox chapter_select;
@@ -55,4 +54,6 @@ public:
 private:
     void ReadChapterStruct();
     void ReadPageStruct();
+public:
+    afx_msg void OnCbnSelchangeComboChapter();
 };
