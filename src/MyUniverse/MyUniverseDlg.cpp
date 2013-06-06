@@ -456,27 +456,13 @@ void CMyUniverseDlg::ReadOnePage()
         g_StoryPage.bMovie = 1;
         g_StoryPage.pagePath = pagePath;
         g_StoryPage.storyType = FOLDER;
-        WIN32_FIND_DATA FindFileData;
-        HANDLE hFind = INVALID_HANDLE_VALUE;
-        hFind = FindFirstFile(pagePath+"\\*.dds", &FindFileData);
-	
-	    if(hFind == INVALID_HANDLE_VALUE)
-	    {
-		    //AfxMessageBox ("Invalid file handle.\n");
-	    }
-	    else
-	    {
-            g_StoryPage.nFrames = 0;
-		    do
-		    {
-                CString FrameName = pagePath;
-                FrameName += "\\";
-                FrameName += FindFileData.cFileName;
-                g_StoryPage.FrameNames.push_back(FrameName);
-                g_StoryPage.nFrames++;
-		    }while (FindNextFile(hFind, &FindFileData) != 0);
-        }
-        g_StoryPage.nCurFrame = 0;
+        g_StoryPage.nFrames = 0;	
+
+        ReadFolderContent(pagePath, "dds");
+        if(g_StoryPage.nFrames == 0)
+        ReadFolderContent(pagePath, "jpg");
+        if(g_StoryPage.nFrames == 0)
+        ReadFolderContent(pagePath, "png");
     }
     LeaveCriticalSection(&g_StoryPage_CS);
 }
@@ -490,4 +476,32 @@ void CMyUniverseDlg::OnCbnSelchangeComboChapter()
 void CMyUniverseDlg::OnCbnSelchangeComboPage()
 {
     ReadOnePage();
+}
+
+void CMyUniverseDlg::ReadFolderContent(CString folderPath, CString suffix)
+{
+    WIN32_FIND_DATA FindFileData;
+    HANDLE hFind = INVALID_HANDLE_VALUE;
+    CString path = folderPath;
+    path += "\\*.";
+    path += suffix;
+    hFind = FindFirstFile(path, &FindFileData);
+
+	if(hFind == INVALID_HANDLE_VALUE)
+	{
+		//AfxMessageBox ("Invalid file handle.\n");
+	}
+	else
+	{
+
+		do
+		{
+            CString FrameName = folderPath;
+            FrameName += "\\";
+            FrameName += FindFileData.cFileName;
+            g_StoryPage.FrameNames.push_back(FrameName);
+            g_StoryPage.nFrames++;
+		}while (FindNextFile(hFind, &FindFileData) != 0);
+    }
+    g_StoryPage.nCurFrame = 0;
 }

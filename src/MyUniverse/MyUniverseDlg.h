@@ -27,6 +27,7 @@ private:
     void ReadChapterStruct();
     void ReadPageStruct();
     void ReadOnePage();
+    void ReadFolderContent(CString folderPath, CString suffix);
 protected:
 	HICON m_hIcon;
 
