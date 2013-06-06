@@ -12,6 +12,7 @@
 #define new DEBUG_NEW
 #endif
 
+extern CStoryPage g_StoryPage;
 
 // 用于应用程序“关于”菜单项的 CAboutDlg 对话框
 
@@ -223,9 +224,9 @@ void CMyUniverseDlg::OnNMCustomdrawSliderRotx(NMHDR *pNMHDR, LRESULT *pResult)
 {
     LPNMCUSTOMDRAW pNMCD = reinterpret_cast<LPNMCUSTOMDRAW>(pNMHDR);
     // TODO: 在此添加控件通知处理程序代码
-    UpdateData(TRUE);
+    UpdateData(GET_DATA);
     m_edit_rotx = (int)(m_slider_rotx/100.0*360);
-    UpdateData(FALSE);
+    UpdateData(PUT_DATA);
     *pResult = 0;
 }
 
@@ -234,9 +235,9 @@ void CMyUniverseDlg::OnNMCustomdrawSliderRoty(NMHDR *pNMHDR, LRESULT *pResult)
 {
     LPNMCUSTOMDRAW pNMCD = reinterpret_cast<LPNMCUSTOMDRAW>(pNMHDR);
     // TODO: 在此添加控件通知处理程序代码
-    UpdateData(TRUE);
+    UpdateData(GET_DATA);
     m_edit_roty = (int)(m_slider_roty/100.0*360);
-    UpdateData(FALSE);
+    UpdateData(PUT_DATA);
     *pResult = 0;
 }
 
@@ -245,34 +246,34 @@ void CMyUniverseDlg::OnNMCustomdrawSliderRotz(NMHDR *pNMHDR, LRESULT *pResult)
 {
     LPNMCUSTOMDRAW pNMCD = reinterpret_cast<LPNMCUSTOMDRAW>(pNMHDR);
     // TODO: 在此添加控件通知处理程序代码
-    UpdateData(TRUE);
+    UpdateData(GET_DATA);
     m_edit_rotz = (int)(m_slider_rotz/100.0*360);
-    UpdateData(FALSE);
+    UpdateData(PUT_DATA);
     *pResult = 0;
 }
 
 
 void CMyUniverseDlg::OnEnChangeEditRotx()
 {
-    UpdateData(TRUE);
+    UpdateData(GET_DATA);
     m_slider_rotx = (int)(m_edit_rotx/360.0*100);
-    UpdateData(FALSE);
+    UpdateData(PUT_DATA);
 }
 
 
 void CMyUniverseDlg::OnEnChangeEditRoty()
 {
-    UpdateData(TRUE);
+    UpdateData(GET_DATA);
     m_slider_roty = (int)(m_edit_roty/360.0*100);
-    UpdateData(FALSE);
+    UpdateData(PUT_DATA);
 }
 
 
 void CMyUniverseDlg::OnEnChangeEditRotz()
 {
-    UpdateData(TRUE);
+    UpdateData(GET_DATA);
     m_slider_rotz = (int)(m_edit_rotz/360.0*100);
-    UpdateData(FALSE);
+    UpdateData(PUT_DATA);
 }
 
 void CMyUniverseDlg::OnBnClickedButtonBrowse()
@@ -406,7 +407,35 @@ void CMyUniverseDlg::ReadOnePage()
 {
     UpdateData(1);
     CString pagePath = m_page_struct_path + m_page_value;
-    AfxMessageBox(pagePath);
+    //AfxMessageBox(pagePath);
+    char* suffix = pagePath.GetBuffer() + pagePath.GetLength() - 3;
+    if( _stricmp(suffix,"jpg") == 0)
+    {
+        //AfxMessageBox("this is a jpg file");
+    }
+    else if( _stricmp(suffix,"png") == 0)
+    {
+        //AfxMessageBox("this is a png file");
+    }
+    else if( _stricmp(suffix,"dds") == 0)
+    {
+        //AfxMessageBox("this is a dds file");
+        g_StoryPage.bMovie = 0;
+        g_StoryPage.pagePath = pagePath;
+        g_StoryPage.storyType = DDS;
+    }
+    else if( _stricmp(suffix,"avi") == 0)
+    {
+        AfxMessageBox("this is a avi file. 暂不支持此格式");
+    }
+    else if( _stricmp(suffix,"wma") == 0)
+    {
+        AfxMessageBox("this is a wma file. 暂不支持此格式");
+    }
+    else
+    {
+        AfxMessageBox("this is a folder. 暂不支持此格式");
+    }
 }
 
 void CMyUniverseDlg::OnCbnSelchangeComboChapter()

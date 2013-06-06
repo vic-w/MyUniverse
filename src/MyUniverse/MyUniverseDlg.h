@@ -5,6 +5,8 @@
 #pragma once
 #include "afxwin.h"
 
+#define GET_DATA 1 
+#define PUT_DATA 0
 
 // CMyUniverseDlg ¶Ô»°¿ò
 class CMyUniverseDlg : public CDialogEx
@@ -50,12 +52,12 @@ public:
     afx_msg void OnEnChangeEditRoty();
     afx_msg void OnEnChangeEditRotz();
     afx_msg void OnCbnSelchangeComboChapter();
+    afx_msg void OnBnClickedButtonBrowse();
+    afx_msg void OnCbnSelchangeComboPage();
     CString m_story_path;
     CString m_page_struct_path;
-    afx_msg void OnBnClickedButtonBrowse();
     CComboBox m_chapter_select;
     CString m_chapter_value;
     CComboBox m_page_select;
     CString m_page_value;
-    afx_msg void OnCbnSelchangeComboPage();
 };

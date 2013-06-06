@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "GlobeThread.h"
 
+CStoryPage g_StoryPage;
+
 DWORD WINAPI GlobeThread(LPVOID lpParam)
 {
     glbCreateWindow(0);
