@@ -15,9 +15,12 @@ enum STORY_TYPE
 class CStoryPage
 {
 public:
+    bool bEmpty;
     bool bMovie;
     CString pagePath;
     STORY_TYPE storyType;
 };
 
 DWORD WINAPI GlobeThread(LPVOID lpParam);
+
+void DrawStoryPage();

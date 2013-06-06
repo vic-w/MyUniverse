@@ -40,10 +40,10 @@ GlbRotmat g_GlobeRotMat;
 GlbImage glbLoadImage(const char* filename)  //载入图像（支持dds,jpg,png）
 {
     int fileNameLen = strlen(filename);
-    const char* suffix = filename + fileNameLen - 3;
+    const char* suffix = filename + fileNameLen - 4;
     //printf("filename = %s, suffix = %s\n", filename, suffix);
 
-    if(_stricmp(suffix,"dds") == 0)
+    if(_stricmp(suffix,".dds") == 0)
     {
         GLuint TextureID = -1;
         DDS_IMAGE_DATA *pDDSImageData = glbLoadDDSFile(filename);
@@ -105,9 +105,9 @@ GlbImage glbLoadImage(const char* filename)  //载入图像（支持dds,jpg,png）
         }
         return TextureID;
     }
-    else if(_stricmp(suffix,"jpg") == 0 
-        || _stricmp(suffix,"bmp") == 0 
-        || _stricmp(suffix,"png") == 0)
+    else if(_stricmp(suffix,".jpg") == 0 
+        || _stricmp(suffix,".bmp") == 0 
+        || _stricmp(suffix,".png") == 0)
     {
         GLuint TextureID = -1;
         IplImage *image = cvLoadImage(filename);

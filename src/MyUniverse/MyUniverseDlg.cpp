@@ -374,16 +374,16 @@ void CMyUniverseDlg::ReadPageStruct()//次处支持：folder，dds，jpg，avi，wma
             CString chapterName = FindFileData.cFileName;
             if(chapterName != "." && chapterName != "..")
             {
-                char* suffix = chapterName.GetBuffer() + chapterName.GetLength() -3;
+                char* suffix = chapterName.GetBuffer() + chapterName.GetLength() -4;
 			    if (FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
                 {
 				    //printf ("这是一个目录\n");
                     m_page_select.AddString(FindFileData.cFileName);
 			    }
-                else if( _stricmp(suffix,"jpg") ==0
-                      || _stricmp(suffix,"dds") ==0
-                      || _stricmp(suffix,"avi") ==0
-                      || _stricmp(suffix,"wma") ==0
+                else if( _stricmp(suffix,".jpg") ==0
+                      || _stricmp(suffix,".dds") ==0
+                      || _stricmp(suffix,".avi") ==0
+                      || _stricmp(suffix,".wma") ==0
                       )
                 {
                     m_page_select.AddString(FindFileData.cFileName);
@@ -405,30 +405,40 @@ void CMyUniverseDlg::ReadPageStruct()//次处支持：folder，dds，jpg，avi，wma
 
 void CMyUniverseDlg::ReadOnePage()
 {
+    g_StoryPage.bEmpty = 1;
     UpdateData(1);
     CString pagePath = m_page_struct_path + m_page_value;
     //AfxMessageBox(pagePath);
-    char* suffix = pagePath.GetBuffer() + pagePath.GetLength() - 3;
-    if( _stricmp(suffix,"jpg") == 0)
+    char* suffix = pagePath.GetBuffer() + pagePath.GetLength() - 4;
+    if( _stricmp(suffix,".jpg") == 0)
     {
         //AfxMessageBox("this is a jpg file");
+        g_StoryPage.bEmpty = 0;
+        g_StoryPage.bMovie = 0;
+        g_StoryPage.pagePath = pagePath;
+        g_StoryPage.storyType = JPG;
     }
-    else if( _stricmp(suffix,"png") == 0)
+    else if( _stricmp(suffix,".png") == 0)
     {
         //AfxMessageBox("this is a png file");
+        g_StoryPage.bEmpty = 0;
+        g_StoryPage.bMovie = 0;
+        g_StoryPage.pagePath = pagePath;
+        g_StoryPage.storyType = PNG;
     }
-    else if( _stricmp(suffix,"dds") == 0)
+    else if( _stricmp(suffix,".dds") == 0)
     {
         //AfxMessageBox("this is a dds file");
+        g_StoryPage.bEmpty = 0;
         g_StoryPage.bMovie = 0;
         g_StoryPage.pagePath = pagePath;
         g_StoryPage.storyType = DDS;
     }
-    else if( _stricmp(suffix,"avi") == 0)
+    else if( _stricmp(suffix,".avi") == 0)
     {
         AfxMessageBox("this is a avi file. 暂不支持此格式");
     }
-    else if( _stricmp(suffix,"wma") == 0)
+    else if( _stricmp(suffix,".wma") == 0)
     {
         AfxMessageBox("this is a wma file. 暂不支持此格式");
     }
