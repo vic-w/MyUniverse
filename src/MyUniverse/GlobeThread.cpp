@@ -5,12 +5,12 @@ DWORD WINAPI GlobeThread(LPVOID lpParam)
 {
     glbCreateWindow(0);
 
-    GlbImage Image = glbLoadImage("a001.dds");
-    //GlbImage Image = glbLoadImage("earth.jpg");
+    //GlbImage Image = glbLoadImage("a001.dds");
+    GlbImage Image = glbLoadImage("earth.jpg");
 
     do
     {
-        glbClearWindow();        
+        glbClearWindow();
         glbDrawImage(Image);
         DrawGlobe(Image);
     }while(glbUpdateWindow(30));

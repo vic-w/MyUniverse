@@ -51,15 +51,15 @@ END_MESSAGE_MAP()
 
 CMyUniverseDlg::CMyUniverseDlg(CWnd* pParent /*=NULL*/)
     : CDialogEx(CMyUniverseDlg::IDD, pParent)
-    , edit_rotx(0)
-    , edit_roty(0)
-    , edit_rotz(0)
-    , slider_rotx(0)
-    , slider_roty(0)
-    , slider_rotz(0)
-    , story_path(_T(""))
-    , chapter_value(_T(""))
-    , page_value(_T(""))
+    , m_edit_rotx(0)
+    , m_edit_roty(0)
+    , m_edit_rotz(0)
+    , m_slider_rotx(0)
+    , m_slider_roty(0)
+    , m_slider_rotz(0)
+    , m_story_path(_T(""))
+    , m_chapter_value(_T(""))
+    , m_page_value(_T(""))
 {
     m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
@@ -67,22 +67,22 @@ CMyUniverseDlg::CMyUniverseDlg(CWnd* pParent /*=NULL*/)
 void CMyUniverseDlg::DoDataExchange(CDataExchange* pDX)
 {
     CDialogEx::DoDataExchange(pDX);
-    DDX_Text(pDX, IDC_EDIT_ROTX, edit_rotx);
-    DDV_MinMaxInt(pDX, edit_rotx, 0, 360);
-    DDX_Text(pDX, IDC_EDIT_ROTY, edit_roty);
-    DDV_MinMaxInt(pDX, edit_roty, 0, 360);
-    DDX_Text(pDX, IDC_EDIT_ROTZ, edit_rotz);
-    DDV_MinMaxInt(pDX, edit_rotz, 0, 360);
-    DDX_Slider(pDX, IDC_SLIDER_ROTX, slider_rotx);
-    DDX_Slider(pDX, IDC_SLIDER_ROTY, slider_roty);
-    DDX_Slider(pDX, IDC_SLIDER_ROTZ, slider_rotz);
-    DDX_Text(pDX, IDC_EDIT_SOTRY_PATH, story_path);
-    DDV_MaxChars(pDX, story_path, 512);
-    DDX_Control(pDX, IDC_COMBO_CHAPTER, chapter_select);
-    DDX_CBString(pDX, IDC_COMBO_CHAPTER, chapter_value);
-    DDV_MaxChars(pDX, chapter_value, 512);
-    DDX_Control(pDX, IDC_COMBO_PAGE, page_select);
-    DDX_CBString(pDX, IDC_COMBO_PAGE, page_value);
+    DDX_Text(pDX, IDC_m_edit_rotx, m_edit_rotx);
+    DDV_MinMaxInt(pDX, m_edit_rotx, 0, 360);
+    DDX_Text(pDX, IDC_m_edit_roty, m_edit_roty);
+    DDV_MinMaxInt(pDX, m_edit_roty, 0, 360);
+    DDX_Text(pDX, IDC_m_edit_rotz, m_edit_rotz);
+    DDV_MinMaxInt(pDX, m_edit_rotz, 0, 360);
+    DDX_Slider(pDX, IDC_m_slider_rotx, m_slider_rotx);
+    DDX_Slider(pDX, IDC_m_slider_roty, m_slider_roty);
+    DDX_Slider(pDX, IDC_m_slider_rotz, m_slider_rotz);
+    DDX_Text(pDX, IDC_EDIT_SOTRY_PATH, m_story_path);
+    DDV_MaxChars(pDX, m_story_path, 512);
+    DDX_Control(pDX, IDC_COMBO_CHAPTER, m_chapter_select);
+    DDX_CBString(pDX, IDC_COMBO_CHAPTER, m_chapter_value);
+    DDV_MaxChars(pDX, m_chapter_value, 512);
+    DDX_Control(pDX, IDC_COMBO_PAGE, m_page_select);
+    DDX_CBString(pDX, IDC_COMBO_PAGE, m_page_value);
 }
 
 BEGIN_MESSAGE_MAP(CMyUniverseDlg, CDialogEx)
@@ -91,12 +91,12 @@ BEGIN_MESSAGE_MAP(CMyUniverseDlg, CDialogEx)
     ON_WM_QUERYDRAGICON()
     ON_BN_CLICKED(IDOK, &CMyUniverseDlg::OnBnClickedOk)
     ON_BN_CLICKED(IDCANCEL, &CMyUniverseDlg::OnBnClickedCancel)
-    ON_NOTIFY(NM_CUSTOMDRAW, IDC_SLIDER_ROTX, &CMyUniverseDlg::OnNMCustomdrawSliderRotx)
-    ON_NOTIFY(NM_CUSTOMDRAW, IDC_SLIDER_ROTY, &CMyUniverseDlg::OnNMCustomdrawSliderRoty)
-    ON_NOTIFY(NM_CUSTOMDRAW, IDC_SLIDER_ROTZ, &CMyUniverseDlg::OnNMCustomdrawSliderRotz)
-    ON_EN_CHANGE(IDC_EDIT_ROTX, &CMyUniverseDlg::OnEnChangeEditRotx)
-    ON_EN_CHANGE(IDC_EDIT_ROTY, &CMyUniverseDlg::OnEnChangeEditRoty)
-    ON_EN_CHANGE(IDC_EDIT_ROTZ, &CMyUniverseDlg::OnEnChangeEditRotz)
+    ON_NOTIFY(NM_CUSTOMDRAW, IDC_m_slider_rotx, &CMyUniverseDlg::OnNMCustomdrawSliderRotx)
+    ON_NOTIFY(NM_CUSTOMDRAW, IDC_m_slider_roty, &CMyUniverseDlg::OnNMCustomdrawSliderRoty)
+    ON_NOTIFY(NM_CUSTOMDRAW, IDC_m_slider_rotz, &CMyUniverseDlg::OnNMCustomdrawSliderRotz)
+    ON_EN_CHANGE(IDC_m_edit_rotx, &CMyUniverseDlg::OnEnChangeEditRotx)
+    ON_EN_CHANGE(IDC_m_edit_roty, &CMyUniverseDlg::OnEnChangeEditRoty)
+    ON_EN_CHANGE(IDC_m_edit_rotz, &CMyUniverseDlg::OnEnChangeEditRotz)
     //ON_EN_CHANGE(IDC_EDIT1, &CMyUniverseDlg::OnEnChangeEdit1)
     ON_BN_CLICKED(IDC_BUTTON_BROWSE, &CMyUniverseDlg::OnBnClickedButtonBrowse)
     ON_CBN_SELCHANGE(IDC_COMBO_CHAPTER, &CMyUniverseDlg::OnCbnSelchangeComboChapter)
@@ -140,7 +140,7 @@ BOOL CMyUniverseDlg::OnInitDialog()
     //读取ini文件中的配置
     char lpStoryPath[512];
     GetPrivateProfileString("MyUniverseCfg", "StoryPath", "", lpStoryPath, 512, ".\\config.ini");
-    story_path = lpStoryPath;
+    m_story_path = lpStoryPath;
     UpdateData(0);
     ReadChapterStruct();
 
@@ -224,7 +224,7 @@ void CMyUniverseDlg::OnNMCustomdrawSliderRotx(NMHDR *pNMHDR, LRESULT *pResult)
     LPNMCUSTOMDRAW pNMCD = reinterpret_cast<LPNMCUSTOMDRAW>(pNMHDR);
     // TODO: 在此添加控件通知处理程序代码
     UpdateData(TRUE);
-    edit_rotx = (int)(slider_rotx/100.0*360);
+    m_edit_rotx = (int)(m_slider_rotx/100.0*360);
     UpdateData(FALSE);
     *pResult = 0;
 }
@@ -235,7 +235,7 @@ void CMyUniverseDlg::OnNMCustomdrawSliderRoty(NMHDR *pNMHDR, LRESULT *pResult)
     LPNMCUSTOMDRAW pNMCD = reinterpret_cast<LPNMCUSTOMDRAW>(pNMHDR);
     // TODO: 在此添加控件通知处理程序代码
     UpdateData(TRUE);
-    edit_roty = (int)(slider_roty/100.0*360);
+    m_edit_roty = (int)(m_slider_roty/100.0*360);
     UpdateData(FALSE);
     *pResult = 0;
 }
@@ -246,7 +246,7 @@ void CMyUniverseDlg::OnNMCustomdrawSliderRotz(NMHDR *pNMHDR, LRESULT *pResult)
     LPNMCUSTOMDRAW pNMCD = reinterpret_cast<LPNMCUSTOMDRAW>(pNMHDR);
     // TODO: 在此添加控件通知处理程序代码
     UpdateData(TRUE);
-    edit_rotz = (int)(slider_rotz/100.0*360);
+    m_edit_rotz = (int)(m_slider_rotz/100.0*360);
     UpdateData(FALSE);
     *pResult = 0;
 }
@@ -255,7 +255,7 @@ void CMyUniverseDlg::OnNMCustomdrawSliderRotz(NMHDR *pNMHDR, LRESULT *pResult)
 void CMyUniverseDlg::OnEnChangeEditRotx()
 {
     UpdateData(TRUE);
-    slider_rotx = (int)(edit_rotx/360.0*100);
+    m_slider_rotx = (int)(m_edit_rotx/360.0*100);
     UpdateData(FALSE);
 }
 
@@ -263,7 +263,7 @@ void CMyUniverseDlg::OnEnChangeEditRotx()
 void CMyUniverseDlg::OnEnChangeEditRoty()
 {
     UpdateData(TRUE);
-    slider_roty = (int)(edit_roty/360.0*100);
+    m_slider_roty = (int)(m_edit_roty/360.0*100);
     UpdateData(FALSE);
 }
 
@@ -271,7 +271,7 @@ void CMyUniverseDlg::OnEnChangeEditRoty()
 void CMyUniverseDlg::OnEnChangeEditRotz()
 {
     UpdateData(TRUE);
-    slider_rotz = (int)(edit_rotz/360.0*100);
+    m_slider_rotz = (int)(m_edit_rotz/360.0*100);
     UpdateData(FALSE);
 }
 
@@ -295,7 +295,7 @@ void CMyUniverseDlg::OnBnClickedButtonBrowse()
     LPITEMIDLIST lp = SHBrowseForFolder(&bi);  
     if(lp && SHGetPathFromIDList(lp, szPath))  
     {
-       story_path = szPath;
+       m_story_path = szPath;
     }
     UpdateData(0);
     ReadChapterStruct();
@@ -307,11 +307,11 @@ void CMyUniverseDlg::ReadChapterStruct()
     WIN32_FIND_DATA FindFileData;
 	HANDLE hFind = INVALID_HANDLE_VALUE;
 
-    chapter_select.ResetContent();
-    if(story_path.GetLength() != 0)
-    story_path += "\\*";
+    m_chapter_select.ResetContent();
+    if(m_story_path.GetLength() != 0)
+    m_story_path += "\\*";
 
-	hFind = FindFirstFile(story_path, &FindFileData);
+	hFind = FindFirstFile(m_story_path, &FindFileData);
 	
 	if(hFind == INVALID_HANDLE_VALUE)
 	{
@@ -327,7 +327,7 @@ void CMyUniverseDlg::ReadChapterStruct()
                 CString chapterName = FindFileData.cFileName;
                 if(chapterName != "." && chapterName != "..")
                 {
-                    chapter_select.AddString(FindFileData.cFileName);
+                    m_chapter_select.AddString(FindFileData.cFileName);
                 }
 			}
 		}while (FindNextFile(hFind, &FindFileData) != 0);
@@ -340,7 +340,7 @@ void CMyUniverseDlg::ReadChapterStruct()
             //AfxMessageBox("ERROR_NO_MORE_FILES");
 		}
 	}
-    chapter_select.SetCurSel(0);
+    m_chapter_select.SetCurSel(0);
     ReadPageStruct();
 }
 
@@ -349,18 +349,18 @@ void CMyUniverseDlg::ReadPageStruct()//次处支持：folder，dds，jpg，avi，wma
     WIN32_FIND_DATA FindFileData;
 	HANDLE hFind = INVALID_HANDLE_VALUE;
 
-    page_select.ResetContent();
+    m_page_select.ResetContent();
 
     UpdateData(1);
-    CString pagePath = story_path;
-    int pathLength = pagePath.GetLength();
-    char lastChar = *(pagePath.GetBuffer()+pathLength-1);
+    m_page_struct_path = m_story_path;
+    int pathLength = m_page_struct_path.GetLength();
+    char lastChar = *(m_page_struct_path.GetBuffer()+pathLength-1);
     if(lastChar != '\\')
-    pagePath +="\\";
-    pagePath += chapter_value;
-    pagePath += "\\*";
+    m_page_struct_path +="\\";
+    m_page_struct_path += m_chapter_value;
+    m_page_struct_path += "\\";
 
-	hFind = FindFirstFile(pagePath, &FindFileData);
+	hFind = FindFirstFile(m_page_struct_path+"*", &FindFileData);
 	
 	if(hFind == INVALID_HANDLE_VALUE)
 	{
@@ -377,7 +377,7 @@ void CMyUniverseDlg::ReadPageStruct()//次处支持：folder，dds，jpg，avi，wma
 			    if (FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
                 {
 				    //printf ("这是一个目录\n");
-                    page_select.AddString(FindFileData.cFileName);
+                    m_page_select.AddString(FindFileData.cFileName);
 			    }
                 else if( _stricmp(suffix,"jpg") ==0
                       || _stricmp(suffix,"dds") ==0
@@ -385,7 +385,7 @@ void CMyUniverseDlg::ReadPageStruct()//次处支持：folder，dds，jpg，avi，wma
                       || _stricmp(suffix,"wma") ==0
                       )
                 {
-                    page_select.AddString(FindFileData.cFileName);
+                    m_page_select.AddString(FindFileData.cFileName);
                 }
             }
 		}while (FindNextFile(hFind, &FindFileData) != 0);
@@ -398,11 +398,15 @@ void CMyUniverseDlg::ReadPageStruct()//次处支持：folder，dds，jpg，avi，wma
             //AfxMessageBox("ERROR_NO_MORE_FILES");
 		}
 	}
-    page_select.SetCurSel(0);
+    m_page_select.SetCurSel(0);
+    ReadOnePage();
 }
 
 void CMyUniverseDlg::ReadOnePage()
 {
+    UpdateData(1);
+    CString pagePath = m_page_struct_path + m_page_value;
+    AfxMessageBox(pagePath);
 }
 
 void CMyUniverseDlg::OnCbnSelchangeComboChapter()

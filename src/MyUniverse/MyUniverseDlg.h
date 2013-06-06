@@ -37,12 +37,12 @@ protected:
 public:
     afx_msg void OnBnClickedOk();
     afx_msg void OnBnClickedCancel();
-    int edit_rotx;
-    int edit_roty;
-    int edit_rotz;
-    int slider_rotx;
-    int slider_roty;
-    int slider_rotz;
+    int m_edit_rotx;
+    int m_edit_roty;
+    int m_edit_rotz;
+    int m_slider_rotx;
+    int m_slider_roty;
+    int m_slider_rotz;
     afx_msg void OnNMCustomdrawSliderRotx(NMHDR *pNMHDR, LRESULT *pResult);
     afx_msg void OnNMCustomdrawSliderRoty(NMHDR *pNMHDR, LRESULT *pResult);
     afx_msg void OnNMCustomdrawSliderRotz(NMHDR *pNMHDR, LRESULT *pResult);
@@ -50,11 +50,12 @@ public:
     afx_msg void OnEnChangeEditRoty();
     afx_msg void OnEnChangeEditRotz();
     afx_msg void OnCbnSelchangeComboChapter();
-    CString story_path;
+    CString m_story_path;
+    CString m_page_struct_path;
     afx_msg void OnBnClickedButtonBrowse();
-    CComboBox chapter_select;
-    CString chapter_value;
-    CComboBox page_select;
-    CString page_value;
+    CComboBox m_chapter_select;
+    CString m_chapter_value;
+    CComboBox m_page_select;
+    CString m_page_value;
     afx_msg void OnCbnSelchangeComboPage();
 };
