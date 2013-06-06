@@ -98,6 +98,15 @@ public:
     }
 }; 
 
+class GlbEularAngle
+{
+public:
+    //旋转顺序严格按照此结构中的顺序（欧拉角->旋转矩阵则按照z-x-z的顺序）
+    float m_1_Horz; //地球水平方向旋转
+    float m_2_Vert; //地球沿0度经线的旋转
+    float m_3_Axis; //地球轴向旋转
+};
+
 class GlbRotmat 
 { 
 public:
@@ -144,6 +153,8 @@ GLBROT_API void CloneGlbRotmat(GlbRotmat r, GlbRotmat &r_dst);
 
 GLBROT_API float Point2Angle(GlbPoint3d p1, GlbPoint3d p2);//计算p1到p2的旋转角度
 GLBROT_API void Point2Pivot(GlbPoint3d p1, GlbPoint3d p2, GlbPoint3d &pivot, bool bNormalize);//计算p1到p2的旋转轴
+
+GLBROT_API void EularAngle2Rotmat(GlbEularAngle angle, GlbRotmat &r);
 
 GLBROT_API void AngleGlbRotmat(GlbPoint3d angle, GlbRotmat &r);//angle的三个分量为绕x，绕y，绕z旋转的角度，依次进行旋转的矩阵
 GLBROT_API void PointGlbRotmat(GlbPoint3d p1, GlbPoint3d p2, GlbRotmat &r);//计算从p1到p2的旋转矩阵

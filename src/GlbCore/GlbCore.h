@@ -27,11 +27,12 @@ GLBCORE_API void glbDrawImage(GlbImage image);              //ÔÚ´°¿ÚÖÐ»­Í¼,µ«²¢Ã
 
 GLBCORE_API int glbUpdateWindow(int ms);                    //¸üÐÂ´°¿ÚÖÐÄÚÈÝ,·µ»Ø0±íÊ¾´°¿ÚÍË³ö£¬·µ»Ø1±íÊ¾Õý³£ÔËÐÐ
 
-GLBCORE_API void DrawLineOnGlobe(GlbPointGeo geoStartPoint, GlbPointGeo geoEndPoint, int layer);
+GLBCORE_API void DrawLineOnGlobe(GlbPointGeo geoStartPoint, GlbRotmat GlobeRotMat, GlbPointGeo geoEndPoint, int layer);
 GLBCORE_API void DrawLineOnScreen(GlbPointGeo geoStartPoint, GlbPointGeo geoEndPoint, int layer);
-GLBCORE_API void DrawGlobe(GlbImage Image);
+GLBCORE_API void DrawGlobe(GlbImage Image, GlbRotmat GlobeRotMat);
 GLBCORE_API void DrawTexture(
                     GlbImage Image,     //²ÄÖÊµÄ±àºÅ
+                    GlbRotmat GlobeRotMat,
                     GlbPointGeo pGeo,       //ÌùÍ¼µÄÖÐÐÄµã
                     bool bPointOnGlobe,     //ÖÐÐÄµã×ø±êÊÇÔÚ globe×ø±êÏµ(true) or screen×ø±êÏµ(false)
                     GlbPointGeo pGeoDirect, //ÌùÍ¼·½ÏòµÄ²Î¿¼µã
@@ -46,6 +47,7 @@ GLBCORE_API void DrawTexture(
 
 GLBCORE_API void DrawBelt(
                 GlbImage Image,
+                GlbRotmat GlobeRotMat,
                 GlbPointGeo pGeo,
                 bool bPointOnGlobe,
                 GlbPointGeo pGeoDirect,	

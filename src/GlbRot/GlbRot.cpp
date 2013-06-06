@@ -199,6 +199,22 @@ void CreateGlbRotmat(GlbRotmat &r)
 	r.r33 = 1;
 }
 
+void EularAngle2Rotmat(GlbEularAngle angle, GlbRotmat &r)
+{
+    float a1 = angle.m_1_Horz/180.0*PI;
+    float a2 = angle.m_2_Vert/180.0*PI;
+    float a3 = angle.m_3_Axis/180.0*PI;
+    r.r11 = cos(a1)*cos(a3)-cos(a2)*sin(a1)*sin(a3);
+    r.r12 = -cos(a1)*sin(a3)-cos(a2)*cos(a3)*sin(a1);
+    r.r13 = sin(a1)*sin(a2);
+    r.r21 = cos(a3)*sin(a1)+cos(a1)*cos(a2)*sin(a3);
+    r.r22 = cos(a1)*cos(a2)*cos(a3)-sin(a1)*sin(a3);
+    r.r23 = -cos(a1)*sin(a2);
+    r.r31 = sin(a2)*sin(a3);
+    r.r32 = cos(a3)*sin(a2);
+    r.r33 = cos(a2);
+}
+
 void AngleGlbRotmat(GlbPoint3d angle, GlbRotmat &r)
 {
 	CvMat * rotVector1 = cvCreateMat(3, 1, CV_32FC1);

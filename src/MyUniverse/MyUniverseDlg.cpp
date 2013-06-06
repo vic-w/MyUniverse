@@ -15,6 +15,9 @@
 extern CRITICAL_SECTION g_StoryPage_CS;
 extern CStoryPage g_StoryPage;
 
+extern CRITICAL_SECTION g_GlobeRotMat_CS;
+extern GlbRotmat g_GlobeRotMat;
+
 // 用于应用程序“关于”菜单项的 CAboutDlg 对话框
 
 class CAboutDlg : public CDialogEx
@@ -111,6 +114,8 @@ END_MESSAGE_MAP()
 BOOL CMyUniverseDlg::OnInitDialog()
 {
     InitializeCriticalSection(&g_StoryPage_CS);//初始化临界区
+    InitializeCriticalSection(&g_GlobeRotMat_CS);//初始化临界区
+
     CDialogEx::OnInitDialog();
 
     // 将“关于...”菜单项添加到系统菜单中。
@@ -147,6 +152,12 @@ BOOL CMyUniverseDlg::OnInitDialog()
     UpdateData(0);
     ReadChapterStruct();
 
+    //初始化旋转矩阵
+    GlbEularAngle angle;
+    angle.m_1_Horz = 0;
+    angle.m_2_Vert = 0;
+    angle.m_3_Axis = 0;
+    EularAngle2Rotmat(angle, g_GlobeRotMat);
     
     CreateThread(0, 0, GlobeThread, 0,0,0);//启动OpenGL显示线程
 
@@ -230,6 +241,7 @@ void CMyUniverseDlg::OnNMCustomdrawSliderRotx(NMHDR *pNMHDR, LRESULT *pResult)
     UpdateData(GET_DATA);
     m_edit_rotx = (int)(m_slider_rotx/100.0*360);
     UpdateData(PUT_DATA);
+    GlobeRotate(m_edit_rotx, m_edit_roty, m_edit_rotz, g_GlobeRotMat);
     *pResult = 0;
 }
 
@@ -241,6 +253,7 @@ void CMyUniverseDlg::OnNMCustomdrawSliderRoty(NMHDR *pNMHDR, LRESULT *pResult)
     UpdateData(GET_DATA);
     m_edit_roty = (int)(m_slider_roty/100.0*360);
     UpdateData(PUT_DATA);
+    GlobeRotate(m_edit_rotx, m_edit_roty, m_edit_rotz, g_GlobeRotMat);
     *pResult = 0;
 }
 
@@ -252,6 +265,7 @@ void CMyUniverseDlg::OnNMCustomdrawSliderRotz(NMHDR *pNMHDR, LRESULT *pResult)
     UpdateData(GET_DATA);
     m_edit_rotz = (int)(m_slider_rotz/100.0*360);
     UpdateData(PUT_DATA);
+    GlobeRotate(m_edit_rotx, m_edit_roty, m_edit_rotz, g_GlobeRotMat);
     *pResult = 0;
 }
 
@@ -504,4 +518,16 @@ void CMyUniverseDlg::ReadFolderContent(CString folderPath, CString suffix)
 		}while (FindNextFile(hFind, &FindFileData) != 0);
     }
     g_StoryPage.nCurFrame = 0;
+}
+
+void CMyUniverseDlg::GlobeRotate(int Axis, int Horz, int Vert, GlbRotmat &r)
+{
+    GlbEularAngle angle;
+    angle.m_1_Horz = Horz;
+    angle.m_2_Vert = Vert;
+    angle.m_3_Axis = Axis;
+
+    EnterCriticalSection(&g_GlobeRotMat_CS);
+    EularAngle2Rotmat(angle, r);
+    LeaveCriticalSection(&g_GlobeRotMat_CS);
 }

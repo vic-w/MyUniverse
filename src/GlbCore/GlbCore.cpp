@@ -32,7 +32,7 @@ Vertex g_quadVertices[] =
     { 0.0f,1.0f, -1.0f, 1.0f, 0.0f }
 };
 
-GlbRotmat g_GlobeRotMat;
+//GlbRotmat g_GlobeRotMat;
 
 #define FACET_SCACLE_IN_ANGLE (6) //每个面片占的最小角度
 #define MAX_FACET_SHOW_THRESHOLD (0.4f)//能显示的最大面片的size
@@ -452,7 +452,7 @@ int glbCreateWindow(HINSTANCE   hInstance)
 
     GL_Init(g_hWnd);
 
-    CreateGlbRotmat(g_GlobeRotMat);
+    //CreateGlbRotmat(g_GlobeRotMat);
     return 1;
 }//*/
 
@@ -531,6 +531,7 @@ int glbUpdateWindow(int ms)
 
 void DrawTexture(
                     GlbImage Image, 
+                    GlbRotmat GlobeRotMat,
                     GlbPointGeo pGeo,
                     bool bPointOnGlobe,
                     GlbPointGeo pGeoDirect,
@@ -556,7 +557,7 @@ void DrawTexture(
     Geo2Rect(pGeo, pRect);
     if(bPointOnGlobe)
     {
-        Sphere2Sphere(pRect, g_GlobeRotMat, pRect);
+        Sphere2Sphere(pRect, GlobeRotMat, pRect);
     }
 
     GlbPoint3d pivot_v, pivot_h;
@@ -564,7 +565,7 @@ void DrawTexture(
     Geo2Rect(pGeoDirect, pRectDirect);
     if(bDirOnGlobe)
     {
-        Sphere2Sphere(pRectDirect, g_GlobeRotMat, pRectDirect);
+        Sphere2Sphere(pRectDirect, GlobeRotMat, pRectDirect);
     }
 
     CreateNormPivot( pRect, pRectDirect, bHeadDirect, pivot_h, pivot_v);
@@ -668,13 +669,13 @@ void DrawTexture(
     //SwapBuffers( g_hDC );
 }
 
-void DrawLineOnGlobe(GlbPointGeo geoStartPoint, GlbPointGeo geoEndPoint, int layer)
+void DrawLineOnGlobe(GlbPointGeo geoStartPoint, GlbRotmat GlobeRotMat, GlbPointGeo geoEndPoint, int layer)
 {
 	GlbPoint3d rectStartPoint, rectEndPoint;
 	Geo2Rect(geoStartPoint, rectStartPoint);
 	Geo2Rect(geoEndPoint, rectEndPoint);
-	Sphere2Sphere(rectStartPoint, g_GlobeRotMat, rectStartPoint);
-	Sphere2Sphere(rectEndPoint, g_GlobeRotMat, rectEndPoint);
+	Sphere2Sphere(rectStartPoint, GlobeRotMat, rectStartPoint);
+	Sphere2Sphere(rectEndPoint, GlobeRotMat, rectEndPoint);
 	GlbPointGeo geoStartPoint2, geoEndPoint2;
 	Rect2Geo(rectStartPoint, geoStartPoint2);
 	Rect2Geo(rectEndPoint, geoEndPoint2);
@@ -722,7 +723,7 @@ void DrawLineOnScreen(GlbPointGeo geoStartPoint, GlbPointGeo geoEndPoint, int la
 	}
 }
 
-void DrawGlobe(GlbImage Image)
+void DrawGlobe(GlbImage Image, GlbRotmat GlobeRotMat)
 {
 	GlbPoint3d pClose;
 	GlbPointGeo pGeo,pGeoDirect;
@@ -733,6 +734,7 @@ void DrawGlobe(GlbImage Image)
 
 	DrawTexture(
 		Image,	//材质的编号
+        GlobeRotMat,
 		pGeo,			//贴图的中心点
 		true,	//中心点坐标是在 globe坐标系(true) or screen坐标系(false)
 		pGeoDirect,	//贴图方向的参考点
@@ -747,6 +749,7 @@ void DrawGlobe(GlbImage Image)
 }
 
 void DrawBelt(GlbImage Image, 
+              GlbRotmat GlobeRotMat,
 			  GlbPointGeo pGeo, 
 			  bool bPointOnGlobe, 
 			  GlbPointGeo pGeoDirect, 
@@ -759,6 +762,7 @@ void DrawBelt(GlbImage Image,
 	GlbPoint3d pClose;
 	DrawTexture(
 		Image,	//材质的编号
+        GlobeRotMat,
 		pGeo,			//贴图的中心点
 		bPointOnGlobe,	//中心点坐标是在 globe坐标系(true) or screen坐标系(false)
 		pGeoDirect,	//贴图方向的参考点

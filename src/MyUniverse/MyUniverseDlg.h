@@ -4,6 +4,7 @@
 
 #pragma once
 #include "afxwin.h"
+#include "GlbRot.h"
 
 #define GET_DATA 1 
 #define PUT_DATA 0
@@ -28,6 +29,7 @@ private:
     void ReadPageStruct();
     void ReadOnePage();
     void ReadFolderContent(CString folderPath, CString suffix);
+    void GlobeRotate(int Axis, int Horz, int Vert, GlbRotmat &r);
 protected:
 	HICON m_hIcon;
 
