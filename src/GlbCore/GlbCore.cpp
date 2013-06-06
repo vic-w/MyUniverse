@@ -95,7 +95,10 @@ GlbImage glbLoadImage(const char* filename)  //载入图像（支持dds,jpg,png）
                 nHeight = (nHeight / 2);
             }
         }
-
+        else
+        {
+            return NULL;
+        }
         if( pDDSImageData != NULL )
         {
             if( pDDSImageData->pixels != NULL )
@@ -187,7 +190,7 @@ DDS_IMAGE_DATA* glbLoadDDSFile( const char *filename )
     {
         char str[255];
         sprintf_s( str, 255, "The file \"%s\" doesn't appear to be a valid .dds file!", filename );
-        MessageBox( NULL, str, "ERROR", MB_OK|MB_ICONEXCLAMATION );
+        //MessageBox( NULL, str, "ERROR", MB_OK|MB_ICONEXCLAMATION );
         fclose( pFile );
         return NULL;
     }
@@ -633,16 +636,16 @@ void DrawTexture(
             {
                 glBegin(GL_QUADS);						// 绘制正方形
 
-                glTexCoord2f((x) * mRectWidth, (y) * mRectHeight); 
+                glTexCoord2f((x) * mRectWidth, 1- (y) * mRectHeight); 
                 glVertex3f(pRound[0].m_x, pRound[0].m_y, layer);				// 左上
 
-                glTexCoord2f((x+1) * mRectWidth, (y) * mRectHeight); 
+                glTexCoord2f((x+1) * mRectWidth, 1- (y) * mRectHeight); 
                 glVertex3f(pRound[1].m_x, pRound[1].m_y, layer);				// 右上
-                glTexCoord2f((x+1) * mRectWidth, (y+1) * mRectHeight); 
+                glTexCoord2f((x+1) * mRectWidth, 1- (y+1) * mRectHeight); 
                 glVertex3f(pRound[2].m_x, pRound[2].m_y, layer);				// 右下
 
 
-                glTexCoord2f((x) * mRectWidth, (y+1) * mRectHeight); 
+                glTexCoord2f((x) * mRectWidth, 1- (y+1) * mRectHeight); 
                 glVertex3f(pRound[3].m_x, pRound[3].m_y, layer);				// 左下
                 glEnd();
             }
