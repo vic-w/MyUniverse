@@ -12,6 +12,7 @@
 #define new DEBUG_NEW
 #endif
 
+extern CRITICAL_SECTION g_StoryPage_CS;
 extern CStoryPage g_StoryPage;
 
 // 用于应用程序“关于”菜单项的 CAboutDlg 对话框
@@ -109,6 +110,7 @@ END_MESSAGE_MAP()
 
 BOOL CMyUniverseDlg::OnInitDialog()
 {
+    InitializeCriticalSection(&g_StoryPage_CS);//初始化临界区
     CDialogEx::OnInitDialog();
 
     // 将“关于...”菜单项添加到系统菜单中。
@@ -145,6 +147,7 @@ BOOL CMyUniverseDlg::OnInitDialog()
     UpdateData(0);
     ReadChapterStruct();
 
+    
     CreateThread(0, 0, GlobeThread, 0,0,0);//启动OpenGL显示线程
 
     return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
@@ -405,11 +408,15 @@ void CMyUniverseDlg::ReadPageStruct()//次处支持：folder，dds，jpg，avi，wma
 
 void CMyUniverseDlg::ReadOnePage()
 {
-    g_StoryPage.bEmpty = 1;
     UpdateData(1);
     CString pagePath = m_page_struct_path + m_page_value;
     //AfxMessageBox(pagePath);
     char* suffix = pagePath.GetBuffer() + pagePath.GetLength() - 4;
+
+    EnterCriticalSection(&g_StoryPage_CS);
+    //清除全局数据
+    g_StoryPage.bEmpty = 1;
+    g_StoryPage.FrameNames.clear();
     if( _stricmp(suffix,".jpg") == 0)
     {
         //AfxMessageBox("this is a jpg file");
@@ -444,8 +451,34 @@ void CMyUniverseDlg::ReadOnePage()
     }
     else
     {
-        AfxMessageBox("this is a folder. 暂不支持此格式");
+        //AfxMessageBox("this is a folder");
+        g_StoryPage.bEmpty = 0;
+        g_StoryPage.bMovie = 1;
+        g_StoryPage.pagePath = pagePath;
+        g_StoryPage.storyType = FOLDER;
+        WIN32_FIND_DATA FindFileData;
+        HANDLE hFind = INVALID_HANDLE_VALUE;
+        hFind = FindFirstFile(pagePath+"\\*.dds", &FindFileData);
+	
+	    if(hFind == INVALID_HANDLE_VALUE)
+	    {
+		    //AfxMessageBox ("Invalid file handle.\n");
+	    }
+	    else
+	    {
+            g_StoryPage.nFrames = 0;
+		    do
+		    {
+                CString FrameName = pagePath;
+                FrameName += "\\";
+                FrameName += FindFileData.cFileName;
+                g_StoryPage.FrameNames.push_back(FrameName);
+                g_StoryPage.nFrames++;
+		    }while (FindNextFile(hFind, &FindFileData) != 0);
+        }
+        g_StoryPage.nCurFrame = 0;
     }
+    LeaveCriticalSection(&g_StoryPage_CS);
 }
 
 void CMyUniverseDlg::OnCbnSelchangeComboChapter()

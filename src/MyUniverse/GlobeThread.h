@@ -1,6 +1,9 @@
 #pragma once
 
 #include "GlbCore.h"
+#include <vector>
+
+using std::vector;
 
 enum STORY_TYPE
 {
@@ -9,7 +12,7 @@ enum STORY_TYPE
     PNG,
     AVI,
     WMA,
-    FLODER
+    FOLDER
 };
 
 class CStoryPage
@@ -19,6 +22,9 @@ public:
     bool bMovie;
     CString pagePath;
     STORY_TYPE storyType;
+    vector<CString> FrameNames;
+    int nFrames;
+    int nCurFrame;
 };
 
 DWORD WINAPI GlobeThread(LPVOID lpParam);

@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "GlobeThread.h"
 
+CRITICAL_SECTION g_StoryPage_CS;
 CStoryPage g_StoryPage;
 
 DWORD WINAPI GlobeThread(LPVOID lpParam)
@@ -25,6 +26,7 @@ DWORD WINAPI GlobeThread(LPVOID lpParam)
 
 void DrawStoryPage()
 {
+    EnterCriticalSection(&g_StoryPage_CS);
     if(!g_StoryPage.bEmpty)
     {
         if(     g_StoryPage.storyType == DDS 
@@ -35,8 +37,17 @@ void DrawStoryPage()
             DrawGlobe(Image);
             glbReleaseImage(&Image);
         }
+        else if(g_StoryPage.storyType == FOLDER) 
+        {
+            GlbImage Image = glbLoadImage(g_StoryPage.FrameNames[g_StoryPage.nCurFrame]);
+            DrawGlobe(Image);
+            glbReleaseImage(&Image);
+            g_StoryPage.nCurFrame = (g_StoryPage.nCurFrame+1)%g_StoryPage.nFrames;
+        }
         else
         {
+            //do nothing
         }
     }
+    LeaveCriticalSection(&g_StoryPage_CS);
 }
