@@ -35,8 +35,9 @@ void glbCrossMul(GlbPoint3d Vec1, GlbPoint3d Vec2, GlbPoint3d &VecDST)
 
 void glbPointGeo2PointRect(GlbPointGeo pGeo, GlbPoint3d &pRect)
 {
-	float latitude = pGeo.m_lat / 180.0f * PI;//左下角为原点？？？
-	float longitude = pGeo.m_lng / 180.0f * PI;
+	float latitude = pGeo.m_lat / 180.0f * PI;//纬度
+	float longitude = pGeo.m_lng / 180.0f * PI;//经度
+
 	pRect.m_x = cos(longitude)*cos(latitude);
 	pRect.m_y = sin(latitude);
 	pRect.m_z = -sin(longitude)*cos(latitude);
