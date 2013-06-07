@@ -4,24 +4,24 @@
 #include "opencv.hpp"
 
 
-float VectorNorm(GlbPoint3d Vec)
+float glbVectorNorm(GlbPoint3d Vec)
 {
 	return sqrt( Vec.m_x * Vec.m_x + Vec.m_y * Vec.m_y + Vec.m_z * Vec.m_z);
 }
-void VectorNormalize(GlbPoint3d Vec, GlbPoint3d &Vec_dst)
+void glbVectorNormalize(GlbPoint3d Vec, GlbPoint3d &Vec_dst)
 {
-	float norm = VectorNorm(Vec);
+	float norm = glbVectorNorm(Vec);
 	if (norm<0.00001f) norm=0.00001f;
 
 	Vec_dst.m_x = Vec.m_x / norm;
 	Vec_dst.m_y = Vec.m_y / norm;
 	Vec_dst.m_z = Vec.m_z / norm;
 }
-float DotMul(GlbPoint3d Vec1, GlbPoint3d Vec2)
+float glbDotMul(GlbPoint3d Vec1, GlbPoint3d Vec2)
 {
 	return Vec1.m_x*Vec2.m_x + Vec1.m_y*Vec2.m_y + Vec1.m_z*Vec2.m_z;
 }
-void CrossMul(GlbPoint3d Vec1, GlbPoint3d Vec2, GlbPoint3d &VecDST)
+void glbCrossMul(GlbPoint3d Vec1, GlbPoint3d Vec2, GlbPoint3d &VecDST)
 {
 	GlbPoint3d t;
 	t.m_x = Vec1.m_y * Vec2.m_z - Vec2.m_y * Vec1.m_z;
@@ -75,20 +75,6 @@ void glbPointRect2PointGeo(GlbPoint3d pRect, GlbPointGeo &pGeo)
 	pGeo.m_lat = latitude;
 }
 
-void Square2Sphere(GlbPoint2d pSquare, float TexWidth, float TexHeight, GlbPoint3d &pSphere)
-{
-	float longitude = pSquare.m_x/TexWidth * 360.0f - 180.0f;
-	float latitude = pSquare.m_y/TexHeight * 180.0f - 90.0f;
-
-	GlbPointGeo pGeo;
-	pGeo.m_lat = latitude;
-	pGeo.m_lng = longitude;
-
-	glbPointGeo2PointRect(pGeo, pSphere);
-
-	//float r = p1.m_x*p1.m_x+p1.m_y*p1.m_y+p1.m_z*p1.m_z;
-}
-
 void glbGlobePoint2ScreenPoint(GlbPoint3d p1, GlbRotmat r, GlbPoint3d &p2)
 {
 	GlbPoint3d t;
@@ -133,55 +119,55 @@ void glbScreenPoint2GlobePoint(GlbPoint3d p1, GlbRotmat r, GlbPoint3d &p2)
 }
 
 
-void glbPointRect2PointRound(GlbPoint3d p2, float radius, GlbPoint2d &p3)
+void glbPointRect2PointRound(GlbPoint3d p3, GlbPointRound &p2)
 {
-	if(p2.m_y > 1)
+	if(p3.m_y > 1)
 	{
-		p2.m_y = 1;
+		p3.m_y = 1;
 	}
-	else if(p2.m_y<-1)
+	else if(p3.m_y<-1)
 	{
-		p2.m_y = -1;
+		p3.m_y = -1;
 	}
 
 
-	float latitude = asin(p2.m_y);
+	float latitude = asin(p3.m_y);
 	float R = (PI/2.0f - latitude)/PI; //范围[0,1]
-	float r_xz = sqrt(pow(p2.m_x, 2) + pow(p2.m_z, 2));
+	float r_xz = sqrt(pow(p3.m_x, 2) + pow(p3.m_z, 2));
 	if( r_xz < 0.0001 )
 	{
-		p3.m_x = 0.0f;
-		p3.m_y = 0.0f;
+		p2.m_x = 0.0f;
+		p2.m_y = 0.0f;
 		return;
 	}	
 
 	//R = DistortR(R);
 
-	p3.m_x = p2.m_x/r_xz*R*radius;
-	p3.m_y = -p2.m_z/r_xz*R*radius;
+	p2.m_x = p3.m_x/r_xz*R;
+	p2.m_y = -p3.m_z/r_xz*R;
 }
 
-void glbPointRound2PointRect(GlbPoint2d p3, float radius, GlbPoint3d &p2)
+void glbPointRound2PointRect(GlbPoint2d p2, GlbPoint3d &p3)
 {
-	float R = sqrt(p3.m_x * p3.m_x + p3.m_y *p3.m_y);
-	float ix = p3.m_x / R;
-	float iz = -p3.m_y / R;
+	float R = sqrt(p2.m_x * p2.m_x + p2.m_y *p2.m_y);
+	float ix = p2.m_x / R;
+	float iz = -p2.m_y / R;
 
 	//R = aDistortR(R);
 
-	float iR = R / radius;//范围[0,1]
+	float iR = R;//范围[0,1]
 	float latitude = PI/2.0f - iR * PI;
-	p2.m_y = sin(latitude);
+	p3.m_y = sin(latitude);
 
 	if(R < 0.0001)
 	{
-		p2.m_x = 0;
-		p2.m_z = 0;
+		p3.m_x = 0;
+		p3.m_z = 0;
 		return;
 	}
 
-	p2.m_x = ix * cos(latitude);
-	p2.m_z = iz * cos(latitude);
+	p3.m_x = ix * cos(latitude);
+	p3.m_z = iz * cos(latitude);
 
 	return;
 }
@@ -246,11 +232,11 @@ float glbAngleBetweenPoints(GlbPoint3d p1, GlbPoint3d p2)
 	{
 		return 0.0f;
 	}
-	float fDotMul = DotMul(p1, p2);
-	float m_p1 = VectorNorm(p1);
-	float m_p2 = VectorNorm(p2);
+	float fglbDotMul = glbDotMul(p1, p2);
+	float m_p1 = glbVectorNorm(p1);
+	float m_p2 = glbVectorNorm(p2);
 
-	float d = fDotMul / m_p1 / m_p2;
+	float d = fglbDotMul / m_p1 / m_p2;
 
 	if(d>1)
 	{
@@ -271,32 +257,15 @@ void glbMovingPoints2RotMat(GlbPoint3d p1, GlbPoint3d p2, GlbRotmat &r)
 	//从p1转到p2
 	if(p1.m_x == p2.m_x && p1.m_y == p2.m_y && p1.m_z == p2.m_z)
 	{
+        glbCreateGlbRotmat(r);
 		return;
 	}
 
 	float a = glbAngleBetweenPoints(p1, p2)/180.0f*PI; //计算旋转角度
-	GlbPoint3d pivot;
+	GlbPivot pivot;
 	glbPivotBetweenPoints(p1, p2, pivot); //计算旋转轴
 
-	//旋转轴单位向量
-	float x = pivot.m_x;
-	float y = pivot.m_y;
-	float z = pivot.m_z;
-
-	GlbRotmat rot;
-	rot.r11 = cos(a) + (1-cos(a)) * x * x;
-	rot.r12 = (1-cos(a))*x*y - sin(a)*z;
-	rot.r13 = (1-cos(a))*x*z + sin(a)*y;
-
-	rot.r21 = (1-cos(a))*y*x + sin(a)*z;
-	rot.r22 = cos(a)+(1-cos(a))*y*y;
-	rot.r23 = (1-cos(a))*y*z - sin(a)*x;
-
-	rot.r31 = (1-cos(a))*z*x - sin(a)*y;
-	rot.r32 = (1-cos(a))*z*y + sin(a)*x;
-	rot.r33 = cos(a) + (1-cos(a))*z*z;
-
-	GlbRotmatMul(rot, r, r);
+    glbAnglePivot2RotMat(pivot, a, r);
 }
 
 void glbAnglePivot2RotMat(GlbPoint3d pivot, float angle, GlbRotmat &r)
@@ -319,7 +288,7 @@ void glbAnglePivot2RotMat(GlbPoint3d pivot, float angle, GlbRotmat &r)
 	r.r33 = cos(angle) + (1-cos(angle))*z*z;
 }
 
-void PivotRotPoint(GlbPoint3d p, GlbPoint3d pivot, float angle, GlbPoint3d &p_out)
+void glbPivotingPoint(GlbPoint3d p, GlbPivot pivot, float angle, GlbPoint3d &p_out)
 {
 	GlbRotmat rot;
 	glbAnglePivot2RotMat(pivot, angle, rot);
@@ -327,7 +296,7 @@ void PivotRotPoint(GlbPoint3d p, GlbPoint3d pivot, float angle, GlbPoint3d &p_ou
 	glbGlobePoint2ScreenPoint(p, rot, p_out);
 }
 
-void CreateNormPivot(GlbPoint3d p, GlbPoint3d directPoint, bool bHeadDirect, GlbPoint3d &pivot_h, GlbPoint3d &pivot_v)
+void glbCreateNormPivot(GlbPoint3d p, GlbPoint3d directPoint, bool bHeadDirect, GlbPivot &pivot_h, GlbPivot &pivot_v)
 {
 	if(p.m_x==directPoint.m_x && p.m_y==directPoint.m_y && p.m_z==directPoint.m_z)
 	{
@@ -347,8 +316,8 @@ void CreateNormPivot(GlbPoint3d p, GlbPoint3d directPoint, bool bHeadDirect, Glb
 	}
 	else
 	{
-		CrossMul(p, directPoint, pivot_v);
-		VectorNormalize(pivot_v, pivot_v);
+		glbCrossMul(p, directPoint, pivot_v);
+		glbVectorNormalize(pivot_v, pivot_v);
 
 		if(!bHeadDirect)
 		{
@@ -357,8 +326,8 @@ void CreateNormPivot(GlbPoint3d p, GlbPoint3d directPoint, bool bHeadDirect, Glb
 			pivot_v.m_z = -pivot_v.m_z;
 		}
 
-		CrossMul(pivot_v, p, pivot_h);
-		VectorNormalize(pivot_h, pivot_h);
+		glbCrossMul(pivot_v, p, pivot_h);
+		glbVectorNormalize(pivot_h, pivot_h);
 	}
 }
 
@@ -410,13 +379,13 @@ void glbCloneGlbRotmat( GlbRotmat r, GlbRotmat &r_dst )
 
 }
 
-void glbPivotBetweenPoints( GlbPoint3d p1, GlbPoint3d p2, GlbPoint3d &pivot)
+void glbPivotBetweenPoints( GlbPoint3d p1, GlbPoint3d p2, GlbPivot &pivot)
 {
 	GlbPoint3d axle;//旋转轴（p1叉乘p2）
-	CrossMul(p1, p2, axle);
+	glbCrossMul(p1, p2, axle);
 
 	float m_axle = 1;
-	m_axle = VectorNorm(axle);
+	m_axle = glbVectorNorm(axle);
 	
 	//旋转轴单位向量
 	pivot.m_x = axle.m_x / m_axle;
@@ -424,7 +393,7 @@ void glbPivotBetweenPoints( GlbPoint3d p1, GlbPoint3d p2, GlbPoint3d &pivot)
 	pivot.m_z = axle.m_z / m_axle;
 }
 
-void GlbRotmatMul( GlbRotmat mat1, GlbRotmat mat2, GlbRotmat &mat_dst )
+void glbRotmatMul( GlbRotmat mat1, GlbRotmat mat2, GlbRotmat &mat_dst )
 {
 	GlbRotmat t;
 	t.r11 = mat1.r11 * mat2.r11 + mat1.r12 * mat2.r21 + mat1.r13 * mat2.r31;

@@ -98,6 +98,9 @@ public:
     }
 }; 
 
+typedef GlbPoint3d GlbPivot;
+typedef GlbPoint2d GlbPointRound;
+
 class GlbEularAngle
 {
 public:
@@ -129,22 +132,23 @@ public:
     long m_nTrackID;
 };
 
-GLBROT_API float VectorNorm(GlbPoint3d Vec);
-GLBROT_API void VectorNormalize(GlbPoint3d Vec, GlbPoint3d &Vec_dst);
-
-GLBROT_API float DotMul(GlbPoint3d Vec1, GlbPoint3d Vec2);
-GLBROT_API void CrossMul(GlbPoint3d Vec1, GlbPoint3d Vec2, GlbPoint3d &VecDST);
-GLBROT_API void GlbRotmatMul(GlbRotmat mat1, GlbRotmat mat2, GlbRotmat &mat_dst);
+//计算向量的长度（模）
+GLBROT_API float glbVectorNorm(GlbPoint3d Vec);
+//将向量变为单位向量
+GLBROT_API void glbVectorNormalize(GlbPoint3d Vec, GlbPoint3d &Vec_dst);
+//两个向量的点乘
+GLBROT_API float glbDotMul(GlbPoint3d Vec1, GlbPoint3d Vec2);
+//两个向量的叉乘
+GLBROT_API void glbCrossMul(GlbPoint3d Vec1, GlbPoint3d Vec2, GlbPoint3d &VecDST);
+//两个旋转矩阵的相乘
+//第一个参数是将要做的旋转，第二个参数是原始的旋转矩阵，第三个参数是旋转后的矩阵
+//Rotation × Origin = destination
+GLBROT_API void glbRotmatMul(GlbRotmat Rotation, GlbRotmat Origin, GlbRotmat &destination);
 
 //经纬坐标 转换为 直角坐标
 GLBROT_API void glbPointGeo2PointRect(GlbPointGeo pGeo, GlbPoint3d &pRect);
 //直角坐标 转换为 经纬坐标
 GLBROT_API void glbPointRect2PointGeo(GlbPoint3d pRect, GlbPointGeo &pGeo);
-
-//原始素材（方形）坐标 转换为 球面上的直角坐标（此函数没有调用）
-GLBROT_API void Square2Sphere(GlbPoint2d pSquare, float TexWidth, float TexHeight, GlbPoint3d &pSphere);
-//直角坐标 转换为 原始素材坐标
-GLBROT_API void Sphere2Square(GlbPoint2d p1, float w, float h, GlbPoint3d &p0);
 
 //地球上的经纬坐标 转换为 屏幕上的经纬坐标
 GLBROT_API void glbGlobePoint2ScreenPoint(GlbPoint3d p1, GlbRotmat r, GlbPoint3d &p2);
@@ -152,9 +156,9 @@ GLBROT_API void glbGlobePoint2ScreenPoint(GlbPoint3d p1, GlbRotmat r, GlbPoint3d
 GLBROT_API void glbScreenPoint2GlobePoint(GlbPoint3d p1, GlbRotmat r, GlbPoint3d &p2);
 
 //直角坐标 转换为 圆饼坐标
-GLBROT_API void glbPointRect2PointRound(GlbPoint3d p2, float radius, GlbPoint2d &p3);
+GLBROT_API void glbPointRect2PointRound(GlbPoint3d p3, GlbPointRound &p2);
 //圆饼坐标 转换为 直角坐标
-GLBROT_API void glbPointRound2PointRect(GlbPoint2d p3, float radius, GlbPoint3d &p2);
+GLBROT_API void glbPointRound2PointRect(GlbPointRound p2, GlbPoint3d &p3);
 
 //生成初始旋转矩阵
 GLBROT_API void glbCreateGlbRotmat(GlbRotmat &r);
@@ -164,7 +168,7 @@ GLBROT_API void glbCloneGlbRotmat(GlbRotmat r, GlbRotmat &r_dst);
 //计算屏幕上的点p1到p2的旋转角度
 GLBROT_API float glbAngleBetweenPoints(GlbPoint3d p1, GlbPoint3d p2);
 //计算屏幕上的点p1到p2的旋转轴
-GLBROT_API void glbPivotBetweenPoints(GlbPoint3d p1, GlbPoint3d p2, GlbPoint3d &pivot);
+GLBROT_API void glbPivotBetweenPoints(GlbPoint3d p1, GlbPoint3d p2, GlbPivot &pivot);
 
 //欧拉角 转换为 旋转矩阵
 GLBROT_API void glbEularAngle2Rotmat(GlbEularAngle angle, GlbRotmat &r);
@@ -173,11 +177,11 @@ GLBROT_API void glbRotVector2RotMat(GlbPoint3d angle, GlbRotmat &r);
 //屏幕上的点p1移动到p2所表示的旋转矩阵
 GLBROT_API void glbMovingPoints2RotMat(GlbPoint3d p1, GlbPoint3d p2, GlbRotmat &r);
 //由转轴和转角所表示的旋转矩阵
-GLBROT_API void glbAnglePivot2RotMat(GlbPoint3d pivot, float angle, GlbRotmat &r);
+GLBROT_API void glbAnglePivot2RotMat(GlbPivot pivot, float angle, GlbRotmat &r);
 //将p点绕pivot轴旋转angle角度
-GLBROT_API void PivotRotPoint(GlbPoint3d p, GlbPoint3d pivot, float angle, GlbPoint3d &p_out);
+GLBROT_API void glbPivotingPoint(GlbPoint3d p, GlbPivot pivot, float angle, GlbPoint3d &p_out);
 //生成贴图时所需的两个正交的旋转轴
-GLBROT_API void CreateNormPivot(GlbPoint3d p, GlbPoint3d directPoint, bool bHeadDirect, GlbPoint3d &pivot_h, GlbPoint3d &pivot_v);//生成p点到headPoint的旋转轴，以及其正交方向的旋转轴
+GLBROT_API void glbCreateNormPivot(GlbPoint3d p, GlbPoint3d directPoint, bool bHeadDirect, GlbPivot &pivot_h, GlbPivot &pivot_v);//生成p点到headPoint的旋转轴，以及其正交方向的旋转轴
 
 //float DistortR(float R);//鱼眼镜头径向畸变矫正
 //float aDistortR(float R);//畸变矫正反变换

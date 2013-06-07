@@ -559,7 +559,7 @@ void DrawTexture(
         glbGlobePoint2ScreenPoint(pRect, GlobeRotMat, pRect);//将“中心点”转换至屏幕上
     }
 
-    GlbPoint3d pivot_v, pivot_h;//横向和纵向旋转轴
+    GlbPivot pivot_v, pivot_h;//横向和纵向旋转轴
     GlbPoint3d pRectDirect;//“朝向点”的直角坐标
     glbPointGeo2PointRect(pGeoDirect, pRectDirect);//将“朝向点”转换为直角坐标
     if(bDirOnGlobe)//如果“朝向点”在地球上
@@ -567,7 +567,7 @@ void DrawTexture(
         glbGlobePoint2ScreenPoint(pRectDirect, GlobeRotMat, pRectDirect);//将“朝向点”转换至屏幕上
     }
 
-    CreateNormPivot( //生成贴图转轴
+    glbCreateNormPivot( //生成贴图转轴
         pRect, //“中心点”直角坐标
         pRectDirect, //“朝向点”直角坐标
         bHeadDirect, //朝向
@@ -598,10 +598,10 @@ void DrawTexture(
             float angle_v = angle_v0 + y * mHeight;//中心点到此关节点的旋转角度
 
             GlbPoint3d p_img;//此关节点的直角坐标
-            PivotRotPoint(pRect, pivot_v, angle_v, p_img);//先从中心点纵向旋转
-            PivotRotPoint(p_img, pivot_h, angle_h, p_img);//再横向旋转
+            glbPivotingPoint(pRect, pivot_v, angle_v, p_img);//先从中心点纵向旋转
+            glbPivotingPoint(p_img, pivot_h, angle_h, p_img);//再横向旋转
             GlbPoint2d r_pRound;//圆饼坐标
-            glbPointRect2PointRound(p_img, 1.0f, r_pRound);//将直角坐标转换为圆饼坐标
+            glbPointRect2PointRound(p_img, r_pRound);//将直角坐标转换为圆饼坐标
 
             PointArr[y][x].m_x = r_pRound.m_x;//赋值
             PointArr[y][x].m_y = r_pRound.m_y;
@@ -669,8 +669,8 @@ void DrawTexture(
     PointArr = NULL;
 
     //输出pClose
-    PivotRotPoint(pRect, pivot_v, height/2.0f, pClose);
-    PivotRotPoint(pClose, pivot_h, width/2.0f, pClose);
+    glbPivotingPoint(pRect, pivot_v, height/2.0f, pClose);
+    glbPivotingPoint(pClose, pivot_h, width/2.0f, pClose);
 }
 
 void DrawLineOnGlobe(GlbPointGeo geoStartPoint, GlbRotmat GlobeRotMat, GlbPointGeo geoEndPoint, int layer)
@@ -693,7 +693,7 @@ void DrawLineOnScreen(GlbPointGeo geoStartPoint, GlbPointGeo geoEndPoint, int la
 	glbPointGeo2PointRect(geoEndPoint, rectEndPoint);
 
 	float angle = glbAngleBetweenPoints(rectStartPoint, rectEndPoint);
-	GlbPoint3d pivot;
+	GlbPivot pivot;
 	glbPivotBetweenPoints(rectStartPoint, rectEndPoint, pivot);
 
 	int nStep = (int)(angle/FACET_SCACLE_IN_ANGLE)+1;
@@ -713,10 +713,10 @@ void DrawLineOnScreen(GlbPointGeo geoStartPoint, GlbPointGeo geoEndPoint, int la
 	{
 		GlbPoint3d p3d1,p3d2;
 		GlbPoint2d p2d1,p2d2;
-		PivotRotPoint(rectStartPoint, pivot, mAngle*i, p3d1);
-		glbPointRect2PointRound(p3d1, 1.0f, p2d1);
-		PivotRotPoint(rectStartPoint, pivot, mAngle*(i+1), p3d2);
-		glbPointRect2PointRound(p3d2, 1.0f, p2d2);
+		glbPivotingPoint(rectStartPoint, pivot, mAngle*i, p3d1);
+		glbPointRect2PointRound(p3d1, p2d1);
+		glbPivotingPoint(rectStartPoint, pivot, mAngle*(i+1), p3d2);
+		glbPointRect2PointRound(p3d2, p2d2);
 		if(fabs(p2d1.m_x-p2d2.m_x)<MAX_FACET_SHOW_THRESHOLD && fabs(p2d1.m_y-p2d2.m_y)<MAX_FACET_SHOW_THRESHOLD)
 		{
 			glBegin(GL_LINES);//画不闭合折线 
