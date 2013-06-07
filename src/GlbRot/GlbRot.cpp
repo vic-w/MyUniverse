@@ -33,7 +33,7 @@ void CrossMul(GlbPoint3d Vec1, GlbPoint3d Vec2, GlbPoint3d &VecDST)
 	VecDST.m_z = t.m_z;
 }
 
-void Geo2Rect(GlbPointGeo pGeo, GlbPoint3d &pRect)
+void glbPointGeo2PointRect(GlbPointGeo pGeo, GlbPoint3d &pRect)
 {
 	float latitude = pGeo.m_lat / 180.0f * PI;//左下角为原点？？？
 	float longitude = pGeo.m_lng / 180.0f * PI;
@@ -42,7 +42,7 @@ void Geo2Rect(GlbPointGeo pGeo, GlbPoint3d &pRect)
 	pRect.m_z = -sin(longitude)*cos(latitude);
 }
 
-void Rect2Geo(GlbPoint3d pRect, GlbPointGeo &pGeo)
+void glbPointRect2PointGeo(GlbPoint3d pRect, GlbPointGeo &pGeo)
 {
 	if(pRect.m_y > 1)
 	{
@@ -84,12 +84,12 @@ void Square2Sphere(GlbPoint2d pSquare, float TexWidth, float TexHeight, GlbPoint
 	pGeo.m_lat = latitude;
 	pGeo.m_lng = longitude;
 
-	Geo2Rect(pGeo, pSphere);
+	glbPointGeo2PointRect(pGeo, pSphere);
 
 	//float r = p1.m_x*p1.m_x+p1.m_y*p1.m_y+p1.m_z*p1.m_z;
 }
 
-void Sphere2Sphere(GlbPoint3d p1, GlbRotmat r, GlbPoint3d &p2)
+void glbGlobePoint2ScreenPoint(GlbPoint3d p1, GlbRotmat r, GlbPoint3d &p2)
 {
 	GlbPoint3d t;
 
@@ -102,7 +102,7 @@ void Sphere2Sphere(GlbPoint3d p1, GlbRotmat r, GlbPoint3d &p2)
 	p2.m_z = t.m_z;
 }
 
-void aSphere2Sphere(GlbPoint3d p1, GlbRotmat r, GlbPoint3d &p2)
+void glbScreenPoint2GlobePoint(GlbPoint3d p1, GlbRotmat r, GlbPoint3d &p2)
 {
 	CvMat *GlbRotmat = cvCreateMat(3, 3, CV_32FC1);
 
@@ -128,12 +128,12 @@ void aSphere2Sphere(GlbPoint3d p1, GlbRotmat r, GlbPoint3d &p2)
 	r.r32 = GlbRotmat->data.fl[7];
 	r.r33 = GlbRotmat->data.fl[8];	
 
-	Sphere2Sphere(p1, r, p2);
+	glbGlobePoint2ScreenPoint(p1, r, p2);
 	cvReleaseMat(&GlbRotmat);
 }
 
 
-void Sphere2Round(GlbPoint3d p2, float radius, GlbPoint2d &p3)
+void glbPointRect2PointRound(GlbPoint3d p2, float radius, GlbPoint2d &p3)
 {
 	if(p2.m_y > 1)
 	{
@@ -161,7 +161,7 @@ void Sphere2Round(GlbPoint3d p2, float radius, GlbPoint2d &p3)
 	p3.m_y = -p2.m_z/r_xz*R*radius;
 }
 
-void Round2Sphere(GlbPoint2d p3, float radius, GlbPoint3d &p2)
+void glbPointRound2PointRect(GlbPoint2d p3, float radius, GlbPoint3d &p2)
 {
 	float R = sqrt(p3.m_x * p3.m_x + p3.m_y *p3.m_y);
 	float ix = p3.m_x / R;
@@ -186,7 +186,7 @@ void Round2Sphere(GlbPoint2d p3, float radius, GlbPoint3d &p2)
 	return;
 }
 
-void CreateGlbRotmat(GlbRotmat &r)
+void glbCreateGlbRotmat(GlbRotmat &r)
 {
 	r.r11 = 1;
 	r.r12 = 0;
@@ -199,11 +199,11 @@ void CreateGlbRotmat(GlbRotmat &r)
 	r.r33 = 1;
 }
 
-void EularAngle2Rotmat(GlbEularAngle angle, GlbRotmat &r)
+void glbEularAngle2Rotmat(GlbEularAngle angle, GlbRotmat &r)
 {
-    float a1 = angle.m_1_Horz/180.0*PI;
-    float a2 = angle.m_2_Vert/180.0*PI;
-    float a3 = angle.m_3_Axis/180.0*PI;
+    float a1 = angle.m_1_Horz/180.0f*PI;
+    float a2 = angle.m_2_Vert/180.0f*PI;
+    float a3 = angle.m_3_Axis/180.0f*PI;
     r.r11 = cos(a1)*cos(a3)-cos(a2)*sin(a1)*sin(a3);
     r.r12 = -cos(a1)*sin(a3)-cos(a2)*cos(a3)*sin(a1);
     r.r13 = sin(a1)*sin(a2);
@@ -215,7 +215,7 @@ void EularAngle2Rotmat(GlbEularAngle angle, GlbRotmat &r)
     r.r33 = cos(a2);
 }
 
-void AngleGlbRotmat(GlbPoint3d angle, GlbRotmat &r)
+void glbRotVector2RotMat(GlbPoint3d angle, GlbRotmat &r)
 {
 	CvMat * rotVector1 = cvCreateMat(3, 1, CV_32FC1);
 	rotVector1->data.fl[0] = angle.m_x;
@@ -239,7 +239,7 @@ void AngleGlbRotmat(GlbPoint3d angle, GlbRotmat &r)
 
 }
 
-float Point2Angle(GlbPoint3d p1, GlbPoint3d p2)
+float glbAngleBetweenPoints(GlbPoint3d p1, GlbPoint3d p2)
 {
 	//从p1转到p2
 	if(p1.m_x == p2.m_x && p1.m_y == p2.m_y && p1.m_z == p2.m_z)
@@ -266,7 +266,7 @@ float Point2Angle(GlbPoint3d p1, GlbPoint3d p2)
 	return a;
 }
 
-void PointGlbRotmat(GlbPoint3d p1, GlbPoint3d p2, GlbRotmat &r)
+void glbMovingPoints2RotMat(GlbPoint3d p1, GlbPoint3d p2, GlbRotmat &r)
 {
 	//从p1转到p2
 	if(p1.m_x == p2.m_x && p1.m_y == p2.m_y && p1.m_z == p2.m_z)
@@ -274,9 +274,9 @@ void PointGlbRotmat(GlbPoint3d p1, GlbPoint3d p2, GlbRotmat &r)
 		return;
 	}
 
-	float a = Point2Angle(p1, p2)/180.0f*PI; //计算旋转角度
+	float a = glbAngleBetweenPoints(p1, p2)/180.0f*PI; //计算旋转角度
 	GlbPoint3d pivot;
-	Point2Pivot(p1, p2, pivot, true); //计算旋转轴
+	glbPivotBetweenPoints(p1, p2, pivot); //计算旋转轴
 
 	//旋转轴单位向量
 	float x = pivot.m_x;
@@ -299,32 +299,32 @@ void PointGlbRotmat(GlbPoint3d p1, GlbPoint3d p2, GlbRotmat &r)
 	GlbRotmatMul(rot, r, r);
 }
 
-void PivotRotmat(GlbPoint3d pivot, float angle, GlbRotmat &rot)
+void glbAnglePivot2RotMat(GlbPoint3d pivot, float angle, GlbRotmat &r)
 {
 	angle = angle / 180.0f * PI;
 	float x = pivot.m_x;
 	float y = pivot.m_y;
 	float z = pivot.m_z;
 
-	rot.r11 = cos(angle) + (1-cos(angle)) * x * x;
-	rot.r12 = (1-cos(angle))*x*y - sin(angle)*z;
-	rot.r13 = (1-cos(angle))*x*z + sin(angle)*y;
+	r.r11 = cos(angle) + (1-cos(angle)) * x * x;
+	r.r12 = (1-cos(angle))*x*y - sin(angle)*z;
+	r.r13 = (1-cos(angle))*x*z + sin(angle)*y;
 
-	rot.r21 = (1-cos(angle))*y*x + sin(angle)*z;
-	rot.r22 = cos(angle)+(1-cos(angle))*y*y;
-	rot.r23 = (1-cos(angle))*y*z - sin(angle)*x;
+	r.r21 = (1-cos(angle))*y*x + sin(angle)*z;
+	r.r22 = cos(angle)+(1-cos(angle))*y*y;
+	r.r23 = (1-cos(angle))*y*z - sin(angle)*x;
 
-	rot.r31 = (1-cos(angle))*z*x - sin(angle)*y;
-	rot.r32 = (1-cos(angle))*z*y + sin(angle)*x;
-	rot.r33 = cos(angle) + (1-cos(angle))*z*z;
+	r.r31 = (1-cos(angle))*z*x - sin(angle)*y;
+	r.r32 = (1-cos(angle))*z*y + sin(angle)*x;
+	r.r33 = cos(angle) + (1-cos(angle))*z*z;
 }
 
 void PivotRotPoint(GlbPoint3d p, GlbPoint3d pivot, float angle, GlbPoint3d &p_out)
 {
 	GlbRotmat rot;
-	PivotRotmat(pivot, angle, rot);
+	glbAnglePivot2RotMat(pivot, angle, rot);
 
-	Sphere2Sphere(p, rot, p_out);
+	glbGlobePoint2ScreenPoint(p, rot, p_out);
 }
 
 void CreateNormPivot(GlbPoint3d p, GlbPoint3d directPoint, bool bHeadDirect, GlbPoint3d &pivot_h, GlbPoint3d &pivot_v)
@@ -394,7 +394,7 @@ void CreateNormPivot(GlbPoint3d p, GlbPoint3d directPoint, bool bHeadDirect, Glb
 //	return ret;
 //}
 
-void CloneGlbRotmat( GlbRotmat r, GlbRotmat &r_dst )
+void glbCloneGlbRotmat( GlbRotmat r, GlbRotmat &r_dst )
 {
 	r_dst.r11 = r.r11;
 	r_dst.r12 = r.r12;
@@ -410,16 +410,13 @@ void CloneGlbRotmat( GlbRotmat r, GlbRotmat &r_dst )
 
 }
 
-void Point2Pivot( GlbPoint3d p1, GlbPoint3d p2, GlbPoint3d &pivot, bool bNormalize )
+void glbPivotBetweenPoints( GlbPoint3d p1, GlbPoint3d p2, GlbPoint3d &pivot)
 {
 	GlbPoint3d axle;//旋转轴（p1叉乘p2）
 	CrossMul(p1, p2, axle);
 
 	float m_axle = 1;
-	if(bNormalize)
-	{
-		m_axle = VectorNorm(axle);
-	}
+	m_axle = VectorNorm(axle);
 	
 	//旋转轴单位向量
 	pivot.m_x = axle.m_x / m_axle;
@@ -442,7 +439,7 @@ void GlbRotmatMul( GlbRotmat mat1, GlbRotmat mat2, GlbRotmat &mat_dst )
 	t.r32 = mat1.r31 * mat2.r12 + mat1.r32 * mat2.r22 + mat1.r33 * mat2.r32;
 	t.r33 = mat1.r31 * mat2.r13 + mat1.r32 * mat2.r23 + mat1.r33 * mat2.r33;
 
-	CloneGlbRotmat(t, mat_dst);
+	glbCloneGlbRotmat(t, mat_dst);
 }
 
 //int GetTopLayer(GlbPoint2d pTouch)

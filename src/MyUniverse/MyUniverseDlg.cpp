@@ -157,7 +157,7 @@ BOOL CMyUniverseDlg::OnInitDialog()
     angle.m_1_Horz = 0;
     angle.m_2_Vert = 0;
     angle.m_3_Axis = 0;
-    EularAngle2Rotmat(angle, g_GlobeRotMat);
+    glbEularAngle2Rotmat(angle, g_GlobeRotMat);
     
     CreateThread(0, 0, GlobeThread, 0,0,0);//启动OpenGL显示线程
 
@@ -523,11 +523,11 @@ void CMyUniverseDlg::ReadFolderContent(CString folderPath, CString suffix)
 void CMyUniverseDlg::GlobeRotate(int Axis, int Horz, int Vert, GlbRotmat &r)
 {
     GlbEularAngle angle;
-    angle.m_1_Horz = Horz;
-    angle.m_2_Vert = Vert;
-    angle.m_3_Axis = Axis;
+    angle.m_1_Horz = (float)Horz;
+    angle.m_2_Vert = (float)Vert;
+    angle.m_3_Axis = (float)Axis;
 
     EnterCriticalSection(&g_GlobeRotMat_CS);
-    EularAngle2Rotmat(angle, r);
+    glbEularAngle2Rotmat(angle, r);
     LeaveCriticalSection(&g_GlobeRotMat_CS);
 }

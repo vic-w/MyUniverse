@@ -452,7 +452,7 @@ int glbCreateWindow(HINSTANCE   hInstance)
 
     GL_Init(g_hWnd);
 
-    //CreateGlbRotmat(g_GlobeRotMat);
+    //glbCreateGlbRotmat(g_GlobeRotMat);
     return 1;
 }//*/
 
@@ -551,70 +551,75 @@ void DrawTexture(
     float mHeight = height/nRow;
     float mWidth = width/nCol;
 
-    //计算当前城市的位置
-    GlbPoint3d pRect;
-    GlbPoint2d r_pRound;
-    Geo2Rect(pGeo, pRect);
-    if(bPointOnGlobe)
+    //计算图像“中心点”的位置
+    GlbPoint3d pRect;//“中心点”的直角坐标
+    glbPointGeo2PointRect(pGeo, pRect);//将“中心点”转换为直角坐标
+    if(bPointOnGlobe)//如果“中心点”在地球上
     {
-        Sphere2Sphere(pRect, GlobeRotMat, pRect);
+        glbGlobePoint2ScreenPoint(pRect, GlobeRotMat, pRect);//将“中心点”转换至屏幕上
     }
 
-    GlbPoint3d pivot_v, pivot_h;
-    GlbPoint3d pRectDirect;
-    Geo2Rect(pGeoDirect, pRectDirect);
-    if(bDirOnGlobe)
+    GlbPoint3d pivot_v, pivot_h;//横向和纵向旋转轴
+    GlbPoint3d pRectDirect;//“朝向点”的直角坐标
+    glbPointGeo2PointRect(pGeoDirect, pRectDirect);//将“朝向点”转换为直角坐标
+    if(bDirOnGlobe)//如果“朝向点”在地球上
     {
-        Sphere2Sphere(pRectDirect, GlobeRotMat, pRectDirect);
+        glbGlobePoint2ScreenPoint(pRectDirect, GlobeRotMat, pRectDirect);//将“朝向点”转换至屏幕上
     }
 
-    CreateNormPivot( pRect, pRectDirect, bHeadDirect, pivot_h, pivot_v);
-    if(mode == GLB_TEX_BELT)
+    CreateNormPivot( //生成贴图转轴
+        pRect, //“中心点”直角坐标
+        pRectDirect, //“朝向点”直角坐标
+        bHeadDirect, //朝向
+        pivot_h, //生成贴图所需的纵向转轴（轴是纵向的，旋转将是横向的）
+        pivot_v  //生成贴图所需的横向转轴
+    );
+
+    if(mode == GLB_TEX_BELT)//如果贴图是类型是“条幅”
     {
-        pivot_h = pRectDirect;
+        pivot_h = pRectDirect;  //纵向转轴 = 球心和“朝向点”的连线
     }
 
-    GlbPoint3d **PointArr = new GlbPoint3d*[nRow+1];
+    GlbPoint3d **PointArr = new GlbPoint3d*[nRow+1];//贴图关节点的二维数组
     for(int x=0; x<=nRow; x++)
     {
         PointArr[x] = new GlbPoint3d[nCol+1];
     }
 
-    float angle_h0 = -width/2.0f;
-    float angle_v0 = -height/2.0f;
-    glPointSize(1.0f);
+    float angle_h0 = -width/2.0f; //贴图中心点到左上角的旋转角度
+    float angle_v0 = -height/2.0f;//贴图中心点到左上角的旋转角度
+    glPointSize(1.0f);//？？？？
 
-    for(int x=0; x<=nCol; x++)
+    for(int x=0; x<=nCol; x++)//写入贴图关节点的坐标
     {
         for(int y=0; y<=nRow; y++)
         {
-            float angle_h = angle_h0 + x * mWidth;
-            float angle_v = angle_v0 + y * mHeight;
+            float angle_h = angle_h0 + x * mWidth; //中心点到此关节点的旋转角度
+            float angle_v = angle_v0 + y * mHeight;//中心点到此关节点的旋转角度
 
-            GlbPoint3d p_img;
-            PivotRotPoint(pRect, pivot_v, angle_v, p_img);
-            PivotRotPoint(p_img, pivot_h, angle_h, p_img);
-            Sphere2Round(p_img, 1.0f, r_pRound);
+            GlbPoint3d p_img;//此关节点的直角坐标
+            PivotRotPoint(pRect, pivot_v, angle_v, p_img);//先从中心点纵向旋转
+            PivotRotPoint(p_img, pivot_h, angle_h, p_img);//再横向旋转
+            GlbPoint2d r_pRound;//圆饼坐标
+            glbPointRect2PointRound(p_img, 1.0f, r_pRound);//将直角坐标转换为圆饼坐标
 
-            PointArr[y][x].m_x = r_pRound.m_x;
+            PointArr[y][x].m_x = r_pRound.m_x;//赋值
             PointArr[y][x].m_y = r_pRound.m_y;
         }
     }
 
-    glLoadIdentity();	
+    glLoadIdentity();	//OpenGL操作
     glColor3f(1.0f,1.0f,1.0f);
     glBindTexture(GL_TEXTURE_2D, Image);	
 
-    float mRectWidth = 1.0f/nCol;
-    float mRectHeight = 1.0f/nRow;
+    float mRectWidth = 1.0f/nCol;//素材分割的小块宽度（素材的坐标是0到1之间的小数）
+    float mRectHeight = 1.0f/nRow;//素材分割的小块高度
 
-    for(int x=0; x<nCol; x++)
+    for(int x=0; x<nCol; x++)//开始贴图
     {
         for(int y=0; y<nRow; y++)
         {
-            float th = 0.4f;
-
-            GlbPoint2d pRound[4];
+            GlbPoint2d pRound[4];//块的四个角的圆饼坐标
             pRound[0].m_x = PointArr[y][x].m_x;
             pRound[0].m_y = PointArr[y][x].m_y;
             pRound[1].m_x = PointArr[y][x+1].m_x;
@@ -624,8 +629,8 @@ void DrawTexture(
             pRound[3].m_x = PointArr[y+1][x].m_x;
             pRound[3].m_y = PointArr[y+1][x].m_y;
 
-
-            if( fabs(pRound[0].m_x-pRound[1].m_x) < th &&
+            float th = 0.4f;//块大小的阈值（太大的块将不会显示）
+            if( fabs(pRound[0].m_x-pRound[1].m_x) < th &&//判断块是否过大
                 fabs(pRound[0].m_x-pRound[2].m_x) < th &&
                 fabs(pRound[1].m_x-pRound[3].m_x) < th &&
                 fabs(pRound[2].m_x-pRound[3].m_x) < th &&
@@ -642,19 +647,20 @@ void DrawTexture(
 
                 glTexCoord2f((x+1) * mRectWidth, 1- (y) * mRectHeight); 
                 glVertex3f(pRound[1].m_x, pRound[1].m_y, layer);				// 右上
+
                 glTexCoord2f((x+1) * mRectWidth, 1- (y+1) * mRectHeight); 
                 glVertex3f(pRound[2].m_x, pRound[2].m_y, layer);				// 右下
 
-
                 glTexCoord2f((x) * mRectWidth, 1- (y+1) * mRectHeight); 
                 glVertex3f(pRound[3].m_x, pRound[3].m_y, layer);				// 左下
-                glEnd();
+
+                glEnd();//绘制结束
             }
         }
     }
 
 
-    for(int x=0; x<=nRow; x++)
+    for(int x=0; x<=nRow; x++)//销毁存放关节点坐标的二维数组
     {
         delete [nCol+1] (PointArr[x]);
         PointArr[x] = NULL;
@@ -665,32 +671,30 @@ void DrawTexture(
     //输出pClose
     PivotRotPoint(pRect, pivot_v, height/2.0f, pClose);
     PivotRotPoint(pClose, pivot_h, width/2.0f, pClose);
-
-    //SwapBuffers( g_hDC );
 }
 
 void DrawLineOnGlobe(GlbPointGeo geoStartPoint, GlbRotmat GlobeRotMat, GlbPointGeo geoEndPoint, int layer)
 {
 	GlbPoint3d rectStartPoint, rectEndPoint;
-	Geo2Rect(geoStartPoint, rectStartPoint);
-	Geo2Rect(geoEndPoint, rectEndPoint);
-	Sphere2Sphere(rectStartPoint, GlobeRotMat, rectStartPoint);
-	Sphere2Sphere(rectEndPoint, GlobeRotMat, rectEndPoint);
+	glbPointGeo2PointRect(geoStartPoint, rectStartPoint);
+	glbPointGeo2PointRect(geoEndPoint, rectEndPoint);
+	glbGlobePoint2ScreenPoint(rectStartPoint, GlobeRotMat, rectStartPoint);
+	glbGlobePoint2ScreenPoint(rectEndPoint, GlobeRotMat, rectEndPoint);
 	GlbPointGeo geoStartPoint2, geoEndPoint2;
-	Rect2Geo(rectStartPoint, geoStartPoint2);
-	Rect2Geo(rectEndPoint, geoEndPoint2);
+	glbPointRect2PointGeo(rectStartPoint, geoStartPoint2);
+	glbPointRect2PointGeo(rectEndPoint, geoEndPoint2);
 	DrawLineOnScreen(geoStartPoint2, geoEndPoint2, layer);
 }
 
 void DrawLineOnScreen(GlbPointGeo geoStartPoint, GlbPointGeo geoEndPoint, int layer)
 {
 	GlbPoint3d rectStartPoint, rectEndPoint;
-	Geo2Rect(geoStartPoint, rectStartPoint);
-	Geo2Rect(geoEndPoint, rectEndPoint);
+	glbPointGeo2PointRect(geoStartPoint, rectStartPoint);
+	glbPointGeo2PointRect(geoEndPoint, rectEndPoint);
 
-	float angle = Point2Angle(rectStartPoint, rectEndPoint);
+	float angle = glbAngleBetweenPoints(rectStartPoint, rectEndPoint);
 	GlbPoint3d pivot;
-	Point2Pivot(rectStartPoint, rectEndPoint, pivot, true);
+	glbPivotBetweenPoints(rectStartPoint, rectEndPoint, pivot);
 
 	int nStep = (int)(angle/FACET_SCACLE_IN_ANGLE)+1;
 	float mAngle = angle/nStep;
@@ -710,9 +714,9 @@ void DrawLineOnScreen(GlbPointGeo geoStartPoint, GlbPointGeo geoEndPoint, int la
 		GlbPoint3d p3d1,p3d2;
 		GlbPoint2d p2d1,p2d2;
 		PivotRotPoint(rectStartPoint, pivot, mAngle*i, p3d1);
-		Sphere2Round(p3d1, 1.0f, p2d1);
+		glbPointRect2PointRound(p3d1, 1.0f, p2d1);
 		PivotRotPoint(rectStartPoint, pivot, mAngle*(i+1), p3d2);
-		Sphere2Round(p3d2, 1.0f, p2d2);
+		glbPointRect2PointRound(p3d2, 1.0f, p2d2);
 		if(fabs(p2d1.m_x-p2d2.m_x)<MAX_FACET_SHOW_THRESHOLD && fabs(p2d1.m_y-p2d2.m_y)<MAX_FACET_SHOW_THRESHOLD)
 		{
 			glBegin(GL_LINES);//画不闭合折线 
