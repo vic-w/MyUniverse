@@ -188,18 +188,28 @@ void glbCreateGlbRotmat(GlbRotmat &r)
 
 void glbEularAngle2Rotmat(GlbEularAngle angle, GlbRotmat &r)
 {
+    //Å·À­½ÇÐý×ªË³Ðò Y1 - Z2 - Y3
+    //²Î¿¼£ºhttp://en.wikipedia.org/wiki/Euler_angles
+
     float a1 = angle.m_1_Horz/180.0f*PI;
     float a2 = angle.m_2_Vert/180.0f*PI;
     float a3 = angle.m_3_Axis/180.0f*PI;
-    r.r11 = cos(a1)*cos(a3)-cos(a2)*sin(a1)*sin(a3);
-    r.r12 = -cos(a1)*sin(a3)-cos(a2)*cos(a3)*sin(a1);
-    r.r13 = sin(a1)*sin(a2);
-    r.r21 = cos(a3)*sin(a1)+cos(a1)*cos(a2)*sin(a3);
-    r.r22 = cos(a1)*cos(a2)*cos(a3)-sin(a1)*sin(a3);
-    r.r23 = -cos(a1)*sin(a2);
-    r.r31 = sin(a2)*sin(a3);
-    r.r32 = cos(a3)*sin(a2);
-    r.r33 = cos(a2);
+    float c1 = cos(a1);
+    float c2 = cos(a2);
+    float c3 = cos(a3);
+    float s1 = sin(a1);
+    float s2 = sin(a2);
+    float s3 = sin(a3);
+
+    r.r11 = c1*c2*c3-s1*s3;
+    r.r12 = -c1*s2;
+    r.r13 = c3*s1+c1*c2*s3;
+    r.r21 = c3*s2;
+    r.r22 = c2;
+    r.r23 = s2*s3;
+    r.r31 = -c1*s3-c2*c3*s1;
+    r.r32 = s1*s2;
+    r.r33 = c1*c3-c2*s1*s3;
 }
 
 void glbRotVector2RotMat(GlbPoint3d angle, GlbRotmat &r)

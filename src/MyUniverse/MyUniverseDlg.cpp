@@ -520,7 +520,7 @@ void CMyUniverseDlg::ReadFolderContent(CString folderPath, CString suffix)
     g_StoryPage.nCurFrame = 0;
 }
 
-void CMyUniverseDlg::GlobeRotate(int Axis, int Horz, int Vert, GlbRotmat &r)
+void CMyUniverseDlg::GlobeRotate(int Horz, int Vert, int Axis, GlbRotmat &r)
 {
     GlbEularAngle angle;
     angle.m_1_Horz = (float)Horz;

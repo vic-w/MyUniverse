@@ -29,7 +29,7 @@ private:
     void ReadPageStruct();
     void ReadOnePage();
     void ReadFolderContent(CString folderPath, CString suffix);
-    void GlobeRotate(int Axis, int Horz, int Vert, GlbRotmat &r);
+    void GlobeRotate(int Horz, int Vert, int Axis, GlbRotmat &r);
 protected:
 	HICON m_hIcon;
 
