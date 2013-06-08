@@ -478,6 +478,7 @@ void CMyUniverseDlg::ReadOnePage()
         if(g_StoryPage.nFrames == 0)
         ReadFolderContent(pagePath, "png");
     }
+    ReadStoryConfigXML();
     LeaveCriticalSection(&g_StoryPage_CS);
 }
 
@@ -530,4 +531,20 @@ void CMyUniverseDlg::GlobeRotate(int Horz, int Vert, int Axis, GlbRotmat &r)
     EnterCriticalSection(&g_GlobeRotMat_CS);
     glbEularAngle2Rotmat(angle, r);
     LeaveCriticalSection(&g_GlobeRotMat_CS);
+}
+
+void CMyUniverseDlg::ReadStoryConfigXML()
+{
+    //AfxMessageBox(m_page_struct_path);//本章节的目录名
+    WIN32_FIND_DATA FindFileData;
+    HANDLE hFind = INVALID_HANDLE_VALUE;
+    hFind = FindFirstFile(m_page_struct_path+"\\*.xml", &FindFileData);
+    if(hFind == INVALID_HANDLE_VALUE)
+	{
+		//AfxMessageBox ("Invalid file handle.\n");
+	}
+	else
+	{
+        AfxMessageBox(FindFileData.cFileName);
+    }
 }

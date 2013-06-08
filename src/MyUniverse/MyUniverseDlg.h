@@ -30,6 +30,7 @@ private:
     void ReadOnePage();
     void ReadFolderContent(CString folderPath, CString suffix);
     void GlobeRotate(int Horz, int Vert, int Axis, GlbRotmat &r);
+    void ReadStoryConfigXML();
 protected:
 	HICON m_hIcon;
 
@@ -57,10 +58,10 @@ public:
     afx_msg void OnCbnSelchangeComboChapter();
     afx_msg void OnBnClickedButtonBrowse();
     afx_msg void OnCbnSelchangeComboPage();
-    CString m_story_path;
-    CString m_page_struct_path;
-    CComboBox m_chapter_select;
-    CString m_chapter_value;
-    CComboBox m_page_select;
-    CString m_page_value;
+    CComboBox m_chapter_select; //章节，下拉选择框
+    CComboBox m_page_select;    //页面，下拉选择框
+    CString m_story_path;       //章节的总目录名
+    CString m_chapter_value;    //章节的子目录名
+    CString m_page_struct_path; //页面文件的目录
+    CString m_page_value;       //页面文件的文件名
 };
