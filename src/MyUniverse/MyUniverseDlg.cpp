@@ -572,6 +572,7 @@ void CMyUniverseDlg::ReadStoryConfigXML()
 {
     //此函数调用了libxml2库，
     //使用方法参考：http://www.blogjava.net/wxb_nudt/archive/2007/11/18/161340.html
+    //中文乱码问题参考：http://ling091.iteye.com/blog/295872
 
     //AfxMessageBox(m_page_struct_path);//本章节的目录名
     WIN32_FIND_DATA FindFileData;
@@ -613,7 +614,6 @@ void CMyUniverseDlg::ReadStoryConfigXML()
         }
 
         xmlFreeDoc(doc);
-        //xmlFreeNode(cur);
         return;
     }
 }

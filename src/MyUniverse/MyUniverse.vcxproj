@@ -57,7 +57,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>GlbCore.lib;GlbRot.lib;tinyxml.lib;opencv_core231.lib;libxml2.lib;iconv.lib</AdditionalDependencies>
+      <AdditionalDependencies>GlbCore.lib;GlbRot.lib;opencv_core231.lib;libxml2.lib;iconv.lib</AdditionalDependencies>
     </Link>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>
