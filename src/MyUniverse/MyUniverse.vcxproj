@@ -41,8 +41,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <LibraryPath>..\debug;..\..\3rdparty\tinyxml;$(LibraryPath)</LibraryPath>
-    <IncludePath>..\GlbRot;..\GlbCore;..\..\3rdparty\tinyxml;$(IncludePath)</IncludePath>
+    <LibraryPath>..\debug;..\..\3rdparty\tinyxml;..\..\3rdparty\opencv231\lib\Release;..\..\3rdparty\libxml2\lib;..\..\3rdparty\iconv;$(LibraryPath)</LibraryPath>
+    <IncludePath>..\GlbRot;..\GlbCore;..\..\3rdparty\tinyxml;..\..\3rdparty\opencv231\include;..\..\3rdparty\libxml2\include;..\..\3rdparty\iconv;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -57,7 +57,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>GlbCore.lib;GlbRot.lib;tinyxml.lib</AdditionalDependencies>
+      <AdditionalDependencies>GlbCore.lib;GlbRot.lib;tinyxml.lib;opencv_core231.lib;libxml2.lib;iconv.lib</AdditionalDependencies>
     </Link>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>

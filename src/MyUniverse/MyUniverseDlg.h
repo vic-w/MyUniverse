@@ -31,6 +31,7 @@ private:
     void ReadFolderContent(CString folderPath, CString suffix);
     void GlobeRotate(int Horz, int Vert, int Axis, GlbRotmat &r);
     void ReadStoryConfigXML();
+    unsigned char* convert (unsigned char *in, char *encoding);
 protected:
 	HICON m_hIcon;
 

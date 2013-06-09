@@ -7,7 +7,8 @@
 #include "MyUniverseDlg.h"
 #include "afxdialogex.h"
 #include "GlobeThread.h"
-#include "tinyxml.h"
+#include "libxml.h"
+#include "opencv.hpp"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -534,8 +535,44 @@ void CMyUniverseDlg::GlobeRotate(int Horz, int Vert, int Axis, GlbRotmat &r)
     LeaveCriticalSection(&g_GlobeRotMat_CS);
 }
 
+int code_convert(char* from_charset, char* to_charset, char* inbuf,
+               int inlen, char* outbuf, int outlen)
+{
+    iconv_t cd;
+    char** pin = &inbuf;  
+    char** pout = &outbuf;
+    cd = iconv_open(to_charset,from_charset);  
+    if(cd == 0)
+       return -1;
+ 
+    memset(outbuf,0,outlen);  
+ 
+    if(iconv(cd,(const char**)pin,(unsigned int *)&inlen,pout,(unsigned int*)&outlen) == -1)
+       return -1;  
+ 
+    iconv_close(cd);
+ 
+    return 0;  
+}
+
+char* u2g(char *inbuf)  
+{
+    int nOutLen = 2 * strlen(inbuf) - 1;
+    char* szOut = (char*)malloc(nOutLen);
+    if (-1 == code_convert("utf-8","gb2312",inbuf,strlen(inbuf),szOut,nOutLen))
+    {
+       free(szOut);
+       szOut = NULL;
+    }
+ 
+    return szOut;
+}  
+
 void CMyUniverseDlg::ReadStoryConfigXML()
 {
+    //此函数调用了libxml2库，
+    //使用方法参考：http://www.blogjava.net/wxb_nudt/archive/2007/11/18/161340.html
+
     //AfxMessageBox(m_page_struct_path);//本章节的目录名
     WIN32_FIND_DATA FindFileData;
     HANDLE hFind = INVALID_HANDLE_VALUE;
@@ -547,24 +584,72 @@ void CMyUniverseDlg::ReadStoryConfigXML()
 	else
 	{
         CString XML_FilePath = m_page_struct_path;
-        XML_FilePath += FindFileData.cFileName;
+        CString XML_FileName = FindFileData.cFileName;
+        XML_FilePath += XML_FileName;
         AfxMessageBox(XML_FilePath);
 
-        //创建一个XML的文档对象。
-        TiXmlDocument *myDocument = new TiXmlDocument(XML_FilePath);
-        myDocument->LoadFile();
-        //获得根元素，即ImageryDescription。
-        TiXmlElement *RootElement = myDocument->RootElement();
-        //输出根元素名称，即输出ImageryDescription。
-        AfxMessageBox(RootElement->Value());
+        xmlDocPtr doc; //文件指针
+        xmlNodePtr cur;//节点指针
+        doc = xmlParseFile(XML_FilePath);
+        cur = xmlDocGetRootElement(doc);
+        AfxMessageBox((char*)cur->name);
+        cur = cur->xmlChildrenNode;
+        while(cur!=NULL)
+        {
+            if(xmlHasProp(cur,(xmlChar*)"href"))
+            {
+                xmlChar* szAttr = xmlGetProp(cur,(xmlChar*) "href");
+                //AfxMessageBox((char*)szAttr);
+                xmlChar* A = szAttr+2;
+                xmlChar* AA = (xmlChar*)u2g((char*)A);
+                xmlChar* B = (xmlChar*)(LPSTR)(LPCTSTR)m_page_value;
+                if(!xmlStrcmp(AA, B))
+                {
+                    AfxMessageBox((char*)AA);
+                }
+                xmlFree(szAttr);
+            }
+            cur = cur->next;
+        }
 
-        //获得第一个ImageryDescription节点。
-        TiXmlElement *FirstElem = RootElement->FirstChildElement();
-        AfxMessageBox(FirstElem->Value());
-
-        //获得第一个Person的name节点和age节点和ID属性。
-        TiXmlAttribute *IDAttribute = FirstElem->FirstAttribute();
-        AfxMessageBox(IDAttribute->Name());
-        AfxMessageBox(IDAttribute->Value());
+        xmlFreeDoc(doc);
+        //xmlFreeNode(cur);
+        return;
     }
+}
+
+unsigned char* CMyUniverseDlg::convert (unsigned char *in, char *encoding)
+{
+    unsigned char *out;
+    int ret,size,out_size,temp;
+    xmlCharEncodingHandlerPtr handler;
+    size = (int)strlen((const char *)in)+1;
+    out_size = size*2-1;
+    out = (unsigned char*)malloc((size_t)out_size);
+    if (out) {
+        handler = xmlFindCharEncodingHandler(encoding);
+        if (!handler) {
+            free(out);
+            out = NULL;
+        }
+    }
+    if (out) {
+        temp=size-1;
+        ret = handler->output(out, &out_size, in, &temp);
+        if (ret || temp-size+1) {
+            if (ret) {
+                printf("conversion wasn't successful.\n");
+            } else {
+                printf("conversion wasn't successful. converted: \n");
+              }
+                free(out);
+                out = NULL;
+            } else {
+                out = (unsigned char*)realloc(out,out_size+1);
+                out[out_size]=0; /*null terminating out*/
+            }
+        } else {
+            printf("no mem\n");
+    }
+    return (out);
 }
