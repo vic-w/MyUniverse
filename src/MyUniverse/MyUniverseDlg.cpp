@@ -7,6 +7,7 @@
 #include "MyUniverseDlg.h"
 #include "afxdialogex.h"
 #include "GlobeThread.h"
+#include "tinyxml.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -538,13 +539,32 @@ void CMyUniverseDlg::ReadStoryConfigXML()
     //AfxMessageBox(m_page_struct_path);//本章节的目录名
     WIN32_FIND_DATA FindFileData;
     HANDLE hFind = INVALID_HANDLE_VALUE;
-    hFind = FindFirstFile(m_page_struct_path+"\\*.xml", &FindFileData);
+    hFind = FindFirstFile(m_page_struct_path+"*.xml", &FindFileData);
     if(hFind == INVALID_HANDLE_VALUE)
 	{
 		//AfxMessageBox ("Invalid file handle.\n");
 	}
 	else
 	{
-        AfxMessageBox(FindFileData.cFileName);
+        CString XML_FilePath = m_page_struct_path;
+        XML_FilePath += FindFileData.cFileName;
+        AfxMessageBox(XML_FilePath);
+
+        //创建一个XML的文档对象。
+        TiXmlDocument *myDocument = new TiXmlDocument(XML_FilePath);
+        myDocument->LoadFile();
+        //获得根元素，即ImageryDescription。
+        TiXmlElement *RootElement = myDocument->RootElement();
+        //输出根元素名称，即输出ImageryDescription。
+        AfxMessageBox(RootElement->Value());
+
+        //获得第一个ImageryDescription节点。
+        TiXmlElement *FirstElem = RootElement->FirstChildElement();
+        AfxMessageBox(FirstElem->Value());
+
+        //获得第一个Person的name节点和age节点和ID属性。
+        TiXmlAttribute *IDAttribute = FirstElem->FirstAttribute();
+        AfxMessageBox(IDAttribute->Name());
+        AfxMessageBox(IDAttribute->Value());
     }
 }
