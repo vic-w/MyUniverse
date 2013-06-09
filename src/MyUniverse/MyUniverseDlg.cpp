@@ -608,6 +608,7 @@ void CMyUniverseDlg::ReadStoryConfigXML()
                 {
                     AfxMessageBox((char*)AA);
                 }
+                free(AA);
                 xmlFree(szAttr);
             }
             cur = cur->next;
