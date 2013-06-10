@@ -6,11 +6,10 @@
 #include "afxwin.h"
 #include "GlbRot.h"
 #include "resource.h"
+#include "afxcmn.h"
 
 #define GET_DATA 1 
 #define PUT_DATA 0
-
-#define WM_GLB_UPDATEDATA (WM_USER+100)
 
 // CMyUniverseDlg 对话框
 class CMyUniverseDlg : public CDialogEx
@@ -43,7 +42,6 @@ protected:
 	afx_msg void OnSysCommand(UINT nID, LPARAM lParam);
 	afx_msg void OnPaint();
 	afx_msg HCURSOR OnQueryDragIcon();
-    LRESULT OnGlbUpdateData(WPARAM wParam, LPARAM lParam);  //自定义的消息响应函数
 	DECLARE_MESSAGE_MAP()
 public:
     afx_msg void OnBnClickedOk();
@@ -76,4 +74,6 @@ public:
     afx_msg void OnEnChangeEditFrameRate();
     afx_msg void OnBnClickedCheckAutoRot();
     BOOL m_rotating;
+    CSliderCtrl m_slider_rotz_ctrl;
+    CEdit m_edit_rotz_ctrl;
 };

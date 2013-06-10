@@ -116,12 +116,9 @@ DWORD WINAPI TimingThread(LPVOID lpParam)
                 angle.m_3_Axis = (float)((int)(angle.m_3_Axis) % 360);
 
                 pDlg->m_edit_rotz = (int)angle.m_3_Axis;
-                pDlg->m_slider_rotz = (int)(pDlg->m_edit_rotz/360.0*100);
+                //pDlg->m_slider_rotz = (int)(pDlg->m_edit_rotz/360.0*100);
+                pDlg->m_slider_rotz_ctrl.SetPos((int)(pDlg->m_edit_rotz/360.0*100));
 
-                //此处使用消息传递控制对话框UI，不能直接使用UpdateData函数
-                //参考：http://blog.csdn.net/zfpnuc/article/details/5944219
-                //pDlg->UpdateData(PUT_DATA);
-                pDlg->SendMessage(WM_GLB_UPDATEDATA,FALSE);//传递自定义消息
 
                 EnterCriticalSection(&g_GlobeRotMat_CS);
                 glbEularAngle2Rotmat(angle, g_GlobeRotMat);

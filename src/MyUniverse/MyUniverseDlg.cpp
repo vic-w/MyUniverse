@@ -109,6 +109,8 @@ void CMyUniverseDlg::DoDataExchange(CDataExchange* pDX)
     DDX_Text(pDX, IDC_EDIT_FRAME_RATE, m_frame_rate);
     DDV_MinMaxInt(pDX, m_frame_rate, 0, 100);
     DDX_Check(pDX, IDC_CHECK_AUTO_ROT, m_rotating);
+    DDX_Control(pDX, IDC_m_slider_rotz, m_slider_rotz_ctrl);
+    DDX_Control(pDX, IDC_m_edit_rotz, m_edit_rotz_ctrl);
 }
 
 BEGIN_MESSAGE_MAP(CMyUniverseDlg, CDialogEx)
@@ -132,9 +134,6 @@ BEGIN_MESSAGE_MAP(CMyUniverseDlg, CDialogEx)
     ON_BN_CLICKED(IDC_BUTTON_PAUSE, &CMyUniverseDlg::OnBnClickedButtonPause)
     ON_EN_CHANGE(IDC_EDIT_FRAME_RATE, &CMyUniverseDlg::OnEnChangeEditFrameRate)
     ON_BN_CLICKED(IDC_CHECK_AUTO_ROT, &CMyUniverseDlg::OnBnClickedCheckAutoRot)
-
-    //自定义的消息响应
-    ON_MESSAGE(WM_GLB_UPDATEDATA,OnGlbUpdateData)  
 END_MESSAGE_MAP()
 
 
@@ -751,10 +750,4 @@ void CMyUniverseDlg::OnBnClickedCheckAutoRot()
 {
     UpdateData(GET_DATA);
     g_StoryPage.bRotating = !!m_rotating;
-}
-
-LRESULT CMyUniverseDlg::OnGlbUpdateData(WPARAM wParam, LPARAM lParam)  
-{  
-    UpdateData(wParam);  
-    return 1;  
 }
