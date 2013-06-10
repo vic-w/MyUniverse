@@ -70,6 +70,8 @@ CMyUniverseDlg::CMyUniverseDlg(CWnd* pParent /*=NULL*/)
     , m_story_path(_T(""))
     , m_chapter_value(_T(""))
     , m_page_value(_T(""))
+    , m_frame_rate(0)
+    , m_rotating(FALSE)
 {
     m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
@@ -104,6 +106,9 @@ void CMyUniverseDlg::DoDataExchange(CDataExchange* pDX)
     DDV_MaxChars(pDX, m_chapter_value, 512);
     DDX_Control(pDX, IDC_COMBO_PAGE, m_page_select);
     DDX_CBString(pDX, IDC_COMBO_PAGE, m_page_value);
+    DDX_Text(pDX, IDC_EDIT_FRAME_RATE, m_frame_rate);
+    DDV_MinMaxInt(pDX, m_frame_rate, 0, 100);
+    DDX_Check(pDX, IDC_CHECK_AUTO_ROT, m_rotating);
 }
 
 BEGIN_MESSAGE_MAP(CMyUniverseDlg, CDialogEx)
@@ -122,6 +127,14 @@ BEGIN_MESSAGE_MAP(CMyUniverseDlg, CDialogEx)
     ON_BN_CLICKED(IDC_BUTTON_BROWSE, &CMyUniverseDlg::OnBnClickedButtonBrowse)
     ON_CBN_SELCHANGE(IDC_COMBO_CHAPTER, &CMyUniverseDlg::OnCbnSelchangeComboChapter)
     ON_CBN_SELCHANGE(IDC_COMBO_PAGE, &CMyUniverseDlg::OnCbnSelchangeComboPage)
+    ON_BN_CLICKED(IDC_BUTTON_STEP, &CMyUniverseDlg::OnBnClickedButtonStep)
+    ON_BN_CLICKED(IDC_BUTTON_PLAY, &CMyUniverseDlg::OnBnClickedButtonPlay)
+    ON_BN_CLICKED(IDC_BUTTON_PAUSE, &CMyUniverseDlg::OnBnClickedButtonPause)
+    ON_EN_CHANGE(IDC_EDIT_FRAME_RATE, &CMyUniverseDlg::OnEnChangeEditFrameRate)
+    ON_BN_CLICKED(IDC_CHECK_AUTO_ROT, &CMyUniverseDlg::OnBnClickedCheckAutoRot)
+
+    //自定义的消息响应
+    ON_MESSAGE(WM_GLB_UPDATEDATA,OnGlbUpdateData)  
 END_MESSAGE_MAP()
 
 
@@ -177,6 +190,7 @@ BOOL CMyUniverseDlg::OnInitDialog()
     glbEularAngle2Rotmat(angle, g_GlobeRotMat);
     
     CreateThread(0, 0, GlobeThread, 0,0,0);//启动OpenGL显示线程
+    CreateThread(0, 0, TimingThread, (LPVOID)this,0,0);//启动时间控制线程
 
     return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
@@ -200,6 +214,7 @@ void CMyUniverseDlg::OnSysCommand(UINT nID, LPARAM lParam)
 
 void CMyUniverseDlg::OnPaint()
 {
+    //UpdateData(PUT_DATA);
     if (IsIconic())
     {
         CPaintDC dc(this); // 用于绘制的设备上下文
@@ -445,9 +460,13 @@ void CMyUniverseDlg::ReadOnePage()
     char* suffix = pagePath.GetBuffer() + pagePath.GetLength() - 4;
 
     EnterCriticalSection(&g_StoryPage_CS);
+
     //清除全局数据
     g_StoryPage.bEmpty = 1;
     g_StoryPage.FrameNames.clear();
+    g_StoryPage.bPlaying = 0;
+    g_StoryPage.bRotating = 0;
+
     if( _stricmp(suffix,".jpg") == 0)
     {
         //AfxMessageBox("this is a jpg file");
@@ -525,7 +544,6 @@ void CMyUniverseDlg::ReadFolderContent(CString folderPath, CString suffix)
 	}
 	else
 	{
-
 		do
 		{
             CString FrameName = folderPath;
@@ -602,13 +620,13 @@ void CMyUniverseDlg::ReadStoryConfigXML()
         CString XML_FilePath = m_page_struct_path;
         CString XML_FileName = FindFileData.cFileName;
         XML_FilePath += XML_FileName;
-        AfxMessageBox(XML_FilePath);
+        //AfxMessageBox(XML_FilePath);
 
         xmlDocPtr doc; //文件指针
         xmlNodePtr cur;//节点指针
         doc = xmlParseFile(XML_FilePath);
         cur = xmlDocGetRootElement(doc);
-        AfxMessageBox((char*)cur->name);
+        //AfxMessageBox((char*)cur->name);
         cur = cur->xmlChildrenNode;
         while(cur!=NULL)
         {
@@ -616,14 +634,47 @@ void CMyUniverseDlg::ReadStoryConfigXML()
             {
                 xmlChar* szAttr = xmlGetProp(cur,(xmlChar*) "href");
                 //AfxMessageBox((char*)szAttr);
-                xmlChar* A = szAttr+2;
-                xmlChar* AA = (xmlChar*)u2g((char*)A);
-                xmlChar* B = (xmlChar*)(LPSTR)(LPCTSTR)m_page_value;
-                if(!xmlStrcmp(AA, B))
+                xmlChar* filename_xml = szAttr+2;
+                xmlChar* filename_xml_gb2312 = (xmlChar*)u2g((char*)filename_xml);
+                xmlChar* filename_page = (xmlChar*)(LPSTR)(LPCTSTR)m_page_value;
+                if(!xmlStrcmp(filename_xml_gb2312, filename_page))
                 {
-                    AfxMessageBox((char*)AA);
+                    //AfxMessageBox((char*)filename_xml_gb2312);
+                    //以确定查找到该Page的配置
+
+                    //读取bPlaying
+                    xmlChar* bPlaying_char = xmlGetProp(cur,(xmlChar*) "playing");
+                    if(!xmlStrcmp(bPlaying_char, (xmlChar*)"true"))
+                    {
+                        g_StoryPage.bPlaying = 1;
+                    }
+
+                    //读取frameRate
+                    xmlChar* frameRate_char = xmlGetProp(cur,(xmlChar*) "frameRate");
+                    if(frameRate_char)
+                    {
+                        int frameRate = atoi((char*)frameRate_char);
+                        g_StoryPage.frameRate = frameRate;
+                        m_frame_rate = frameRate;
+                        UpdateData(PUT_DATA);
+                    }
+
+                    //读取rotating
+                    xmlChar* bRotating_char = xmlGetProp(cur,(xmlChar*) "rotating");
+                    if(!xmlStrcmp(bRotating_char, (xmlChar*)"true"))
+                    {
+                        g_StoryPage.bRotating = 1;
+                        m_rotating = 1;
+                        UpdateData(PUT_DATA);
+                    }
+                    else
+                    {
+                        g_StoryPage.bRotating = 0;
+                        m_rotating = 0;
+                        UpdateData(PUT_DATA);
+                    }
                 }
-                free(AA);
+                free(filename_xml_gb2312);
                 xmlFree(szAttr);
             }
             cur = cur->next;
@@ -668,4 +719,42 @@ unsigned char* CMyUniverseDlg::convert (unsigned char *in, char *encoding)
             printf("no mem\n");
     }
     return (out);
+}
+
+
+void CMyUniverseDlg::OnBnClickedButtonPlay()
+{
+    g_StoryPage.bPlaying = 1;
+}
+
+
+void CMyUniverseDlg::OnBnClickedButtonPause()
+{
+    g_StoryPage.bPlaying = 0;
+}
+
+void CMyUniverseDlg::OnBnClickedButtonStep()
+{
+    g_StoryPage.nCurFrame += 1;
+    g_StoryPage.nCurFrame %= g_StoryPage.nFrames;
+}
+
+
+void CMyUniverseDlg::OnEnChangeEditFrameRate()
+{
+    UpdateData(GET_DATA);
+    g_StoryPage.frameRate = m_frame_rate;
+}
+
+
+void CMyUniverseDlg::OnBnClickedCheckAutoRot()
+{
+    UpdateData(GET_DATA);
+    g_StoryPage.bRotating = !!m_rotating;
+}
+
+LRESULT CMyUniverseDlg::OnGlbUpdateData(WPARAM wParam, LPARAM lParam)  
+{  
+    UpdateData(wParam);  
+    return 1;  
 }

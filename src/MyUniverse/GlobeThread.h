@@ -39,5 +39,6 @@ public:
 };
 
 DWORD WINAPI GlobeThread(LPVOID lpParam);
+DWORD WINAPI TimingThread(LPVOID lpParam);
 
 void DrawStoryPage();
