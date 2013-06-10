@@ -15,7 +15,7 @@ class CMyUniverseDlg : public CDialogEx
 // 构造
 public:
 	CMyUniverseDlg(CWnd* pParent = NULL);	// 标准构造函数
-
+    ~CMyUniverseDlg();
 // 对话框数据
 	enum { IDD = IDD_MYUNIVERSE_DIALOG };
 

@@ -20,6 +20,9 @@ extern CStoryPage g_StoryPage;
 extern CRITICAL_SECTION g_GlobeRotMat_CS;
 extern GlbRotmat g_GlobeRotMat;
 
+int g_bMainThreadActive;
+int g_bGlbThreadActive;
+
 // 用于应用程序“关于”菜单项的 CAboutDlg 对话框
 
 class CAboutDlg : public CDialogEx
@@ -71,6 +74,17 @@ CMyUniverseDlg::CMyUniverseDlg(CWnd* pParent /*=NULL*/)
     m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
 
+CMyUniverseDlg::~CMyUniverseDlg()
+{
+    g_bMainThreadActive = 0;//主线程即将退出（开始于OnInitDialog()函数中）
+
+    while( g_bGlbThreadActive )//等待子线程退出
+    {
+        Sleep(1);
+    }
+    return; //真正退出
+}
+
 void CMyUniverseDlg::DoDataExchange(CDataExchange* pDX)
 {
     CDialogEx::DoDataExchange(pDX);
@@ -117,6 +131,7 @@ BOOL CMyUniverseDlg::OnInitDialog()
 {
     InitializeCriticalSection(&g_StoryPage_CS);//初始化临界区
     InitializeCriticalSection(&g_GlobeRotMat_CS);//初始化临界区
+    g_bMainThreadActive = 1; //主线程开始活动，结束是在~CMyUniverseDlg()函数中
 
     CDialogEx::OnInitDialog();
 

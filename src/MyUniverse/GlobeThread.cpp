@@ -7,17 +7,24 @@ CStoryPage g_StoryPage;
 CRITICAL_SECTION g_GlobeRotMat_CS;
 GlbRotmat g_GlobeRotMat;
 
+extern int g_bMainThreadActive;//主线程活动指示
+extern int g_bGlbThreadActive;//星球绘图线程活动指示
+
 DWORD WINAPI GlobeThread(LPVOID lpParam)
 {
+    g_bGlbThreadActive = 1;
+
     glbCreateWindow(0);
 
     do
     {
         glbClearWindow();
         DrawStoryPage();
-    }while(glbUpdateWindow(30));
+        glbUpdateWindow(0);
+    }while(g_bMainThreadActive);
 
     glbDestoryWindow(0);
+    g_bGlbThreadActive = 0;
     return 1;
 }
 
