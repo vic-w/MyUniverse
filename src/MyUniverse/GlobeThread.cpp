@@ -81,7 +81,7 @@ DWORD WINAPI TimingThread(LPVOID lpParam)
         QueryPerformanceCounter(&TimeCounter);
 
         //¸üÐÂ¶¯»­
-        if(g_StoryPage.bPlaying)
+        if(g_StoryPage.bPlaying && g_StoryPage.frameRate>0)
         {
             int frameRate = g_StoryPage.frameRate;
             if( frameRate<1)
@@ -129,6 +129,6 @@ DWORD WINAPI TimingThread(LPVOID lpParam)
         {
             LastTimeCounter_rotating = TimeCounter;
         }
-        Sleep(10);
+        Sleep(1);
     }
 }
