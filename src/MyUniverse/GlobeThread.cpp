@@ -10,6 +10,7 @@ GlbRotmat g_GlobeRotMat;
 
 extern int g_bMainThreadActive;//主线程活动指示
 extern int g_bGlbThreadActive;//星球绘图线程活动指示
+extern int g_bTimingThreadActive;//星球绘图线程活动指示
 
 DWORD WINAPI GlobeThread(LPVOID lpParam)
 {
@@ -68,6 +69,7 @@ void DrawStoryPage()
 
 DWORD WINAPI TimingThread(LPVOID lpParam)
 {
+    g_bTimingThreadActive = 1;
     LARGE_INTEGER tFreq={0};
 	LARGE_INTEGER LastTimeCounter_playing;
 	LARGE_INTEGER LastTimeCounter_rotating;
@@ -76,7 +78,7 @@ DWORD WINAPI TimingThread(LPVOID lpParam)
 	QueryPerformanceCounter(&LastTimeCounter_playing);
 	QueryPerformanceCounter(&LastTimeCounter_rotating);
 
-    while(1)
+    while(g_bMainThreadActive)
     {
         QueryPerformanceCounter(&TimeCounter);
 
@@ -131,4 +133,6 @@ DWORD WINAPI TimingThread(LPVOID lpParam)
         }
         Sleep(1);
     }
+    g_bTimingThreadActive = 0;
+    return 1;
 }

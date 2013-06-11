@@ -22,6 +22,7 @@ extern GlbRotmat g_GlobeRotMat;
 
 int g_bMainThreadActive;
 int g_bGlbThreadActive;
+int g_bTimingThreadActive;
 
 // 用于应用程序“关于”菜单项的 CAboutDlg 对话框
 
@@ -80,7 +81,7 @@ CMyUniverseDlg::~CMyUniverseDlg()
 {
     g_bMainThreadActive = 0;//主线程即将退出（开始于OnInitDialog()函数中）
 
-    while( g_bGlbThreadActive )//等待子线程退出
+    while( g_bGlbThreadActive || g_bTimingThreadActive)//等待子线程退出
     {
         Sleep(1);
     }
@@ -465,6 +466,7 @@ void CMyUniverseDlg::ReadOnePage()
     g_StoryPage.FrameNames.clear();
     g_StoryPage.bPlaying = 0;
     g_StoryPage.bRotating = 0;
+    m_rotating = 0;//控制界面
 
     if( _stricmp(suffix,".jpg") == 0)
     {
@@ -655,7 +657,7 @@ void CMyUniverseDlg::ReadStoryConfigXML()
                         int frameRate = atoi((char*)frameRate_char);
                         g_StoryPage.frameRate = frameRate;
                         m_frame_rate = frameRate;
-                        UpdateData(PUT_DATA);
+                        //UpdateData(PUT_DATA);
                     }
 
                     //读取rotating
@@ -664,13 +666,13 @@ void CMyUniverseDlg::ReadStoryConfigXML()
                     {
                         g_StoryPage.bRotating = 1;
                         m_rotating = 1;
-                        UpdateData(PUT_DATA);
+                        //UpdateData(PUT_DATA);
                     }
                     else
                     {
                         g_StoryPage.bRotating = 0;
                         m_rotating = 0;
-                        UpdateData(PUT_DATA);
+                        //UpdateData(PUT_DATA);
                     }
                 }
                 free(filename_xml_gb2312);
@@ -679,6 +681,7 @@ void CMyUniverseDlg::ReadStoryConfigXML()
             cur = cur->next;
         }
 
+        UpdateData(PUT_DATA);
         xmlFreeDoc(doc);
         return;
     }
