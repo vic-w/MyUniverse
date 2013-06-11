@@ -680,11 +680,10 @@ void CMyUniverseDlg::ReadStoryConfigXML()
             }
             cur = cur->next;
         }
-
-        UpdateData(PUT_DATA);
         xmlFreeDoc(doc);
-        return;
     }
+    UpdateData(PUT_DATA);
+    return;
 }
 
 unsigned char* CMyUniverseDlg::convert (unsigned char *in, char *encoding)
