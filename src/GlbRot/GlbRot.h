@@ -183,7 +183,11 @@ GLBROT_API void glbPivotingPoint(GlbPoint3d p, GlbPivot pivot, float angle, GlbP
 //生成贴图时所需的两个正交的旋转轴
 GLBROT_API void glbCreateNormPivot(GlbPoint3d p, GlbPoint3d directPoint, bool bHeadDirect, GlbPivot &pivot_h, GlbPivot &pivot_v);//生成p点到headPoint的旋转轴，以及其正交方向的旋转轴
 
-//float DistortR(float R);//鱼眼镜头径向畸变矫正
-//float aDistortR(float R);//畸变矫正反变换
-//
+//从ini中读取畸变矫正信息
+GLBROT_API void glbInitDistort();
+//鱼眼镜头径向畸变矫正(由正规的圆饼坐标转变到适应镜头显示的圆饼坐标）
+GLBROT_API float glbDistortRadius(float Radius);
+//畸变矫正反变换
+GLBROT_API float glbUnDistortRadius(float Radius);
+
 //int GetTopLayer(GlbPoint2d pTouch);

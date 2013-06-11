@@ -16,6 +16,7 @@ DWORD WINAPI GlobeThread(LPVOID lpParam)
 {
     g_bGlbThreadActive = 1;
 
+    glbInitDistort();
     glbCreateWindow(0);
 
     do

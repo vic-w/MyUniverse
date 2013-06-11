@@ -3,6 +3,8 @@
 #include <math.h>
 #include "opencv.hpp"
 
+#define N_CALIB  (12) //标定纬线的条数
+float latitude_calib[N_CALIB+1];
 
 float glbVectorNorm(GlbPoint3d Vec)
 {
@@ -142,7 +144,7 @@ void glbPointRect2PointRound(GlbPoint3d p3, GlbPointRound &p2)
 		return;
 	}	
 
-	//R = DistortR(R);
+	R = glbDistortRadius(R);
 
 	p2.m_x = p3.m_x/r_xz*R;
 	p2.m_y = -p3.m_z/r_xz*R;
@@ -154,7 +156,7 @@ void glbPointRound2PointRect(GlbPoint2d p2, GlbPoint3d &p3)
 	float ix = p2.m_x / R;
 	float iz = -p2.m_y / R;
 
-	//R = aDistortR(R);
+	R = glbUnDistortRadius(R);
 
 	float iR = R;//范围[0,1]
 	float latitude = PI/2.0f - iR * PI;
@@ -342,37 +344,51 @@ void glbCreateNormPivot(GlbPoint3d p, GlbPoint3d directPoint, bool bHeadDirect, 
 	}
 }
 
-//float DistortR(float R)
-//{
-//	float ret=1.0f;
-//	float fnCalib = (float)(N_CALIB);
-//
-//	for(int i=1; i<=N_CALIB; i++)
-//	{
-//		if(R <= i/fnCalib)
-//		{
-//			ret = (R - (i-1)/fnCalib) * (latitude_calib[i] - latitude_calib[i-1])*fnCalib + latitude_calib[i-1];
-//			break;
-//		}
-//	}
-//	return ret;
-//}
+void glbInitDistort()
+{
+    //读取纬度标定信息
+	for(int i=0; i<N_CALIB+1; i++)
+	{
+		char Name[20],Default[20], Value[20];
+		sprintf_s(Name, 20,"latitude%d", i);
+		sprintf_s(Default, 20,"%f", i/(float)N_CALIB);
+		GetPrivateProfileString("CALIB", Name, Default, Value, 10, ".\\calib.ini");
+		sscanf_s(Value,"%f", latitude_calib+i );
+		//！！！！！todo:这里需加入判断维度标定值是否合理！！！！！
+	}
+}
 
-//float aDistortR(float R)
-//{
-//	float ret=1.0f;
-//	float fnCalib = (float)(N_CALIB);
-//
-//	for(int i=1; i<=N_CALIB; i++)
-//	{
-//		if(R <= latitude_calib[i])
-//		{
-//			ret = (R - latitude_calib[i-1])/(latitude_calib[i] - latitude_calib[i-1]) / fnCalib + (i-1)/fnCalib;
-//			break;
-//		}
-//	}
-//	return ret;
-//}
+float glbDistortRadius(float Radius)
+{
+	float ret=1.0f;
+	float fnCalib = (float)(N_CALIB);
+
+	for(int i=1; i<=N_CALIB; i++)
+	{
+		if(Radius <= i/fnCalib)
+		{
+			ret = (Radius - (i-1)/fnCalib) * (latitude_calib[i] - latitude_calib[i-1])*fnCalib + latitude_calib[i-1];
+			break;
+		}
+	}
+	return ret;
+}
+
+float glbUnDistortRadius(float Radius)
+{
+	float ret=1.0f;
+	float fnCalib = (float)(N_CALIB);
+
+	for(int i=1; i<=N_CALIB; i++)
+	{
+		if(Radius <= latitude_calib[i])
+		{
+			ret = (Radius - latitude_calib[i-1])/(latitude_calib[i] - latitude_calib[i-1]) / fnCalib + (i-1)/fnCalib;
+			break;
+		}
+	}
+	return ret;
+}
 
 void glbCloneGlbRotmat( GlbRotmat r, GlbRotmat &r_dst )
 {
