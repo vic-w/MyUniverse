@@ -7,6 +7,7 @@ CStoryPage g_StoryPage;
 
 CRITICAL_SECTION g_GlobeRotMat_CS;
 GlbRotmat g_GlobeRotMat;
+GlbEularAngle g_GlobeEularAngle;
 
 extern int g_bMainThreadActive;//主线程活动指示
 extern int g_bGlbThreadActive;//星球绘图线程活动指示
@@ -110,22 +111,19 @@ DWORD WINAPI TimingThread(LPVOID lpParam)
 	        {
 		        LastTimeCounter_rotating = TimeCounter;
 
-                CMyUniverseDlg* pDlg = (CMyUniverseDlg*)lpParam;
-                GlbEularAngle angle;
-                angle.m_1_Horz = (float)pDlg->m_edit_rotx;
-                angle.m_2_Vert = (float)pDlg->m_edit_roty;
-                angle.m_3_Axis = (float)pDlg->m_edit_rotz;
-                angle.m_3_Axis += 2.0f;
-                angle.m_3_Axis = (float)((int)(angle.m_3_Axis) % 360);
-
-                pDlg->m_edit_rotz = (int)angle.m_3_Axis;
-                //pDlg->m_slider_rotz = (int)(pDlg->m_edit_rotz/360.0*100);
-                pDlg->m_slider_rotz_ctrl.SetPos((int)(pDlg->m_edit_rotz/360.0*100));
-
-
                 EnterCriticalSection(&g_GlobeRotMat_CS);
-                glbEularAngle2Rotmat(angle, g_GlobeRotMat);
+                g_GlobeEularAngle.m_3_Axis += 0.2f;
+                if(g_GlobeEularAngle.m_3_Axis>360)
+                {
+                    g_GlobeEularAngle.m_3_Axis -= 360;
+                }
+                glbEularAngle2Rotmat(g_GlobeEularAngle, g_GlobeRotMat);
                 LeaveCriticalSection(&g_GlobeRotMat_CS);
+
+                CMyUniverseDlg* pDlg = (CMyUniverseDlg*)lpParam;
+                pDlg->m_edit_rotz = (int)g_GlobeEularAngle.m_3_Axis;
+                //pDlg->m_slider_rotz = (int)(pDlg->m_edit_rotz/360.0*100);
+                pDlg->m_slider_rotz_ctrl.SetPos((int)(g_GlobeEularAngle.m_3_Axis/360.0*100));
 	        }
         }
         else

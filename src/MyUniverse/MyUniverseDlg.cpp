@@ -19,6 +19,7 @@ extern CStoryPage g_StoryPage;
 
 extern CRITICAL_SECTION g_GlobeRotMat_CS;
 extern GlbRotmat g_GlobeRotMat;
+extern GlbEularAngle g_GlobeEularAngle;
 
 int g_bMainThreadActive;
 int g_bGlbThreadActive;
@@ -183,11 +184,10 @@ BOOL CMyUniverseDlg::OnInitDialog()
     ReadChapterStruct();
 
     //初始化旋转矩阵
-    GlbEularAngle angle;
-    angle.m_1_Horz = 0;
-    angle.m_2_Vert = 0;
-    angle.m_3_Axis = 0;
-    glbEularAngle2Rotmat(angle, g_GlobeRotMat);
+    g_GlobeEularAngle.m_1_Horz = 0;
+    g_GlobeEularAngle.m_2_Vert = 0;
+    g_GlobeEularAngle.m_3_Axis = 0;
+    glbEularAngle2Rotmat(g_GlobeEularAngle, g_GlobeRotMat);
     
     CreateThread(0, 0, GlobeThread, 0,0,0);//启动OpenGL显示线程
     CreateThread(0, 0, TimingThread, (LPVOID)this,0,0);//启动时间控制线程
@@ -559,13 +559,14 @@ void CMyUniverseDlg::ReadFolderContent(CString folderPath, CString suffix)
 
 void CMyUniverseDlg::GlobeRotate(int Horz, int Vert, int Axis, GlbRotmat &r)
 {
-    GlbEularAngle angle;
-    angle.m_1_Horz = (float)Horz;
-    angle.m_2_Vert = (float)Vert;
-    angle.m_3_Axis = (float)Axis;
-
     EnterCriticalSection(&g_GlobeRotMat_CS);
-    glbEularAngle2Rotmat(angle, r);
+    g_GlobeEularAngle.m_1_Horz = (float)Horz;
+    g_GlobeEularAngle.m_2_Vert = (float)Vert;
+    if(fabs(g_GlobeEularAngle.m_3_Axis - Axis) > 2)
+    {
+        g_GlobeEularAngle.m_3_Axis = (float)Axis;
+    }
+    glbEularAngle2Rotmat(g_GlobeEularAngle, r);
     LeaveCriticalSection(&g_GlobeRotMat_CS);
 }
 
