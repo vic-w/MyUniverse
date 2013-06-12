@@ -41,11 +41,22 @@ void DrawStoryPage()
             ||  g_StoryPage.storyType == JPG
             ||  g_StoryPage.storyType == PNG )
         {
-            GlbImage Image = glbLoadImage(g_StoryPage.pagePath);
+            static CString lastPath = "";
+            static GlbImage Image = 0;
+
+            if(strcmp(lastPath, g_StoryPage.pagePath))
+            {
+                if(Image)
+                {
+                    glbReleaseImage(&Image);
+                }
+                Image = glbLoadImage(g_StoryPage.pagePath);
+            }
             EnterCriticalSection(&g_GlobeRotMat_CS);
             DrawGlobe(Image, g_GlobeRotMat);
             LeaveCriticalSection(&g_GlobeRotMat_CS);
-            glbReleaseImage(&Image);
+            lastPath = g_StoryPage.pagePath;
+
         }
         else if(g_StoryPage.storyType == FOLDER) 
         {
@@ -120,11 +131,14 @@ DWORD WINAPI TimingThread(LPVOID lpParam)
                 glbEularAngle2Rotmat(g_GlobeEularAngle, g_GlobeRotMat);
                 LeaveCriticalSection(&g_GlobeRotMat_CS);
 
-                CMyUniverseDlg* pDlg = (CMyUniverseDlg*)lpParam;
-                pDlg->m_edit_rotz = (int)g_GlobeEularAngle.m_3_Axis;
-                //pDlg->m_slider_rotz = (int)(pDlg->m_edit_rotz/360.0*100);
-                pDlg->m_slider_rotz_ctrl.SetPos((int)(g_GlobeEularAngle.m_3_Axis/360.0*100));
-	        }
+                //if(g_bMainThreadActive)
+                {
+                    CMyUniverseDlg* pDlg = (CMyUniverseDlg*)lpParam;
+                    pDlg->m_edit_rotz = (int)g_GlobeEularAngle.m_3_Axis;
+                    //pDlg->m_slider_rotz = (int)(pDlg->m_edit_rotz/360.0*100);
+                    pDlg->m_slider_rotz_ctrl.SetPos((int)(g_GlobeEularAngle.m_3_Axis/360.0*100));
+                }
+            }
         }
         else
         {
