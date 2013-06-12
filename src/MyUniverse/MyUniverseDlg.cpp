@@ -562,7 +562,7 @@ void CMyUniverseDlg::GlobeRotate(int Horz, int Vert, int Axis, GlbRotmat &r)
     EnterCriticalSection(&g_GlobeRotMat_CS);
     g_GlobeEularAngle.m_1_Horz = (float)Horz;
     g_GlobeEularAngle.m_2_Vert = (float)Vert;
-    if(fabs(g_GlobeEularAngle.m_3_Axis - Axis) > 2)
+    if(fabs(g_GlobeEularAngle.m_3_Axis - Axis) > 3.7)//因为slider最小分辨率相当于3.6度角度
     {
         g_GlobeEularAngle.m_3_Axis = (float)Axis;
     }
