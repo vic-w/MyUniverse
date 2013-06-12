@@ -131,7 +131,7 @@ DWORD WINAPI TimingThread(LPVOID lpParam)
                 glbEularAngle2Rotmat(g_GlobeEularAngle, g_GlobeRotMat);
                 LeaveCriticalSection(&g_GlobeRotMat_CS);
 
-                //if(g_bMainThreadActive)
+                if(g_bMainThreadActive)
                 {
                     CMyUniverseDlg* pDlg = (CMyUniverseDlg*)lpParam;
                     pDlg->m_edit_rotz = (int)g_GlobeEularAngle.m_3_Axis;
