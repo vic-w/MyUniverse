@@ -133,7 +133,7 @@ DWORD WINAPI TimingThread(LPVOID lpParam)
 
                 if(g_bMainThreadActive)
                 {
-                    //Sleep(100);
+                    //Sleep(1000);
                     CMyUniverseDlg* pDlg = (CMyUniverseDlg*)lpParam;
                     pDlg->m_edit_rotz = (int)g_GlobeEularAngle.m_3_Axis;
                     //pDlg->m_slider_rotz = (int)(pDlg->m_edit_rotz/360.0*100);
