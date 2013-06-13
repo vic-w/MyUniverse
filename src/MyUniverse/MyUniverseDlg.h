@@ -11,6 +11,9 @@
 #define GET_DATA 1 
 #define PUT_DATA 0
 
+//自定义消息（更新slider_rotz),供TimingThread调用
+#define WM_GLB_UPDATEDATA WM_USER+100 
+
 // CMyUniverseDlg 对话框
 class CMyUniverseDlg : public CDialogEx
 {
@@ -42,6 +45,7 @@ protected:
 	afx_msg void OnSysCommand(UINT nID, LPARAM lParam);
 	afx_msg void OnPaint();
 	afx_msg HCURSOR OnQueryDragIcon();
+    LRESULT OnGlbUpdateData(WPARAM wParam, LPARAM lParam);//自定义消息的响应函数
 	DECLARE_MESSAGE_MAP()
 public:
     afx_msg void OnBnClickedOk();

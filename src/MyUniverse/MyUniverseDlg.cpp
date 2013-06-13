@@ -7,6 +7,7 @@
 #include "MyUniverseDlg.h"
 #include "afxdialogex.h"
 #include "GlobeThread.h"
+#include "udpThread.h"
 #include "libxml.h"
 #include "opencv.hpp"
 
@@ -24,6 +25,11 @@ extern GlbEularAngle g_GlobeEularAngle;
 int g_bMainThreadActive;
 int g_bGlbThreadActive;
 int g_bTimingThreadActive;
+int g_bUdpThreadActive;
+
+
+#pragma comment( linker, "/subsystem:console /entry:WinMainCRTStartup" )
+
 
 // 用于应用程序“关于”菜单项的 CAboutDlg 对话框
 
@@ -80,13 +86,7 @@ CMyUniverseDlg::CMyUniverseDlg(CWnd* pParent /*=NULL*/)
 
 CMyUniverseDlg::~CMyUniverseDlg()
 {
-    g_bMainThreadActive = 0;//主线程即将退出（开始于OnInitDialog()函数中）
 
-    while( g_bGlbThreadActive || g_bTimingThreadActive)//等待子线程退出
-    {
-        Sleep(1);
-    }
-    return; //真正退出
 }
 
 void CMyUniverseDlg::DoDataExchange(CDataExchange* pDX)
@@ -136,6 +136,9 @@ BEGIN_MESSAGE_MAP(CMyUniverseDlg, CDialogEx)
     ON_BN_CLICKED(IDC_BUTTON_PAUSE, &CMyUniverseDlg::OnBnClickedButtonPause)
     ON_EN_CHANGE(IDC_EDIT_FRAME_RATE, &CMyUniverseDlg::OnEnChangeEditFrameRate)
     ON_BN_CLICKED(IDC_CHECK_AUTO_ROT, &CMyUniverseDlg::OnBnClickedCheckAutoRot)
+
+    //自定义消息
+    ON_MESSAGE(WM_GLB_UPDATEDATA,OnGlbUpdateData)  
 END_MESSAGE_MAP()
 
 
@@ -191,6 +194,7 @@ BOOL CMyUniverseDlg::OnInitDialog()
     
     CreateThread(0, 0, GlobeThread, 0,0,0);//启动OpenGL显示线程
     CreateThread(0, 0, TimingThread, (LPVOID)this,0,0);//启动时间控制线程
+    CreateThread(0, 0, UdpThread, (LPVOID)this,0,0);//启动时间控制线程
 
     return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
@@ -261,7 +265,18 @@ void CMyUniverseDlg::OnBnClickedCancel()
     }
     else
     {
-        CDialogEx::OnCancel();
+        g_bMainThreadActive = 0;//主线程即将退出（开始于OnInitDialog()函数中）
+
+        while( g_bGlbThreadActive || g_bTimingThreadActive)//等待子线程退出
+        {
+            MSG msg;
+            PeekMessage(&msg, NULL, 0, 0, PM_REMOVE);
+            TranslateMessage(&msg);
+            DispatchMessage(&msg);
+            Sleep(1);
+        }
+
+        CDialogEx::OnCancel();//真正退出
     }
 }
 
@@ -754,3 +769,10 @@ void CMyUniverseDlg::OnBnClickedCheckAutoRot()
     UpdateData(GET_DATA);
     g_StoryPage.bRotating = !!m_rotating;
 }
+
+LRESULT CMyUniverseDlg::OnGlbUpdateData(WPARAM wParam, LPARAM lParam)  
+{  
+    //UpdateData(wParam);  
+    m_slider_rotz_ctrl.SetPos((int)(g_GlobeEularAngle.m_3_Axis/360.0*100));
+    return 1;  
+} 

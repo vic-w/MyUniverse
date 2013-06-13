@@ -42,6 +42,9 @@
     <ClInclude Include="GlobeThread.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="udpThread.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MyUniverse.cpp">
@@ -54,6 +57,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="GlobeThread.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="udpThread.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

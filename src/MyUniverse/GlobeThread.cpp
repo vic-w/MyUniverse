@@ -133,10 +133,15 @@ DWORD WINAPI TimingThread(LPVOID lpParam)
 
                 if(g_bMainThreadActive)
                 {
+                    //Sleep(100);
                     CMyUniverseDlg* pDlg = (CMyUniverseDlg*)lpParam;
                     pDlg->m_edit_rotz = (int)g_GlobeEularAngle.m_3_Axis;
                     //pDlg->m_slider_rotz = (int)(pDlg->m_edit_rotz/360.0*100);
-                    pDlg->m_slider_rotz_ctrl.SetPos((int)(g_GlobeEularAngle.m_3_Axis/360.0*100));
+                    //pDlg->m_slider_rotz_ctrl.SetPos((int)(g_GlobeEularAngle.m_3_Axis/360.0*100));//此函数也会阻塞
+                    
+                    //给主界面发送自定义消息
+                    //参考：http://blog.csdn.net/zfpnuc/article/details/5944219
+                    pDlg->SendMessage(WM_GLB_UPDATEDATA, FALSE);
                 }
             }
         }
