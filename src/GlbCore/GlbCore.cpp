@@ -615,6 +615,7 @@ void DrawTexture(
     float mRectWidth = 1.0f/nCol;//素材分割的小块宽度（素材的坐标是0到1之间的小数）
     float mRectHeight = 1.0f/nRow;//素材分割的小块高度
 
+    glBegin(GL_QUADS);						// 绘制正方形
     for(int x=0; x<nCol; x++)//开始贴图
     {
         for(int y=0; y<nRow; y++)
@@ -640,8 +641,6 @@ void DrawTexture(
                 fabs(pRound[1].m_y-pRound[3].m_y) < th &&
                 fabs(pRound[2].m_y-pRound[3].m_y) < th)
             {
-                glBegin(GL_QUADS);						// 绘制正方形
-
                 glTexCoord2f((x) * mRectWidth, 1- (y) * mRectHeight); 
                 glVertex3f(pRound[0].m_x, pRound[0].m_y, layer);				// 左上
 
@@ -653,11 +652,10 @@ void DrawTexture(
 
                 glTexCoord2f((x) * mRectWidth, 1- (y+1) * mRectHeight); 
                 glVertex3f(pRound[3].m_x, pRound[3].m_y, layer);				// 左下
-
-                glEnd();//绘制结束
             }
         }
     }
+    glEnd();//绘制结束
 
 
     for(int x=0; x<=nRow; x++)//销毁存放关节点坐标的二维数组
