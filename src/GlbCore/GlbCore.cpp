@@ -361,7 +361,7 @@ LRESULT CALLBACK WinProc( HWND   hWnd,
 }
 
 
-void GL_Init( HWND hWnd )
+void GL_Init( HWND hWnd, long winWidth, long winHeight)
 {
     GLuint PixelFormat;
 
@@ -387,6 +387,12 @@ void GL_Init( HWND hWnd )
     //glMatrixMode( GL_PROJECTION );
     //glLoadIdentity();
     //gluPerspective( 45.0f, 640.0f / 480.0f, 0.1f, 100.0f);
+
+    //glLoadIdentity();							                // 重置当前的模型观察矩阵
+	glMatrixMode( GL_PROJECTION );
+	//glLoadIdentity();
+	//float W_H_Rate = 640/480.0f;
+	glOrtho( -winWidth/(float)winHeight, winWidth/(float)winHeight, -1, 1, -10, 20);
 
     //
     // If the required extension is present, get the addresses of its 
@@ -415,7 +421,7 @@ void GL_Init( HWND hWnd )
 }
 
 
-int glbCreateWindow(HINSTANCE   hInstance)
+int glbCreateWindow(GlbRect windowSize, bool fullscreen, HINSTANCE hInstance)
 {
     WNDCLASSEX winClass; 
 
@@ -442,10 +448,10 @@ int glbCreateWindow(HINSTANCE   hInstance)
         "GLB_WINDOWS_CLASS",    // 类名字
         "MyUniverse",           // 窗口标题
         WS_OVERLAPPED | WS_VISIBLE,// 窗体风格属性
-        0,                      // 窗口位置
-        0,                      // 窗口位置
-        640,                    // 窗口大小
-        480,                    // 窗口大小
+        windowSize.m_left,      // 窗口位置
+        windowSize.m_top,       // 窗口位置
+        windowSize.m_width,     // 窗口大小
+        windowSize.m_height,    // 窗口大小
         NULL,                   // 无父窗口
         NULL,                   // 无菜单
         NULL,                   // 倒数第二个参数应该是hInstance实例
@@ -460,7 +466,8 @@ int glbCreateWindow(HINSTANCE   hInstance)
     ShowWindow( g_hWnd, SW_SHOW );
     UpdateWindow( g_hWnd );
 
-    GL_Init(g_hWnd);//OpenGL相关的初始化
+    GL_Init(g_hWnd, windowSize.m_width, windowSize.m_height);//OpenGL相关的初始化
+    glbInitDistort();//从ini中读取镜头畸变参数
 
     return 1;
 }//*/
@@ -468,11 +475,11 @@ int glbCreateWindow(HINSTANCE   hInstance)
 void glbClearWindow()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);			// 清除屏幕和深度缓存
-	glLoadIdentity();							// 重置当前的模型观察矩阵
-	glMatrixMode( GL_PROJECTION );
-	glLoadIdentity();
-	float W_H_Rate = 640/480.0f;
-	glOrtho( -W_H_Rate, W_H_Rate, -1, 1, -10, 20);
+	//glLoadIdentity();							                // 重置当前的模型观察矩阵
+	//glMatrixMode( GL_PROJECTION );
+	//glLoadIdentity();
+	//float W_H_Rate = 640/480.0f;
+	//glOrtho( -W_H_Rate, W_H_Rate, -1, 1, -10, 20);
 	glMatrixMode( GL_MODELVIEW );
 }
 void glbDrawImage( GlbImage image )
@@ -789,10 +796,6 @@ void DrawBelt(GlbImage Image,
 
 int glbDetectScreen(vector<GlbRect> &screens)
 {
-    //bool hasSecondary = false;
-	//POINT secondaryPosition;
-	//POINT secondarySize;
-	//POINT primarySize;
 	DISPLAY_DEVICE displayDevice;
 	displayDevice.cb = sizeof(DISPLAY_DEVICE);
 
@@ -817,20 +820,7 @@ int glbDetectScreen(vector<GlbRect> &screens)
             screen.m_height = deviceMode.dmPelsHeight;
 
             screens.push_back(screen);
-   //         if(deviceMode.dmPosition.x != 0 || deviceMode.dmPosition.y != 0)
-			//{
-			//	hasSecondary = true;
-			//	secondaryPosition.x = deviceMode.dmPosition.x;
-			//	secondaryPosition.y = deviceMode.dmPosition.y;
-			//	secondarySize.x = deviceMode.dmPelsWidth;
-			//	secondarySize.y = deviceMode.dmPelsHeight;
-			//}
-			//else
-			//{
-			//	primarySize.x = deviceMode.dmPelsWidth;
-			//	primarySize.y = deviceMode.dmPelsHeight;
-			//}
 		}
 	}	
-	return i;
+	return screens.size();
 }

@@ -26,15 +26,23 @@ public:
     long m_top;
     long m_width;
     long m_height;
+    GlbRect(){}
+    GlbRect(long left, long top, long width, long height)
+    {
+        m_left = left;
+        m_top = top;
+        m_width = width;
+        m_height = height;
+    }
 };
 
-GLBCORE_API int glbDetectScreen(vector<GlbRect> &screens);
+GLBCORE_API int glbDetectScreen(vector<GlbRect> &screens);//检测屏幕的个数及分辨率，返回屏幕个数
 
 GLBCORE_API GlbImage glbLoadImage(const char* filename);    //载入图像（支持dds,jpg,png）
 GLBCORE_API void glbReleaseImage(GlbImage* pImage);         //释放图像
 
-GLBCORE_API int glbCreateWindow(HINSTANCE   hInstance);
-GLBCORE_API void glbDestoryWindow(HINSTANCE   hInstance);
+GLBCORE_API int glbCreateWindow(GlbRect windowSize, bool fullscreen, HINSTANCE hInstance=0);
+GLBCORE_API void glbDestoryWindow(HINSTANCE hInstance=0);
 
 GLBCORE_API void glbClearWindow();                                    //清空窗口内容
 GLBCORE_API void glbDrawImage(GlbImage image);              //在窗口中画图,但并没有显示

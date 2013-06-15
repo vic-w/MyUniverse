@@ -20,8 +20,15 @@ DWORD WINAPI GlobeThread(LPVOID lpParam)
     vector<GlbRect> screens;
     int nScreen = glbDetectScreen(screens);
 
-    glbInitDistort();
-    glbCreateWindow(0);
+    if(nScreen >= 2)//屏幕个数大于1个
+    {
+        glbCreateWindow(screens[1], true);//以全屏方式显示到第2屏上
+    }
+    else
+    {
+        GlbRect windowSize(0,0,500,500);
+        glbCreateWindow(windowSize, false);//以固定大小显示在第一屏上
+    }
 
     do
     {
