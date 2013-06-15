@@ -384,9 +384,9 @@ void GL_Init( HWND hWnd )
     glClearColor( 0.35f, 0.53f, 0.7f, 1.0f );
     glEnable(GL_TEXTURE_2D);
 
-    glMatrixMode( GL_PROJECTION );
-    glLoadIdentity();
-    gluPerspective( 45.0f, 640.0f / 480.0f, 0.1f, 100.0f);
+    //glMatrixMode( GL_PROJECTION );
+    //glLoadIdentity();
+    //gluPerspective( 45.0f, 640.0f / 480.0f, 0.1f, 100.0f);
 
     //
     // If the required extension is present, get the addresses of its 
@@ -421,7 +421,7 @@ int glbCreateWindow(HINSTANCE   hInstance)
 
     winClass.lpszClassName = "GLB_WINDOWS_CLASS";
     winClass.cbSize        = sizeof(WNDCLASSEX);
-    winClass.style         = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;
+    winClass.style         = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;//改变窗口大小重绘，分配单独上下文给每个窗口
     winClass.lpfnWndProc   = WinProc;
     winClass.hInstance     = hInstance;
     winClass.hIcon         = NULL;
@@ -437,10 +437,20 @@ int glbCreateWindow(HINSTANCE   hInstance)
         return 0;
     }
 
-    g_hWnd = CreateWindowEx( NULL, "GLB_WINDOWS_CLASS", //倒数第二个参数应该是hInstance
-        "MyUniverse",
-        WS_OVERLAPPEDWINDOW | WS_VISIBLE,
-        0, 0, 640, 480, NULL, NULL, NULL, NULL );
+    g_hWnd = CreateWindowEx( 
+        NULL,                   // 扩展窗体风格
+        "GLB_WINDOWS_CLASS",    // 类名字
+        "MyUniverse",           // 窗口标题
+        WS_OVERLAPPED | WS_VISIBLE,// 窗体风格属性
+        0,                      // 窗口位置
+        0,                      // 窗口位置
+        640,                    // 窗口大小
+        480,                    // 窗口大小
+        NULL,                   // 无父窗口
+        NULL,                   // 无菜单
+        NULL,                   // 倒数第二个参数应该是hInstance实例
+        NULL                    // 不向WM_CREATE传递任何东东
+        );
 
     if( g_hWnd == NULL )
     {
@@ -450,9 +460,8 @@ int glbCreateWindow(HINSTANCE   hInstance)
     ShowWindow( g_hWnd, SW_SHOW );
     UpdateWindow( g_hWnd );
 
-    GL_Init(g_hWnd);
+    GL_Init(g_hWnd);//OpenGL相关的初始化
 
-    //glbCreateGlbRotmat(g_GlobeRotMat);
     return 1;
 }//*/
 
@@ -462,7 +471,7 @@ void glbClearWindow()
 	glLoadIdentity();							// 重置当前的模型观察矩阵
 	glMatrixMode( GL_PROJECTION );
 	glLoadIdentity();
-	float W_H_Rate = 1;
+	float W_H_Rate = 640/480.0;
 	glOrtho( -W_H_Rate, W_H_Rate, -1, 1, -10, 20);
 	glMatrixMode( GL_MODELVIEW );
 }
