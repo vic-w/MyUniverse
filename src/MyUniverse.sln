@@ -17,6 +17,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ConsoleTest", "ConsoleTest\
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GlbRot", "GlbRot\GlbRot.vcxproj", "{9772690B-282A-4AEB-A0B0-CB61359702D5}"
+	ProjectSection(ProjectDependencies) = postProject
+		{85DCE37E-A7F8-44D5-9B09-CE9E09AA97E6} = {85DCE37E-A7F8-44D5-9B09-CE9E09AA97E6}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyUniverseControl", "MyUniverseControl\MyUniverseControl.csproj", "{BD48AB45-1968-464F-ADB2-EEA3FFBAEC8C}"
 EndProject
@@ -24,6 +27,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyUniverseControlTest", "My
 	ProjectSection(ProjectDependencies) = postProject
 		{BD48AB45-1968-464F-ADB2-EEA3FFBAEC8C} = {BD48AB45-1968-464F-ADB2-EEA3FFBAEC8C}
 	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GlbKt", "GlbKt\GlbKt.vcxproj", "{85DCE37E-A7F8-44D5-9B09-CE9E09AA97E6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -109,6 +114,18 @@ Global
 		{50D5ED6B-E714-481A-8B2D-EC5A51FECB91}.Release|Win32.ActiveCfg = Release|x86
 		{50D5ED6B-E714-481A-8B2D-EC5A51FECB91}.Release|x86.ActiveCfg = Release|x86
 		{50D5ED6B-E714-481A-8B2D-EC5A51FECB91}.Release|x86.Build.0 = Release|x86
+		{85DCE37E-A7F8-44D5-9B09-CE9E09AA97E6}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{85DCE37E-A7F8-44D5-9B09-CE9E09AA97E6}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
+		{85DCE37E-A7F8-44D5-9B09-CE9E09AA97E6}.Debug|Mixed Platforms.Build.0 = Debug|Win32
+		{85DCE37E-A7F8-44D5-9B09-CE9E09AA97E6}.Debug|Win32.ActiveCfg = Debug|Win32
+		{85DCE37E-A7F8-44D5-9B09-CE9E09AA97E6}.Debug|Win32.Build.0 = Debug|Win32
+		{85DCE37E-A7F8-44D5-9B09-CE9E09AA97E6}.Debug|x86.ActiveCfg = Debug|Win32
+		{85DCE37E-A7F8-44D5-9B09-CE9E09AA97E6}.Release|Any CPU.ActiveCfg = Release|Win32
+		{85DCE37E-A7F8-44D5-9B09-CE9E09AA97E6}.Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{85DCE37E-A7F8-44D5-9B09-CE9E09AA97E6}.Release|Mixed Platforms.Build.0 = Release|Win32
+		{85DCE37E-A7F8-44D5-9B09-CE9E09AA97E6}.Release|Win32.ActiveCfg = Release|Win32
+		{85DCE37E-A7F8-44D5-9B09-CE9E09AA97E6}.Release|Win32.Build.0 = Release|Win32
+		{85DCE37E-A7F8-44D5-9B09-CE9E09AA97E6}.Release|x86.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

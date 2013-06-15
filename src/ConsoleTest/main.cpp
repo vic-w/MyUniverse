@@ -1,11 +1,14 @@
 #include "GlbCore.h"
+#include "GlbKt.h"
 
 GlbRotmat g_GlobeRotMat;
 GlbEularAngle g_GlobeEularAngle;
 
 void main()
 {
-    glbCreateWindow(0);
+    glbKt();
+    GlbRect size(0,0,500,500);
+    glbCreateWindow(size, false);
     glbInitDistort();
 
     g_GlobeEularAngle.m_1_Horz = 0;

@@ -42,7 +42,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <LibraryPath>..\debug;..\..\3rdparty\tinyxml;..\..\3rdparty\opencv231\lib\Release;..\..\3rdparty\libxml2\lib;..\..\3rdparty\iconv;$(LibraryPath)</LibraryPath>
-    <IncludePath>..\GlbRot;..\GlbCore;..\..\3rdparty\tinyxml;..\..\3rdparty\opencv231\include;..\..\3rdparty\libxml2\include;..\..\3rdparty\iconv;$(IncludePath)</IncludePath>
+    <IncludePath>..\GlbRot;..\GlbCore;..\..\3rdparty\tinyxml;..\..\3rdparty\opencv231\include;..\..\3rdparty\libxml2\include;..\..\3rdparty\iconv;..\GlbKt;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
