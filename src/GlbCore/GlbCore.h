@@ -1,5 +1,6 @@
 #pragma once
 #include "windows.h"
+#include <vector>
 #include "GlbRot.h"
 
 #ifdef GLBCORE_EXPORTS
@@ -8,6 +9,8 @@
 #define GLBCORE_API __declspec(dllimport)
 #endif
 
+using namespace std;
+
 typedef unsigned int GlbImage;
 
 enum GlbTexMode
@@ -15,6 +18,17 @@ enum GlbTexMode
     GLB_TEX_RECT,
     GLB_TEX_BELT
 };
+
+class GlbRect
+{
+public:
+    long m_left;
+    long m_top;
+    long m_width;
+    long m_height;
+};
+
+GLBCORE_API int glbDetectScreen(vector<GlbRect> &screens);
 
 GLBCORE_API GlbImage glbLoadImage(const char* filename);    //载入图像（支持dds,jpg,png）
 GLBCORE_API void glbReleaseImage(GlbImage* pImage);         //释放图像

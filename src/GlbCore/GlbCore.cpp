@@ -471,7 +471,7 @@ void glbClearWindow()
 	glLoadIdentity();							// 重置当前的模型观察矩阵
 	glMatrixMode( GL_PROJECTION );
 	glLoadIdentity();
-	float W_H_Rate = 640/480.0;
+	float W_H_Rate = 640/480.0f;
 	glOrtho( -W_H_Rate, W_H_Rate, -1, 1, -10, 20);
 	glMatrixMode( GL_MODELVIEW );
 }
@@ -785,4 +785,52 @@ void DrawBelt(GlbImage Image,
 		GLB_TEX_BELT,
 		pClose		//返回贴图右上角的坐标
 		);
+}
+
+int glbDetectScreen(vector<GlbRect> &screens)
+{
+    //bool hasSecondary = false;
+	//POINT secondaryPosition;
+	//POINT secondarySize;
+	//POINT primarySize;
+	DISPLAY_DEVICE displayDevice;
+	displayDevice.cb = sizeof(DISPLAY_DEVICE);
+
+	DEVMODE deviceMode;
+	ZeroMemory(&deviceMode, sizeof(DEVMODE));
+	deviceMode.dmSize = sizeof(DEVMODE);
+
+	int i = 0;
+	while(::EnumDisplayDevices(NULL, i++, &displayDevice, 0))
+	{
+		if(displayDevice.StateFlags & DISPLAY_DEVICE_ATTACHED_TO_DESKTOP &&
+			!(displayDevice.StateFlags & DISPLAY_DEVICE_MIRRORING_DRIVER))
+		{
+			if(EnumDisplaySettingsEx(displayDevice.DeviceName, ENUM_CURRENT_SETTINGS, &deviceMode, 0) == FALSE)
+            {
+				EnumDisplaySettingsEx(displayDevice.DeviceName, ENUM_REGISTRY_SETTINGS, &deviceMode, 0);
+            }
+            GlbRect screen;
+            screen.m_top = deviceMode.dmPosition.y;
+            screen.m_left = deviceMode.dmPosition.x;
+            screen.m_width = deviceMode.dmPelsWidth;
+            screen.m_height = deviceMode.dmPelsHeight;
+
+            screens.push_back(screen);
+   //         if(deviceMode.dmPosition.x != 0 || deviceMode.dmPosition.y != 0)
+			//{
+			//	hasSecondary = true;
+			//	secondaryPosition.x = deviceMode.dmPosition.x;
+			//	secondaryPosition.y = deviceMode.dmPosition.y;
+			//	secondarySize.x = deviceMode.dmPelsWidth;
+			//	secondarySize.y = deviceMode.dmPelsHeight;
+			//}
+			//else
+			//{
+			//	primarySize.x = deviceMode.dmPelsWidth;
+			//	primarySize.y = deviceMode.dmPelsHeight;
+			//}
+		}
+	}	
+	return i;
 }

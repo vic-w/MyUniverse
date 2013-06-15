@@ -17,6 +17,9 @@ DWORD WINAPI GlobeThread(LPVOID lpParam)
 {
     g_bGlbThreadActive = 1;
 
+    vector<GlbRect> screens;
+    int nScreen = glbDetectScreen(screens);
+
     glbInitDistort();
     glbCreateWindow(0);
 
