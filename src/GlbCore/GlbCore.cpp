@@ -559,7 +559,7 @@ int glbUpdateWindow(int ms)
     }
 }
 
-void DrawTexture(
+void glbDrawTexture(
                     GlbImage Image, 
                     GlbRotmat GlobeRotMat,
                     GlbPointGeo pGeo,
@@ -701,7 +701,7 @@ void DrawTexture(
     glbPivotingPoint(pClose, pivot_h, width/2.0f, pClose);
 }
 
-void DrawLineOnGlobe(GlbPointGeo geoStartPoint, GlbRotmat GlobeRotMat, GlbPointGeo geoEndPoint, int layer)
+void glbDrawLineOnGlobe(GlbPointGeo geoStartPoint, GlbRotmat GlobeRotMat, GlbPointGeo geoEndPoint, int layer)
 {
 	GlbPoint3d rectStartPoint, rectEndPoint;
 	glbPointGeo2PointRect(geoStartPoint, rectStartPoint);
@@ -711,10 +711,10 @@ void DrawLineOnGlobe(GlbPointGeo geoStartPoint, GlbRotmat GlobeRotMat, GlbPointG
 	GlbPointGeo geoStartPoint2, geoEndPoint2;
 	glbPointRect2PointGeo(rectStartPoint, geoStartPoint2);
 	glbPointRect2PointGeo(rectEndPoint, geoEndPoint2);
-	DrawLineOnScreen(geoStartPoint2, geoEndPoint2, layer);
+	glbDrawLineOnScreen(geoStartPoint2, geoEndPoint2, layer);
 }
 
-void DrawLineOnScreen(GlbPointGeo geoStartPoint, GlbPointGeo geoEndPoint, int layer)
+void glbDrawLineOnScreen(GlbPointGeo geoStartPoint, GlbPointGeo geoEndPoint, int layer)
 {
 	GlbPoint3d rectStartPoint, rectEndPoint;
 	glbPointGeo2PointRect(geoStartPoint, rectStartPoint);
@@ -755,7 +755,7 @@ void DrawLineOnScreen(GlbPointGeo geoStartPoint, GlbPointGeo geoEndPoint, int la
 	}
 }
 
-void DrawGlobe(GlbImage Image, GlbRotmat GlobeRotMat)
+void glbDrawGlobe(GlbImage Image, GlbRotmat GlobeRotMat)
 {
 	GlbPoint3d pClose;
 	GlbPointGeo pGeo,pGeoDirect;
@@ -764,7 +764,7 @@ void DrawGlobe(GlbImage Image, GlbRotmat GlobeRotMat)
 	pGeoDirect.m_lat = 90;
 	pGeoDirect.m_lng = 0;
 
-	DrawTexture(
+	glbDrawTexture(
 		Image,	//材质的编号
         GlobeRotMat,
 		pGeo,			//贴图的中心点
@@ -780,7 +780,7 @@ void DrawGlobe(GlbImage Image, GlbRotmat GlobeRotMat)
 		);
 }
 
-void DrawBelt(GlbImage Image, 
+void glbDrawBelt(GlbImage Image, 
               GlbRotmat GlobeRotMat,
 			  GlbPointGeo pGeo, 
 			  bool bPointOnGlobe, 
@@ -792,7 +792,7 @@ void DrawBelt(GlbImage Image,
 			  float layer )
 {
 	GlbPoint3d pClose;
-	DrawTexture(
+	glbDrawTexture(
 		Image,	//材质的编号
         GlobeRotMat,
 		pGeo,			//贴图的中心点

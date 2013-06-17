@@ -1,0 +1,18 @@
+LIBRARY
+EXPORTS
+
+   glbDetectScreen   @1   NONAME  
+   glbLoadImage   @2   NONAME  
+   glbReleaseImage   @3   NONAME  
+   glbCreateWindow   @4   NONAME  
+   glbDestoryWindow   @5   NONAME  
+   glbClearWindow   @6   NONAME  
+   glbDrawImage   @7   NONAME  
+   glbUpdateWindow   @8   NONAME  
+   glbDrawLineOnGlobe   @9   NONAME  
+   glbDrawLineOnScreen   @10   NONAME  
+   glbDrawGlobe   @11   NONAME  
+   glbDrawTexture   @12   NONAME  
+   glbDrawBelt   @13   NONAME  
+;   glbShowFrameRate   @14   NONAME  
+

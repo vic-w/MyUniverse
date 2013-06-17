@@ -65,7 +65,7 @@ void DrawStoryPage()
                 Image = glbLoadImage(g_StoryPage.pagePath);
             }
             EnterCriticalSection(&g_GlobeRotMat_CS);
-            DrawGlobe(Image, g_GlobeRotMat);
+            glbDrawGlobe(Image, g_GlobeRotMat);
             LeaveCriticalSection(&g_GlobeRotMat_CS);
             lastPath = g_StoryPage.pagePath;
 
@@ -76,7 +76,7 @@ void DrawStoryPage()
             {
                 GlbImage Image = glbLoadImage(g_StoryPage.FrameNames[g_StoryPage.nCurFrame]);
                 EnterCriticalSection(&g_GlobeRotMat_CS);
-                DrawGlobe(Image, g_GlobeRotMat);
+                glbDrawGlobe(Image, g_GlobeRotMat);
                 LeaveCriticalSection(&g_GlobeRotMat_CS);
                 glbReleaseImage(&Image);
 

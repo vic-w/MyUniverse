@@ -16,30 +16,50 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="ReadMe.txt" />
-    <None Include="GlbCore.def">
+    <None Include="Ktmfc.def">
       <Filter>源文件</Filter>
+    </None>
+    <None Include="res\Ktmfc.rc2">
+      <Filter>资源文件</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Ktmfc.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="IDtest.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="md5.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Ktmfc.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
     <ClInclude Include="stdafx.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="targetver.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="GlbCore.h">
+    <ClInclude Include="Resource.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="GlbType.h">
+    <ClInclude Include="IDtest.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="md5.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="stdafx.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="GlbCore.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
+    <ResourceCompile Include="Ktmfc.rc">
+      <Filter>资源文件</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

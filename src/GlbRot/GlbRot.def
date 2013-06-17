@@ -1,0 +1,27 @@
+LIBRARY
+EXPORTS
+
+   glbVectorNorm   @1   NONAME  
+   glbVectorNormalize    @2   NONAME  
+   glbDotMul    @3   NONAME  
+   glbCrossMul    @4   NONAME  
+   glbRotmatMul    @5   NONAME  
+   glbPointGeo2PointRect    @6   NONAME  
+   glbPointRect2PointGeo    @7   NONAME  
+   glbGlobePoint2ScreenPoint    @8   NONAME  
+   glbScreenPoint2GlobePoint    @9   NONAME  
+   glbPointRect2PointRound    @10   NONAME  
+   glbPointRound2PointRect    @11   NONAME  
+   glbCreateGlbRotmat    @12   NONAME  
+   glbCloneGlbRotmat    @13   NONAME  
+   glbAngleBetweenPoints    @14   NONAME  
+   glbPivotBetweenPoints    @15   NONAME  
+   glbEularAngle2Rotmat    @16   NONAME  
+   glbRotVector2RotMat    @17   NONAME  
+   glbMovingPoints2RotMat    @18   NONAME  
+   glbAnglePivot2RotMat    @19   NONAME  
+   glbPivotingPoint    @20   NONAME  
+   glbCreateNormPivot    @21   NONAME  
+   glbInitDistort    @22   NONAME  
+   glbDistortRadius    @23   NONAME  
+   glbUnDistortRadius    @24   NONAME  

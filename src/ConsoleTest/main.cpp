@@ -22,7 +22,7 @@ void main()
     do
     {
         glbClearWindow();
-        DrawGlobe(Image, g_GlobeRotMat);
+        glbDrawGlobe(Image, g_GlobeRotMat);
         g_GlobeEularAngle.m_3_Axis += 0.2f;
         if(g_GlobeEularAngle.m_3_Axis>360)
         {

@@ -49,10 +49,10 @@ GLBCORE_API void glbDrawImage(GlbImage image);              //ÔÚ´°¿ÚÖÐ»­Í¼,µ«²¢Ã
 
 GLBCORE_API int glbUpdateWindow(int ms);                    //¸üÐÂ´°¿ÚÖÐÄÚÈÝ,·µ»Ø0±íÊ¾´°¿ÚÍË³ö£¬·µ»Ø1±íÊ¾Õý³£ÔËÐÐ
 
-GLBCORE_API void DrawLineOnGlobe(GlbPointGeo geoStartPoint, GlbRotmat GlobeRotMat, GlbPointGeo geoEndPoint, int layer);
-GLBCORE_API void DrawLineOnScreen(GlbPointGeo geoStartPoint, GlbPointGeo geoEndPoint, int layer);
-GLBCORE_API void DrawGlobe(GlbImage Image, GlbRotmat GlobeRotMat);
-GLBCORE_API void DrawTexture(
+GLBCORE_API void glbDrawLineOnGlobe(GlbPointGeo geoStartPoint, GlbRotmat GlobeRotMat, GlbPointGeo geoEndPoint, int layer);
+GLBCORE_API void glbDrawLineOnScreen(GlbPointGeo geoStartPoint, GlbPointGeo geoEndPoint, int layer);
+GLBCORE_API void glbDrawGlobe(GlbImage Image, GlbRotmat GlobeRotMat);
+GLBCORE_API void glbDrawTexture(
                     GlbImage Image,     //²ÄÖÊµÄ±àºÅ
                     GlbRotmat GlobeRotMat,
                     GlbPointGeo pGeo,       //ÌùÍ¼µÄÖÐÐÄµã
@@ -67,7 +67,7 @@ GLBCORE_API void DrawTexture(
                     GlbPoint3d &pClose      //·µ»ØÌùÍ¼ÓÒÉÏ½ÇµÄ×ø±ê
 );
 
-GLBCORE_API void DrawBelt(
+GLBCORE_API void glbDrawBelt(
                 GlbImage Image,
                 GlbRotmat GlobeRotMat,
                 GlbPointGeo pGeo,
@@ -80,5 +80,5 @@ GLBCORE_API void DrawBelt(
                 float layer
     );
 
-GLBCORE_API void ShowFrameRate();
+//GLBCORE_API void glbShowFrameRate();
 
