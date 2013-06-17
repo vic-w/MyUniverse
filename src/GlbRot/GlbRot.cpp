@@ -2,7 +2,6 @@
 #include "GlbRot.h"
 #include <math.h>
 #include "opencv.hpp"
-#include "IDtest.h"
 #include "Ktmfc.h"
 
 #define N_CALIB  (12) //标定纬线的条数

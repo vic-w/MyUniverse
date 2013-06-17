@@ -8,7 +8,7 @@ void main()
 {
     glbKt();
     GlbRect size(0,0,500,500);
-    glbCreateWindow(size, false);
+    glbCreateWindow(size, false,0);
     glbInitDistort();
 
     g_GlobeEularAngle.m_1_Horz = 0;

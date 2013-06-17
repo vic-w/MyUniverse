@@ -20,7 +20,7 @@ DWORD WINAPI GlobeThread(LPVOID lpParam)
     vector<GlbRect> screens;
     int nScreen = glbDetectScreen(screens);
 
-    bool mirror =!!GetPrivateProfileInt("MyUniverseCfg", "StoryPath", 0, ".\\config.ini");
+    bool mirror =!!GetPrivateProfileInt("MyUniverseCfg", "MirrorDisplay", 0, ".\\config.ini");
     
     if(nScreen >= 2)//屏幕个数大于1个
     {

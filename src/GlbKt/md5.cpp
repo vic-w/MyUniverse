@@ -32,9 +32,6 @@
 // These notices must be retained in any copies of any part of this
 // documentation and/or software.
 /////////////////////////////////////////////////////////////////////////
-
-///ÐÞ¸Ä
-#define MD5_API _declspec(dllexport)
 ///
 #include "stdafx.h"
 #include <assert.h>
@@ -81,11 +78,11 @@ char* PrintMD5(uchar md5Digest[16])
 
 	for (nCount = 0; nCount < 16; nCount++)
 	{
-		sprintf(chEach, "%02x", md5Digest[nCount]);
-		strncat(chBuffer, chEach, sizeof(chEach));
+		sprintf_s(chEach, 10, "%02x", md5Digest[nCount]);
+		strncat_s(chBuffer, 256, chEach, sizeof(chEach));
 	}
 
-	return strdup(chBuffer);
+	return _strdup(chBuffer);
 }
 
 // MD5String: Performs the MD5 algorithm on a char* string, returning
@@ -115,7 +112,7 @@ char* MD5File(char* szFilename)
 	{
 		memset(chBuffer, 0, 1024);
 
-		if ((file = fopen (szFilename, "rb")) != NULL)
+		if (fopen_s(&file, szFilename, "rb") == 0)
 		{
 			while (nLen = fread (chBuffer, 1, 1024, file))
 				alg.Update(chBuffer, nLen);
