@@ -3,6 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MyUniverse", "MyUniverse\MyUniverse.vcxproj", "{3D2415B1-2BED-4E62-8733-400936764CFF}"
 	ProjectSection(ProjectDependencies) = postProject
+		{AC5F4083-3012-474B-9519-263DC6ED9406} = {AC5F4083-3012-474B-9519-263DC6ED9406}
 		{6C0DF790-FA8E-451B-9250-F8CF00581BB8} = {6C0DF790-FA8E-451B-9250-F8CF00581BB8}
 	EndProjectSection
 EndProject
@@ -29,6 +30,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyUniverseControlTest", "My
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GlbKt", "GlbKt\GlbKt.vcxproj", "{85DCE37E-A7F8-44D5-9B09-CE9E09AA97E6}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Ktmfc", "Ktmfc\Ktmfc.vcxproj", "{AC5F4083-3012-474B-9519-263DC6ED9406}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -126,6 +129,18 @@ Global
 		{85DCE37E-A7F8-44D5-9B09-CE9E09AA97E6}.Release|Win32.ActiveCfg = Release|Win32
 		{85DCE37E-A7F8-44D5-9B09-CE9E09AA97E6}.Release|Win32.Build.0 = Release|Win32
 		{85DCE37E-A7F8-44D5-9B09-CE9E09AA97E6}.Release|x86.ActiveCfg = Release|Win32
+		{AC5F4083-3012-474B-9519-263DC6ED9406}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{AC5F4083-3012-474B-9519-263DC6ED9406}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
+		{AC5F4083-3012-474B-9519-263DC6ED9406}.Debug|Mixed Platforms.Build.0 = Debug|Win32
+		{AC5F4083-3012-474B-9519-263DC6ED9406}.Debug|Win32.ActiveCfg = Debug|Win32
+		{AC5F4083-3012-474B-9519-263DC6ED9406}.Debug|Win32.Build.0 = Debug|Win32
+		{AC5F4083-3012-474B-9519-263DC6ED9406}.Debug|x86.ActiveCfg = Debug|Win32
+		{AC5F4083-3012-474B-9519-263DC6ED9406}.Release|Any CPU.ActiveCfg = Release|Win32
+		{AC5F4083-3012-474B-9519-263DC6ED9406}.Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{AC5F4083-3012-474B-9519-263DC6ED9406}.Release|Mixed Platforms.Build.0 = Release|Win32
+		{AC5F4083-3012-474B-9519-263DC6ED9406}.Release|Win32.ActiveCfg = Release|Win32
+		{AC5F4083-3012-474B-9519-263DC6ED9406}.Release|Win32.Build.0 = Release|Win32
+		{AC5F4083-3012-474B-9519-263DC6ED9406}.Release|x86.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

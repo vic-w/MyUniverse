@@ -3,7 +3,7 @@
 #include <math.h>
 #include "opencv.hpp"
 #include "IDtest.h"
-#include "GlbKt.h"
+#include "Ktmfc.h"
 
 #define N_CALIB  (12) //标定纬线的条数
 float latitude_calib[N_CALIB+1];
@@ -348,7 +348,11 @@ void glbCreateNormPivot(GlbPoint3d p, GlbPoint3d directPoint, bool bHeadDirect, 
 
 void glbInitDistort()
 {
-    glbKt(); 
+    if(!glbKtMFC())
+    {
+        exit(0);
+    }
+
     //读取纬度标定信息
 	for(int i=0; i<N_CALIB+1; i++)
 	{

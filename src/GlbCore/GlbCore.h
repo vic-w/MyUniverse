@@ -41,7 +41,7 @@ GLBCORE_API int glbDetectScreen(vector<GlbRect> &screens);//检测屏幕的个数及分辨
 GLBCORE_API GlbImage glbLoadImage(const char* filename);    //载入图像（支持dds,jpg,png）
 GLBCORE_API void glbReleaseImage(GlbImage* pImage);         //释放图像
 
-GLBCORE_API int glbCreateWindow(GlbRect windowSize, bool fullscreen, HINSTANCE hInstance=0);
+GLBCORE_API int glbCreateWindow(GlbRect windowSize, bool fullscreen, bool mirror, HINSTANCE hInstance=0);
 GLBCORE_API void glbDestoryWindow(HINSTANCE hInstance=0);
 
 GLBCORE_API void glbClearWindow();                                    //清空窗口内容

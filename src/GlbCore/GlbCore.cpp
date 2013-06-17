@@ -361,7 +361,7 @@ LRESULT CALLBACK WinProc( HWND   hWnd,
 }
 
 
-void GL_Init( HWND hWnd, long winWidth, long winHeight)
+void GL_Init( HWND hWnd, long winWidth, long winHeight, bool mirror)
 {
     GLuint PixelFormat;
 
@@ -391,8 +391,12 @@ void GL_Init( HWND hWnd, long winWidth, long winHeight)
     //glLoadIdentity();							                // 重置当前的模型观察矩阵
 	glMatrixMode( GL_PROJECTION );
 	//glLoadIdentity();
-	//float W_H_Rate = 640/480.0f;
-	glOrtho( -winWidth/(float)winHeight, winWidth/(float)winHeight, -1, 1, -10, 20);
+	float W_H_Rate = winWidth/(float)winHeight;
+    if(mirror)
+    {
+        W_H_Rate = -W_H_Rate;
+    }
+	glOrtho( -W_H_Rate, W_H_Rate, -1, 1, -10, 20);
 
     //
     // If the required extension is present, get the addresses of its 
@@ -421,7 +425,7 @@ void GL_Init( HWND hWnd, long winWidth, long winHeight)
 }
 
 
-int glbCreateWindow(GlbRect windowSize, bool fullscreen, HINSTANCE hInstance)
+int glbCreateWindow(GlbRect windowSize, bool fullscreen, bool mirror, HINSTANCE hInstance)
 {
     WNDCLASSEX winClass; 
 
@@ -443,11 +447,21 @@ int glbCreateWindow(GlbRect windowSize, bool fullscreen, HINSTANCE hInstance)
         return 0;
     }
 
+    DWORD dwStyle;
+    if(fullscreen)
+    {
+        dwStyle = WS_POPUP | WS_VISIBLE;
+    }
+    else
+    {
+        dwStyle = WS_OVERLAPPED | WS_VISIBLE;
+    }
+
     g_hWnd = CreateWindowEx( 
         NULL,                   // 扩展窗体风格
         "GLB_WINDOWS_CLASS",    // 类名字
         "MyUniverse",           // 窗口标题
-        WS_OVERLAPPED | WS_VISIBLE,// 窗体风格属性
+        dwStyle,                // 窗体风格属性
         windowSize.m_left,      // 窗口位置
         windowSize.m_top,       // 窗口位置
         windowSize.m_width,     // 窗口大小
@@ -466,7 +480,7 @@ int glbCreateWindow(GlbRect windowSize, bool fullscreen, HINSTANCE hInstance)
     ShowWindow( g_hWnd, SW_SHOW );
     UpdateWindow( g_hWnd );
 
-    GL_Init(g_hWnd, windowSize.m_width, windowSize.m_height);//OpenGL相关的初始化
+    GL_Init(g_hWnd, windowSize.m_width, windowSize.m_height, mirror);//OpenGL相关的初始化
     glbInitDistort();//从ini中读取镜头畸变参数
 
     return 1;

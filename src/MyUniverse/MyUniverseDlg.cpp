@@ -10,6 +10,7 @@
 #include "udpThread.h"
 #include "libxml.h"
 #include "opencv.hpp"
+#include "Ktmfc.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
