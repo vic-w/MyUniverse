@@ -37,6 +37,39 @@ Vertex g_quadVertices[] =
 #define FACET_SCACLE_IN_ANGLE (6) //每个面片占的最小角度
 #define MAX_FACET_SHOW_THRESHOLD (0.4f)//能显示的最大面片的size
 
+GlbImage glbLoadImageFromOpencv(IplImage* pImage)
+{
+    GLuint TextureID = -1;
+    int sizeX,sizeY;
+    sizeX = pImage->width;
+    sizeY = pImage->height;
+
+    float texAspectRatio = (float)sizeX / (float)sizeY;
+
+    // Generate a texture with the associative texture ID stored in the array
+    glGenTextures(1, &TextureID);
+
+    // This sets the alignment requirements for the start of each pixel row in memory.
+    // glPixelStorei (GL_UNPACK_ALIGNMENT, 1);
+
+    // Bind the texture to the texture arrays index and init the texture
+    glBindTexture(GL_TEXTURE_2D, TextureID);
+
+    //Assign the mip map levels and texture info
+    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
+    glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+    // Build Mipmaps (builds different versions of the picture for distances - looks better)
+
+    gluBuild2DMipmaps(GL_TEXTURE_2D, 3, sizeX, sizeY, GL_BGR_EXT, GL_UNSIGNED_BYTE, pImage->imageData);
+
+    //glEnable(GL_TEXTURE_2D);
+    // Now we need to free the image data that we loaded since openGL stored it as a texture
+
+    return TextureID;
+}
+
 GlbImage glbLoadImage(const char* filename)  //载入图像（支持dds,jpg,png）
 {
     int fileNameLen = strlen(filename);
@@ -113,41 +146,17 @@ GlbImage glbLoadImage(const char* filename)  //载入图像（支持dds,jpg,png）
         || _stricmp(suffix,".png") == 0)
     {
         GLuint TextureID = -1;
-        IplImage *image = cvLoadImage(filename);
+        IplImage *pImage = cvLoadImage(filename);
 
-        if(!image)
+        if(!pImage)
         {
             MessageBox(0, "读取图像错误！", NULL, MB_OK);
             return false;
         }
+        TextureID = glbLoadImageFromOpencv(pImage);
 
-        int sizeX,sizeY;
-        sizeX = image->width;
-        sizeY = image->height;
+        cvReleaseImage(&pImage);
 
-        float texAspectRatio = (float)sizeX / (float)sizeY;
-
-        // Generate a texture with the associative texture ID stored in the array
-        glGenTextures(1, &TextureID);
-
-        // This sets the alignment requirements for the start of each pixel row in memory.
-        // glPixelStorei (GL_UNPACK_ALIGNMENT, 1);
-
-        // Bind the texture to the texture arrays index and init the texture
-        glBindTexture(GL_TEXTURE_2D, TextureID);
-
-        //Assign the mip map levels and texture info
-        // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
-        glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
-        glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-        // Build Mipmaps (builds different versions of the picture for distances - looks better)
-
-        gluBuild2DMipmaps(GL_TEXTURE_2D, 3, sizeX, sizeY, GL_BGR_EXT, GL_UNSIGNED_BYTE, image->imageData);
-
-        //glEnable(GL_TEXTURE_2D);
-        // Now we need to free the image data that we loaded since openGL stored it as a texture
-        cvReleaseImage(&image);
         return TextureID;
     }
     else

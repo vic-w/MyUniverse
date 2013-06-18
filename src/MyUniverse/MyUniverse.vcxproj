@@ -59,7 +59,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>GlbCore.lib;GlbRot.lib;opencv_core231.lib;libxml2.lib;iconv.lib;Ktmfc.lib</AdditionalDependencies>
+      <AdditionalDependencies>GlbCore.lib;GlbRot.lib;opencv_highgui231.lib;libxml2.lib;iconv.lib;Ktmfc.lib</AdditionalDependencies>
     </Link>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>
@@ -86,7 +86,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>GlbCore.lib;GlbRot.lib;libxml2.lib;iconv.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>GlbCore.lib;GlbRot.lib;libxml2.lib;iconv.lib;opencv_highgui231.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>

@@ -511,11 +511,27 @@ void CMyUniverseDlg::ReadOnePage()
     }
     else if( _stricmp(suffix,".avi") == 0)
     {
-        AfxMessageBox("this is a avi file. 暂不支持此格式");
+        //AfxMessageBox("this is a avi file. 暂不支持此格式");
+        g_StoryPage.bEmpty = 0;
+        g_StoryPage.bMovie = 1;
+        g_StoryPage.bPlaying = 1;
+        g_StoryPage.frameRate = 30;
+        g_StoryPage.pagePath = pagePath;
+        g_StoryPage.storyType = AVI;
+        g_StoryPage.nCurFrame = 0;
+        m_frame_rate = g_StoryPage.frameRate;
     }
     else if( _stricmp(suffix,".wma") == 0)
     {
-        AfxMessageBox("this is a wma file. 暂不支持此格式");
+        //AfxMessageBox("this is a wma file. 暂不支持此格式");
+        g_StoryPage.bEmpty = 0;
+        g_StoryPage.bMovie = 1;
+        g_StoryPage.bPlaying = 1;
+        g_StoryPage.frameRate = 30;
+        g_StoryPage.pagePath = pagePath;
+        g_StoryPage.storyType = WMA;
+        g_StoryPage.nCurFrame = 0;
+        m_frame_rate = g_StoryPage.frameRate;
     }
     else
     {

@@ -84,9 +84,58 @@ void DrawStoryPage()
                 //g_StoryPage.nCurFrame = (g_StoryPage.nCurFrame+g_StoryPage.bPlaying)%g_StoryPage.nFrames;
             }
         }
-        else
+        else if(g_StoryPage.storyType == AVI
+            || g_StoryPage.storyType == WMA) 
         {
+            static  CvCapture* pCapture = NULL;
+            static long snCurFrame = 0;
+            static IplImage* pFrame = NULL;
+            static CString videoPath = "";
+
+            if(videoPath != g_StoryPage.pagePath)
+            {
+                if(pCapture)
+	            {
+		            cvReleaseCapture(&pCapture);
+                }
+                pCapture = cvCaptureFromFile(g_StoryPage.pagePath);
+                if(!pCapture)
+                {
+                    AfxMessageBox("无法读取视频");
+                }
+                videoPath = g_StoryPage.pagePath;
+                g_StoryPage.nCurFrame = 0;
+                snCurFrame = 0;
+                pFrame = cvQueryFrame( pCapture );
+            }
             //do nothing
+            if( snCurFrame < g_StoryPage.nCurFrame )
+            {
+                pFrame = cvQueryFrame( pCapture );
+                if(pFrame == NULL)
+                {
+                    cvReleaseCapture(&pCapture);
+                    pCapture = cvCaptureFromFile(g_StoryPage.pagePath);
+                    pFrame = cvQueryFrame( pCapture );
+                    g_StoryPage.nCurFrame = 0;
+                }
+
+                snCurFrame = g_StoryPage.nCurFrame;
+            }
+            GlbImage Image;
+            if(pFrame)
+            {
+                Image = glbLoadImageFromOpencv(pFrame);
+            }
+            else
+            {
+                Image = 0;
+            }
+
+            EnterCriticalSection(&g_GlobeRotMat_CS);
+            glbDrawGlobe(Image, g_GlobeRotMat);
+            LeaveCriticalSection(&g_GlobeRotMat_CS);
+            glbReleaseImage(&Image);
         }
     }
     LeaveCriticalSection(&g_StoryPage_CS);
@@ -119,8 +168,15 @@ DWORD WINAPI TimingThread(LPVOID lpParam)
 	        if( TimeCounter.QuadPart - LastTimeCounter_playing.QuadPart > tFreq.QuadPart/frameRate)
 	        {
 		        LastTimeCounter_playing = TimeCounter;
-		        g_StoryPage.nCurFrame = (g_StoryPage.nCurFrame+g_StoryPage.bPlaying)%g_StoryPage.nFrames;
-	        }
+                if(g_StoryPage.storyType == FOLDER)
+                {
+		            g_StoryPage.nCurFrame = (g_StoryPage.nCurFrame+g_StoryPage.bPlaying)%g_StoryPage.nFrames;
+                }
+                else// AVI or WMA
+                {
+                    g_StoryPage.nCurFrame ++;
+                }
+            }
         }
         else
         {
