@@ -12,7 +12,8 @@ enum STORY_TYPE
     PNG,
     AVI,
     WMA,
-    FOLDER
+    FOLDER,
+    NONE
 };
 
 class CStoryPage

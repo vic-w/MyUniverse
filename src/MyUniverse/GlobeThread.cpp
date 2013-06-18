@@ -102,6 +102,7 @@ void DrawStoryPage()
                 if(!pCapture)
                 {
                     AfxMessageBox("无法读取视频");
+                    g_StoryPage.storyType = NONE;
                 }
                 videoPath = g_StoryPage.pagePath;
                 g_StoryPage.nCurFrame = 0;
