@@ -108,7 +108,7 @@ void DrawStoryPage()
                 snCurFrame = 0;
                 pFrame = cvQueryFrame( pCapture );
             }
-            //do nothing
+            
             if( snCurFrame < g_StoryPage.nCurFrame )
             {
                 pFrame = cvQueryFrame( pCapture );
@@ -119,13 +119,12 @@ void DrawStoryPage()
                     pFrame = cvQueryFrame( pCapture );
                     g_StoryPage.nCurFrame = 0;
                 }
-
                 snCurFrame = g_StoryPage.nCurFrame;
             }
             GlbImage Image;
             if(pFrame)
             {
-                Image = glbLoadImageFromOpencv(pFrame);
+                Image = glbLoadImageFromOpencv(pFrame, false);
             }
             else
             {

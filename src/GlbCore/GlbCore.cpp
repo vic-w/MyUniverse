@@ -37,7 +37,7 @@ Vertex g_quadVertices[] =
 #define FACET_SCACLE_IN_ANGLE (6) //每个面片占的最小角度
 #define MAX_FACET_SHOW_THRESHOLD (0.4f)//能显示的最大面片的size
 
-GlbImage glbLoadImageFromOpencv(IplImage* pImage)
+GlbImage glbLoadImageFromOpencv(IplImage* pImage, bool bMipmap)
 {
     GLuint TextureID = -1;
     int sizeX,sizeY;
@@ -62,8 +62,15 @@ GlbImage glbLoadImageFromOpencv(IplImage* pImage)
     glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
     // Build Mipmaps (builds different versions of the picture for distances - looks better)
 
-    gluBuild2DMipmaps(GL_TEXTURE_2D, 3, sizeX, sizeY, GL_BGR_EXT, GL_UNSIGNED_BYTE, pImage->imageData);
-
+    if(bMipmap)
+    {
+        gluBuild2DMipmaps(GL_TEXTURE_2D, 3, sizeX, sizeY, GL_BGR_EXT, GL_UNSIGNED_BYTE, pImage->imageData);
+    }
+    else
+    {
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, sizeX, sizeY, 0, GL_RGB, GL_UNSIGNED_BYTE,NULL );
+	    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, sizeX, sizeY, GL_BGR_EXT, GL_UNSIGNED_BYTE, pImage->imageData);
+    }
     //glEnable(GL_TEXTURE_2D);
     // Now we need to free the image data that we loaded since openGL stored it as a texture
 

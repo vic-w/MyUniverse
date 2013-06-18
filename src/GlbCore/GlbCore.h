@@ -40,7 +40,7 @@ public:
 GLBCORE_API int glbDetectScreen(vector<GlbRect> &screens);//检测屏幕的个数及分辨率，返回屏幕个数
 
 GLBCORE_API GlbImage glbLoadImage(const char* filename);    //载入图像（支持dds,jpg,png）
-GLBCORE_API GlbImage glbLoadImageFromOpencv(IplImage* pImage);       //从OpenCV图像转换
+GLBCORE_API GlbImage glbLoadImageFromOpencv(IplImage* pImage, bool bMipmap = true);       //从OpenCV图像转换
 GLBCORE_API void glbReleaseImage(GlbImage* pImage);         //释放图像
 
 GLBCORE_API int glbCreateWindow(GlbRect windowSize, bool fullscreen, bool mirror, HINSTANCE hInstance=0);
