@@ -30,13 +30,14 @@
         {
             this.Play = new System.Windows.Forms.Button();
             this.Pause = new System.Windows.Forms.Button();
+            this.Test = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // Play
             // 
-            this.Play.Location = new System.Drawing.Point(144, 80);
+            this.Play.Location = new System.Drawing.Point(144, 87);
             this.Play.Name = "Play";
-            this.Play.Size = new System.Drawing.Size(75, 23);
+            this.Play.Size = new System.Drawing.Size(75, 25);
             this.Play.TabIndex = 0;
             this.Play.Text = "Play";
             this.Play.UseVisualStyleBackColor = true;
@@ -44,19 +45,30 @@
             // 
             // Pause
             // 
-            this.Pause.Location = new System.Drawing.Point(144, 130);
+            this.Pause.Location = new System.Drawing.Point(144, 118);
             this.Pause.Name = "Pause";
-            this.Pause.Size = new System.Drawing.Size(75, 23);
+            this.Pause.Size = new System.Drawing.Size(75, 25);
             this.Pause.TabIndex = 1;
             this.Pause.Text = "Pause";
             this.Pause.UseVisualStyleBackColor = true;
             this.Pause.Click += new System.EventHandler(this.Pause_Click);
             // 
+            // Test
+            // 
+            this.Test.Location = new System.Drawing.Point(144, 149);
+            this.Test.Name = "Test";
+            this.Test.Size = new System.Drawing.Size(75, 23);
+            this.Test.TabIndex = 2;
+            this.Test.Text = "Test";
+            this.Test.UseVisualStyleBackColor = true;
+            this.Test.Click += new System.EventHandler(this.Test_Click);
+            // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(292, 266);
+            this.ClientSize = new System.Drawing.Size(292, 288);
+            this.Controls.Add(this.Test);
             this.Controls.Add(this.Pause);
             this.Controls.Add(this.Play);
             this.Name = "Form1";
@@ -69,6 +81,7 @@
 
         private System.Windows.Forms.Button Play;
         private System.Windows.Forms.Button Pause;
+        private System.Windows.Forms.Button Test;
     }
 }
 

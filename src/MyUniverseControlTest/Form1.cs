@@ -30,5 +30,10 @@ namespace MyUniverseControlTest
             //MessageBox.Show("Clicked Pause");
             ctrl.Pause();
         }
+
+        private void Test_Click(object sender, EventArgs e)
+        {
+            ctrl.Test();
+        }
     }
 }
