@@ -16,8 +16,11 @@
 
 #define MSG_BUFFER_LENGTH 2048 // 接收数据的最大长度
 
+void SendRet();
+
 int main(int argc, char **argv)
 {
+    //SendRet();
 	WSADATA   wsd;
 	SOCKET    recv_s;
 	char      *recvbuf;
@@ -92,6 +95,10 @@ int main(int argc, char **argv)
             printf("fParam2:%f\n",pCMD->fParam2);
             printf("cParam1:%s\n",pCMD->cParam1);
             printf("cParam2:%s\n",pCMD->cParam2);
+            if(pCMD->command == 3)
+            {
+                SendRet();
+            }
 		}
 
 	}
@@ -101,3 +108,53 @@ int main(int argc, char **argv)
 	return 0;
 }
 
+#define MSG_SEND_BUFFER 1056 // 发送缓存的最大长度
+
+void SendRet()
+{
+    WSADATA        wsd;
+    SOCKET         send_s;
+    char          *sendbuf = NULL;
+    int            ret;
+    SOCKADDR_IN    recv_addr;
+	int port;
+	int sendlen = MSG_SEND_BUFFER;
+
+	port=9161;
+
+    // 初始化Winsock库
+    if (WSAStartup(MAKEWORD(2, 2), &wsd) != 0)
+    {
+        printf("WSAStartup error!\n");
+        exit(1);
+    }
+
+    // 创建UDP套接字
+    send_s = socket(AF_INET, SOCK_DGRAM, 0);
+    if (send_s == INVALID_SOCKET)
+    {
+        printf("socket() error; %d\n", WSAGetLastError());
+        exit(1);
+    }
+	// 设置接收端地址结构
+    recv_addr.sin_family = AF_INET;
+    recv_addr.sin_port = htons((u_short)port);
+    recv_addr.sin_addr.s_addr = inet_addr("127.0.0.1");
+
+    // 分配发送缓存空间
+    sendbuf = new char[MSG_SEND_BUFFER];
+    memset(sendbuf, 0, MSG_SEND_BUFFER);
+	// 开始发送消息
+
+    GlbCommand cmd;
+    cmd.command =3;
+    cmd.ctrl1_ret0 =0;
+
+	ret = sendto(send_s, (const char*)&cmd, sendlen, 0, (SOCKADDR *)&recv_addr, sizeof(recv_addr));
+             
+    closesocket(send_s);
+
+    delete sendbuf;
+    WSACleanup();
+    return;
+}
