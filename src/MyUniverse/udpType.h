@@ -12,6 +12,26 @@ struct GlbCommand
     char cParam2[512];
 };
 
+const int GLB_CMD_PLAY                      = 1;
+const int GLB_CMD_PAUSE                     = 2;
 
-#define GLB_CMD_PLAY            (1)
-#define GLB_CMD_PAUSE           (2)
+const int GLB_CMD_GET_ROTATECLOCKWISE       = 3;
+const int GLB_CMD_SET_ROTATECLOCKWISE       = 4;
+
+const int GLB_CMD_GET_ROTATING              = 5;
+const int GLB_CMD_SET_ROTATING              = 6;
+
+const int GLB_CMD_GET_POLELATITUDE          = 7;
+const int GLB_CMD_SET_POLELATITUDE          = 8;
+
+const int GLB_CMD_GET_POLELONGITUDE         = 9;
+const int GLB_CMD_SET_POLELONGITUDE         = 10;
+
+const int GLB_CMD_GET_CHAPTERNAME           = 11;
+const int GLB_CMD_SET_CHAPTERNAME           = 12;
+
+const int GLB_CMD_GET_PAGENAME              = 13;
+const int GLB_CMD_SET_PAGENAME              = 14;
+
+const int GLB_CMD_GET_ROTATERATE            = 15;
+const int GLB_CMD_SET_ROTATERATE            = 16;

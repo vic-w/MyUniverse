@@ -5,4 +5,4 @@
 
 DWORD WINAPI UdpThread(LPVOID lpParam);
 
-void SparseCmd(void* buf);
+void DespatchCmd(void* buf);

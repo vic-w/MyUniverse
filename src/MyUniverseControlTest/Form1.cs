@@ -35,5 +35,37 @@ namespace MyUniverseControlTest
         {
             ctrl.Test();
         }
+
+        private void RotateClockwiseTrue_Click(object sender, EventArgs e)
+        {
+            ctrl.SetRotateClockwise(true);
+        }
+
+        private void RotateClockwiseFalse_Click(object sender, EventArgs e)
+        {
+            ctrl.SetRotateClockwise(false);
+        }
+
+        private void RotatingTrue_Click(object sender, EventArgs e)
+        {
+            ctrl.SetRotating(true);
+        }
+
+        private void RotatingFalse_Click(object sender, EventArgs e)
+        {
+            ctrl.SetRotating(false);
+        }
+
+        private void GetRotateRate_Click(object sender, EventArgs e)
+        {
+            int i = ctrl.GetRotateRate();
+            MessageBox.Show(i.ToString());
+        }
+
+        private void SetRotateRate_Click(object sender, EventArgs e)
+        {
+            ctrl.SetRotateRate(int.Parse(this.textBox1.Text));
+        }
+
     }
 }

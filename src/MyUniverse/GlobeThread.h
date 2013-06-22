@@ -36,6 +36,7 @@ public:
 
     //旋转控制
     bool bRotating;//自转
+    bool bClockwise; //自转方向
     int rotationRate;//自转速度
 };
 

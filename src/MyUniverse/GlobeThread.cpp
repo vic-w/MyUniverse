@@ -190,12 +190,23 @@ DWORD WINAPI TimingThread(LPVOID lpParam)
 	        {
 		        LastTimeCounter_rotating = TimeCounter;
 
+                float rotationStep = g_StoryPage.rotationRate * 0.1f;
+                if (g_StoryPage.bClockwise)
+                {
+                    rotationStep = -rotationStep;
+                }
+
                 EnterCriticalSection(&g_GlobeRotMat_CS);
-                g_GlobeEularAngle.m_3_Axis += 0.2f;
+                g_GlobeEularAngle.m_3_Axis += rotationStep;
                 if(g_GlobeEularAngle.m_3_Axis>360)
                 {
                     g_GlobeEularAngle.m_3_Axis -= 360;
                 }
+                else if(g_GlobeEularAngle.m_3_Axis<0)
+                {
+                    g_GlobeEularAngle.m_3_Axis += 360;
+                }
+                //printf("Axis3 = %f\n", g_GlobeEularAngle.m_3_Axis);
                 glbEularAngle2Rotmat(g_GlobeEularAngle, g_GlobeRotMat);
                 LeaveCriticalSection(&g_GlobeRotMat_CS);
 
