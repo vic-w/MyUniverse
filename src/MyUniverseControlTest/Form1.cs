@@ -89,5 +89,18 @@ namespace MyUniverseControlTest
             ctrl.SetPoleLongitude(double.Parse(this.textBox_PoleLongitude.Text));
         }
 
+        private void GetChapterAndPageNames_Click(object sender, EventArgs e)
+        {
+            string chapter_name="",page_name="";
+            ctrl.GetChapterAndPageNames(ref chapter_name, ref page_name);
+            string msg = chapter_name + " ";
+            msg += page_name;
+            MessageBox.Show(msg);
+        }
+
+        private void SetChapterAndPageNames_Click(object sender, EventArgs e)
+        {
+            ctrl.SetChapterAndPageNames(textBox_chapter.Text, textBox_page.Text);
+        }
     }
 }

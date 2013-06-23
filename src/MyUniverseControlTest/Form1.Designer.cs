@@ -45,8 +45,8 @@
             this.SetPoleLongitude = new System.Windows.Forms.Button();
             this.textBox_PoleLongitude = new System.Windows.Forms.TextBox();
             this.SetChapterAndPageNames = new System.Windows.Forms.Button();
-            this.textBox4 = new System.Windows.Forms.TextBox();
-            this.textBox5 = new System.Windows.Forms.TextBox();
+            this.textBox_chapter = new System.Windows.Forms.TextBox();
+            this.textBox_page = new System.Windows.Forms.TextBox();
             this.GetChapterAndPageNames = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
@@ -209,20 +209,21 @@
             this.SetChapterAndPageNames.TabIndex = 16;
             this.SetChapterAndPageNames.Text = "SetChapterAndPageNames";
             this.SetChapterAndPageNames.UseVisualStyleBackColor = true;
+            this.SetChapterAndPageNames.Click += new System.EventHandler(this.SetChapterAndPageNames_Click);
             // 
-            // textBox4
+            // textBox_chapter
             // 
-            this.textBox4.Location = new System.Drawing.Point(169, 347);
-            this.textBox4.Name = "textBox4";
-            this.textBox4.Size = new System.Drawing.Size(152, 21);
-            this.textBox4.TabIndex = 17;
+            this.textBox_chapter.Location = new System.Drawing.Point(169, 347);
+            this.textBox_chapter.Name = "textBox_chapter";
+            this.textBox_chapter.Size = new System.Drawing.Size(152, 21);
+            this.textBox_chapter.TabIndex = 17;
             // 
-            // textBox5
+            // textBox_page
             // 
-            this.textBox5.Location = new System.Drawing.Point(328, 347);
-            this.textBox5.Name = "textBox5";
-            this.textBox5.Size = new System.Drawing.Size(179, 21);
-            this.textBox5.TabIndex = 18;
+            this.textBox_page.Location = new System.Drawing.Point(328, 347);
+            this.textBox_page.Name = "textBox_page";
+            this.textBox_page.Size = new System.Drawing.Size(179, 21);
+            this.textBox_page.TabIndex = 18;
             // 
             // GetChapterAndPageNames
             // 
@@ -232,6 +233,7 @@
             this.GetChapterAndPageNames.TabIndex = 19;
             this.GetChapterAndPageNames.Text = "GetChapterAndPageNames";
             this.GetChapterAndPageNames.UseVisualStyleBackColor = true;
+            this.GetChapterAndPageNames.Click += new System.EventHandler(this.GetChapterAndPageNames_Click);
             // 
             // Form1
             // 
@@ -239,8 +241,8 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(531, 393);
             this.Controls.Add(this.GetChapterAndPageNames);
-            this.Controls.Add(this.textBox5);
-            this.Controls.Add(this.textBox4);
+            this.Controls.Add(this.textBox_page);
+            this.Controls.Add(this.textBox_chapter);
             this.Controls.Add(this.SetChapterAndPageNames);
             this.Controls.Add(this.textBox_PoleLongitude);
             this.Controls.Add(this.SetPoleLongitude);
@@ -284,8 +286,8 @@
         private System.Windows.Forms.Button SetPoleLongitude;
         private System.Windows.Forms.TextBox textBox_PoleLongitude;
         private System.Windows.Forms.Button SetChapterAndPageNames;
-        private System.Windows.Forms.TextBox textBox4;
-        private System.Windows.Forms.TextBox textBox5;
+        private System.Windows.Forms.TextBox textBox_chapter;
+        private System.Windows.Forms.TextBox textBox_page;
         private System.Windows.Forms.Button GetChapterAndPageNames;
     }
 }

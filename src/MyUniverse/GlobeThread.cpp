@@ -85,7 +85,7 @@ void DrawStoryPage()
             }
         }
         else if(g_StoryPage.storyType == AVI
-            || g_StoryPage.storyType == WMA) 
+            || g_StoryPage.storyType == WMV) 
         {
             static  CvCapture* pCapture = NULL;
             static long snCurFrame = 0;
@@ -172,7 +172,7 @@ DWORD WINAPI TimingThread(LPVOID lpParam)
                 {
 		            g_StoryPage.nCurFrame = (g_StoryPage.nCurFrame+g_StoryPage.bPlaying)%g_StoryPage.nFrames;
                 }
-                else// AVI or WMA
+                else// AVI or WMV
                 {
                     g_StoryPage.nCurFrame ++;
                 }

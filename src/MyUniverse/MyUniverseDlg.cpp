@@ -413,7 +413,7 @@ void CMyUniverseDlg::ReadChapterStruct()
     ReadPageStruct();
 }
 
-void CMyUniverseDlg::ReadPageStruct()//次处支持：folder，dds，jpg，avi，wma
+void CMyUniverseDlg::ReadPageStruct()//次处支持：folder，dds，jpg，avi，wmv
 {
     WIN32_FIND_DATA FindFileData;
 	HANDLE hFind = INVALID_HANDLE_VALUE;
@@ -451,7 +451,7 @@ void CMyUniverseDlg::ReadPageStruct()//次处支持：folder，dds，jpg，avi，wma
                 else if( _stricmp(suffix,".jpg") ==0
                       || _stricmp(suffix,".dds") ==0
                       || _stricmp(suffix,".avi") ==0
-                      || _stricmp(suffix,".wma") ==0
+                      || _stricmp(suffix,".wmv") ==0
                       )
                 {
                     m_page_select.AddString(FindFileData.cFileName);
@@ -525,15 +525,15 @@ void CMyUniverseDlg::ReadOnePage()
         g_StoryPage.nCurFrame = 0;
         m_frame_rate = g_StoryPage.frameRate;
     }
-    else if( _stricmp(suffix,".wma") == 0)
+    else if( _stricmp(suffix,".wmv") == 0)
     {
-        //AfxMessageBox("this is a wma file. 暂不支持此格式");
+        //AfxMessageBox("this is a wmv file. 暂不支持此格式");
         g_StoryPage.bEmpty = 0;
         g_StoryPage.bMovie = 1;
         g_StoryPage.bPlaying = 1;
         g_StoryPage.frameRate = 30;
         g_StoryPage.pagePath = pagePath;
-        g_StoryPage.storyType = WMA;
+        g_StoryPage.storyType = WMV;
         g_StoryPage.nCurFrame = 0;
         m_frame_rate = g_StoryPage.frameRate;
     }

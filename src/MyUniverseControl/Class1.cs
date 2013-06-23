@@ -143,6 +143,18 @@ namespace MyUniverseControl
         {
             SendCmd(GLB_CMD_SET_POLELONGITUDE, 0, 0, longitude);
         }
+        public void GetChapterAndPageNames(ref string chapter, ref string page)
+        {
+            SendCmd(GLB_CMD_GET_CHAPTERANDPAGENAME);
+            int command = 0, iParam1 = 0, iParam2 = 0;
+            double fParam1 = 0, fParam2 = 0;
+            GetReturn(ref command, ref iParam1, ref iParam2, ref fParam1, ref fParam2, ref chapter, ref page);
+            return;
+        }
+        public void SetChapterAndPageNames(string chapter, string page)
+        {
+            SendCmd(GLB_CMD_SET_CHAPTERANDPAGENAME, 0, 0, 0, 0, chapter, page);
+        }
 
         private static void WriteString(IntPtr basePtr, string value, int offset, int length)
         {
@@ -163,7 +175,7 @@ namespace MyUniverseControl
         {
             int pos = 0;
             byte[] bytes = new byte[length];
-            while (pos < length - 1)
+            while (pos < length - 1 && Marshal.ReadByte(basePtr, offset)!=0)
             {
                 if (pos < bytes.Length)
                     bytes[pos] = Marshal.ReadByte(basePtr, offset);
@@ -172,7 +184,7 @@ namespace MyUniverseControl
                 pos++;
                 offset++;
             }
-            value = Encoding.Default.GetString(bytes);
+            value = Encoding.Default.GetString(bytes, 0, pos);
         }
 
         public unsafe bool GetReturn(
@@ -206,7 +218,7 @@ namespace MyUniverseControl
             double* pfParam2 = (double*)(ptr + 24); //fParam2
             fParam2 = *pfParam2;
             ReadString(ptr, ref cParam1, 32, 512);
-            ReadString(ptr, ref cParam1, 544, 512);
+            ReadString(ptr, ref cParam2, 544, 512);
             Marshal.FreeHGlobal(ptr);
             return true;
         }
