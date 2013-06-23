@@ -143,6 +143,7 @@ BEGIN_MESSAGE_MAP(CMyUniverseDlg, CDialogEx)
 
     //自定义消息
     ON_MESSAGE(WM_GLB_UPDATEDATA,OnGlbUpdateData)  
+    ON_MESSAGE(WM_GLB_UDPREADONEPAGE, OnGlbUdpReadOnePage)
 END_MESSAGE_MAP()
 
 
@@ -413,6 +414,18 @@ void CMyUniverseDlg::ReadChapterStruct()
     ReadPageStruct();
 }
 
+CString CMyUniverseDlg::GetPageStructPath(CString StoryPath, CString ChapterName)
+{
+    CString page_struct_path = StoryPath;
+    int pathLength = page_struct_path.GetLength();
+    char lastChar = *(page_struct_path.GetBuffer()+pathLength-1);
+    if(lastChar != '\\')
+    page_struct_path +="\\";
+    page_struct_path += ChapterName;
+    page_struct_path += "\\";
+    return page_struct_path;
+}
+
 void CMyUniverseDlg::ReadPageStruct()//次处支持：folder，dds，jpg，avi，wmv
 {
     WIN32_FIND_DATA FindFileData;
@@ -421,13 +434,8 @@ void CMyUniverseDlg::ReadPageStruct()//次处支持：folder，dds，jpg，avi，wmv
     m_page_select.ResetContent();
 
     UpdateData(1);
-    m_page_struct_path = m_story_path;
-    int pathLength = m_page_struct_path.GetLength();
-    char lastChar = *(m_page_struct_path.GetBuffer()+pathLength-1);
-    if(lastChar != '\\')
-    m_page_struct_path +="\\";
-    m_page_struct_path += m_chapter_value;
-    m_page_struct_path += "\\";
+
+    m_page_struct_path = GetPageStructPath(m_story_path, m_chapter_value);
 
 	hFind = FindFirstFile(m_page_struct_path+"*", &FindFileData);
 	
@@ -468,12 +476,16 @@ void CMyUniverseDlg::ReadPageStruct()//次处支持：folder，dds，jpg，avi，wmv
 		}
 	}
     m_page_select.SetCurSel(0);
-    ReadOnePage();
+    ReadOnePage(true);
 }
 
-void CMyUniverseDlg::ReadOnePage()
+void CMyUniverseDlg::ReadOnePage(bool bUpdateDataFromUI)
 {
-    UpdateData(1);
+    if(bUpdateDataFromUI)
+    {
+        UpdateData(GET_DATA);
+    }
+    m_page_struct_path = GetPageStructPath(m_story_path, m_chapter_value); 
     CString pagePath = m_page_struct_path + m_page_value;
     //AfxMessageBox(pagePath);
     char* suffix = pagePath.GetBuffer() + pagePath.GetLength() - 4;
@@ -564,7 +576,9 @@ void CMyUniverseDlg::OnCbnSelchangeComboChapter()
 
 void CMyUniverseDlg::OnCbnSelchangeComboPage()
 {
-    ReadOnePage();
+    UpdateData(PUT_DATA);
+    ReadPageStruct();
+    //ReadOnePage(true);
 }
 
 void CMyUniverseDlg::ReadFolderContent(CString folderPath, CString suffix)
@@ -806,3 +820,8 @@ LRESULT CMyUniverseDlg::OnGlbUpdateData(WPARAM wParam, LPARAM lParam)
     m_slider_rotz_ctrl.SetPos((int)(g_GlobeEularAngle.m_3_Axis/360.0*100));
     return 1;  
 } 
+LRESULT CMyUniverseDlg::OnGlbUdpReadOnePage(WPARAM wParam, LPARAM lParam)  
+{
+    ReadOnePage(false);
+    return 1;
+}

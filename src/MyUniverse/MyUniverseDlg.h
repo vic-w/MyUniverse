@@ -12,7 +12,8 @@
 #define PUT_DATA 0
 
 //自定义消息（更新slider_rotz),供TimingThread调用
-#define WM_GLB_UPDATEDATA WM_USER+100 
+#define WM_GLB_UPDATEDATA (WM_USER+100)
+#define WM_GLB_UDPREADONEPAGE (WM_USER+101)
 
 // CMyUniverseDlg 对话框
 class CMyUniverseDlg : public CDialogEx
@@ -30,9 +31,10 @@ public:
 
 // 实现
 private:
+    CString GetPageStructPath(CString StoryPath, CString ChapterName);
+    void ReadOnePage(bool bUpdateDataFromUI);
     void ReadChapterStruct();
     void ReadPageStruct();
-    void ReadOnePage();
     void ReadFolderContent(CString folderPath, CString suffix);
     void GlobeRotate(int Horz, int Vert, int Axis, GlbRotmat &r);
     void ReadStoryConfigXML();
@@ -46,6 +48,7 @@ protected:
 	afx_msg void OnPaint();
 	afx_msg HCURSOR OnQueryDragIcon();
     LRESULT OnGlbUpdateData(WPARAM wParam, LPARAM lParam);//自定义消息的响应函数
+    LRESULT OnGlbUdpReadOnePage(WPARAM wParam, LPARAM lParam);//自定义消息的响应函数
 	DECLARE_MESSAGE_MAP()
 public:
     afx_msg void OnBnClickedOk();
