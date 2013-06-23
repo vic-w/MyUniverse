@@ -576,9 +576,7 @@ void CMyUniverseDlg::OnCbnSelchangeComboChapter()
 
 void CMyUniverseDlg::OnCbnSelchangeComboPage()
 {
-    UpdateData(PUT_DATA);
-    ReadPageStruct();
-    //ReadOnePage(true);
+    ReadOnePage(true);
 }
 
 void CMyUniverseDlg::ReadFolderContent(CString folderPath, CString suffix)
@@ -822,6 +820,16 @@ LRESULT CMyUniverseDlg::OnGlbUpdateData(WPARAM wParam, LPARAM lParam)
 } 
 LRESULT CMyUniverseDlg::OnGlbUdpReadOnePage(WPARAM wParam, LPARAM lParam)  
 {
+    CString chapter = m_chapter_value;
+    CString page = m_page_value;
+
+    UpdateData(PUT_DATA);
+
+    ReadPageStruct();
+    m_page_value = page;
+
+    UpdateData(PUT_DATA);
+
     ReadOnePage(false);
     return 1;
 }
