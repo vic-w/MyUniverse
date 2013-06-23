@@ -32,20 +32,17 @@ namespace MyUniverseControl
         const int GLB_CMD_GET_ROTATING = 5;
         const int GLB_CMD_SET_ROTATING = 6;
 
-        const int GLB_CMD_GET_POLELATITUDE = 7;
-        const int GLB_CMD_SET_POLELATITUDE = 8;
+        const int GLB_CMD_GET_ROTATERATE = 7;
+        const int GLB_CMD_SET_ROTATERATE = 8;
 
-        const int GLB_CMD_GET_POLELONGITUDE = 9;
-        const int GLB_CMD_SET_POLELONGITUDE = 10;
+        const int GLB_CMD_GET_POLELATITUDE = 9;
+        const int GLB_CMD_SET_POLELATITUDE = 10;
 
-        const int GLB_CMD_GET_CHAPTERNAME = 11;
-        const int GLB_CMD_SET_CHAPTERNAME = 12;
+        const int GLB_CMD_GET_POLELONGITUDE = 11;
+        const int GLB_CMD_SET_POLELONGITUDE = 12;
 
-        const int GLB_CMD_GET_PAGENAME = 13;
-        const int GLB_CMD_SET_PAGENAME = 14;
-
-        const int GLB_CMD_GET_ROTATERATE = 15;
-        const int GLB_CMD_SET_ROTATERATE = 16;
+        const int GLB_CMD_GET_CHAPTERANDPAGENAME = 13;
+        const int GLB_CMD_SET_CHAPTERANDPAGENAME = 14;
 
         public void Play()
         {
@@ -119,6 +116,32 @@ namespace MyUniverseControl
         public void SetRotateRate(int rate)
         {
             SendCmd(GLB_CMD_SET_ROTATERATE, rate);
+        }
+        public double GetPoleLatitude()
+        {
+            SendCmd(GLB_CMD_GET_POLELATITUDE);
+            int command = 0, iParam1 = 0, iParam2 = 0;
+            double fParam1 = 0, fParam2 = 0;
+            string cParam1 = "", cParam2 = "";
+            GetReturn(ref command, ref iParam1, ref iParam2, ref fParam1, ref fParam2, ref cParam1, ref cParam2);
+            return fParam1;
+        }
+        public void SetPoleLatitude(double latitude)
+        {
+            SendCmd(GLB_CMD_SET_POLELATITUDE, 0, 0, latitude);
+        }
+        public double GetPoleLongitude()
+        {
+            SendCmd(GLB_CMD_GET_POLELONGITUDE);
+            int command = 0, iParam1 = 0, iParam2 = 0;
+            double fParam1 = 0, fParam2 = 0;
+            string cParam1 = "", cParam2 = "";
+            GetReturn(ref command, ref iParam1, ref iParam2, ref fParam1, ref fParam2, ref cParam1, ref cParam2);
+            return fParam1;
+        }
+        public void SetPoleLongitude(double longitude)
+        {
+            SendCmd(GLB_CMD_SET_POLELONGITUDE, 0, 0, longitude);
         }
 
         private static void WriteString(IntPtr basePtr, string value, int offset, int length)

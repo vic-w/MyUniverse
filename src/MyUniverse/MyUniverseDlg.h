@@ -80,4 +80,6 @@ public:
     BOOL m_rotating;
     CSliderCtrl m_slider_rotz_ctrl;
     CEdit m_edit_rotz_ctrl;
+    CSliderCtrl m_slider_rotx_ctrl;
+    CSliderCtrl m_slider_roty_ctrl;
 };

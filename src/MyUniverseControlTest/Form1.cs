@@ -64,7 +64,29 @@ namespace MyUniverseControlTest
 
         private void SetRotateRate_Click(object sender, EventArgs e)
         {
-            ctrl.SetRotateRate(int.Parse(this.textBox1.Text));
+            ctrl.SetRotateRate(int.Parse(this.TextBox_rotRate.Text));
+        }
+
+        private void GetPoleLatitude_Click(object sender, EventArgs e)
+        {
+            double l = ctrl.GetPoleLatitude();
+            MessageBox.Show(l.ToString());
+        }
+
+        private void SetPoleLatitude_Click(object sender, EventArgs e)
+        {
+            ctrl.SetPoleLatitude(double.Parse(this.textBox_PoleLatitude.Text));
+        }
+
+        private void GetPoleLongitude_Click(object sender, EventArgs e)
+        {
+            double l = ctrl.GetPoleLongitude();
+            MessageBox.Show(l.ToString());
+        }
+
+        private void SetPoleLongitude_Click(object sender, EventArgs e)
+        {
+            ctrl.SetPoleLongitude(double.Parse(this.textBox_PoleLongitude.Text));
         }
 
     }

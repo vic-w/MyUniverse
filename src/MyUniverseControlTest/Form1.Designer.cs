@@ -37,16 +37,17 @@
             this.RotatingFalse = new System.Windows.Forms.Button();
             this.GetRotateRate = new System.Windows.Forms.Button();
             this.SetRotateRate = new System.Windows.Forms.Button();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.TextBox_rotRate = new System.Windows.Forms.TextBox();
             this.GetPoleLatitude = new System.Windows.Forms.Button();
             this.SetPoleLatitude = new System.Windows.Forms.Button();
-            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.textBox_PoleLatitude = new System.Windows.Forms.TextBox();
             this.GetPoleLongitude = new System.Windows.Forms.Button();
             this.SetPoleLongitude = new System.Windows.Forms.Button();
-            this.textBox3 = new System.Windows.Forms.TextBox();
-            this.ChapterAndPageNames = new System.Windows.Forms.Button();
+            this.textBox_PoleLongitude = new System.Windows.Forms.TextBox();
+            this.SetChapterAndPageNames = new System.Windows.Forms.Button();
             this.textBox4 = new System.Windows.Forms.TextBox();
             this.textBox5 = new System.Windows.Forms.TextBox();
+            this.GetChapterAndPageNames = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // Play
@@ -139,12 +140,12 @@
             this.SetRotateRate.UseVisualStyleBackColor = true;
             this.SetRotateRate.Click += new System.EventHandler(this.SetRotateRate_Click);
             // 
-            // textBox1
+            // TextBox_rotRate
             // 
-            this.textBox1.Location = new System.Drawing.Point(383, 165);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(52, 21);
-            this.textBox1.TabIndex = 9;
+            this.TextBox_rotRate.Location = new System.Drawing.Point(383, 165);
+            this.TextBox_rotRate.Name = "TextBox_rotRate";
+            this.TextBox_rotRate.Size = new System.Drawing.Size(52, 21);
+            this.TextBox_rotRate.TabIndex = 9;
             // 
             // GetPoleLatitude
             // 
@@ -154,6 +155,7 @@
             this.GetPoleLatitude.TabIndex = 10;
             this.GetPoleLatitude.Text = "GetPoleLatitude";
             this.GetPoleLatitude.UseVisualStyleBackColor = true;
+            this.GetPoleLatitude.Click += new System.EventHandler(this.GetPoleLatitude_Click);
             // 
             // SetPoleLatitude
             // 
@@ -163,13 +165,14 @@
             this.SetPoleLatitude.TabIndex = 11;
             this.SetPoleLatitude.Text = "SetPoleLatitude";
             this.SetPoleLatitude.UseVisualStyleBackColor = true;
+            this.SetPoleLatitude.Click += new System.EventHandler(this.SetPoleLatitude_Click);
             // 
-            // textBox2
+            // textBox_PoleLatitude
             // 
-            this.textBox2.Location = new System.Drawing.Point(383, 225);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(52, 21);
-            this.textBox2.TabIndex = 12;
+            this.textBox_PoleLatitude.Location = new System.Drawing.Point(383, 225);
+            this.textBox_PoleLatitude.Name = "textBox_PoleLatitude";
+            this.textBox_PoleLatitude.Size = new System.Drawing.Size(52, 21);
+            this.textBox_PoleLatitude.TabIndex = 12;
             // 
             // GetPoleLongitude
             // 
@@ -179,6 +182,7 @@
             this.GetPoleLongitude.TabIndex = 13;
             this.GetPoleLongitude.Text = "GetPoleLongitude";
             this.GetPoleLongitude.UseVisualStyleBackColor = true;
+            this.GetPoleLongitude.Click += new System.EventHandler(this.GetPoleLongitude_Click);
             // 
             // SetPoleLongitude
             // 
@@ -188,52 +192,63 @@
             this.SetPoleLongitude.TabIndex = 14;
             this.SetPoleLongitude.Text = "SetPoleLongitude";
             this.SetPoleLongitude.UseVisualStyleBackColor = true;
+            this.SetPoleLongitude.Click += new System.EventHandler(this.SetPoleLongitude_Click);
             // 
-            // textBox3
+            // textBox_PoleLongitude
             // 
-            this.textBox3.Location = new System.Drawing.Point(383, 285);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(52, 21);
-            this.textBox3.TabIndex = 15;
+            this.textBox_PoleLongitude.Location = new System.Drawing.Point(383, 285);
+            this.textBox_PoleLongitude.Name = "textBox_PoleLongitude";
+            this.textBox_PoleLongitude.Size = new System.Drawing.Size(52, 21);
+            this.textBox_PoleLongitude.TabIndex = 15;
             // 
-            // ChapterAndPageNames
+            // SetChapterAndPageNames
             // 
-            this.ChapterAndPageNames.Location = new System.Drawing.Point(24, 314);
-            this.ChapterAndPageNames.Name = "ChapterAndPageNames";
-            this.ChapterAndPageNames.Size = new System.Drawing.Size(150, 23);
-            this.ChapterAndPageNames.TabIndex = 16;
-            this.ChapterAndPageNames.Text = "ChapterAndPageNames";
-            this.ChapterAndPageNames.UseVisualStyleBackColor = true;
+            this.SetChapterAndPageNames.Location = new System.Drawing.Point(12, 347);
+            this.SetChapterAndPageNames.Name = "SetChapterAndPageNames";
+            this.SetChapterAndPageNames.Size = new System.Drawing.Size(150, 23);
+            this.SetChapterAndPageNames.TabIndex = 16;
+            this.SetChapterAndPageNames.Text = "SetChapterAndPageNames";
+            this.SetChapterAndPageNames.UseVisualStyleBackColor = true;
             // 
             // textBox4
             // 
-            this.textBox4.Location = new System.Drawing.Point(181, 314);
+            this.textBox4.Location = new System.Drawing.Point(169, 347);
             this.textBox4.Name = "textBox4";
             this.textBox4.Size = new System.Drawing.Size(152, 21);
             this.textBox4.TabIndex = 17;
             // 
             // textBox5
             // 
-            this.textBox5.Location = new System.Drawing.Point(340, 314);
+            this.textBox5.Location = new System.Drawing.Point(328, 347);
             this.textBox5.Name = "textBox5";
             this.textBox5.Size = new System.Drawing.Size(179, 21);
             this.textBox5.TabIndex = 18;
+            // 
+            // GetChapterAndPageNames
+            // 
+            this.GetChapterAndPageNames.Location = new System.Drawing.Point(13, 318);
+            this.GetChapterAndPageNames.Name = "GetChapterAndPageNames";
+            this.GetChapterAndPageNames.Size = new System.Drawing.Size(149, 23);
+            this.GetChapterAndPageNames.TabIndex = 19;
+            this.GetChapterAndPageNames.Text = "GetChapterAndPageNames";
+            this.GetChapterAndPageNames.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(531, 350);
+            this.ClientSize = new System.Drawing.Size(531, 393);
+            this.Controls.Add(this.GetChapterAndPageNames);
             this.Controls.Add(this.textBox5);
             this.Controls.Add(this.textBox4);
-            this.Controls.Add(this.ChapterAndPageNames);
-            this.Controls.Add(this.textBox3);
+            this.Controls.Add(this.SetChapterAndPageNames);
+            this.Controls.Add(this.textBox_PoleLongitude);
             this.Controls.Add(this.SetPoleLongitude);
             this.Controls.Add(this.GetPoleLongitude);
-            this.Controls.Add(this.textBox2);
+            this.Controls.Add(this.textBox_PoleLatitude);
             this.Controls.Add(this.SetPoleLatitude);
             this.Controls.Add(this.GetPoleLatitude);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.TextBox_rotRate);
             this.Controls.Add(this.SetRotateRate);
             this.Controls.Add(this.GetRotateRate);
             this.Controls.Add(this.RotatingFalse);
@@ -261,16 +276,17 @@
         private System.Windows.Forms.Button RotatingFalse;
         private System.Windows.Forms.Button GetRotateRate;
         private System.Windows.Forms.Button SetRotateRate;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox TextBox_rotRate;
         private System.Windows.Forms.Button GetPoleLatitude;
         private System.Windows.Forms.Button SetPoleLatitude;
-        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.TextBox textBox_PoleLatitude;
         private System.Windows.Forms.Button GetPoleLongitude;
         private System.Windows.Forms.Button SetPoleLongitude;
-        private System.Windows.Forms.TextBox textBox3;
-        private System.Windows.Forms.Button ChapterAndPageNames;
+        private System.Windows.Forms.TextBox textBox_PoleLongitude;
+        private System.Windows.Forms.Button SetChapterAndPageNames;
         private System.Windows.Forms.TextBox textBox4;
         private System.Windows.Forms.TextBox textBox5;
+        private System.Windows.Forms.Button GetChapterAndPageNames;
     }
 }
 

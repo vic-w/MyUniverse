@@ -115,6 +115,8 @@ void CMyUniverseDlg::DoDataExchange(CDataExchange* pDX)
     DDX_Check(pDX, IDC_CHECK_AUTO_ROT, m_rotating);
     DDX_Control(pDX, IDC_m_slider_rotz, m_slider_rotz_ctrl);
     DDX_Control(pDX, IDC_m_edit_rotz, m_edit_rotz_ctrl);
+    DDX_Control(pDX, IDC_m_slider_rotx, m_slider_rotx_ctrl);
+    DDX_Control(pDX, IDC_m_slider_roty, m_slider_roty_ctrl);
 }
 
 BEGIN_MESSAGE_MAP(CMyUniverseDlg, CDialogEx)
@@ -595,8 +597,14 @@ void CMyUniverseDlg::ReadFolderContent(CString folderPath, CString suffix)
 void CMyUniverseDlg::GlobeRotate(int Horz, int Vert, int Axis, GlbRotmat &r)
 {
     EnterCriticalSection(&g_GlobeRotMat_CS);
-    g_GlobeEularAngle.m_1_Horz = (float)Horz;
-    g_GlobeEularAngle.m_2_Vert = (float)Vert;
+    if(fabs(g_GlobeEularAngle.m_1_Horz - Horz)>5)
+    {
+        g_GlobeEularAngle.m_1_Horz = (float)Horz;
+    }
+    if(fabs(g_GlobeEularAngle.m_2_Vert - Vert)>5)
+    {
+        g_GlobeEularAngle.m_2_Vert = (float)Vert;
+    }
     if(fabs(g_GlobeEularAngle.m_3_Axis - Axis) > 5)//因为slider最小分辨率相当于3.6度角度
     {
         g_GlobeEularAngle.m_3_Axis = (float)Axis;
@@ -793,6 +801,8 @@ void CMyUniverseDlg::OnBnClickedCheckAutoRot()
 LRESULT CMyUniverseDlg::OnGlbUpdateData(WPARAM wParam, LPARAM lParam)  
 {  
     //UpdateData(wParam);  
+    m_slider_rotx_ctrl.SetPos((int)(g_GlobeEularAngle.m_1_Horz/360.0*100));
+    m_slider_roty_ctrl.SetPos((int)(g_GlobeEularAngle.m_2_Vert/360.0*100));
     m_slider_rotz_ctrl.SetPos((int)(g_GlobeEularAngle.m_3_Axis/360.0*100));
     return 1;  
 } 
