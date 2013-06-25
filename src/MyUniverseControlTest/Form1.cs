@@ -33,74 +33,74 @@ namespace MyUniverseControlTest
 
         private void Test_Click(object sender, EventArgs e)
         {
-            ctrl.Test();
+            //ctrl.Test();
         }
 
         private void RotateClockwiseTrue_Click(object sender, EventArgs e)
         {
-            ctrl.SetRotateClockwise(true);
+            ctrl.RotateClockwise = true;
         }
 
         private void RotateClockwiseFalse_Click(object sender, EventArgs e)
         {
-            ctrl.SetRotateClockwise(false);
+            ctrl.RotateClockwise = false;
         }
 
         private void RotatingTrue_Click(object sender, EventArgs e)
         {
-            ctrl.SetRotating(true);
+            ctrl.Rotating = true;
         }
 
         private void RotatingFalse_Click(object sender, EventArgs e)
         {
-            ctrl.SetRotating(false);
+            ctrl.Rotating = false;
         }
 
         private void GetRotateRate_Click(object sender, EventArgs e)
         {
-            int i = ctrl.GetRotateRate();
-            MessageBox.Show(i.ToString());
+            double f = ctrl.RotationRate;
+            MessageBox.Show(f.ToString());
         }
 
         private void SetRotateRate_Click(object sender, EventArgs e)
         {
-            ctrl.SetRotateRate(int.Parse(this.TextBox_rotRate.Text));
+            ctrl.RotationRate = double.Parse(this.TextBox_rotRate.Text);
         }
 
         private void GetPoleLatitude_Click(object sender, EventArgs e)
         {
-            double l = ctrl.GetPoleLatitude();
+            double l = ctrl.PoleLatitude;
             MessageBox.Show(l.ToString());
         }
 
         private void SetPoleLatitude_Click(object sender, EventArgs e)
         {
-            ctrl.SetPoleLatitude(double.Parse(this.textBox_PoleLatitude.Text));
+            ctrl.PoleLatitude = double.Parse(this.textBox_PoleLatitude.Text);
         }
 
         private void GetPoleLongitude_Click(object sender, EventArgs e)
         {
-            double l = ctrl.GetPoleLongitude();
+            double l = ctrl.PoleLongitude;
             MessageBox.Show(l.ToString());
         }
 
         private void SetPoleLongitude_Click(object sender, EventArgs e)
         {
-            ctrl.SetPoleLongitude(double.Parse(this.textBox_PoleLongitude.Text));
+            ctrl.PoleLongitude = double.Parse(this.textBox_PoleLongitude.Text);
         }
 
         private void GetChapterAndPageNames_Click(object sender, EventArgs e)
         {
-            string chapter_name="",page_name="";
-            ctrl.GetChapterAndPageNames(ref chapter_name, ref page_name);
-            string msg = chapter_name + " ";
-            msg += page_name;
-            MessageBox.Show(msg);
+            //string chapter_name="",page_name="";
+            //ctrl.GetChapterAndPageNames(ref chapter_name, ref page_name);
+            //string msg = chapter_name + " ";
+            //msg += page_name;
+            //MessageBox.Show(msg);
         }
 
         private void SetChapterAndPageNames_Click(object sender, EventArgs e)
         {
-            ctrl.SetChapterAndPageNames(textBox_chapter.Text, textBox_page.Text);
+            ctrl.ChapterAndPageNames(textBox_chapter.Text, textBox_page.Text);
         }
     }
 }

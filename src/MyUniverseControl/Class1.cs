@@ -44,24 +44,42 @@ namespace MyUniverseControl
         const int GLB_CMD_GET_CHAPTERANDPAGENAME = 13;
         const int GLB_CMD_SET_CHAPTERANDPAGENAME = 14;
 
+        public double RotationRate
+        {
+            get{ return GetRotateRate(); }
+            set{ SetRotateRate(value);}
+        }
+        public double PoleLatitude
+        {
+            get { return GetPoleLatitude(); }
+            set { SetPoleLatitude(value); }
+        }
+        public double PoleLongitude
+        {
+            get { return GetPoleLongitude(); }
+            set { SetPoleLongitude(value); }
+        }
+        public bool RotateClockwise
+        {
+            get { return GetRotateClockwise(); }
+            set { SetRotateClockwise(value); }
+        }
+        public bool Rotating
+        {
+            get { return false;}///////////////////////有问题
+            set { SetRotating(value); }
+        }
+
         public void Play()
         {
-            //MessageBox.Show("Play");
             SendCmd(GLB_CMD_PLAY);
         }
         public void Pause()
         {
-            //MessageBox.Show("Pause");
             SendCmd(GLB_CMD_PAUSE);
         }
-        public void Test()
-        {
-            //MessageBox.Show("Test");
-            SendCmd(3, 2, 3, 4.0, 5.0, "6", "7测试");
-            byte[] Buffer = new byte[1056];
-            UdpRecv(9161, Buffer);
-        }
-        public bool GetRotateClockwise()
+
+        private bool GetRotateClockwise()
         {
             SendCmd(GLB_CMD_GET_ROTATECLOCKWISE);
 
@@ -78,7 +96,7 @@ namespace MyUniverseControl
                 return false;
             }
         }
-        public void SetRotateClockwise(bool bClockwise)
+        private void SetRotateClockwise(bool bClockwise)
         {
             int iClockwise;
             if (bClockwise)
@@ -91,7 +109,7 @@ namespace MyUniverseControl
             }
             SendCmd(GLB_CMD_SET_ROTATECLOCKWISE, iClockwise);
         }
-        public void SetRotating(bool bRotating)
+        private void SetRotating(bool bRotating)
         {
             int iRotating;
             if (bRotating)
@@ -104,20 +122,20 @@ namespace MyUniverseControl
             }
             SendCmd(GLB_CMD_SET_ROTATING, iRotating);
         }
-        public int GetRotateRate()
+        private double GetRotateRate()
         {
             SendCmd(GLB_CMD_GET_ROTATERATE);
             int command = 0, iParam1 = 0, iParam2 = 0;
             double fParam1 = 0, fParam2 = 0;
             string cParam1 = "", cParam2 = "";
             GetReturn(ref command, ref iParam1, ref iParam2, ref fParam1, ref fParam2, ref cParam1, ref cParam2);
-            return iParam1;
+            return fParam1;
         }
-        public void SetRotateRate(int rate)
+        private void SetRotateRate(double rate)
         {
-            SendCmd(GLB_CMD_SET_ROTATERATE, rate);
+            SendCmd(GLB_CMD_SET_ROTATERATE, 0,0, rate);
         }
-        public double GetPoleLatitude()
+        private double GetPoleLatitude()
         {
             SendCmd(GLB_CMD_GET_POLELATITUDE);
             int command = 0, iParam1 = 0, iParam2 = 0;
@@ -126,11 +144,11 @@ namespace MyUniverseControl
             GetReturn(ref command, ref iParam1, ref iParam2, ref fParam1, ref fParam2, ref cParam1, ref cParam2);
             return fParam1;
         }
-        public void SetPoleLatitude(double latitude)
+        private void SetPoleLatitude(double latitude)
         {
             SendCmd(GLB_CMD_SET_POLELATITUDE, 0, 0, latitude);
         }
-        public double GetPoleLongitude()
+        private double GetPoleLongitude()
         {
             SendCmd(GLB_CMD_GET_POLELONGITUDE);
             int command = 0, iParam1 = 0, iParam2 = 0;
@@ -139,19 +157,19 @@ namespace MyUniverseControl
             GetReturn(ref command, ref iParam1, ref iParam2, ref fParam1, ref fParam2, ref cParam1, ref cParam2);
             return fParam1;
         }
-        public void SetPoleLongitude(double longitude)
+        private void SetPoleLongitude(double longitude)
         {
             SendCmd(GLB_CMD_SET_POLELONGITUDE, 0, 0, longitude);
         }
-        public void GetChapterAndPageNames(ref string chapter, ref string page)
-        {
-            SendCmd(GLB_CMD_GET_CHAPTERANDPAGENAME);
-            int command = 0, iParam1 = 0, iParam2 = 0;
-            double fParam1 = 0, fParam2 = 0;
-            GetReturn(ref command, ref iParam1, ref iParam2, ref fParam1, ref fParam2, ref chapter, ref page);
-            return;
-        }
-        public void SetChapterAndPageNames(string chapter, string page)
+        //public void GetChapterAndPageNames(ref string chapter, ref string page)
+        //{
+        //    SendCmd(GLB_CMD_GET_CHAPTERANDPAGENAME);
+        //    int command = 0, iParam1 = 0, iParam2 = 0;
+        //    double fParam1 = 0, fParam2 = 0;
+        //    GetReturn(ref command, ref iParam1, ref iParam2, ref fParam1, ref fParam2, ref chapter, ref page);
+        //    return;
+        //}
+        public void ChapterAndPageNames(string chapter, string page)
         {
             SendCmd(GLB_CMD_SET_CHAPTERANDPAGENAME, 0, 0, 0, 0, chapter, page);
         }
@@ -187,7 +205,7 @@ namespace MyUniverseControl
             value = Encoding.Default.GetString(bytes, 0, pos);
         }
 
-        public unsafe bool GetReturn(
+        private unsafe bool GetReturn(
             ref int command,
             ref int iParam1, ref int iParam2,
             ref double fParam1, ref double fParam2,
@@ -222,7 +240,7 @@ namespace MyUniverseControl
             Marshal.FreeHGlobal(ptr);
             return true;
         }
-        public unsafe void SendCmd(
+        private unsafe void SendCmd(
             int command,
             int iParam1 = 0, int iParam2 = 0,
             double fParam1 = 0, double fParam2 = 0,
@@ -246,7 +264,7 @@ namespace MyUniverseControl
             Marshal.FreeHGlobal(ptr);
         }
 
-        public unsafe void UdpSend(string sIP, int iPort, byte[] Buffer, int length)
+        private unsafe void UdpSend(string sIP, int iPort, byte[] Buffer, int length)
         {
             //设置服务IP，设置TCP端口号
             IPEndPoint ip = new IPEndPoint(IPAddress.Parse(sIP), iPort);
@@ -258,7 +276,7 @@ namespace MyUniverseControl
             server.Close();
         }
 
-        public unsafe bool UdpRecv(int iPort, byte[] Buffer)
+        private unsafe bool UdpRecv(int iPort, byte[] Buffer)
         {
             IPEndPoint MyIP = new IPEndPoint(IPAddress.Any, iPort);
             IPEndPoint SenderIP = new IPEndPoint(IPAddress.Any, 0);
