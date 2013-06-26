@@ -16,28 +16,31 @@ void main()
        return;
     }
 
-    xmlNodeSetPtr nodeset = NULL;  
-    xmlChar* uri;  
-
     xmlXPathRegisterNs(context,(const xmlChar *)"ns", (const xmlChar *)"http://localhost/ImageryDescriptionDocumentFile.xsd");
 
-    xmlChar* szXpath = (xmlChar*)"/ns:ImageryDescription";
+    xmlChar* szXpath = (xmlChar*)"/ns:ImageryDescription/ns:imageryDescription[@id=0]";
+
     xmlXPathObjectPtr result = xmlXPathEvalExpression(szXpath, context);
 
+    if (result == NULL || xmlXPathNodeSetIsEmpty(result->nodesetval))
+    {
+        printf("can't find element!\n");
+    }
+    else
+    {
+        xmlNodePtr pNode = result->nodesetval->nodeTab[0];
 
-    if(NULL != result) {  
-        nodeset = result->nodesetval;  
-        int i = 0;  
-        for(i = 0; i < nodeset->nodeNr; i ++) {  
-            uri = xmlGetProp(nodeset->nodeTab[i],(const xmlChar*)"href");  
-            printf("link address:%s\n",uri);  
-            xmlFree(uri);  
-        }  
-        xmlXPathFreeObject(result);  
-    }  
+        xmlChar* id_char = xmlGetProp(pNode,(xmlChar*) "id");
+        int id = atoi((char*)id_char);
+        printf("id = %d\n", id);
+        xmlChar* href = xmlGetProp(pNode,(xmlChar*) "href");
+        printf("href = %s\n", (char*)href);
+        xmlChar* imageName = xmlGetProp(pNode,(xmlChar*) "imageName");
+        printf("imageName = %s\n", (char*)imageName);
+    }
 
 
-    int a=0;
+
     xmlCleanupParser();
     return;
 
