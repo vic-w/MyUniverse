@@ -431,50 +431,61 @@ void CMyUniverseDlg::ReadPageStruct()//次处支持：folder，dds，jpg，avi，wmv
     WIN32_FIND_DATA FindFileData;
 	HANDLE hFind = INVALID_HANDLE_VALUE;
 
-    m_page_select.ResetContent();
+    m_page_select.ResetContent();//清空二级菜单（页面）的内容
 
-    UpdateData(1);
+    UpdateData(GET_DATA);//从界面上获取m_chapter_value
 
     m_page_struct_path = GetPageStructPath(m_story_path, m_chapter_value);
 
-	hFind = FindFirstFile(m_page_struct_path+"*", &FindFileData);
-	
-	if(hFind == INVALID_HANDLE_VALUE)
-	{
-		//AfxMessageBox ("Invalid file handle.\n");
-	}
-	else
-	{
-		do
-		{
-            CString chapterName = FindFileData.cFileName;
-            if(chapterName != "." && chapterName != "..")
-            {
-                char* suffix = chapterName.GetBuffer() + chapterName.GetLength() -4;
-			    if (FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
-                {
-				    //printf ("这是一个目录\n");
-                    m_page_select.AddString(FindFileData.cFileName);
-			    }
-                else if( _stricmp(suffix,".jpg") ==0
-                      || _stricmp(suffix,".dds") ==0
-                      || _stricmp(suffix,".avi") ==0
-                      || _stricmp(suffix,".wmv") ==0
-                      )
-                {
-                    m_page_select.AddString(FindFileData.cFileName);
-                }
-            }
-		}while (FindNextFile(hFind, &FindFileData) != 0);
+    CString XML_FilePath = FindXMLFilePath(m_page_struct_path);
 
-		DWORD dwError = GetLastError();
-		FindClose(hFind);
-		if (dwError != ERROR_NO_MORE_FILES) 
-		{
-			//printf ("FindNextFile error. Error is %u\n", dwError);
-            //AfxMessageBox("ERROR_NO_MORE_FILES");
-		}
-	}
+    if(XML_FilePath == "")
+    {
+	    hFind = FindFirstFile(m_page_struct_path+"*", &FindFileData);
+	
+	    if(hFind == INVALID_HANDLE_VALUE)
+	    {
+		    //AfxMessageBox ("Invalid file handle.\n");
+	    }
+	    else
+	    {
+		    do
+		    {
+                CString chapterName = FindFileData.cFileName;
+                if(chapterName != "." && chapterName != "..")
+                {
+                    char* suffix = chapterName.GetBuffer() + chapterName.GetLength() -4;
+			        if (FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
+                    {
+				        //printf ("这是一个目录\n");
+                        m_page_select.AddString(FindFileData.cFileName);
+			        }
+                    else if( _stricmp(suffix,".jpg") ==0
+                          || _stricmp(suffix,".dds") ==0
+                          || _stricmp(suffix,".avi") ==0
+                          || _stricmp(suffix,".wmv") ==0
+                          )
+                    {
+                        m_page_select.AddString(FindFileData.cFileName);
+                    }
+                }
+		    }while (FindNextFile(hFind, &FindFileData) != 0);
+
+		    DWORD dwError = GetLastError();
+		    FindClose(hFind);
+		    if (dwError != ERROR_NO_MORE_FILES) 
+		    {
+			    //printf ("FindNextFile error. Error is %u\n", dwError);
+                //AfxMessageBox("ERROR_NO_MORE_FILES");
+		    }
+	    }
+    }
+    else
+    {
+        //there is one xml file!
+
+    }
+
     m_page_select.SetCurSel(0);
     ReadOnePage(true);
 }
@@ -483,7 +494,7 @@ void CMyUniverseDlg::ReadOnePage(bool bUpdateDataFromUI)
 {
     if(bUpdateDataFromUI)
     {
-        UpdateData(GET_DATA);
+        UpdateData(GET_DATA);//从界面上获取m_chapter_value和m_page_value
     }
     m_page_struct_path = GetPageStructPath(m_story_path, m_chapter_value); 
     CString pagePath = m_page_struct_path + m_page_value;
@@ -658,6 +669,25 @@ char* u2g(char *inbuf)
     return szOut;
 }  
 
+CString CMyUniverseDlg::FindXMLFilePath(CString pageStructPath)
+{
+    WIN32_FIND_DATA FindFileData;
+    HANDLE hFind = INVALID_HANDLE_VALUE;
+    hFind = FindFirstFile(pageStructPath+"*.xml", &FindFileData);
+    if(hFind == INVALID_HANDLE_VALUE)
+	{
+		//AfxMessageBox ("Invalid file handle.\n");
+        return "";
+	}
+	else
+	{
+        CString XML_FilePath = pageStructPath;
+        CString XML_FileName = FindFileData.cFileName;
+        XML_FilePath += XML_FileName;
+        return XML_FilePath;
+    }
+}
+
 void CMyUniverseDlg::ReadStoryConfigXML()
 {
     //此函数调用了libxml2库，
@@ -665,18 +695,16 @@ void CMyUniverseDlg::ReadStoryConfigXML()
     //中文乱码问题参考：http://ling091.iteye.com/blog/295872
 
     //AfxMessageBox(m_page_struct_path);//本章节的目录名
-    WIN32_FIND_DATA FindFileData;
-    HANDLE hFind = INVALID_HANDLE_VALUE;
-    hFind = FindFirstFile(m_page_struct_path+"*.xml", &FindFileData);
-    if(hFind == INVALID_HANDLE_VALUE)
+    //WIN32_FIND_DATA FindFileData;
+    //HANDLE hFind = INVALID_HANDLE_VALUE;
+    //hFind = FindFirstFile(m_page_struct_path+"*.xml", &FindFileData);
+    CString XML_FilePath = FindXMLFilePath(m_page_struct_path);
+    if(XML_FilePath == "")
 	{
 		//AfxMessageBox ("Invalid file handle.\n");
 	}
 	else
 	{
-        CString XML_FilePath = m_page_struct_path;
-        CString XML_FileName = FindFileData.cFileName;
-        XML_FilePath += XML_FileName;
         //AfxMessageBox(XML_FilePath);
 
         xmlDocPtr doc; //文件指针

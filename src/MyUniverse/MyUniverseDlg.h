@@ -38,6 +38,7 @@ private:
     void ReadFolderContent(CString folderPath, CString suffix);
     void GlobeRotate(int Horz, int Vert, int Axis, GlbRotmat &r);
     void ReadStoryConfigXML();
+    CString FindXMLFilePath(CString pageStructPath);
     unsigned char* convert (unsigned char *in, char *encoding);
 protected:
 	HICON m_hIcon;
@@ -73,7 +74,7 @@ public:
     CString m_story_path;       //章节的总目录名
     CString m_chapter_value;    //章节的子目录名
     CString m_page_struct_path; //页面文件的目录
-    CString m_page_value;       //页面文件的文件名
+    CString m_page_value;       //页面文件的文件名（或别名）
     afx_msg void OnBnClickedButtonStep();
     afx_msg void OnBnClickedButtonPlay();
     afx_msg void OnBnClickedButtonPause();
