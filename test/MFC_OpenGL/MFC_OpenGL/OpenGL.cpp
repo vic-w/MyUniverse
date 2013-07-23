@@ -19,28 +19,13 @@ void COpenGL::oglCreate(CRect rect, CWnd *parent)
  
    CreateEx(0, className, "OpenGL", WS_CHILD | WS_VISIBLE |
             WS_CLIPSIBLINGS | WS_CLIPCHILDREN, rect, parent, 0);
- 
-   // Set initial variables' values
-   m_oldWindow    = rect;
-   m_originalRect = rect;
- 
-   hWnd = parent;
+
+   oglInitialize();
 }
 
 BEGIN_MESSAGE_MAP(COpenGL, CWnd)
-    ON_WM_PAINT()
-    ON_WM_CREATE()
     ON_WM_TIMER()
-    ON_WM_SIZE()
 END_MESSAGE_MAP()
-
-
-void COpenGL::OnPaint()
-{
-    //CPaintDC dc(this);    // device context for painting
-   ValidateRect(NULL);
-}
-
 
 int COpenGL::OnCreate(LPCREATESTRUCT lpCreateStruct)
 {
@@ -120,28 +105,7 @@ void COpenGL::OnTimer(UINT_PTR nIDEvent)
 }
 
 
-void COpenGL::OnSize(UINT nType, int cx, int cy)
-{
-    CWnd::OnSize(nType, cx, cy);
- 
-	if (cy == 0)								
-	{
-		cy = 1;						
-	}
 
-
-	glViewport(0,0,cx,cy);	
-
-	glMatrixMode(GL_PROJECTION);						
-	glLoadIdentity();						
-
-	
-	glOrtho(-1.0f,1.0f,-1.0f,1.0f,1.0f,-1.0f);
-//	gluPerspective(45.0f,cx/cy,0.1f,100.0f);
-
-	glMatrixMode(GL_MODELVIEW);						
-	glLoadIdentity();
-}
 
 
 void COpenGL::oglDrawScene(void)

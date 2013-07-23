@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MFC_OpenGL", "MFC_OpenGL\MFC_OpenGL.vcxproj", "{BBF02203-41C9-4A8D-BFD7-EBEEFB6B5819}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "My_MFC_OpenGL_test", "My_MFC_OpenGL_test\My_MFC_OpenGL_test.vcxproj", "{C083A3BF-4F47-49D6-9391-A1E4932EB26E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -13,6 +15,10 @@ Global
 		{BBF02203-41C9-4A8D-BFD7-EBEEFB6B5819}.Debug|Win32.Build.0 = Debug|Win32
 		{BBF02203-41C9-4A8D-BFD7-EBEEFB6B5819}.Release|Win32.ActiveCfg = Release|Win32
 		{BBF02203-41C9-4A8D-BFD7-EBEEFB6B5819}.Release|Win32.Build.0 = Release|Win32
+		{C083A3BF-4F47-49D6-9391-A1E4932EB26E}.Debug|Win32.ActiveCfg = Debug|Win32
+		{C083A3BF-4F47-49D6-9391-A1E4932EB26E}.Debug|Win32.Build.0 = Debug|Win32
+		{C083A3BF-4F47-49D6-9391-A1E4932EB26E}.Release|Win32.ActiveCfg = Release|Win32
+		{C083A3BF-4F47-49D6-9391-A1E4932EB26E}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

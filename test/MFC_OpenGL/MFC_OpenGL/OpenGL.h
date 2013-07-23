@@ -11,10 +11,10 @@ class COpenGL:public CWnd
 {
 public:
     UINT_PTR m_unpTimer;
-private:
     CWnd    *hWnd;
     HDC     hdc;
     HGLRC   hrc;
+private:
     int     m_nPixelFormat;
     CRect   m_rect;
     CRect   m_oldWindow;
