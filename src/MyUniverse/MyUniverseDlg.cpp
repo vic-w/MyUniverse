@@ -546,8 +546,8 @@ void CMyUniverseDlg::ReadOnePage(bool bUpdateDataFromUI)
                 xmlChar* imageName_fromDlg = (xmlChar*)(LPSTR)(LPCTSTR)m_page_value;
                 if(!xmlStrcmp(imageName_gb2312, imageName_fromDlg))
                 {
-                    //读取bPlaying
-                    pageFileName = xmlGetProp(cur,(xmlChar*) "href") + 2;
+                    //读取文件名
+                    pageFileName = u2g((char*)xmlGetProp(cur,(xmlChar*) "href") + 2);
                 }
                 free(imageName_gb2312);
                 xmlFree(szImageName);
