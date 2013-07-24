@@ -39,6 +39,7 @@ private:
     void GlobeRotate(int Horz, int Vert, int Axis, GlbRotmat &r);
     void ReadStoryConfigXML();
     CString FindXMLFilePath(CString pageStructPath);
+    bool Find_ID_in_XML(CString XML_FilePath, int id, CString &imageName, CString &href);
     unsigned char* convert (unsigned char *in, char *encoding);
 protected:
 	HICON m_hIcon;

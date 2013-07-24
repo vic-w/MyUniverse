@@ -32,6 +32,7 @@ int g_bUdpThreadActive;
 #pragma comment( linker, "/subsystem:console /entry:WinMainCRTStartup" )
 #endif
 
+char* u2g(char *inbuf);
 
 // 用于应用程序“关于”菜单项的 CAboutDlg 对话框
 
@@ -437,7 +438,7 @@ void CMyUniverseDlg::ReadPageStruct()//次处支持：folder，dds，jpg，avi，wmv
 
     m_page_struct_path = GetPageStructPath(m_story_path, m_chapter_value);
 
-    CString XML_FilePath = FindXMLFilePath(m_page_struct_path);
+    CString XML_FilePath = FindXMLFilePath(m_page_struct_path);//判断是否有xml文件存在
 
     if(XML_FilePath == "")
     {
@@ -480,10 +481,29 @@ void CMyUniverseDlg::ReadPageStruct()//次处支持：folder，dds，jpg，avi，wmv
 		    }
 	    }
     }
-    else
+    else//there is one xml file!
     {
-        //there is one xml file!
+        xmlDocPtr doc; //文件指针
+        xmlNodePtr cur;//节点指针
+        doc = xmlParseFile(XML_FilePath);
+        cur = xmlDocGetRootElement(doc);
+        //AfxMessageBox((char*)cur->name);
+        cur = cur->xmlChildrenNode;
+        while(cur!=NULL)
+        {
+            if(xmlHasProp(cur,(xmlChar*)"imageName"))
+            {
+                xmlChar* szImageName = xmlGetProp(cur,(xmlChar*) "imageName");
+                char* imageName_gb2312 = u2g((char*)szImageName);
 
+                m_page_select.AddString(imageName_gb2312);
+                
+                free(imageName_gb2312);
+                xmlFree(szImageName);
+            }
+            cur = cur->next;
+        }
+        xmlFreeDoc(doc);
     }
 
     m_page_select.SetCurSel(0);
@@ -496,9 +516,48 @@ void CMyUniverseDlg::ReadOnePage(bool bUpdateDataFromUI)
     {
         UpdateData(GET_DATA);//从界面上获取m_chapter_value和m_page_value
     }
-    m_page_struct_path = GetPageStructPath(m_story_path, m_chapter_value); 
-    CString pagePath = m_page_struct_path + m_page_value;
-    //AfxMessageBox(pagePath);
+
+    m_page_struct_path = GetPageStructPath(m_story_path, m_chapter_value);
+    CString XML_FilePath = FindXMLFilePath(m_page_struct_path);//判断是否有xml文件存在
+
+    
+    CString pageFileName;
+    if(XML_FilePath=="")
+    {
+        //以m_page_value作为文件名
+        pageFileName = m_page_value;
+        //AfxMessageBox(pagePath);
+    }
+    else
+    {
+        //从xml文件中查找文件名
+        xmlDocPtr doc; //文件指针
+        xmlNodePtr cur;//节点指针
+        doc = xmlParseFile(XML_FilePath);
+        cur = xmlDocGetRootElement(doc);
+        //AfxMessageBox((char*)cur->name);
+        cur = cur->xmlChildrenNode;
+        while(cur!=NULL)
+        {
+            if(xmlHasProp(cur,(xmlChar*)"imageName"))
+            {
+                xmlChar* szImageName = xmlGetProp(cur,(xmlChar*) "imageName");
+                xmlChar* imageName_gb2312 = (xmlChar*)u2g((char*)szImageName);
+                xmlChar* imageName_fromDlg = (xmlChar*)(LPSTR)(LPCTSTR)m_page_value;
+                if(!xmlStrcmp(imageName_gb2312, imageName_fromDlg))
+                {
+                    //读取bPlaying
+                    pageFileName = xmlGetProp(cur,(xmlChar*) "href") + 2;
+                }
+                free(imageName_gb2312);
+                xmlFree(szImageName);
+            }
+            cur = cur->next;
+        }
+        xmlFreeDoc(doc);
+    }
+
+    CString pagePath = m_page_struct_path + pageFileName;
     char* suffix = pagePath.GetBuffer() + pagePath.GetLength() - 4;
 
     EnterCriticalSection(&g_StoryPage_CS);
@@ -688,6 +747,54 @@ CString CMyUniverseDlg::FindXMLFilePath(CString pageStructPath)
     }
 }
 
+bool CMyUniverseDlg::Find_ID_in_XML(CString XML_FilePath, int id, CString &imageName, CString &href)
+{
+    xmlInitParser();
+    xmlDocPtr doc;
+    doc = xmlParseFile(XML_FilePath); //读取文件
+
+    xmlXPathContextPtr context = xmlXPathNewContext(doc);//建立context
+    if (context == NULL)
+    {  
+       printf("context is NULL\n");
+       return false;
+    }
+
+    xmlXPathRegisterNs(context,(const xmlChar *)"ns", (const xmlChar *)"http://localhost/ImageryDescriptionDocumentFile.xsd");
+
+    CString Xpath = "/ns:ImageryDescription/ns:imageryDescription[@id=";
+    char number[10];
+    _itoa_s(id, number, 10, 10);
+    Xpath += number;
+    Xpath += "]";
+    //xmlChar* szXpath = (xmlChar*)"/ns:ImageryDescription/ns:imageryDescription[@id=";//0]";
+
+    xmlXPathObjectPtr result = xmlXPathEvalExpression((xmlChar*)(LPSTR)(LPCTSTR)Xpath, context);
+
+    if (result == NULL || xmlXPathNodeSetIsEmpty(result->nodesetval))
+    {
+        printf("can't find element!\n");
+    }
+    else
+    {
+        xmlNodePtr pNode = result->nodesetval->nodeTab[0];
+
+        xmlChar* id_char = xmlGetProp(pNode,(xmlChar*) "id");
+        int id = atoi((char*)id_char);
+        printf("id = %d\n", id);
+        xmlChar* href = xmlGetProp(pNode,(xmlChar*) "href");
+        printf("href = %s\n", (char*)href);
+        xmlChar* imageName = xmlGetProp(pNode,(xmlChar*) "imageName");
+        printf("imageName = %s\n", (char*)imageName);
+    }
+
+
+
+    xmlCleanupParser();
+
+    return true;
+}
+
 void CMyUniverseDlg::ReadStoryConfigXML()
 {
     //此函数调用了libxml2库，
@@ -695,9 +802,6 @@ void CMyUniverseDlg::ReadStoryConfigXML()
     //中文乱码问题参考：http://ling091.iteye.com/blog/295872
 
     //AfxMessageBox(m_page_struct_path);//本章节的目录名
-    //WIN32_FIND_DATA FindFileData;
-    //HANDLE hFind = INVALID_HANDLE_VALUE;
-    //hFind = FindFirstFile(m_page_struct_path+"*.xml", &FindFileData);
     CString XML_FilePath = FindXMLFilePath(m_page_struct_path);
     if(XML_FilePath == "")
 	{
@@ -706,7 +810,6 @@ void CMyUniverseDlg::ReadStoryConfigXML()
 	else
 	{
         //AfxMessageBox(XML_FilePath);
-
         xmlDocPtr doc; //文件指针
         xmlNodePtr cur;//节点指针
         doc = xmlParseFile(XML_FilePath);
@@ -715,14 +818,14 @@ void CMyUniverseDlg::ReadStoryConfigXML()
         cur = cur->xmlChildrenNode;
         while(cur!=NULL)
         {
-            if(xmlHasProp(cur,(xmlChar*)"href"))
+            if(xmlHasProp(cur,(xmlChar*)"imageName"))
             {
-                xmlChar* szAttr = xmlGetProp(cur,(xmlChar*) "href");
+                xmlChar* szAttr = xmlGetProp(cur,(xmlChar*) "imageName");
                 //AfxMessageBox((char*)szAttr);
-                xmlChar* filename_xml = szAttr+2;
-                xmlChar* filename_xml_gb2312 = (xmlChar*)u2g((char*)filename_xml);
-                xmlChar* filename_page = (xmlChar*)(LPSTR)(LPCTSTR)m_page_value;
-                if(!xmlStrcmp(filename_xml_gb2312, filename_page))
+                xmlChar* imageName_xml = szAttr;
+                xmlChar* imageName_xml_gb2312 = (xmlChar*)u2g((char*)imageName_xml);
+                xmlChar* imageName_page = (xmlChar*)(LPSTR)(LPCTSTR)m_page_value;
+                if(!xmlStrcmp(imageName_xml_gb2312, imageName_page))
                 {
                     //AfxMessageBox((char*)filename_xml_gb2312);
                     //以确定查找到该Page的配置
@@ -759,7 +862,7 @@ void CMyUniverseDlg::ReadStoryConfigXML()
                         //UpdateData(PUT_DATA);
                     }
                 }
-                free(filename_xml_gb2312);
+                free(imageName_xml_gb2312);
                 xmlFree(szAttr);
             }
             cur = cur->next;
