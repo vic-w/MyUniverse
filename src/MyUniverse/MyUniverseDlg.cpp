@@ -747,54 +747,6 @@ CString CMyUniverseDlg::FindXMLFilePath(CString pageStructPath)
     }
 }
 
-bool CMyUniverseDlg::Find_ID_in_XML(CString XML_FilePath, int id, CString &imageName, CString &href)
-{
-    xmlInitParser();
-    xmlDocPtr doc;
-    doc = xmlParseFile(XML_FilePath); //读取文件
-
-    xmlXPathContextPtr context = xmlXPathNewContext(doc);//建立context
-    if (context == NULL)
-    {  
-       printf("context is NULL\n");
-       return false;
-    }
-
-    xmlXPathRegisterNs(context,(const xmlChar *)"ns", (const xmlChar *)"http://localhost/ImageryDescriptionDocumentFile.xsd");
-
-    CString Xpath = "/ns:ImageryDescription/ns:imageryDescription[@id=";
-    char number[10];
-    _itoa_s(id, number, 10, 10);
-    Xpath += number;
-    Xpath += "]";
-    //xmlChar* szXpath = (xmlChar*)"/ns:ImageryDescription/ns:imageryDescription[@id=";//0]";
-
-    xmlXPathObjectPtr result = xmlXPathEvalExpression((xmlChar*)(LPSTR)(LPCTSTR)Xpath, context);
-
-    if (result == NULL || xmlXPathNodeSetIsEmpty(result->nodesetval))
-    {
-        printf("can't find element!\n");
-    }
-    else
-    {
-        xmlNodePtr pNode = result->nodesetval->nodeTab[0];
-
-        xmlChar* id_char = xmlGetProp(pNode,(xmlChar*) "id");
-        int id = atoi((char*)id_char);
-        printf("id = %d\n", id);
-        xmlChar* href = xmlGetProp(pNode,(xmlChar*) "href");
-        printf("href = %s\n", (char*)href);
-        xmlChar* imageName = xmlGetProp(pNode,(xmlChar*) "imageName");
-        printf("imageName = %s\n", (char*)imageName);
-    }
-
-
-
-    xmlCleanupParser();
-
-    return true;
-}
-
 void CMyUniverseDlg::ReadStoryConfigXML()
 {
     //此函数调用了libxml2库，
