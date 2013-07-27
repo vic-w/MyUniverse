@@ -48,6 +48,9 @@
     <ClInclude Include="udpType.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="StorytellerComp.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MyUniverse.cpp">
@@ -63,6 +66,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="udpThread.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="StorytellerComp.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

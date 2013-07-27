@@ -11,6 +11,7 @@
 #include "libxml.h"
 #include "opencv.hpp"
 #include "Ktmfc.h"
+#include "StorytellerComp.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -21,7 +22,9 @@ extern CStoryPage g_StoryPage;
 
 extern CRITICAL_SECTION g_GlobeRotMat_CS;
 extern GlbRotmat g_GlobeRotMat;
+extern GlbEularAngle g_StorytellerEularAngle;
 extern GlbEularAngle g_GlobeEularAngle;
+extern GlbEularAngle g_OffsetEularAngle;
 
 int g_bMainThreadActive;
 int g_bGlbThreadActive;
@@ -189,13 +192,25 @@ BOOL CMyUniverseDlg::OnInitDialog()
     char lpStoryPath[512];
     GetPrivateProfileString("MyUniverseCfg", "StoryPath", "", lpStoryPath, 512, ".\\config.ini");
     m_story_path = lpStoryPath;
-    UpdateData(0);
+    UpdateData(PUT_DATA);
     ReadChapterStruct();
 
     //初始化旋转矩阵
-    g_GlobeEularAngle.m_1_Horz = 0;
-    g_GlobeEularAngle.m_2_Vert = 0;
-    g_GlobeEularAngle.m_3_Axis = 0;
+    g_StorytellerEularAngle.m_1_Horz = 0;
+    g_StorytellerEularAngle.m_2_Vert = 90;
+    g_StorytellerEularAngle.m_3_Axis = 0;    
+
+    // 初始化界面上的值
+    m_edit_roty = g_StorytellerEularAngle.m_2_Vert;
+    m_slider_roty = (int)(m_edit_roty/360.0*100);
+    UpdateData(PUT_DATA);
+
+    
+    g_OffsetEularAngle.m_1_Horz = 0;
+    g_OffsetEularAngle.m_2_Vert = -90;
+    g_OffsetEularAngle.m_3_Axis = 0;
+
+    StorytellerEular2GlobeEular(g_StorytellerEularAngle, g_OffsetEularAngle, g_GlobeEularAngle);
     glbEularAngle2Rotmat(g_GlobeEularAngle, g_GlobeRotMat);
 
     CreateThread(0, 0, GlobeThread, 0,0,0);//启动OpenGL显示线程
@@ -679,18 +694,19 @@ void CMyUniverseDlg::ReadFolderContent(CString folderPath, CString suffix)
 void CMyUniverseDlg::GlobeRotate(int Horz, int Vert, int Axis, GlbRotmat &r)
 {
     EnterCriticalSection(&g_GlobeRotMat_CS);
-    if(fabs(g_GlobeEularAngle.m_1_Horz - Horz)>5)
+    if(fabs(g_StorytellerEularAngle.m_1_Horz - Horz)>5)
     {
-        g_GlobeEularAngle.m_1_Horz = (float)Horz;
+        g_StorytellerEularAngle.m_1_Horz = (float)Horz;
     }
-    if(fabs(g_GlobeEularAngle.m_2_Vert - Vert)>5)
+    if(fabs(g_StorytellerEularAngle.m_2_Vert - Vert)>5)
     {
-        g_GlobeEularAngle.m_2_Vert = (float)Vert;
+        g_StorytellerEularAngle.m_2_Vert = (float)Vert;
     }
-    if(fabs(g_GlobeEularAngle.m_3_Axis - Axis) > 5)//因为slider最小分辨率相当于3.6度角度
+    if(fabs(g_StorytellerEularAngle.m_3_Axis - Axis) > 5)//因为slider最小分辨率相当于3.6度角度
     {
-        g_GlobeEularAngle.m_3_Axis = (float)Axis;
+        g_StorytellerEularAngle.m_3_Axis = (float)Axis;
     }
+    StorytellerEular2GlobeEular(g_StorytellerEularAngle, g_OffsetEularAngle, g_GlobeEularAngle);
     glbEularAngle2Rotmat(g_GlobeEularAngle, r);
     LeaveCriticalSection(&g_GlobeRotMat_CS);
 }
@@ -896,9 +912,9 @@ void CMyUniverseDlg::OnBnClickedCheckAutoRot()
 LRESULT CMyUniverseDlg::OnGlbUpdateData(WPARAM wParam, LPARAM lParam)  
 {  
     //UpdateData(wParam);  
-    m_slider_rotx_ctrl.SetPos((int)(g_GlobeEularAngle.m_1_Horz/360.0*100));
-    m_slider_roty_ctrl.SetPos((int)(g_GlobeEularAngle.m_2_Vert/360.0*100));
-    m_slider_rotz_ctrl.SetPos((int)(g_GlobeEularAngle.m_3_Axis/360.0*100));
+    m_slider_rotx_ctrl.SetPos((int)(g_StorytellerEularAngle.m_1_Horz/360.0*100));
+    m_slider_roty_ctrl.SetPos((int)(g_StorytellerEularAngle.m_2_Vert/360.0*100));
+    m_slider_rotz_ctrl.SetPos((int)(g_StorytellerEularAngle.m_3_Axis/360.0*100));
     return 1;  
 } 
 LRESULT CMyUniverseDlg::OnGlbUdpReadOnePage(WPARAM wParam, LPARAM lParam)  

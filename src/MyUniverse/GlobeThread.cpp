@@ -1,13 +1,16 @@
 #include "stdafx.h"
 #include "GlobeThread.h"
 #include "MyUniverseDlg.h"
+#include "StorytellerComp.h"
 
 CRITICAL_SECTION g_StoryPage_CS;
 CStoryPage g_StoryPage;
 
 CRITICAL_SECTION g_GlobeRotMat_CS;
 GlbRotmat g_GlobeRotMat;
-GlbEularAngle g_GlobeEularAngle;
+GlbEularAngle g_StorytellerEularAngle;//这是storyteller的坐标系
+GlbEularAngle g_GlobeEularAngle;//这是MyUniverse的坐标系
+GlbEularAngle g_OffsetEularAngle;//这是连个坐标系的差别
 
 extern int g_bMainThreadActive;//主线程活动指示
 extern int g_bGlbThreadActive;//星球绘图线程活动指示
@@ -197,16 +200,17 @@ DWORD WINAPI TimingThread(LPVOID lpParam)
                 }
 
                 EnterCriticalSection(&g_GlobeRotMat_CS);
-                g_GlobeEularAngle.m_3_Axis += rotationStep;
-                if(g_GlobeEularAngle.m_3_Axis>360)
+                g_StorytellerEularAngle.m_3_Axis += rotationStep;
+                if(g_StorytellerEularAngle.m_3_Axis>360)
                 {
-                    g_GlobeEularAngle.m_3_Axis -= 360;
+                    g_StorytellerEularAngle.m_3_Axis -= 360;
                 }
-                else if(g_GlobeEularAngle.m_3_Axis<0)
+                else if(g_StorytellerEularAngle.m_3_Axis<0)
                 {
-                    g_GlobeEularAngle.m_3_Axis += 360;
+                    g_StorytellerEularAngle.m_3_Axis += 360;
                 }
-                //printf("Axis3 = %f\n", g_GlobeEularAngle.m_3_Axis);
+                //printf("Axis3 = %f\n", g_StorytellerEularAngle.m_3_Axis);
+                StorytellerEular2GlobeEular(g_StorytellerEularAngle, g_OffsetEularAngle, g_GlobeEularAngle);
                 glbEularAngle2Rotmat(g_GlobeEularAngle, g_GlobeRotMat);
                 LeaveCriticalSection(&g_GlobeRotMat_CS);
 
