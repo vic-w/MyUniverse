@@ -85,7 +85,8 @@ CMyUniverseDlg::CMyUniverseDlg(CWnd* pParent /*=NULL*/)
     , m_chapter_value(_T(""))
     , m_page_value(_T(""))
     , m_frame_rate(0)
-    , m_rotating(FALSE)
+    , m_rotating_UI(FALSE)
+    , m_rotationRate_UI(0)
 {
     m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
@@ -116,11 +117,14 @@ void CMyUniverseDlg::DoDataExchange(CDataExchange* pDX)
     DDX_CBString(pDX, IDC_COMBO_PAGE, m_page_value);
     DDX_Text(pDX, IDC_EDIT_FRAME_RATE, m_frame_rate);
     DDV_MinMaxInt(pDX, m_frame_rate, 0, 100);
-    DDX_Check(pDX, IDC_CHECK_AUTO_ROT, m_rotating);
+    DDX_Check(pDX, IDC_CHECK_AUTO_ROT, m_rotating_UI);
     DDX_Control(pDX, IDC_m_slider_rotz, m_slider_rotz_ctrl);
     DDX_Control(pDX, IDC_m_edit_rotz, m_edit_rotz_ctrl);
     DDX_Control(pDX, IDC_m_slider_rotx, m_slider_rotx_ctrl);
     DDX_Control(pDX, IDC_m_slider_roty, m_slider_roty_ctrl);
+    DDX_Text(pDX, IDC_m_rotationRate, m_rotationRate_UI);
+    DDX_Control(pDX, IDC_UNCLOCKWISE, m_unclockwise_UI);
+    DDX_Control(pDX, IDC_CLOCKWISE, m_clockwise_UI);
 }
 
 BEGIN_MESSAGE_MAP(CMyUniverseDlg, CDialogEx)
@@ -148,6 +152,9 @@ BEGIN_MESSAGE_MAP(CMyUniverseDlg, CDialogEx)
     //自定义消息
     ON_MESSAGE(WM_GLB_UPDATEDATA,OnGlbUpdateData)  
     ON_MESSAGE(WM_GLB_UDPREADONEPAGE, OnGlbUdpReadOnePage)
+    ON_EN_CHANGE(IDC_m_rotationRate, &CMyUniverseDlg::OnEnChangemrotationrate)
+    ON_BN_CLICKED(IDC_UNCLOCKWISE, &CMyUniverseDlg::OnBnClickedUnclockwise)
+    ON_BN_CLICKED(IDC_CLOCKWISE, &CMyUniverseDlg::OnBnClickedClockwise)
 END_MESSAGE_MAP()
 
 
@@ -201,7 +208,7 @@ BOOL CMyUniverseDlg::OnInitDialog()
     g_StorytellerEularAngle.m_3_Axis = 0;    
 
     // 初始化界面上的值
-    m_edit_roty = g_StorytellerEularAngle.m_2_Vert;
+    m_edit_roty = (int)g_StorytellerEularAngle.m_2_Vert;
     m_slider_roty = (int)(m_edit_roty/360.0*100);
     UpdateData(PUT_DATA);
 
@@ -562,7 +569,9 @@ void CMyUniverseDlg::ReadOnePage(bool bUpdateDataFromUI)
                 if(!xmlStrcmp(imageName_gb2312, imageName_fromDlg))
                 {
                     //读取文件名
-                    pageFileName = u2g((char*)xmlGetProp(cur,(xmlChar*) "href") + 2);
+                    char* g = u2g((char*)xmlGetProp(cur,(xmlChar*) "href") + 2);
+                    pageFileName = g;
+                    free(g);
                 }
                 free(imageName_gb2312);
                 xmlFree(szImageName);
@@ -584,7 +593,12 @@ void CMyUniverseDlg::ReadOnePage(bool bUpdateDataFromUI)
     g_StoryPage.bRotating = 0;
     g_StoryPage.bClockwise = 0;
     g_StoryPage.rotationRate = 2;
-    m_rotating = 0;//控制界面
+
+    //控制界面变量
+    m_rotating_UI = 0;
+    m_rotationRate_UI = 2;
+    m_unclockwise_UI.SetCheck(true);
+    m_clockwise_UI.SetCheck(false);
 
     if( _stricmp(suffix,".jpg") == 0)
     {
@@ -612,7 +626,6 @@ void CMyUniverseDlg::ReadOnePage(bool bUpdateDataFromUI)
     }
     else if( _stricmp(suffix,".avi") == 0)
     {
-        //AfxMessageBox("this is a avi file. 暂不支持此格式");
         g_StoryPage.bEmpty = 0;
         g_StoryPage.bMovie = 1;
         g_StoryPage.bPlaying = 1;
@@ -624,7 +637,6 @@ void CMyUniverseDlg::ReadOnePage(bool bUpdateDataFromUI)
     }
     else if( _stricmp(suffix,".wmv") == 0)
     {
-        //AfxMessageBox("this is a wmv file. 暂不支持此格式");
         g_StoryPage.bEmpty = 0;
         g_StoryPage.bMovie = 1;
         g_StoryPage.bPlaying = 1;
@@ -813,6 +825,33 @@ void CMyUniverseDlg::ReadStoryConfigXML()
                         g_StoryPage.frameRate = frameRate;
                         m_frame_rate = frameRate;
                         //UpdateData(PUT_DATA);
+                    }                    
+                    
+                    //读取rotationRate
+                    xmlChar* rotationRate_char = xmlGetProp(cur,(xmlChar*) "rotationRate");
+                    if(rotationRate_char)
+                    {
+                        int rotationRate = atoi((char*)rotationRate_char);
+                        g_StoryPage.rotationRate = rotationRate;
+                        m_rotationRate_UI = rotationRate;
+                        //UpdateData(PUT_DATA);
+                    }
+
+                    //读取rotateClockwise
+                    xmlChar* rotateClockwise_char = xmlGetProp(cur,(xmlChar*) "rotateClockwise");
+                    if(!xmlStrcmp(rotateClockwise_char, (xmlChar*)"true"))
+                    {
+                        g_StoryPage.bClockwise = 1;
+                        m_clockwise_UI.SetCheck(true);
+                        m_unclockwise_UI.SetCheck(false);
+                        //UpdateData(PUT_DATA);
+                    }
+                    else
+                    {
+                        g_StoryPage.bClockwise = 0;
+                        m_unclockwise_UI.SetCheck(true);
+                        m_clockwise_UI.SetCheck(false);
+                        //UpdateData(PUT_DATA);
                     }
 
                     //读取rotating
@@ -820,13 +859,13 @@ void CMyUniverseDlg::ReadStoryConfigXML()
                     if(!xmlStrcmp(bRotating_char, (xmlChar*)"true"))
                     {
                         g_StoryPage.bRotating = 1;
-                        m_rotating = 1;
+                        m_rotating_UI = 1;
                         //UpdateData(PUT_DATA);
                     }
                     else
                     {
                         g_StoryPage.bRotating = 0;
-                        m_rotating = 0;
+                        m_rotating_UI = 0;
                         //UpdateData(PUT_DATA);
                     }
                 }
@@ -906,7 +945,7 @@ void CMyUniverseDlg::OnEnChangeEditFrameRate()
 void CMyUniverseDlg::OnBnClickedCheckAutoRot()
 {
     UpdateData(GET_DATA);
-    g_StoryPage.bRotating = !!m_rotating;
+    g_StoryPage.bRotating = !!m_rotating_UI;
 }
 
 LRESULT CMyUniverseDlg::OnGlbUpdateData(WPARAM wParam, LPARAM lParam)  
@@ -915,6 +954,23 @@ LRESULT CMyUniverseDlg::OnGlbUpdateData(WPARAM wParam, LPARAM lParam)
     m_slider_rotx_ctrl.SetPos((int)(g_StorytellerEularAngle.m_1_Horz/360.0*100));
     m_slider_roty_ctrl.SetPos((int)(g_StorytellerEularAngle.m_2_Vert/360.0*100));
     m_slider_rotz_ctrl.SetPos((int)(g_StorytellerEularAngle.m_3_Axis/360.0*100));
+
+    m_rotating_UI = g_StoryPage.bRotating;
+    m_rotationRate_UI = g_StoryPage.rotationRate;
+    if(g_StoryPage.bClockwise)
+    {
+        m_clockwise_UI.SetCheck(true);
+        m_unclockwise_UI.SetCheck(false);
+    }
+    else
+    {
+        m_unclockwise_UI.SetCheck(true);
+        m_clockwise_UI.SetCheck(false);
+    }
+    if(wParam)
+    {
+        UpdateData(PUT_DATA);
+    }
     return 1;  
 } 
 LRESULT CMyUniverseDlg::OnGlbUdpReadOnePage(WPARAM wParam, LPARAM lParam)  
@@ -931,4 +987,31 @@ LRESULT CMyUniverseDlg::OnGlbUdpReadOnePage(WPARAM wParam, LPARAM lParam)
 
     ReadOnePage(false);
     return 1;
+}
+
+void CMyUniverseDlg::OnEnChangemrotationrate()
+{
+    UpdateData(GET_DATA);
+    if(m_rotationRate_UI > 30)
+    {
+        m_rotationRate_UI = 30;
+    }
+    else if(m_rotationRate_UI < 0)
+    {
+        m_rotationRate_UI = 0;
+    }
+    UpdateData(PUT_DATA);
+    g_StoryPage.rotationRate = m_rotationRate_UI;
+}
+
+
+void CMyUniverseDlg::OnBnClickedUnclockwise()
+{
+    g_StoryPage.bClockwise = 0;
+}
+
+
+void CMyUniverseDlg::OnBnClickedClockwise()
+{
+    g_StoryPage.bClockwise = 1;
 }

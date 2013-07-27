@@ -81,9 +81,15 @@ public:
     int m_frame_rate;
     afx_msg void OnEnChangeEditFrameRate();
     afx_msg void OnBnClickedCheckAutoRot();
-    BOOL m_rotating;
+    BOOL m_rotating_UI;
     CSliderCtrl m_slider_rotz_ctrl;
     CEdit m_edit_rotz_ctrl;
     CSliderCtrl m_slider_rotx_ctrl;
     CSliderCtrl m_slider_roty_ctrl;
+    int m_rotationRate_UI;
+    afx_msg void OnEnChangemrotationrate();
+    CButton m_unclockwise_UI;
+    CButton m_clockwise_UI;
+    afx_msg void OnBnClickedUnclockwise();
+    afx_msg void OnBnClickedClockwise();
 };
