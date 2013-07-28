@@ -127,6 +127,14 @@ GlbImage glbLoadImage(const char* filename)  //ÔØÈëÍ¼Ïñ£¨Ö§³Ödds,jpg,png£©
                     0,
                     nSize,
                     pDDSImageData->pixels + nOffset );
+                int error = glGetError();
+                if(error)
+                {
+                    //GL_INVALID_ENUM;
+                    char str[255];
+                    sprintf_s( str, 255, "error code = 0x%08X", error );
+                    MessageBox( NULL, str, "ERROR", MB_OK|MB_ICONEXCLAMATION );
+                }
 
                 nOffset += nSize;
 
