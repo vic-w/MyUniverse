@@ -137,6 +137,7 @@ GlbImage glbLoadImage(const char* filename)  //载入图像（支持dds,jpg,png）
         }
         else
         {
+            MessageBox(0, "读取DDS图像错误！", NULL, MB_OK);
             return NULL;
         }
         if( pDDSImageData != NULL )
