@@ -9,28 +9,10 @@
 DDS_IMAGE_DATA* glbLoadDDSFile(const char* filename);
 PFNGLCOMPRESSEDTEXIMAGE2DARBPROC glCompressedTexImage2DARB;
 
-HWND   g_hWnd                = NULL;
-HDC    g_hDC                 = NULL;
-HGLRC  g_hRC                 = NULL;
+//HWND   g_hWnd                = NULL;
+//HDC    g_hDC                 = NULL;
+//HGLRC  g_hRC                 = NULL;
 
-
-float g_fDistance = -3.0f;
-float g_fSpinX    = 0.0f;
-float g_fSpinY    = 0.0f;
-
-struct Vertex
-{
-    float tu, tv;
-    float x, y, z;
-};
-
-Vertex g_quadVertices[] =
-{
-    { 0.0f,0.0f, -1.0f,-1.0f, 0.0f },
-    { 1.0f,0.0f,  1.0f,-1.0f, 0.0f },
-    { 1.0f,1.0f,  1.0f, 1.0f, 0.0f },
-    { 0.0f,1.0f, -1.0f, 1.0f, 0.0f }
-};
 
 //GlbRotmat g_GlobeRotMat;
 
@@ -343,8 +325,8 @@ LRESULT CALLBACK WinProc( HWND   hWnd,
 
             if( bMousing )
             {
-                g_fSpinX -= (ptCurrentMousePosit.x - ptLastMousePosit.x);
-                g_fSpinY -= (ptCurrentMousePosit.y - ptLastMousePosit.y);
+                //g_fSpinX -= (ptCurrentMousePosit.x - ptLastMousePosit.x);
+                //g_fSpinY -= (ptCurrentMousePosit.y - ptLastMousePosit.y);
             }
 
             ptLastMousePosit.x = ptCurrentMousePosit.x;
@@ -386,7 +368,7 @@ LRESULT CALLBACK WinProc( HWND   hWnd,
 }
 
 
-void GL_Init( HWND hWnd, long winWidth, long winHeight, bool mirror)
+void GL_Init(HDC &hDC, HGLRC &hRC, HWND hWnd, long winWidth, long winHeight, bool mirror)
 {
     GLuint PixelFormat;
 
@@ -400,11 +382,11 @@ void GL_Init( HWND hWnd, long winWidth, long winHeight, bool mirror)
     pfd.cColorBits = 16;
     pfd.cDepthBits = 16;
 
-    g_hDC = GetDC( hWnd );
-    PixelFormat = ChoosePixelFormat( g_hDC, &pfd );
-    SetPixelFormat( g_hDC, PixelFormat, &pfd);
-    g_hRC = wglCreateContext( g_hDC );
-    wglMakeCurrent( g_hDC, g_hRC );
+    hDC = GetDC( hWnd );
+    PixelFormat = ChoosePixelFormat( hDC, &pfd );
+    SetPixelFormat( hDC, PixelFormat, &pfd);
+    hRC = wglCreateContext( hDC );
+    wglMakeCurrent( hDC, hRC );
 
     glClearColor( 0.35f, 0.53f, 0.7f, 1.0f );
     glEnable(GL_TEXTURE_2D);
@@ -450,7 +432,7 @@ void GL_Init( HWND hWnd, long winWidth, long winHeight, bool mirror)
 }
 
 
-int glbCreateWindow(GlbRect windowSize, bool fullscreen, bool mirror, HINSTANCE hInstance)
+int glbCreateWindow(GlbWindow &window, GlbRect windowSize, bool fullscreen, bool mirror, HINSTANCE hInstance)
 {
     WNDCLASSEX winClass; 
 
@@ -481,8 +463,8 @@ int glbCreateWindow(GlbRect windowSize, bool fullscreen, bool mirror, HINSTANCE 
     {
         dwStyle = WS_OVERLAPPED | WS_VISIBLE;
     }
-
-    g_hWnd = CreateWindowEx( 
+    HWND hWnd;
+    hWnd = CreateWindowEx( 
         NULL,                   // 扩展窗体风格
         "GLB_WINDOWS_CLASS",    // 类名字
         "MyUniverse",           // 窗口标题
@@ -497,16 +479,22 @@ int glbCreateWindow(GlbRect windowSize, bool fullscreen, bool mirror, HINSTANCE 
         NULL                    // 不向WM_CREATE传递任何东东
         );
 
-    if( g_hWnd == NULL )
+    if( hWnd == NULL )
     {
         return 0;
     }
 
-    ShowWindow( g_hWnd, SW_SHOW );
-    UpdateWindow( g_hWnd );
+    ShowWindow( hWnd, SW_SHOW );
+    UpdateWindow( hWnd );
 
-    GL_Init(g_hWnd, windowSize.m_width, windowSize.m_height, mirror);//OpenGL相关的初始化
+    HDC    hDC;
+    HGLRC  hRC;
+    GL_Init(hDC, hRC, hWnd, windowSize.m_width, windowSize.m_height, mirror);//OpenGL相关的初始化
     glbInitDistort();//从ini中读取镜头畸变参数
+
+    window.m_hWnd = hWnd;
+    window.m_hDC = hDC;
+    window.m_hRC = hRC;
 
     return 1;
 }//*/
@@ -523,6 +511,23 @@ void glbClearWindow()
 }
 void glbDrawImage( GlbImage image )
 {
+    float g_fDistance = -3.0f;
+    float g_fSpinX    = 0.0f;
+    float g_fSpinY    = 0.0f;
+
+    struct Vertex
+    {
+        float tu, tv;
+        float x, y, z;
+    };
+
+    Vertex g_quadVertices[] =
+    {
+        { 0.0f,0.0f, -1.0f,-1.0f, 0.0f },
+        { 1.0f,0.0f,  1.0f,-1.0f, 0.0f },
+        { 1.0f,1.0f,  1.0f, 1.0f, 0.0f },
+        { 0.0f,1.0f, -1.0f, 1.0f, 0.0f }
+    };
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
     glMatrixMode( GL_MODELVIEW );
@@ -541,31 +546,31 @@ void glbDrawImage( GlbImage image )
     //SwapBuffers( g_hDC );
 }
 
-void glbDestoryWindow( HINSTANCE   hInstance )   
+void glbDestoryWindow(GlbWindow window, HINSTANCE   hInstance )   
 {
 
-    if( g_hRC != NULL )
+    if( window.m_hRC != NULL )
     {
         wglMakeCurrent( NULL, NULL );
-        wglDeleteContext( g_hRC );
-        g_hRC = NULL;
+        wglDeleteContext( window.m_hRC );
+        window.m_hRC = NULL;
     }
 
-    if( g_hDC != NULL )
+    if( window.m_hDC != NULL )
     {
-        ReleaseDC( g_hWnd, g_hDC );
-        g_hDC = NULL;
+        ReleaseDC( window.m_hWnd, window.m_hDC );
+        window.m_hDC = NULL;
     }
 
     UnregisterClass( "GLB_WINDOWS_CLASS", hInstance );
 }
 
-int glbUpdateWindow(int ms)
+int glbUpdateWindow(GlbWindow window, int ms)
 {
     MSG uMsg;
     memset(&uMsg,0,sizeof(uMsg));
 
-    SwapBuffers( g_hDC );
+    SwapBuffers( window.m_hDC );
     if( PeekMessage( &uMsg, NULL, 0, 0, PM_REMOVE ) )
     {
         TranslateMessage( &uMsg );

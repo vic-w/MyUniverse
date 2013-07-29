@@ -37,19 +37,27 @@ public:
     }
 };
 
+class GlbWindow
+{
+public:
+    HWND   m_hWnd;
+    HDC    m_hDC;
+    HGLRC  m_hRC;
+};
+
 GLBCORE_API int glbDetectScreen(vector<GlbRect> &screens);//检测屏幕的个数及分辨率，返回屏幕个数
 
 GLBCORE_API GlbImage glbLoadImage(const char* filename);    //载入图像（支持dds,jpg,png）
 GLBCORE_API GlbImage glbLoadImageFromOpencv(IplImage* pImage, bool bMipmap = true);       //从OpenCV图像转换
 GLBCORE_API void glbReleaseImage(GlbImage* pImage);         //释放图像
 
-GLBCORE_API int glbCreateWindow(GlbRect windowSize, bool fullscreen, bool mirror, HINSTANCE hInstance=0);
-GLBCORE_API void glbDestoryWindow(HINSTANCE hInstance=0);
+GLBCORE_API int glbCreateWindow(GlbWindow &window, GlbRect windowSize, bool fullscreen, bool mirror, HINSTANCE hInstance=0);
+GLBCORE_API void glbDestoryWindow(GlbWindow window, HINSTANCE hInstance=0);
 
 GLBCORE_API void glbClearWindow();                                    //清空窗口内容
 GLBCORE_API void glbDrawImage(GlbImage image);              //在窗口中画图,但并没有显示
 
-GLBCORE_API int glbUpdateWindow(int ms);                    //更新窗口中内容,返回0表示窗口退出，返回1表示正常运行
+GLBCORE_API int glbUpdateWindow(GlbWindow window, int ms);                    //更新窗口中内容,返回0表示窗口退出，返回1表示正常运行
 
 GLBCORE_API void glbDrawLineOnGlobe(GlbPointGeo geoStartPoint, GlbRotmat GlobeRotMat, GlbPointGeo geoEndPoint, int layer);
 GLBCORE_API void glbDrawLineOnScreen(GlbPointGeo geoStartPoint, GlbPointGeo geoEndPoint, int layer);
