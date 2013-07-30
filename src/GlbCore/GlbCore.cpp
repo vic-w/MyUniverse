@@ -522,7 +522,7 @@ int glbCreateWindowMFC(GlbWindow &window, CRect rect, CWnd* parentWindow, bool m
     HGLRC  hRC;
     GL_Init(hDC, hRC, hWnd, rect.Width(), rect.Height(), mirror);//OpenGL相关的初始化
     
-    glbInitDistort();//从ini中读取镜头畸变参数
+    //glbInitDistort();//从ini中读取镜头畸变参数
 
     window.m_hWnd = hWnd;
     window.m_hDC = hDC;
@@ -531,6 +531,10 @@ int glbCreateWindowMFC(GlbWindow &window, CRect rect, CWnd* parentWindow, bool m
     return 1;
 }
 
+void glbSwitchWindow(GlbWindow window)
+{
+    wglMakeCurrent( window.m_hDC, window.m_hRC );
+}
 
 void glbClearWindow()
 {

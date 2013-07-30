@@ -26,28 +26,40 @@ DWORD WINAPI GlobeThread(LPVOID lpParam)
     bool mirror =!!GetPrivateProfileInt("MyUniverseCfg", "MirrorDisplay", 0, ".\\config.ini");
     
     GlbWindow mainWindow;
-    //if(nScreen >= 2)//屏幕个数大于1个
-    //{
-    //    glbCreateWindow(mainWindow, screens[1], true, mirror);//以全屏方式显示到第2屏上
-    //}
-    //else
-    //{
-    //    GlbRect windowSize(0,0,500,500);
-    //    glbCreateWindow(mainWindow, windowSize, false, mirror);//以固定大小显示在第一屏上
-    //}
+    GlbWindow previewWindow;
 
+    //生成主窗口
+    if(nScreen >= 2)//显示器个数大于1个
+    {
+        glbCreateWindow(mainWindow, screens[1], true, mirror);//以全屏方式显示到第2屏上
+    }
+    else
+    {
+        GlbRect windowSize(0,0,500,500);
+        glbCreateWindow(mainWindow, windowSize, false, mirror);//以固定大小显示在第一屏上
+    }
+
+    //生成预览窗口
     CMyUniverseDlg* pWnd = (CMyUniverseDlg*)lpParam;
     CRect rect;
     pWnd->GetDlgItem(IDC_PREVIEW_WINDOW)->GetWindowRect(rect);
     pWnd->ScreenToClient(rect);
-    glbCreateWindowMFC(mainWindow, rect, pWnd, 0);
-
+    glbCreateWindowMFC(previewWindow, rect, pWnd, 0);
 
     do
     {
+        glbSwitchWindow(mainWindow);
         glbClearWindow();
         DrawStoryPage(mainWindow);
         glbUpdateWindow(mainWindow, 10);
+
+        glbSwitchWindow(previewWindow);
+        glbClearWindow();
+        GlbImage Image = glbLoadImage("a001.dds");
+        glbDrawImage(Image);
+        glbReleaseImage(&Image);
+        glbUpdateWindow(previewWindow, 10);
+
     }while(g_bMainThreadActive);
 
     glbDestoryWindow(mainWindow, 0);
