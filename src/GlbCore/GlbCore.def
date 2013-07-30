@@ -14,5 +14,5 @@ EXPORTS
    glbDrawGlobe   @11   NONAME  
    glbDrawTexture   @12   NONAME  
    glbDrawBelt   @13   NONAME  
-;   glbShowFrameRate   @14   NONAME  
+;  glbShowFrameRate   @14   NONAME  
 

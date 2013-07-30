@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include <windows.h>
+//#include <windows.h>
 #include "GlbCore.h"
 #include "GlbType.h"
 #include <stdio.h>
@@ -498,6 +498,39 @@ int glbCreateWindow(GlbWindow &window, GlbRect windowSize, bool fullscreen, bool
 
     return 1;
 }//*/
+
+int glbCreateWindowMFC(GlbWindow &window, CRect rect, CWnd* parentWindow, bool mirror)
+{
+    HWND parentHWnd = parentWindow->m_hWnd;
+    CString className = AfxRegisterWndClass(CS_HREDRAW |
+        CS_VREDRAW | CS_OWNDC, NULL,
+        (HBRUSH)GetStockObject(BLACK_BRUSH), NULL);
+
+    HWND hWnd = CreateWindowEx(
+        0, 
+        className, 
+        "OpenGL", 
+        WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN, 
+        rect.left,
+        rect.top,
+        rect.Width(),
+        rect.Height(),
+        parentHWnd,
+        0,0,0);
+
+    HDC    hDC;
+    HGLRC  hRC;
+    GL_Init(hDC, hRC, hWnd, rect.Width(), rect.Height(), mirror);//OpenGL相关的初始化
+    
+    glbInitDistort();//从ini中读取镜头畸变参数
+
+    window.m_hWnd = hWnd;
+    window.m_hDC = hDC;
+    window.m_hRC = hRC;
+
+    return 1;
+}
+
 
 void glbClearWindow()
 {

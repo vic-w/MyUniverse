@@ -1,8 +1,9 @@
 #pragma once
-#include "windows.h"
+//#include "windows.h"
 #include <vector>
 #include "GlbRot.h"
 #include "opencv.hpp"
+#include <afxwin.h>
 
 #ifdef GLBCORE_EXPORTS
 #define GLBCORE_API __declspec(dllexport)
@@ -52,6 +53,8 @@ GLBCORE_API GlbImage glbLoadImageFromOpencv(IplImage* pImage, bool bMipmap = tru
 GLBCORE_API void glbReleaseImage(GlbImage* pImage);         //释放图像
 
 GLBCORE_API int glbCreateWindow(GlbWindow &window, GlbRect windowSize, bool fullscreen, bool mirror, HINSTANCE hInstance=0);
+GLBCORE_API int glbCreateWindowMFC(GlbWindow &window, CRect rect, CWnd* parentWindow, bool mirror);
+
 GLBCORE_API void glbDestoryWindow(GlbWindow window, HINSTANCE hInstance=0);
 
 GLBCORE_API void glbClearWindow();                                    //清空窗口内容

@@ -26,15 +26,22 @@ DWORD WINAPI GlobeThread(LPVOID lpParam)
     bool mirror =!!GetPrivateProfileInt("MyUniverseCfg", "MirrorDisplay", 0, ".\\config.ini");
     
     GlbWindow mainWindow;
-    if(nScreen >= 2)//屏幕个数大于1个
-    {
-        glbCreateWindow(mainWindow, screens[1], true, mirror);//以全屏方式显示到第2屏上
-    }
-    else
-    {
-        GlbRect windowSize(0,0,500,500);
-        glbCreateWindow(mainWindow, windowSize, false, mirror);//以固定大小显示在第一屏上
-    }
+    //if(nScreen >= 2)//屏幕个数大于1个
+    //{
+    //    glbCreateWindow(mainWindow, screens[1], true, mirror);//以全屏方式显示到第2屏上
+    //}
+    //else
+    //{
+    //    GlbRect windowSize(0,0,500,500);
+    //    glbCreateWindow(mainWindow, windowSize, false, mirror);//以固定大小显示在第一屏上
+    //}
+
+    CMyUniverseDlg* pWnd = (CMyUniverseDlg*)lpParam;
+    CRect rect;
+    pWnd->GetDlgItem(IDC_PREVIEW_WINDOW)->GetWindowRect(rect);
+    pWnd->ScreenToClient(rect);
+    glbCreateWindowMFC(mainWindow, rect, pWnd, 0);
+
 
     do
     {

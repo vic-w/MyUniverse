@@ -220,7 +220,7 @@ BOOL CMyUniverseDlg::OnInitDialog()
     StorytellerEular2GlobeEular(g_StorytellerEularAngle, g_OffsetEularAngle, g_GlobeEularAngle);
     glbEularAngle2Rotmat(g_GlobeEularAngle, g_GlobeRotMat);
 
-    CreateThread(0, 0, GlobeThread, 0,0,0);//启动OpenGL显示线程
+    CreateThread(0, 0, GlobeThread, (LPVOID)this,0,0);//启动OpenGL显示线程
     CreateThread(0, 0, TimingThread, (LPVOID)this,0,0);//启动时间控制线程
     CreateThread(0, 0, UdpThread, (LPVOID)this,0,0);//启动时间控制线程
 
