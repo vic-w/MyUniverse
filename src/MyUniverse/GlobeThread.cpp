@@ -74,6 +74,7 @@ void DrawStoryPage(GlbWindow mainWindow)
     {
         if(     g_StoryPage.storyType == DDS 
             ||  g_StoryPage.storyType == JPG
+            ||  g_StoryPage.storyType == BMP
             ||  g_StoryPage.storyType == PNG )
         {
             static CString lastPath = "";

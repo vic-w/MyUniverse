@@ -59,7 +59,7 @@ GlbImage glbLoadImageFromOpencv(IplImage* pImage, bool bMipmap)
     return TextureID;
 }
 
-GlbImage glbLoadImage(const char* filename)  //载入图像（支持dds,jpg,png）
+GlbImage glbLoadImage(const char* filename)  //载入图像（支持dds,jpg,bmp,png）
 {
     int fileNameLen = strlen(filename);
     const char* suffix = filename + fileNameLen - 4;

@@ -484,6 +484,8 @@ void CMyUniverseDlg::ReadPageStruct()//次处支持：folder，dds，jpg，avi，wmv
                         m_page_select.AddString(FindFileData.cFileName);
 			        }
                     else if( _stricmp(suffix,".jpg") ==0
+                          || _stricmp(suffix,".bmp") ==0
+                          || _stricmp(suffix,".png") ==0
                           || _stricmp(suffix,".dds") ==0
                           || _stricmp(suffix,".avi") ==0
                           || _stricmp(suffix,".wmv") ==0
@@ -608,6 +610,14 @@ void CMyUniverseDlg::ReadOnePage(bool bUpdateDataFromUI)
         g_StoryPage.pagePath = pagePath;
         g_StoryPage.storyType = JPG;
     }
+    else if( _stricmp(suffix,".bmp") == 0)
+    {
+        //AfxMessageBox("this is a bmp file");
+        g_StoryPage.bEmpty = 0;
+        g_StoryPage.bMovie = 0;
+        g_StoryPage.pagePath = pagePath;
+        g_StoryPage.storyType = BMP;
+    }
     else if( _stricmp(suffix,".png") == 0)
     {
         //AfxMessageBox("this is a png file");
@@ -658,6 +668,8 @@ void CMyUniverseDlg::ReadOnePage(bool bUpdateDataFromUI)
         ReadFolderContent(pagePath, "dds");
         if(g_StoryPage.nFrames == 0)
         ReadFolderContent(pagePath, "jpg");
+        if(g_StoryPage.nFrames == 0)
+        ReadFolderContent(pagePath, "bmp");
         if(g_StoryPage.nFrames == 0)
         ReadFolderContent(pagePath, "png");
     }

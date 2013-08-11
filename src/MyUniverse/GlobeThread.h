@@ -9,6 +9,7 @@ enum STORY_TYPE
 {
     DDS,
     JPG,
+    BMP,
     PNG,
     AVI,
     WMV,
@@ -23,7 +24,7 @@ public:
     bool bEmpty;//页面文件为空
     bool bMovie;//页面是一个动画
     CString pagePath;//页面文件的完整路径（目录+文件名）
-    STORY_TYPE storyType;//DDS,JPG,PNG,AVI,WMV,FOLDER
+    STORY_TYPE storyType;//DDS,JPG,BMP,PNG,AVI,WMV,FOLDER
 
     //序列帧专用
     vector<CString> FrameNames;//序列帧（FOLDER）格式时，用来存放每一帧的文件名
