@@ -20,7 +20,7 @@ namespace MyUniverseControl
     //    char[] cParam1;
     //    char[] cParam2;
     //}
-
+    [ClassInterface(ClassInterfaceType.AutoDual)]
     public class MyUniverseControl
     {
         const int GLB_CMD_PLAY = 1;
@@ -69,7 +69,10 @@ namespace MyUniverseControl
             get { return false;}///////////////////////有问题
             set { SetRotating(value); }
         }
-
+        public void Test()
+        {
+            MessageBox.Show("test");
+        }
         public void Play()
         {
             SendCmd(GLB_CMD_PLAY);
