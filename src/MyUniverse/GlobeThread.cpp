@@ -48,18 +48,17 @@ DWORD WINAPI GlobeThread(LPVOID lpParam)
 
     do
     {
+        //画主窗口内容
         glbSwitchWindow(mainWindow);
         glbClearWindow();
         DrawStoryPage(mainWindow);
-        glbUpdateWindow(mainWindow, 10);
+        glbUpdateWindow(mainWindow, 1);
 
+        //画预览窗口内容
         glbSwitchWindow(previewWindow);
         glbClearWindow();
-        GlbImage Image = glbLoadImage("a001.dds");
-        glbDrawImage(Image);
-        glbReleaseImage(&Image);
-        glbUpdateWindow(previewWindow, 10);
-
+        DrawStoryPagePreview(previewWindow);
+        glbUpdateWindow(previewWindow, 1);
     }while(g_bMainThreadActive);
 
     glbDestoryWindow(mainWindow, 0);
@@ -67,7 +66,122 @@ DWORD WINAPI GlobeThread(LPVOID lpParam)
     return 1;
 }
 
-void DrawStoryPage(GlbWindow mainWindow)
+void RotateToStudents(GlbRotmat mainWindowRotMat, GlbRotmat &previewWindowRotMat)
+{
+    GlbEularAngle eularAngle;
+    eularAngle.m_1_Horz = -90;
+    eularAngle.m_2_Vert = 90;
+    eularAngle.m_3_Axis = 0;
+
+    GlbRotmat r;
+
+    glbEularAngle2Rotmat(eularAngle, r);
+
+    glbRotmatMul(r, mainWindowRotMat, previewWindowRotMat);
+}
+
+void DrawStoryPagePreview(GlbWindow window)
+{
+    EnterCriticalSection(&g_StoryPage_CS);
+    if(!g_StoryPage.bEmpty)
+    {
+        if(     g_StoryPage.storyType == DDS 
+            ||  g_StoryPage.storyType == JPG
+            ||  g_StoryPage.storyType == BMP
+            ||  g_StoryPage.storyType == PNG )
+        {
+            static CString lastPath = "";
+            static GlbImage Image = 0;
+
+            if(strcmp(lastPath, g_StoryPage.pagePath))
+            {
+                if(Image)
+                {
+                    glbReleaseImage(&Image);
+                }
+                Image = glbLoadImage(g_StoryPage.pagePath);
+            }
+            EnterCriticalSection(&g_GlobeRotMat_CS);
+            GlbRotmat previewWindowRotMat;
+            RotateToStudents(g_GlobeRotMat, previewWindowRotMat);
+            glbDrawGlobe(Image, previewWindowRotMat);
+            LeaveCriticalSection(&g_GlobeRotMat_CS);
+            lastPath = g_StoryPage.pagePath;
+
+        }
+        else if(g_StoryPage.storyType == FOLDER) 
+        {
+            if(g_StoryPage.FrameNames.size()>0)
+            {
+                GlbImage Image = glbLoadImage(g_StoryPage.FrameNames[g_StoryPage.nCurFrame]);
+                EnterCriticalSection(&g_GlobeRotMat_CS);
+                glbDrawGlobe(Image, g_GlobeRotMat);
+                LeaveCriticalSection(&g_GlobeRotMat_CS);
+                glbReleaseImage(&Image);
+
+                //删去此句，放在TimingThread线程中
+                //g_StoryPage.nCurFrame = (g_StoryPage.nCurFrame+g_StoryPage.bPlaying)%g_StoryPage.nFrames;
+            }
+        }
+        else if(g_StoryPage.storyType == AVI
+            || g_StoryPage.storyType == WMV) 
+        {
+            static  CvCapture* pCapture = NULL;
+            static long snCurFrame = 0;
+            static IplImage* pFrame = NULL;
+            static CString videoPath = "";
+
+            if(videoPath != g_StoryPage.pagePath)
+            {
+                if(pCapture)
+	            {
+		            cvReleaseCapture(&pCapture);
+                }
+                pCapture = cvCaptureFromFile(g_StoryPage.pagePath);
+                if(!pCapture)
+                {
+                    AfxMessageBox("无法读取视频");
+                    g_StoryPage.storyType = NONE;
+                }
+                videoPath = g_StoryPage.pagePath;
+                g_StoryPage.nCurFrame = 0;
+                snCurFrame = 0;
+                pFrame = cvQueryFrame( pCapture );
+            }
+            
+            if( snCurFrame < g_StoryPage.nCurFrame )
+            {
+                pFrame = cvQueryFrame( pCapture );
+                if(pFrame == NULL)
+                {
+                    cvReleaseCapture(&pCapture);
+                    pCapture = cvCaptureFromFile(g_StoryPage.pagePath);
+                    pFrame = cvQueryFrame( pCapture );
+                    g_StoryPage.nCurFrame = 0;
+                }
+                snCurFrame = g_StoryPage.nCurFrame;
+            }
+            GlbImage Image;
+            if(pFrame)
+            {
+                Image = glbLoadImageFromOpencv(pFrame, false);
+            }
+            else
+            {
+                Image = 0;
+            }
+
+            EnterCriticalSection(&g_GlobeRotMat_CS);
+            glbDrawGlobe(Image, g_GlobeRotMat);
+            LeaveCriticalSection(&g_GlobeRotMat_CS);
+            glbReleaseImage(&Image);
+        }
+    }
+    LeaveCriticalSection(&g_StoryPage_CS);
+}
+
+
+void DrawStoryPage(GlbWindow window)
 {
     EnterCriticalSection(&g_StoryPage_CS);
     if(!g_StoryPage.bEmpty)

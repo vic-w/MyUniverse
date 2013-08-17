@@ -44,4 +44,6 @@ public:
 DWORD WINAPI GlobeThread(LPVOID lpParam);
 DWORD WINAPI TimingThread(LPVOID lpParam);
 
-void DrawStoryPage(GlbWindow mainWindow);
+void DrawStoryPage(GlbWindow window);
+void DrawStoryPagePreview(GlbWindow window);
+void RotateToStudents(GlbRotmat mainWindowRotMat, GlbRotmat &previewWindowRotMat);
