@@ -115,7 +115,9 @@ void DrawStoryPagePreview(GlbWindow window)
             {
                 GlbImage Image = glbLoadImage(g_StoryPage.FrameNames[g_StoryPage.nCurFrame]);
                 EnterCriticalSection(&g_GlobeRotMat_CS);
-                glbDrawGlobe(Image, g_GlobeRotMat, window.m_calib);
+                GlbRotmat previewWindowRotMat;
+                RotateToStudents(g_GlobeRotMat, previewWindowRotMat);
+                glbDrawGlobe(Image, previewWindowRotMat, window.m_calib);
                 LeaveCriticalSection(&g_GlobeRotMat_CS);
                 glbReleaseImage(&Image);
 
@@ -172,7 +174,9 @@ void DrawStoryPagePreview(GlbWindow window)
             }
 
             EnterCriticalSection(&g_GlobeRotMat_CS);
-            glbDrawGlobe(Image, g_GlobeRotMat, window.m_calib);
+            GlbRotmat previewWindowRotMat;
+            RotateToStudents(g_GlobeRotMat, previewWindowRotMat);
+            glbDrawGlobe(Image, previewWindowRotMat, window.m_calib);
             LeaveCriticalSection(&g_GlobeRotMat_CS);
             glbReleaseImage(&Image);
         }
