@@ -20,6 +20,16 @@ using namespace std;
 
 KT_API bool glbKtMFC(void)
 {
+    static bool first = 1;
+    if(!first)
+    {
+        return true;
+    }
+    else
+    {
+        first = false;
+    }
+
     fstream file;
     file.open("license.dat");
     char BiosID[256];

@@ -7,7 +7,7 @@
 #endif
 
 #define PI (3.1415926f)
-#define N_CALIB  (12) //标定纬线的条数
+//#define N_CALIB  (12) //标定纬线的条数
 
 
 class GlbPointGeo   
@@ -98,6 +98,14 @@ public:
     }
 }; 
 
+class GlbCalib
+{
+    #define N_CALIB  (12) //标定纬线的条数
+public:
+    float latitude[N_CALIB+1];
+};
+
+
 typedef GlbPoint3d GlbPivot;
 typedef GlbPoint2d GlbPointRound;
 
@@ -156,9 +164,9 @@ GLBROT_API void glbGlobePoint2ScreenPoint(GlbPoint3d p1, GlbRotmat r, GlbPoint3d
 GLBROT_API void glbScreenPoint2GlobePoint(GlbPoint3d p1, GlbRotmat r, GlbPoint3d &p2);
 
 //直角坐标 转换为 圆饼坐标
-GLBROT_API void glbPointRect2PointRound(GlbPoint3d p3, GlbPointRound &p2);
+GLBROT_API void glbPointRect2PointRound(GlbPoint3d p3, GlbPointRound &p2, GlbCalib calib);
 //圆饼坐标 转换为 直角坐标
-GLBROT_API void glbPointRound2PointRect(GlbPointRound p2, GlbPoint3d &p3);
+GLBROT_API void glbPointRound2PointRect(GlbPointRound p2, GlbPoint3d &p3, GlbCalib calib);
 
 //生成初始旋转矩阵
 GLBROT_API void glbCreateGlbRotmat(GlbRotmat &r);
@@ -184,10 +192,10 @@ GLBROT_API void glbPivotingPoint(GlbPoint3d p, GlbPivot pivot, float angle, GlbP
 GLBROT_API void glbCreateNormPivot(GlbPoint3d p, GlbPoint3d directPoint, bool bHeadDirect, GlbPivot &pivot_h, GlbPivot &pivot_v);//生成p点到headPoint的旋转轴，以及其正交方向的旋转轴
 
 //从ini中读取畸变矫正信息
-GLBROT_API void glbInitDistort();
+GLBROT_API void glbInitDistort(GlbCalib &calib, char* calibFileName);
 //鱼眼镜头径向畸变矫正(由正规的圆饼坐标转变到适应镜头显示的圆饼坐标）
-GLBROT_API float glbDistortRadius(float Radius);
+GLBROT_API float glbDistortRadius(float Radius, GlbCalib calib);
 //畸变矫正反变换
-GLBROT_API float glbUnDistortRadius(float Radius);
+GLBROT_API float glbUnDistortRadius(float Radius, GlbCalib calib);
 
 //int GetTopLayer(GlbPoint2d pTouch);

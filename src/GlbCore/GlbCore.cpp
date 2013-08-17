@@ -432,7 +432,7 @@ void GL_Init(HDC &hDC, HGLRC &hRC, HWND hWnd, long winWidth, long winHeight, boo
 }
 
 
-int glbCreateWindow(GlbWindow &window, GlbRect windowSize, bool fullscreen, bool mirror, HINSTANCE hInstance)
+int glbCreateWindow(GlbWindow &window, GlbRect windowSize, char *calibFileName, bool fullscreen, bool mirror, HINSTANCE hInstance)
 {
     WNDCLASSEX winClass; 
 
@@ -490,7 +490,7 @@ int glbCreateWindow(GlbWindow &window, GlbRect windowSize, bool fullscreen, bool
     HDC    hDC;
     HGLRC  hRC;
     GL_Init(hDC, hRC, hWnd, windowSize.m_width, windowSize.m_height, mirror);//OpenGL相关的初始化
-    glbInitDistort();//从ini中读取镜头畸变参数
+    glbInitDistort(window.m_calib, calibFileName);//从ini中读取镜头畸变参数
 
     window.m_hWnd = hWnd;
     window.m_hDC = hDC;
@@ -499,7 +499,7 @@ int glbCreateWindow(GlbWindow &window, GlbRect windowSize, bool fullscreen, bool
     return 1;
 }//*/
 
-int glbCreateWindowMFC(GlbWindow &window, CRect rect, CWnd* parentWindow, bool mirror)
+int glbCreateWindowMFC(GlbWindow &window, CRect rect, char* calibFileName, CWnd* parentWindow, bool mirror)
 {
     HWND parentHWnd = parentWindow->m_hWnd;
     CString className = AfxRegisterWndClass(CS_HREDRAW |
@@ -522,7 +522,7 @@ int glbCreateWindowMFC(GlbWindow &window, CRect rect, CWnd* parentWindow, bool m
     HGLRC  hRC;
     GL_Init(hDC, hRC, hWnd, rect.Width(), rect.Height(), mirror);//OpenGL相关的初始化
     
-    //glbInitDistort();//从ini中读取镜头畸变参数
+    glbInitDistort(window.m_calib, calibFileName);//从ini中读取镜头畸变参数
 
     window.m_hWnd = hWnd;
     window.m_hDC = hDC;
@@ -629,6 +629,7 @@ int glbUpdateWindow(GlbWindow window, int ms)
 void glbDrawTexture(
                     GlbImage Image, 
                     GlbRotmat GlobeRotMat,
+                    GlbCalib calib,
                     GlbPointGeo pGeo,
                     bool bPointOnGlobe,
                     GlbPointGeo pGeoDirect,
@@ -698,7 +699,7 @@ void glbDrawTexture(
             glbPivotingPoint(pRect, pivot_v, angle_v, p_img);//先从中心点纵向旋转
             glbPivotingPoint(p_img, pivot_h, angle_h, p_img);//再横向旋转
             GlbPoint2d r_pRound;//圆饼坐标
-            glbPointRect2PointRound(p_img, r_pRound);//将直角坐标转换为圆饼坐标
+            glbPointRect2PointRound(p_img, r_pRound, calib);//将直角坐标转换为圆饼坐标
 
             PointArr[y][x].m_x = r_pRound.m_x;//赋值
             PointArr[y][x].m_y = r_pRound.m_y;
@@ -768,7 +769,7 @@ void glbDrawTexture(
     glbPivotingPoint(pClose, pivot_h, width/2.0f, pClose);
 }
 
-void glbDrawLineOnGlobe(GlbPointGeo geoStartPoint, GlbRotmat GlobeRotMat, GlbPointGeo geoEndPoint, int layer)
+void glbDrawLineOnGlobe(GlbPointGeo geoStartPoint, GlbRotmat GlobeRotMat, GlbCalib calib, GlbPointGeo geoEndPoint, int layer)
 {
 	GlbPoint3d rectStartPoint, rectEndPoint;
 	glbPointGeo2PointRect(geoStartPoint, rectStartPoint);
@@ -778,10 +779,10 @@ void glbDrawLineOnGlobe(GlbPointGeo geoStartPoint, GlbRotmat GlobeRotMat, GlbPoi
 	GlbPointGeo geoStartPoint2, geoEndPoint2;
 	glbPointRect2PointGeo(rectStartPoint, geoStartPoint2);
 	glbPointRect2PointGeo(rectEndPoint, geoEndPoint2);
-	glbDrawLineOnScreen(geoStartPoint2, geoEndPoint2, layer);
+	glbDrawLineOnScreen(calib, geoStartPoint2, geoEndPoint2, layer);
 }
 
-void glbDrawLineOnScreen(GlbPointGeo geoStartPoint, GlbPointGeo geoEndPoint, int layer)
+void glbDrawLineOnScreen(GlbCalib calib, GlbPointGeo geoStartPoint, GlbPointGeo geoEndPoint, int layer)
 {
 	GlbPoint3d rectStartPoint, rectEndPoint;
 	glbPointGeo2PointRect(geoStartPoint, rectStartPoint);
@@ -809,9 +810,9 @@ void glbDrawLineOnScreen(GlbPointGeo geoStartPoint, GlbPointGeo geoEndPoint, int
 		GlbPoint3d p3d1,p3d2;
 		GlbPoint2d p2d1,p2d2;
 		glbPivotingPoint(rectStartPoint, pivot, mAngle*i, p3d1);
-		glbPointRect2PointRound(p3d1, p2d1);
+		glbPointRect2PointRound(p3d1, p2d1, calib);
 		glbPivotingPoint(rectStartPoint, pivot, mAngle*(i+1), p3d2);
-		glbPointRect2PointRound(p3d2, p2d2);
+		glbPointRect2PointRound(p3d2, p2d2, calib);
 		if(fabs(p2d1.m_x-p2d2.m_x)<MAX_FACET_SHOW_THRESHOLD && fabs(p2d1.m_y-p2d2.m_y)<MAX_FACET_SHOW_THRESHOLD)
 		{
 			glBegin(GL_LINES);//画不闭合折线 
@@ -822,7 +823,7 @@ void glbDrawLineOnScreen(GlbPointGeo geoStartPoint, GlbPointGeo geoEndPoint, int
 	}
 }
 
-void glbDrawGlobe(GlbImage Image, GlbRotmat GlobeRotMat)
+void glbDrawGlobe(GlbImage Image, GlbRotmat GlobeRotMat, GlbCalib calib)
 {
 	GlbPoint3d pClose;
 	GlbPointGeo pGeo,pGeoDirect;
@@ -834,6 +835,7 @@ void glbDrawGlobe(GlbImage Image, GlbRotmat GlobeRotMat)
 	glbDrawTexture(
 		Image,	//材质的编号
         GlobeRotMat,
+        calib,
 		pGeo,			//贴图的中心点
 		true,	//中心点坐标是在 globe坐标系(true) or screen坐标系(false)
 		pGeoDirect,	//贴图方向的参考点
@@ -849,6 +851,7 @@ void glbDrawGlobe(GlbImage Image, GlbRotmat GlobeRotMat)
 
 void glbDrawBelt(GlbImage Image, 
               GlbRotmat GlobeRotMat,
+              GlbCalib calib,
 			  GlbPointGeo pGeo, 
 			  bool bPointOnGlobe, 
 			  GlbPointGeo pGeoDirect, 
@@ -862,6 +865,7 @@ void glbDrawBelt(GlbImage Image,
 	glbDrawTexture(
 		Image,	//材质的编号
         GlobeRotMat,
+        calib,
 		pGeo,			//贴图的中心点
 		bPointOnGlobe,	//中心点坐标是在 globe坐标系(true) or screen坐标系(false)
 		pGeoDirect,	//贴图方向的参考点

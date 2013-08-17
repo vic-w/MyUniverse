@@ -31,12 +31,12 @@ DWORD WINAPI GlobeThread(LPVOID lpParam)
     //生成主窗口
     if(nScreen >= 2)//显示器个数大于1个
     {
-        glbCreateWindow(mainWindow, screens[1], true, mirror);//以全屏方式显示到第2屏上
+        glbCreateWindow(mainWindow, screens[1], ".\\calibmain.ini", true, mirror);//以全屏方式显示到第2屏上
     }
     else
     {
         GlbRect windowSize(0,0,500,500);
-        glbCreateWindow(mainWindow, windowSize, false, mirror);//以固定大小显示在第一屏上
+        glbCreateWindow(mainWindow, windowSize, ".\\calibmain.ini", false, mirror);//以固定大小显示在第一屏上
     }
 
     //生成预览窗口
@@ -44,7 +44,7 @@ DWORD WINAPI GlobeThread(LPVOID lpParam)
     CRect rect;
     pWnd->GetDlgItem(IDC_PREVIEW_WINDOW)->GetWindowRect(rect);
     pWnd->ScreenToClient(rect);
-    glbCreateWindowMFC(previewWindow, rect, pWnd, 0);
+    glbCreateWindowMFC(previewWindow, rect, ".\\calibprev.ini", pWnd, 0);
 
     do
     {
@@ -104,7 +104,7 @@ void DrawStoryPagePreview(GlbWindow window)
             EnterCriticalSection(&g_GlobeRotMat_CS);
             GlbRotmat previewWindowRotMat;
             RotateToStudents(g_GlobeRotMat, previewWindowRotMat);
-            glbDrawGlobe(Image, previewWindowRotMat);
+            glbDrawGlobe(Image, previewWindowRotMat, window.m_calib);
             LeaveCriticalSection(&g_GlobeRotMat_CS);
             lastPath = g_StoryPage.pagePath;
 
@@ -115,7 +115,7 @@ void DrawStoryPagePreview(GlbWindow window)
             {
                 GlbImage Image = glbLoadImage(g_StoryPage.FrameNames[g_StoryPage.nCurFrame]);
                 EnterCriticalSection(&g_GlobeRotMat_CS);
-                glbDrawGlobe(Image, g_GlobeRotMat);
+                glbDrawGlobe(Image, g_GlobeRotMat, window.m_calib);
                 LeaveCriticalSection(&g_GlobeRotMat_CS);
                 glbReleaseImage(&Image);
 
@@ -172,7 +172,7 @@ void DrawStoryPagePreview(GlbWindow window)
             }
 
             EnterCriticalSection(&g_GlobeRotMat_CS);
-            glbDrawGlobe(Image, g_GlobeRotMat);
+            glbDrawGlobe(Image, g_GlobeRotMat, window.m_calib);
             LeaveCriticalSection(&g_GlobeRotMat_CS);
             glbReleaseImage(&Image);
         }
@@ -203,7 +203,7 @@ void DrawStoryPage(GlbWindow window)
                 Image = glbLoadImage(g_StoryPage.pagePath);
             }
             EnterCriticalSection(&g_GlobeRotMat_CS);
-            glbDrawGlobe(Image, g_GlobeRotMat);
+            glbDrawGlobe(Image, g_GlobeRotMat, window.m_calib);
             LeaveCriticalSection(&g_GlobeRotMat_CS);
             lastPath = g_StoryPage.pagePath;
 
@@ -214,7 +214,7 @@ void DrawStoryPage(GlbWindow window)
             {
                 GlbImage Image = glbLoadImage(g_StoryPage.FrameNames[g_StoryPage.nCurFrame]);
                 EnterCriticalSection(&g_GlobeRotMat_CS);
-                glbDrawGlobe(Image, g_GlobeRotMat);
+                glbDrawGlobe(Image, g_GlobeRotMat, window.m_calib);
                 LeaveCriticalSection(&g_GlobeRotMat_CS);
                 glbReleaseImage(&Image);
 
@@ -271,7 +271,7 @@ void DrawStoryPage(GlbWindow window)
             }
 
             EnterCriticalSection(&g_GlobeRotMat_CS);
-            glbDrawGlobe(Image, g_GlobeRotMat);
+            glbDrawGlobe(Image, g_GlobeRotMat, window.m_calib);
             LeaveCriticalSection(&g_GlobeRotMat_CS);
             glbReleaseImage(&Image);
         }

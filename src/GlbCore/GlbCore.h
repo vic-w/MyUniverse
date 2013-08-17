@@ -44,6 +44,7 @@ public:
     HWND   m_hWnd;
     HDC    m_hDC;
     HGLRC  m_hRC;
+    GlbCalib m_calib;
 };
 
 GLBCORE_API int glbDetectScreen(vector<GlbRect> &screens);//¼ì²âÆÁÄ»µÄ¸öÊý¼°·Ö±æÂÊ£¬·µ»ØÆÁÄ»¸öÊý
@@ -52,8 +53,8 @@ GLBCORE_API GlbImage glbLoadImage(const char* filename);    //ÔØÈëÍ¼Ïñ£¨Ö§³Ödds,
 GLBCORE_API GlbImage glbLoadImageFromOpencv(IplImage* pImage, bool bMipmap = true);       //´ÓOpenCVÍ¼Ïñ×ª»»
 GLBCORE_API void glbReleaseImage(GlbImage* pImage);         //ÊÍ·ÅÍ¼Ïñ
 
-GLBCORE_API int glbCreateWindow(GlbWindow &window, GlbRect windowSize, bool fullscreen, bool mirror, HINSTANCE hInstance=0);
-GLBCORE_API int glbCreateWindowMFC(GlbWindow &window, CRect rect, CWnd* parentWindow, bool mirror);
+GLBCORE_API int glbCreateWindow(GlbWindow &window, GlbRect windowSize, char *calibFileName, bool fullscreen, bool mirror, HINSTANCE hInstance=0);
+GLBCORE_API int glbCreateWindowMFC(GlbWindow &window, CRect rect, char *calibFileName, CWnd* parentWindow, bool mirror);
 GLBCORE_API void glbSwitchWindow(GlbWindow window);
 GLBCORE_API void glbDestoryWindow(GlbWindow window, HINSTANCE hInstance=0);
 
@@ -62,12 +63,13 @@ GLBCORE_API void glbDrawImage(GlbImage image);              //ÔÚ´°¿ÚÖÐ»­Í¼,µ«²¢Ã
 
 GLBCORE_API int glbUpdateWindow(GlbWindow window, int ms);                    //¸üÐÂ´°¿ÚÖÐÄÚÈÝ,·µ»Ø0±íÊ¾´°¿ÚÍË³ö£¬·µ»Ø1±íÊ¾Õý³£ÔËÐÐ
 
-GLBCORE_API void glbDrawLineOnGlobe(GlbPointGeo geoStartPoint, GlbRotmat GlobeRotMat, GlbPointGeo geoEndPoint, int layer);
-GLBCORE_API void glbDrawLineOnScreen(GlbPointGeo geoStartPoint, GlbPointGeo geoEndPoint, int layer);
-GLBCORE_API void glbDrawGlobe(GlbImage Image, GlbRotmat GlobeRotMat);
+GLBCORE_API void glbDrawLineOnGlobe(GlbPointGeo geoStartPoint, GlbRotmat GlobeRotMat, GlbCalib calib, GlbPointGeo geoEndPoint, int layer);
+GLBCORE_API void glbDrawLineOnScreen(GlbCalib calib, GlbPointGeo geoStartPoint, GlbPointGeo geoEndPoint, int layer);
+GLBCORE_API void glbDrawGlobe(GlbImage Image, GlbRotmat GlobeRotMat, GlbCalib calib);
 GLBCORE_API void glbDrawTexture(
                     GlbImage Image,     //²ÄÖÊµÄ±àºÅ
                     GlbRotmat GlobeRotMat,
+                    GlbCalib calib,
                     GlbPointGeo pGeo,       //ÌùÍ¼µÄÖÐÐÄµã
                     bool bPointOnGlobe,     //ÖÐÐÄµã×ø±êÊÇÔÚ globe×ø±êÏµ(true) or screen×ø±êÏµ(false)
                     GlbPointGeo pGeoDirect, //ÌùÍ¼·½ÏòµÄ²Î¿¼µã
@@ -83,6 +85,7 @@ GLBCORE_API void glbDrawTexture(
 GLBCORE_API void glbDrawBelt(
                 GlbImage Image,
                 GlbRotmat GlobeRotMat,
+                GlbCalib calib,
                 GlbPointGeo pGeo,
                 bool bPointOnGlobe,
                 GlbPointGeo pGeoDirect,	
