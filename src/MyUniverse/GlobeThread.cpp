@@ -316,6 +316,7 @@ DWORD WINAPI TimingThread(LPVOID lpParam)
                 if(g_StoryPage.storyType == FOLDER)
                 {
 		            g_StoryPage.nCurFrame = (g_StoryPage.nCurFrame+g_StoryPage.bPlaying)%g_StoryPage.nFrames;
+                    printf("nFrame:%d\n", g_StoryPage.nCurFrame);
                 }
                 else// AVI or WMV
                 {
