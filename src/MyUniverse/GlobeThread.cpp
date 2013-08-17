@@ -133,7 +133,7 @@ void DrawStoryPagePreview(GlbWindow window)
             static IplImage* pFrame = NULL;
             static CString videoPath = "";
 
-            if(videoPath != g_StoryPage.pagePath)
+            if(videoPath != g_StoryPage.pagePath)//
             {
                 if(pCapture)
 	            {
@@ -151,7 +151,7 @@ void DrawStoryPagePreview(GlbWindow window)
                 pFrame = cvQueryFrame( pCapture );
             }
             
-            if( snCurFrame < g_StoryPage.nCurFrame )
+            if( snCurFrame != g_StoryPage.nCurFrame )
             {
                 pFrame = cvQueryFrame( pCapture );
                 if(pFrame == NULL)
@@ -162,6 +162,7 @@ void DrawStoryPagePreview(GlbWindow window)
                     g_StoryPage.nCurFrame = 0;
                 }
                 snCurFrame = g_StoryPage.nCurFrame;
+                printf("prev nframe=%d\n", snCurFrame);
             }
             GlbImage Image;
             if(pFrame)
@@ -252,8 +253,9 @@ void DrawStoryPage(GlbWindow window)
                 pFrame = cvQueryFrame( pCapture );
             }
             
-            if( snCurFrame < g_StoryPage.nCurFrame )
+            if( snCurFrame != g_StoryPage.nCurFrame )
             {
+                //时间已过去了30毫秒
                 pFrame = cvQueryFrame( pCapture );
                 if(pFrame == NULL)
                 {
@@ -263,6 +265,7 @@ void DrawStoryPage(GlbWindow window)
                     g_StoryPage.nCurFrame = 0;
                 }
                 snCurFrame = g_StoryPage.nCurFrame;
+                printf("main nframe=%d\n", snCurFrame);
             }
             GlbImage Image;
             if(pFrame)
