@@ -1,4 +1,4 @@
-// GlbKt.cpp : ¶¨Òå DLL Ó¦ÓÃ³ÌĞòµÄµ¼³öº¯Êı¡£
+ï»¿// GlbKt.cpp : å®šä¹‰ DLL åº”ç”¨ç¨‹åºçš„å¯¼å‡ºå‡½æ•°ã€‚
 //
 
 #include "stdafx.h"
@@ -19,5 +19,3 @@ GLBKT_API void glbKt(void)
 
 	return;
 }
-
-

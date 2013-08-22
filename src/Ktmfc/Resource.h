@@ -1,9 +1,9 @@
-//{{NO_DEPENDENCIES}}
+О╩©//{{NO_DEPENDENCIES}}
 // Microsoft Visual C++ generated include file.
 // Used by Ktmfc.rc
 //
 
-// пб╤тоС╣добр╩вИд╛хож╣
+// Ф√╟Е╞╧Х╠║Г └Д╦▀Д╦─Г╩└И╩≤Х╝╓Е─╪
 //
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS

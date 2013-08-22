@@ -1,4 +1,4 @@
-LIBRARY
+﻿LIBRARY
 EXPORTS
 
    glbDetectScreen   @1   NONAME  

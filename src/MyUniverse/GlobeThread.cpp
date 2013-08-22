@@ -1,4 +1,4 @@
-#include "stdafx.h"
+ï»¿#include "stdafx.h"
 #include "GlobeThread.h"
 #include "MyUniverseDlg.h"
 #include "StorytellerComp.h"
@@ -8,13 +8,13 @@ CStoryPage g_StoryPage;
 
 CRITICAL_SECTION g_GlobeRotMat_CS;
 GlbRotmat g_GlobeRotMat;
-GlbEularAngle g_StorytellerEularAngle;//ÕâÊÇstorytellerµÄ×ø±êÏµ
-GlbEularAngle g_GlobeEularAngle;//ÕâÊÇMyUniverseµÄ×ø±êÏµ
-GlbEularAngle g_OffsetEularAngle;//ÕâÊÇÁ¬¸ö×ø±êÏµµÄ²î±ð
+GlbEularAngle g_StorytellerEularAngle;//è¿™æ˜¯storytellerçš„åæ ‡ç³»
+GlbEularAngle g_GlobeEularAngle;//è¿™æ˜¯MyUniverseçš„åæ ‡ç³»
+GlbEularAngle g_OffsetEularAngle;//è¿™æ˜¯è¿žä¸ªåæ ‡ç³»çš„å·®åˆ«
 
-extern int g_bMainThreadActive;//Ö÷Ïß³Ì»î¶¯Ö¸Ê¾
-extern int g_bGlbThreadActive;//ÐÇÇò»æÍ¼Ïß³Ì»î¶¯Ö¸Ê¾
-extern int g_bTimingThreadActive;//ÐÇÇò»æÍ¼Ïß³Ì»î¶¯Ö¸Ê¾
+extern int g_bMainThreadActive;//ä¸»çº¿ç¨‹æ´»åŠ¨æŒ‡ç¤º
+extern int g_bGlbThreadActive;//æ˜Ÿçƒç»˜å›¾çº¿ç¨‹æ´»åŠ¨æŒ‡ç¤º
+extern int g_bTimingThreadActive;//æ˜Ÿçƒç»˜å›¾çº¿ç¨‹æ´»åŠ¨æŒ‡ç¤º
 
 DWORD WINAPI GlobeThread(LPVOID lpParam)
 {
@@ -28,18 +28,18 @@ DWORD WINAPI GlobeThread(LPVOID lpParam)
     GlbWindow mainWindow;
     GlbWindow previewWindow;
 
-    //Éú³ÉÖ÷´°¿Ú
-    if(nScreen >= 2)//ÏÔÊ¾Æ÷¸öÊý´óÓÚ1¸ö
+    //ç”Ÿæˆä¸»çª—å£
+    if(nScreen >= 2)//æ˜¾ç¤ºå™¨ä¸ªæ•°å¤§äºŽ1ä¸ª
     {
-        glbCreateWindow(mainWindow, screens[1], ".\\calibmain.ini", true, mirror);//ÒÔÈ«ÆÁ·½Ê½ÏÔÊ¾µ½µÚ2ÆÁÉÏ
+        glbCreateWindow(mainWindow, screens[1], ".\\calibmain.ini", true, mirror);//ä»¥å…¨å±æ–¹å¼æ˜¾ç¤ºåˆ°ç¬¬2å±ä¸Š
     }
     else
     {
         GlbRect windowSize(0,0,500,500);
-        glbCreateWindow(mainWindow, windowSize, ".\\calibmain.ini", false, mirror);//ÒÔ¹Ì¶¨´óÐ¡ÏÔÊ¾ÔÚµÚÒ»ÆÁÉÏ
+        glbCreateWindow(mainWindow, windowSize, ".\\calibmain.ini", false, mirror);//ä»¥å›ºå®šå¤§å°æ˜¾ç¤ºåœ¨ç¬¬ä¸€å±ä¸Š
     }
 
-    //Éú³ÉÔ¤ÀÀ´°¿Ú
+    //ç”Ÿæˆé¢„è§ˆçª—å£
     CMyUniverseDlg* pWnd = (CMyUniverseDlg*)lpParam;
     CRect rect;
     pWnd->GetDlgItem(IDC_PREVIEW_WINDOW)->GetWindowRect(rect);
@@ -48,13 +48,13 @@ DWORD WINAPI GlobeThread(LPVOID lpParam)
 
     do
     {
-        //»­Ö÷´°¿ÚÄÚÈÝ
+        //ç”»ä¸»çª—å£å†…å®¹
         glbSwitchWindow(mainWindow);
         glbClearWindow();
         DrawStoryPage(mainWindow);
         glbUpdateWindow(mainWindow, 1);
 
-        //»­Ô¤ÀÀ´°¿ÚÄÚÈÝ
+        //ç”»é¢„è§ˆçª—å£å†…å®¹
         glbSwitchWindow(previewWindow);
         glbClearWindow();
         DrawStoryPagePreview(previewWindow);
@@ -121,7 +121,7 @@ void DrawStoryPagePreview(GlbWindow window)
                 LeaveCriticalSection(&g_GlobeRotMat_CS);
                 glbReleaseImage(&Image);
 
-                //É¾È¥´Ë¾ä£¬·ÅÔÚTimingThreadÏß³ÌÖÐ
+                //åˆ åŽ»æ­¤å¥ï¼Œæ”¾åœ¨TimingThreadçº¿ç¨‹ä¸­
                 //g_StoryPage.nCurFrame = (g_StoryPage.nCurFrame+g_StoryPage.bPlaying)%g_StoryPage.nFrames;
             }
         }
@@ -142,7 +142,7 @@ void DrawStoryPagePreview(GlbWindow window)
                 pCapture = cvCaptureFromFile(g_StoryPage.pagePath);
                 if(!pCapture)
                 {
-                    AfxMessageBox("ÎÞ·¨¶ÁÈ¡ÊÓÆµ");
+                    AfxMessageBox("æ— æ³•è¯»å–è§†é¢‘");
                     g_StoryPage.storyType = NONE;
                 }
                 videoPath = g_StoryPage.pagePath;
@@ -223,7 +223,7 @@ void DrawStoryPage(GlbWindow window)
                 LeaveCriticalSection(&g_GlobeRotMat_CS);
                 glbReleaseImage(&Image);
 
-                //É¾È¥´Ë¾ä£¬·ÅÔÚTimingThreadÏß³ÌÖÐ
+                //åˆ åŽ»æ­¤å¥ï¼Œæ”¾åœ¨TimingThreadçº¿ç¨‹ä¸­
                 //g_StoryPage.nCurFrame = (g_StoryPage.nCurFrame+g_StoryPage.bPlaying)%g_StoryPage.nFrames;
             }
         }
@@ -244,7 +244,7 @@ void DrawStoryPage(GlbWindow window)
                 pCapture = cvCaptureFromFile(g_StoryPage.pagePath);
                 if(!pCapture)
                 {
-                    AfxMessageBox("ÎÞ·¨¶ÁÈ¡ÊÓÆµ");
+                    AfxMessageBox("æ— æ³•è¯»å–è§†é¢‘");
                     g_StoryPage.storyType = NONE;
                 }
                 videoPath = g_StoryPage.pagePath;
@@ -255,7 +255,7 @@ void DrawStoryPage(GlbWindow window)
             
             if( snCurFrame != g_StoryPage.nCurFrame )
             {
-                //Ê±¼äÒÑ¹ýÈ¥ÁË30ºÁÃë
+                //æ—¶é—´å·²è¿‡åŽ»äº†30æ¯«ç§’
                 pFrame = cvQueryFrame( pCapture );
                 if(pFrame == NULL)
                 {
@@ -301,7 +301,7 @@ DWORD WINAPI TimingThread(LPVOID lpParam)
     {
         QueryPerformanceCounter(&TimeCounter);
 
-        //¸üÐÂ¶¯»­
+        //æ›´æ–°åŠ¨ç”»
         if(g_StoryPage.bPlaying && g_StoryPage.frameRate>0)
         {
             int frameRate = g_StoryPage.frameRate;
@@ -329,7 +329,7 @@ DWORD WINAPI TimingThread(LPVOID lpParam)
             LastTimeCounter_playing = TimeCounter;
         }
 
-        //¸üÐÂ×Ô×ª
+        //æ›´æ–°è‡ªè½¬
         if(g_StoryPage.bRotating)
         {
 	        if( TimeCounter.QuadPart - LastTimeCounter_rotating.QuadPart > tFreq.QuadPart/30)
@@ -361,8 +361,8 @@ DWORD WINAPI TimingThread(LPVOID lpParam)
                 {
                     //Sleep(1000);
                     CMyUniverseDlg* pDlg = (CMyUniverseDlg*)lpParam;                   
-                    //¸øÖ÷½çÃæ·¢ËÍ×Ô¶¨ÒåÏûÏ¢
-                    //²Î¿¼£ºhttp://blog.csdn.net/zfpnuc/article/details/5944219
+                    //ç»™ä¸»ç•Œé¢å‘é€è‡ªå®šä¹‰æ¶ˆæ¯
+                    //å‚è€ƒï¼šhttp://blog.csdn.net/zfpnuc/article/details/5944219
                     pDlg->SendMessage(WM_GLB_UPDATEDATA, FALSE);
                 }
             }

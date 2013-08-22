@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #ifdef GLBROT_EXPORTS
 #define GLBROT_API __declspec(dllexport)
@@ -7,14 +7,14 @@
 #endif
 
 #define PI (3.1415926f)
-//#define N_CALIB  (12) //±ê¶¨Î³ÏßµÄÌõÊı
+//#define N_CALIB  (12) //æ ‡å®šçº¬çº¿çš„æ¡æ•°
 
 
 class GlbPointGeo   
 { 
 public:
-    float m_lat;//Î¬¶È
-    float m_lng;//¾­¶È
+    float m_lat;//ç»´åº¦
+    float m_lng;//ç»åº¦
     GlbPointGeo()
     {
         m_lat = 0;
@@ -25,11 +25,11 @@ public:
         m_lat = lat;
         m_lng = lng;
     }
-    GlbPointGeo &operator =(GlbPointGeo p)    //ÒªĞŞ¸Ä¶ÔÏóÊı¾İ³ÉÔ±£¬·µ»ØÖµ±ØĞëÎª¶ÔÏóµÄÒıÓÃ
+    GlbPointGeo &operator =(GlbPointGeo p)    //è¦ä¿®æ”¹å¯¹è±¡æ•°æ®æˆå‘˜ï¼Œè¿”å›å€¼å¿…é¡»ä¸ºå¯¹è±¡çš„å¼•ç”¨
     {
         m_lat = p.m_lat;
         m_lng = p.m_lng;
-        return *this;            //·µ»ØĞŞ¸ÄºóµÄ×óÖµ¶ÔÏó
+        return *this;            //è¿”å›ä¿®æ”¹åçš„å·¦å€¼å¯¹è±¡
     }
 }; 
 
@@ -48,11 +48,11 @@ public:
         m_x = x;
         m_y = y;
     }
-    GlbPoint2d &operator =(GlbPoint2d p)    //ÒªĞŞ¸Ä¶ÔÏóÊı¾İ³ÉÔ±£¬·µ»ØÖµ±ØĞëÎª¶ÔÏóµÄÒıÓÃ
+    GlbPoint2d &operator =(GlbPoint2d p)    //è¦ä¿®æ”¹å¯¹è±¡æ•°æ®æˆå‘˜ï¼Œè¿”å›å€¼å¿…é¡»ä¸ºå¯¹è±¡çš„å¼•ç”¨
     {
         m_x = p.m_x;
         m_y = p.m_y;
-        return *this;            //·µ»ØĞŞ¸ÄºóµÄ×óÖµ¶ÔÏó
+        return *this;            //è¿”å›ä¿®æ”¹åçš„å·¦å€¼å¯¹è±¡
     }
 }; 
 
@@ -74,33 +74,33 @@ public:
         m_y = y;
         m_z = z;
     }
-    GlbPoint3d &operator =(GlbPoint3d p)    //ÒªĞŞ¸Ä¶ÔÏóÊı¾İ³ÉÔ±£¬·µ»ØÖµ±ØĞëÎª¶ÔÏóµÄÒıÓÃ
+    GlbPoint3d &operator =(GlbPoint3d p)    //è¦ä¿®æ”¹å¯¹è±¡æ•°æ®æˆå‘˜ï¼Œè¿”å›å€¼å¿…é¡»ä¸ºå¯¹è±¡çš„å¼•ç”¨
     {
         m_x = p.m_x;
         m_y = p.m_y;
         m_z = p.m_z;
-        return *this;            //·µ»ØĞŞ¸ÄºóµÄ×óÖµ¶ÔÏó
+        return *this;            //è¿”å›ä¿®æ”¹åçš„å·¦å€¼å¯¹è±¡
     }
-    GlbPoint3d &operator +=(GlbPoint3d p)    //ÒªĞŞ¸Ä¶ÔÏóÊı¾İ³ÉÔ±£¬·µ»ØÖµ±ØĞëÎª¶ÔÏóµÄÒıÓÃ
+    GlbPoint3d &operator +=(GlbPoint3d p)    //è¦ä¿®æ”¹å¯¹è±¡æ•°æ®æˆå‘˜ï¼Œè¿”å›å€¼å¿…é¡»ä¸ºå¯¹è±¡çš„å¼•ç”¨
     {
         m_x += p.m_x;
         m_y += p.m_y;
         m_z += p.m_z;
-        return *this;            //·µ»ØĞŞ¸ÄºóµÄ×óÖµ¶ÔÏó
+        return *this;            //è¿”å›ä¿®æ”¹åçš„å·¦å€¼å¯¹è±¡
     }	
 
-    GlbPoint3d &operator *=(float f)    //ÒªĞŞ¸Ä¶ÔÏóÊı¾İ³ÉÔ±£¬·µ»ØÖµ±ØĞëÎª¶ÔÏóµÄÒıÓÃ
+    GlbPoint3d &operator *=(float f)    //è¦ä¿®æ”¹å¯¹è±¡æ•°æ®æˆå‘˜ï¼Œè¿”å›å€¼å¿…é¡»ä¸ºå¯¹è±¡çš„å¼•ç”¨
     {
         m_x *= f;
         m_y *= f;
         m_z *= f;
-        return *this;            //·µ»ØĞŞ¸ÄºóµÄ×óÖµ¶ÔÏó
+        return *this;            //è¿”å›ä¿®æ”¹åçš„å·¦å€¼å¯¹è±¡
     }
 }; 
 
 class GlbCalib
 {
-    #define N_CALIB  (12) //±ê¶¨Î³ÏßµÄÌõÊı
+    #define N_CALIB  (12) //æ ‡å®šçº¬çº¿çš„æ¡æ•°
 public:
     float latitude[N_CALIB+1];
 };
@@ -112,10 +112,10 @@ typedef GlbPoint2d GlbPointRound;
 class GlbEularAngle
 {
 public:
-    //Ğı×ªË³ĞòÑÏ¸ñ°´ÕÕ´Ë½á¹¹ÖĞµÄË³Ğò£¨Å·À­½Ç->Ğı×ª¾ØÕóÔò°´ÕÕz-x-zµÄË³Ğò£©
-    float m_1_Horz; //µØÇòË®Æ½·½ÏòĞı×ª
-    float m_2_Vert; //µØÇòÑØ0¶È¾­ÏßµÄĞı×ª
-    float m_3_Axis; //µØÇòÖáÏòĞı×ª
+    //æ—‹è½¬é¡ºåºä¸¥æ ¼æŒ‰ç…§æ­¤ç»“æ„ä¸­çš„é¡ºåºï¼ˆæ¬§æ‹‰è§’->æ—‹è½¬çŸ©é˜µåˆ™æŒ‰ç…§z-x-zçš„é¡ºåºï¼‰
+    float m_1_Horz; //åœ°çƒæ°´å¹³æ–¹å‘æ—‹è½¬
+    float m_2_Vert; //åœ°çƒæ²¿0åº¦ç»çº¿çš„æ—‹è½¬
+    float m_3_Axis; //åœ°çƒè½´å‘æ—‹è½¬
 };
 
 class GlbRotmat 
@@ -140,62 +140,62 @@ public:
     long m_nTrackID;
 };
 
-//¼ÆËãÏòÁ¿µÄ³¤¶È£¨Ä££©
+//è®¡ç®—å‘é‡çš„é•¿åº¦ï¼ˆæ¨¡ï¼‰
 GLBROT_API float glbVectorNorm(GlbPoint3d Vec);
-//½«ÏòÁ¿±äÎªµ¥Î»ÏòÁ¿
+//å°†å‘é‡å˜ä¸ºå•ä½å‘é‡
 GLBROT_API void glbVectorNormalize(GlbPoint3d Vec, GlbPoint3d &Vec_dst);
-//Á½¸öÏòÁ¿µÄµã³Ë
+//ä¸¤ä¸ªå‘é‡çš„ç‚¹ä¹˜
 GLBROT_API float glbDotMul(GlbPoint3d Vec1, GlbPoint3d Vec2);
-//Á½¸öÏòÁ¿µÄ²æ³Ë
+//ä¸¤ä¸ªå‘é‡çš„å‰ä¹˜
 GLBROT_API void glbCrossMul(GlbPoint3d Vec1, GlbPoint3d Vec2, GlbPoint3d &VecDST);
-//Á½¸öĞı×ª¾ØÕóµÄÏà³Ë
-//µÚÒ»¸ö²ÎÊıÊÇ½«Òª×öµÄĞı×ª£¬µÚ¶ş¸ö²ÎÊıÊÇÔ­Ê¼µÄĞı×ª¾ØÕó£¬µÚÈı¸ö²ÎÊıÊÇĞı×ªºóµÄ¾ØÕó
-//Rotation ¡Á Origin = destination
+//ä¸¤ä¸ªæ—‹è½¬çŸ©é˜µçš„ç›¸ä¹˜
+//ç¬¬ä¸€ä¸ªå‚æ•°æ˜¯å°†è¦åšçš„æ—‹è½¬ï¼Œç¬¬äºŒä¸ªå‚æ•°æ˜¯åŸå§‹çš„æ—‹è½¬çŸ©é˜µï¼Œç¬¬ä¸‰ä¸ªå‚æ•°æ˜¯æ—‹è½¬åçš„çŸ©é˜µ
+//Rotation Ã— Origin = destination
 GLBROT_API void glbRotmatMul(GlbRotmat Rotation, GlbRotmat Origin, GlbRotmat &destination);
 
-//¾­Î³×ø±ê ×ª»»Îª Ö±½Ç×ø±ê
+//ç»çº¬åæ ‡ è½¬æ¢ä¸º ç›´è§’åæ ‡
 GLBROT_API void glbPointGeo2PointRect(GlbPointGeo pGeo, GlbPoint3d &pRect);
-//Ö±½Ç×ø±ê ×ª»»Îª ¾­Î³×ø±ê
+//ç›´è§’åæ ‡ è½¬æ¢ä¸º ç»çº¬åæ ‡
 GLBROT_API void glbPointRect2PointGeo(GlbPoint3d pRect, GlbPointGeo &pGeo);
 
-//µØÇòÉÏµÄ¾­Î³×ø±ê ×ª»»Îª ÆÁÄ»ÉÏµÄ¾­Î³×ø±ê
+//åœ°çƒä¸Šçš„ç»çº¬åæ ‡ è½¬æ¢ä¸º å±å¹•ä¸Šçš„ç»çº¬åæ ‡
 GLBROT_API void glbGlobePoint2ScreenPoint(GlbPoint3d p1, GlbRotmat r, GlbPoint3d &p2);
-//ÆÁÄ»ÉÏµÄ¾­Î³×ø±ê ×ª»»Îª µØÇòÉÏµÄ¾­Î³×ø±ê
+//å±å¹•ä¸Šçš„ç»çº¬åæ ‡ è½¬æ¢ä¸º åœ°çƒä¸Šçš„ç»çº¬åæ ‡
 GLBROT_API void glbScreenPoint2GlobePoint(GlbPoint3d p1, GlbRotmat r, GlbPoint3d &p2);
 
-//Ö±½Ç×ø±ê ×ª»»Îª Ô²±ı×ø±ê
+//ç›´è§’åæ ‡ è½¬æ¢ä¸º åœ†é¥¼åæ ‡
 GLBROT_API void glbPointRect2PointRound(GlbPoint3d p3, GlbPointRound &p2, GlbCalib calib);
-//Ô²±ı×ø±ê ×ª»»Îª Ö±½Ç×ø±ê
+//åœ†é¥¼åæ ‡ è½¬æ¢ä¸º ç›´è§’åæ ‡
 GLBROT_API void glbPointRound2PointRect(GlbPointRound p2, GlbPoint3d &p3, GlbCalib calib);
 
-//Éú³É³õÊ¼Ğı×ª¾ØÕó
+//ç”Ÿæˆåˆå§‹æ—‹è½¬çŸ©é˜µ
 GLBROT_API void glbCreateGlbRotmat(GlbRotmat &r);
-//¸´ÖÆĞı×ª¾ØÕó
+//å¤åˆ¶æ—‹è½¬çŸ©é˜µ
 GLBROT_API void glbCloneGlbRotmat(GlbRotmat r, GlbRotmat &r_dst);
 
-//¼ÆËãÆÁÄ»ÉÏµÄµãp1µ½p2µÄĞı×ª½Ç¶È
+//è®¡ç®—å±å¹•ä¸Šçš„ç‚¹p1åˆ°p2çš„æ—‹è½¬è§’åº¦
 GLBROT_API float glbAngleBetweenPoints(GlbPoint3d p1, GlbPoint3d p2);
-//¼ÆËãÆÁÄ»ÉÏµÄµãp1µ½p2µÄĞı×ªÖá
+//è®¡ç®—å±å¹•ä¸Šçš„ç‚¹p1åˆ°p2çš„æ—‹è½¬è½´
 GLBROT_API void glbPivotBetweenPoints(GlbPoint3d p1, GlbPoint3d p2, GlbPivot &pivot);
 
-//Å·À­½Ç ×ª»»Îª Ğı×ª¾ØÕó
+//æ¬§æ‹‰è§’ è½¬æ¢ä¸º æ—‹è½¬çŸ©é˜µ
 GLBROT_API void glbEularAngle2Rotmat(GlbEularAngle angle, GlbRotmat &r);
-//Ğı×ªÏòÁ¿ ×ª»»Îª Ğı×ª¾ØÕó
+//æ—‹è½¬å‘é‡ è½¬æ¢ä¸º æ—‹è½¬çŸ©é˜µ
 GLBROT_API void glbRotVector2RotMat(GlbPoint3d angle, GlbRotmat &r);
-//ÆÁÄ»ÉÏµÄµãp1ÒÆ¶¯µ½p2Ëù±íÊ¾µÄĞı×ª¾ØÕó
+//å±å¹•ä¸Šçš„ç‚¹p1ç§»åŠ¨åˆ°p2æ‰€è¡¨ç¤ºçš„æ—‹è½¬çŸ©é˜µ
 GLBROT_API void glbMovingPoints2RotMat(GlbPoint3d p1, GlbPoint3d p2, GlbRotmat &r);
-//ÓÉ×ªÖáºÍ×ª½ÇËù±íÊ¾µÄĞı×ª¾ØÕó
+//ç”±è½¬è½´å’Œè½¬è§’æ‰€è¡¨ç¤ºçš„æ—‹è½¬çŸ©é˜µ
 GLBROT_API void glbAnglePivot2RotMat(GlbPivot pivot, float angle, GlbRotmat &r);
-//½«pµãÈÆpivotÖáĞı×ªangle½Ç¶È
+//å°†pç‚¹ç»•pivotè½´æ—‹è½¬angleè§’åº¦
 GLBROT_API void glbPivotingPoint(GlbPoint3d p, GlbPivot pivot, float angle, GlbPoint3d &p_out);
-//Éú³ÉÌùÍ¼Ê±ËùĞèµÄÁ½¸öÕı½»µÄĞı×ªÖá
-GLBROT_API void glbCreateNormPivot(GlbPoint3d p, GlbPoint3d directPoint, bool bHeadDirect, GlbPivot &pivot_h, GlbPivot &pivot_v);//Éú³Épµãµ½headPointµÄĞı×ªÖá£¬ÒÔ¼°ÆäÕı½»·½ÏòµÄĞı×ªÖá
+//ç”Ÿæˆè´´å›¾æ—¶æ‰€éœ€çš„ä¸¤ä¸ªæ­£äº¤çš„æ—‹è½¬è½´
+GLBROT_API void glbCreateNormPivot(GlbPoint3d p, GlbPoint3d directPoint, bool bHeadDirect, GlbPivot &pivot_h, GlbPivot &pivot_v);//ç”Ÿæˆpç‚¹åˆ°headPointçš„æ—‹è½¬è½´ï¼Œä»¥åŠå…¶æ­£äº¤æ–¹å‘çš„æ—‹è½¬è½´
 
-//´ÓiniÖĞ¶ÁÈ¡»û±ä½ÃÕıĞÅÏ¢
+//ä»iniä¸­è¯»å–ç•¸å˜çŸ«æ­£ä¿¡æ¯
 GLBROT_API void glbInitDistort(GlbCalib &calib, char* calibFileName);
-//ÓãÑÛ¾µÍ·¾¶Ïò»û±ä½ÃÕı(ÓÉÕı¹æµÄÔ²±ı×ø±ê×ª±äµ½ÊÊÓ¦¾µÍ·ÏÔÊ¾µÄÔ²±ı×ø±ê£©
+//é±¼çœ¼é•œå¤´å¾„å‘ç•¸å˜çŸ«æ­£(ç”±æ­£è§„çš„åœ†é¥¼åæ ‡è½¬å˜åˆ°é€‚åº”é•œå¤´æ˜¾ç¤ºçš„åœ†é¥¼åæ ‡ï¼‰
 GLBROT_API float glbDistortRadius(float Radius, GlbCalib calib);
-//»û±ä½ÃÕı·´±ä»»
+//ç•¸å˜çŸ«æ­£åå˜æ¢
 GLBROT_API float glbUnDistortRadius(float Radius, GlbCalib calib);
 
 //int GetTopLayer(GlbPoint2d pTouch);

@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include "GlbCore.h"
 #include <vector>
@@ -20,25 +20,25 @@ enum STORY_TYPE
 class CStoryPage
 {
 public:
-    //Ò³ÃæÎÄ¼ş½á¹¹
-    bool bEmpty;//Ò³ÃæÎÄ¼şÎª¿Õ
-    bool bMovie;//Ò³ÃæÊÇÒ»¸ö¶¯»­
-    CString pagePath;//Ò³ÃæÎÄ¼şµÄÍêÕûÂ·¾¶£¨Ä¿Â¼+ÎÄ¼şÃû£©
+    //é¡µé¢æ–‡ä»¶ç»“æ„
+    bool bEmpty;//é¡µé¢æ–‡ä»¶ä¸ºç©º
+    bool bMovie;//é¡µé¢æ˜¯ä¸€ä¸ªåŠ¨ç”»
+    CString pagePath;//é¡µé¢æ–‡ä»¶çš„å®Œæ•´è·¯å¾„ï¼ˆç›®å½•+æ–‡ä»¶åï¼‰
     STORY_TYPE storyType;//DDS,JPG,BMP,PNG,AVI,WMV,FOLDER
 
-    //ĞòÁĞÖ¡×¨ÓÃ
-    vector<CString> FrameNames;//ĞòÁĞÖ¡£¨FOLDER£©¸ñÊ½Ê±£¬ÓÃÀ´´æ·ÅÃ¿Ò»Ö¡µÄÎÄ¼şÃû
-    int nFrames;//ĞòÁĞÖ¡µÄ×ÜÖ¡Êı
-    int nCurFrame;//µ±Ç°µÄÖ¡ºÅ
+    //åºåˆ—å¸§ä¸“ç”¨
+    vector<CString> FrameNames;//åºåˆ—å¸§ï¼ˆFOLDERï¼‰æ ¼å¼æ—¶ï¼Œç”¨æ¥å­˜æ”¾æ¯ä¸€å¸§çš„æ–‡ä»¶å
+    int nFrames;//åºåˆ—å¸§çš„æ€»å¸§æ•°
+    int nCurFrame;//å½“å‰çš„å¸§å·
 
-    //¶¯»­¿ØÖÆ
-    bool bPlaying;//²¥·Å¶¯»­
-    int frameRate;//¶¯»­²¥·ÅËÙ¶È
+    //åŠ¨ç”»æ§åˆ¶
+    bool bPlaying;//æ’­æ”¾åŠ¨ç”»
+    int frameRate;//åŠ¨ç”»æ’­æ”¾é€Ÿåº¦
 
-    //Ğı×ª¿ØÖÆ
-    bool bRotating;//×Ô×ª
-    bool bClockwise; //×Ô×ª·½Ïò
-    int rotationRate;//×Ô×ªËÙ¶È
+    //æ—‹è½¬æ§åˆ¶
+    bool bRotating;//è‡ªè½¬
+    bool bClockwise; //è‡ªè½¬æ–¹å‘
+    int rotationRate;//è‡ªè½¬é€Ÿåº¦
 };
 
 DWORD WINAPI GlobeThread(LPVOID lpParam);

@@ -1,4 +1,4 @@
-#include "stdafx.h"
+ï»¿#include "stdafx.h"
 #include "draw.h"
 #include <math.h>
 #include <windows.h>
@@ -36,12 +36,12 @@ void DrawLineOnScreen(GlbPointGeo geoStartPoint, GlbPointGeo geoEndPoint, int la
 	int nStep = (int)(angle/FACET_SCACLE_IN_ANGLE)+1;
 	float mAngle = angle/nStep;
 
-	glLoadIdentity();											// ÖØÖÃµ±Ç°µÄÄ£ĞÍ¹Û²ì¾ØÕó
+	glLoadIdentity();											// é‡ç½®å½“å‰çš„æ¨¡å‹è§‚å¯ŸçŸ©é˜µ
 	glBindTexture(GL_TEXTURE_2D, 0);
 	glColor3f(1.0f,1.0f,0.0f);
-	glLineWidth(0.5);//ÉèÖÃ²»±ÕºÏÕÛÏß´óĞ¡  
+	glLineWidth(0.5);//è®¾ç½®ä¸é—­åˆæŠ˜çº¿å¤§å°  
 
-	//¿¹¾â³İ
+	//æŠ—é”¯é½¿
 	glEnable(GL_LINE_SMOOTH);
 	//glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
 	//glEnable(GL_BLEND);
@@ -56,7 +56,7 @@ void DrawLineOnScreen(GlbPointGeo geoStartPoint, GlbPointGeo geoEndPoint, int la
 		Sphere2Round(p3d2, 1.0f, p2d2);
 		if(fabs(p2d1.m_x-p2d2.m_x)<MAX_FACET_SHOW_THRESHOLD && fabs(p2d1.m_y-p2d2.m_y)<MAX_FACET_SHOW_THRESHOLD)
 		{
-			glBegin(GL_LINES);//»­²»±ÕºÏÕÛÏß 
+			glBegin(GL_LINES);//ç”»ä¸é—­åˆæŠ˜çº¿ 
 			glVertex3f(p2d1.m_x,p2d1.m_y, layer);
 			glVertex3f(p2d2.m_x,p2d2.m_y, layer);
 			glEnd();
@@ -74,32 +74,32 @@ void DrawGlobe(GLuint texture)
 	pGeoDirect.m_lng = 0;
 
 	DrawTexture(
-		texture,	//²ÄÖÊµÄ±àºÅ
-		pGeo,			//ÌùÍ¼µÄÖĞĞÄµã
-		true,	//ÖĞĞÄµã×ø±êÊÇÔÚ globe×ø±êÏµ(true) or screen×ø±êÏµ(false)
-		pGeoDirect,	//ÌùÍ¼·½ÏòµÄ²Î¿¼µã
-		true,		//·½Ïò²Î¿¼µãÊµÔÚ globe×ø±êÏµ(true) or screen×ø±êÏµ(false)
-		true,		//Í¼Æ¬³¯Ïò²Î¿¼µã(ture) or ±³Ïò²Î¿¼µã(false)
-		360,			//ÌùÍ¼µÄ¿í¶È(µ¥Î»:½Ç¶È)
-		180,			//ÌùÍ¼µÄ¸ß¶È(µ¥Î»:½Ç¶È)
-		0,			//ÌùÍ¼ËùÔÚµÄ²ã
+		texture,	//æè´¨çš„ç¼–å·
+		pGeo,			//è´´å›¾çš„ä¸­å¿ƒç‚¹
+		true,	//ä¸­å¿ƒç‚¹åæ ‡æ˜¯åœ¨ globeåæ ‡ç³»(true) or screenåæ ‡ç³»(false)
+		pGeoDirect,	//è´´å›¾æ–¹å‘çš„å‚è€ƒç‚¹
+		true,		//æ–¹å‘å‚è€ƒç‚¹å®åœ¨ globeåæ ‡ç³»(true) or screenåæ ‡ç³»(false)
+		true,		//å›¾ç‰‡æœå‘å‚è€ƒç‚¹(ture) or èƒŒå‘å‚è€ƒç‚¹(false)
+		360,			//è´´å›¾çš„å®½åº¦(å•ä½:è§’åº¦)
+		180,			//è´´å›¾çš„é«˜åº¦(å•ä½:è§’åº¦)
+		0,			//è´´å›¾æ‰€åœ¨çš„å±‚
 		GLB_TEX_BELT,
-		pClose		//·µ»ØÌùÍ¼ÓÒÉÏ½ÇµÄ×ø±ê
+		pClose		//è¿”å›è´´å›¾å³ä¸Šè§’çš„åæ ‡
 		);
 }
 
 void DrawTexture(
-				 GLuint TextureName,	//²ÄÖÊµÄ±àºÅ
-				 GlbPointGeo pGeo,		//ÌùÍ¼µÄÖĞĞÄµã
-				 bool bPointOnGlobe,	//ÖĞĞÄµã×ø±êÊÇÔÚ globe×ø±êÏµ(true) or screen×ø±êÏµ(false)
-				 GlbPointGeo pGeoDirect,//ÌùÍ¼·½ÏòµÄ²Î¿¼µã
-				 bool bDirOnGlobe,		//·½Ïò²Î¿¼µãÊµÔÚ globe×ø±êÏµ(true) or screen×ø±êÏµ(false)
-				 bool bHeadDirect,		//Í¼Æ¬³¯Ïò²Î¿¼µã(ture) or ±³Ïò²Î¿¼µã(false)
-				 float width,			//ÌùÍ¼µÄ¿í¶È(µ¥Î»:½Ç¶È)
-				 float height,			//ÌùÍ¼µÄ¸ß¶È(µ¥Î»:½Ç¶È)
-				 float layer,			//ÌùÍ¼ËùÔÚµÄ²ã
+				 GLuint TextureName,	//æè´¨çš„ç¼–å·
+				 GlbPointGeo pGeo,		//è´´å›¾çš„ä¸­å¿ƒç‚¹
+				 bool bPointOnGlobe,	//ä¸­å¿ƒç‚¹åæ ‡æ˜¯åœ¨ globeåæ ‡ç³»(true) or screenåæ ‡ç³»(false)
+				 GlbPointGeo pGeoDirect,//è´´å›¾æ–¹å‘çš„å‚è€ƒç‚¹
+				 bool bDirOnGlobe,		//æ–¹å‘å‚è€ƒç‚¹å®åœ¨ globeåæ ‡ç³»(true) or screenåæ ‡ç³»(false)
+				 bool bHeadDirect,		//å›¾ç‰‡æœå‘å‚è€ƒç‚¹(ture) or èƒŒå‘å‚è€ƒç‚¹(false)
+				 float width,			//è´´å›¾çš„å®½åº¦(å•ä½:è§’åº¦)
+				 float height,			//è´´å›¾çš„é«˜åº¦(å•ä½:è§’åº¦)
+				 float layer,			//è´´å›¾æ‰€åœ¨çš„å±‚
 				 GlbTexMode mode,
-				 GlbPoint3d &pClose		//·µ»ØÌùÍ¼ÓÒÉÏ½ÇµÄ×ø±ê
+				 GlbPoint3d &pClose		//è¿”å›è´´å›¾å³ä¸Šè§’çš„åæ ‡
 				 )
 {
 	int nRow = (int)(height/FACET_SCACLE_IN_ANGLE)+1;
@@ -109,7 +109,7 @@ void DrawTexture(
 	float mHeight = height/nRow;
 	float mWidth = width/nCol;
 
-	//¼ÆËãµ±Ç°³ÇÊĞµÄÎ»ÖÃ
+	//è®¡ç®—å½“å‰åŸå¸‚çš„ä½ç½®
 	GlbPoint3d pRect;
 	GlbPoint2d r_pRound;
 	Geo2Rect(pGeo, pRect);
@@ -193,19 +193,19 @@ void DrawTexture(
 				fabs(pRound[1].m_y-pRound[3].m_y) < th &&
 				fabs(pRound[2].m_y-pRound[3].m_y) < th)
 			{
-				glBegin(GL_QUADS);						// »æÖÆÕı·½ĞÎ
+				glBegin(GL_QUADS);						// ç»˜åˆ¶æ­£æ–¹å½¢
 				
 				glTexCoord2f((x) * mRectWidth, (y) * mRectHeight); 
-				glVertex3f(pRound[0].m_x, pRound[0].m_y, layer);				// ×óÉÏ
+				glVertex3f(pRound[0].m_x, pRound[0].m_y, layer);				// å·¦ä¸Š
 
 				glTexCoord2f((x+1) * mRectWidth, (y) * mRectHeight); 
-				glVertex3f(pRound[1].m_x, pRound[1].m_y, layer);				// ÓÒÉÏ
+				glVertex3f(pRound[1].m_x, pRound[1].m_y, layer);				// å³ä¸Š
 				glTexCoord2f((x+1) * mRectWidth, (y+1) * mRectHeight); 
-				glVertex3f(pRound[2].m_x, pRound[2].m_y, layer);				// ÓÒÏÂ
+				glVertex3f(pRound[2].m_x, pRound[2].m_y, layer);				// å³ä¸‹
 
 				
 				glTexCoord2f((x) * mRectWidth, (y+1) * mRectHeight); 
-				glVertex3f(pRound[3].m_x, pRound[3].m_y, layer);				// ×óÏÂ
+				glVertex3f(pRound[3].m_x, pRound[3].m_y, layer);				// å·¦ä¸‹
 				glEnd();
 			}
 		}
@@ -218,7 +218,7 @@ void DrawTexture(
 	}
 	delete [] PointArr;
 
-	//Êä³öpClose
+	//è¾“å‡ºpClose
 	PivotRotPoint(pRect, pivot_v, height/2.0f, pClose);
 	PivotRotPoint(pClose, pivot_h, width/2.0f, pClose);
 }
@@ -236,16 +236,16 @@ void DrawBelt( GLuint TextureName,
 {
 	GlbPoint3d pClose;
 	DrawTexture(
-		TextureName,	//²ÄÖÊµÄ±àºÅ
-		pGeo,			//ÌùÍ¼µÄÖĞĞÄµã
-		bPointOnGlobe,	//ÖĞĞÄµã×ø±êÊÇÔÚ globe×ø±êÏµ(true) or screen×ø±êÏµ(false)
-		pGeoDirect,	//ÌùÍ¼·½ÏòµÄ²Î¿¼µã
-		bDirOnGlobe,		//·½Ïò²Î¿¼µãÊµÔÚ globe×ø±êÏµ(true) or screen×ø±êÏµ(false)
-		bHeadDirect,		//Í¼Æ¬³¯Ïò²Î¿¼µã(ture) or ±³Ïò²Î¿¼µã(false)
-		width,			//ÌùÍ¼µÄ¿í¶È(µ¥Î»:½Ç¶È)
-		height,			//ÌùÍ¼µÄ¸ß¶È(µ¥Î»:½Ç¶È)
-		layer,			//ÌùÍ¼ËùÔÚµÄ²ã
+		TextureName,	//æè´¨çš„ç¼–å·
+		pGeo,			//è´´å›¾çš„ä¸­å¿ƒç‚¹
+		bPointOnGlobe,	//ä¸­å¿ƒç‚¹åæ ‡æ˜¯åœ¨ globeåæ ‡ç³»(true) or screenåæ ‡ç³»(false)
+		pGeoDirect,	//è´´å›¾æ–¹å‘çš„å‚è€ƒç‚¹
+		bDirOnGlobe,		//æ–¹å‘å‚è€ƒç‚¹å®åœ¨ globeåæ ‡ç³»(true) or screenåæ ‡ç³»(false)
+		bHeadDirect,		//å›¾ç‰‡æœå‘å‚è€ƒç‚¹(ture) or èƒŒå‘å‚è€ƒç‚¹(false)
+		width,			//è´´å›¾çš„å®½åº¦(å•ä½:è§’åº¦)
+		height,			//è´´å›¾çš„é«˜åº¦(å•ä½:è§’åº¦)
+		layer,			//è´´å›¾æ‰€åœ¨çš„å±‚
 		GLB_TEX_BELT,
-		pClose		//·µ»ØÌùÍ¼ÓÒÉÏ½ÇµÄ×ø±ê
+		pClose		//è¿”å›è´´å›¾å³ä¸Šè§’çš„åæ ‡
 		);
 }

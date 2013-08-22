@@ -1,4 +1,4 @@
-#include "GlbCore.h"
+﻿#include "GlbCore.h"
 #include "GlbKt.h"
 
 GlbRotmat g_GlobeRotMat;

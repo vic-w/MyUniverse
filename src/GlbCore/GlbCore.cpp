@@ -1,4 +1,4 @@
-#include "stdafx.h"
+ï»¿#include "stdafx.h"
 //#include <windows.h>
 #include "GlbCore.h"
 #include "GlbType.h"
@@ -16,8 +16,8 @@ PFNGLCOMPRESSEDTEXIMAGE2DARBPROC glCompressedTexImage2DARB;
 
 //GlbRotmat g_GlobeRotMat;
 
-#define FACET_SCACLE_IN_ANGLE (6) //Ã¿¸öÃæÆ¬Õ¼µÄ×îĞ¡½Ç¶È
-#define MAX_FACET_SHOW_THRESHOLD (0.4f)//ÄÜÏÔÊ¾µÄ×î´óÃæÆ¬µÄsize
+#define FACET_SCACLE_IN_ANGLE (6) //æ¯ä¸ªé¢ç‰‡å çš„æœ€å°è§’åº¦
+#define MAX_FACET_SHOW_THRESHOLD (0.4f)//èƒ½æ˜¾ç¤ºçš„æœ€å¤§é¢ç‰‡çš„size
 
 GlbImage glbLoadImageFromOpencv(IplImage* pImage, bool bMipmap)
 {
@@ -59,7 +59,7 @@ GlbImage glbLoadImageFromOpencv(IplImage* pImage, bool bMipmap)
     return TextureID;
 }
 
-GlbImage glbLoadImage(const char* filename)  //ÔØÈëÍ¼Ïñ£¨Ö§³Ödds,jpg,bmp,png£©
+GlbImage glbLoadImage(const char* filename)  //è½½å…¥å›¾åƒï¼ˆæ”¯æŒdds,jpg,bmp,pngï¼‰
 {
     int fileNameLen = strlen(filename);
     const char* suffix = filename + fileNameLen - 4;
@@ -127,7 +127,7 @@ GlbImage glbLoadImage(const char* filename)  //ÔØÈëÍ¼Ïñ£¨Ö§³Ödds,jpg,bmp,png£©
         }
         else
         {
-            MessageBox(0, "¶ÁÈ¡DDSÍ¼Ïñ´íÎó£¡", NULL, MB_OK);
+            MessageBox(0, "è¯»å–DDSå›¾åƒé”™è¯¯ï¼", NULL, MB_OK);
             return NULL;
         }
         if( pDDSImageData != NULL )
@@ -148,7 +148,7 @@ GlbImage glbLoadImage(const char* filename)  //ÔØÈëÍ¼Ïñ£¨Ö§³Ödds,jpg,bmp,png£©
 
         if(!pImage)
         {
-            MessageBox(0, "¶ÁÈ¡Í¼Ïñ´íÎó£¡", NULL, MB_OK);
+            MessageBox(0, "è¯»å–å›¾åƒé”™è¯¯ï¼", NULL, MB_OK);
             return false;
         }
         TextureID = glbLoadImageFromOpencv(pImage);
@@ -159,12 +159,12 @@ GlbImage glbLoadImage(const char* filename)  //ÔØÈëÍ¼Ïñ£¨Ö§³Ödds,jpg,bmp,png£©
     }
     else
     {
-        MessageBox(0, "Í¼Ïñ¸ñÊ½²»Ö§³Ö£¡", NULL, MB_OK);
+        MessageBox(0, "å›¾åƒæ ¼å¼ä¸æ”¯æŒï¼", NULL, MB_OK);
         return 0;
     }
 }
 
-void glbReleaseImage(GlbImage* pImage)            //ÊÍ·ÅÍ¼Ïñ
+void glbReleaseImage(GlbImage* pImage)            //é‡Šæ”¾å›¾åƒ
 {
     glDeleteTextures( 1, pImage );
 }
@@ -395,7 +395,7 @@ void GL_Init(HDC &hDC, HGLRC &hRC, HWND hWnd, long winWidth, long winHeight, boo
     //glLoadIdentity();
     //gluPerspective( 45.0f, 640.0f / 480.0f, 0.1f, 100.0f);
 
-    //glLoadIdentity();							                // ÖØÖÃµ±Ç°µÄÄ£ĞÍ¹Û²ì¾ØÕó
+    //glLoadIdentity();							                // é‡ç½®å½“å‰çš„æ¨¡å‹è§‚å¯ŸçŸ©é˜µ
 	glMatrixMode( GL_PROJECTION );
 	//glLoadIdentity();
 	float W_H_Rate = winWidth/(float)winHeight;
@@ -438,7 +438,7 @@ int glbCreateWindow(GlbWindow &window, GlbRect windowSize, char *calibFileName, 
 
     winClass.lpszClassName = "GLB_WINDOWS_CLASS";
     winClass.cbSize        = sizeof(WNDCLASSEX);
-    winClass.style         = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;//¸Ä±ä´°¿Ú´óĞ¡ÖØ»æ£¬·ÖÅäµ¥¶ÀÉÏÏÂÎÄ¸øÃ¿¸ö´°¿Ú
+    winClass.style         = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;//æ”¹å˜çª—å£å¤§å°é‡ç»˜ï¼Œåˆ†é…å•ç‹¬ä¸Šä¸‹æ–‡ç»™æ¯ä¸ªçª—å£
     winClass.lpfnWndProc   = WinProc;
     winClass.hInstance     = hInstance;
     winClass.hIcon         = NULL;
@@ -465,18 +465,18 @@ int glbCreateWindow(GlbWindow &window, GlbRect windowSize, char *calibFileName, 
     }
     HWND hWnd;
     hWnd = CreateWindowEx( 
-        NULL,                   // À©Õ¹´°Ìå·ç¸ñ
-        "GLB_WINDOWS_CLASS",    // ÀàÃû×Ö
-        "MyUniverse",           // ´°¿Ú±êÌâ
-        dwStyle,                // ´°Ìå·ç¸ñÊôĞÔ
-        windowSize.m_left,      // ´°¿ÚÎ»ÖÃ
-        windowSize.m_top,       // ´°¿ÚÎ»ÖÃ
-        windowSize.m_width,     // ´°¿Ú´óĞ¡
-        windowSize.m_height,    // ´°¿Ú´óĞ¡
-        NULL,                   // ÎŞ¸¸´°¿Ú
-        NULL,                   // ÎŞ²Ëµ¥
-        NULL,                   // µ¹ÊıµÚ¶ş¸ö²ÎÊıÓ¦¸ÃÊÇhInstanceÊµÀı
-        NULL                    // ²»ÏòWM_CREATE´«µİÈÎºÎ¶«¶«
+        NULL,                   // æ‰©å±•çª—ä½“é£æ ¼
+        "GLB_WINDOWS_CLASS",    // ç±»åå­—
+        "MyUniverse",           // çª—å£æ ‡é¢˜
+        dwStyle,                // çª—ä½“é£æ ¼å±æ€§
+        windowSize.m_left,      // çª—å£ä½ç½®
+        windowSize.m_top,       // çª—å£ä½ç½®
+        windowSize.m_width,     // çª—å£å¤§å°
+        windowSize.m_height,    // çª—å£å¤§å°
+        NULL,                   // æ— çˆ¶çª—å£
+        NULL,                   // æ— èœå•
+        NULL,                   // å€’æ•°ç¬¬äºŒä¸ªå‚æ•°åº”è¯¥æ˜¯hInstanceå®ä¾‹
+        NULL                    // ä¸å‘WM_CREATEä¼ é€’ä»»ä½•ä¸œä¸œ
         );
 
     if( hWnd == NULL )
@@ -489,8 +489,8 @@ int glbCreateWindow(GlbWindow &window, GlbRect windowSize, char *calibFileName, 
 
     HDC    hDC;
     HGLRC  hRC;
-    GL_Init(hDC, hRC, hWnd, windowSize.m_width, windowSize.m_height, mirror);//OpenGLÏà¹ØµÄ³õÊ¼»¯
-    glbInitDistort(window.m_calib, calibFileName);//´ÓiniÖĞ¶ÁÈ¡¾µÍ·»û±ä²ÎÊı
+    GL_Init(hDC, hRC, hWnd, windowSize.m_width, windowSize.m_height, mirror);//OpenGLç›¸å…³çš„åˆå§‹åŒ–
+    glbInitDistort(window.m_calib, calibFileName);//ä»iniä¸­è¯»å–é•œå¤´ç•¸å˜å‚æ•°
 
     window.m_hWnd = hWnd;
     window.m_hDC = hDC;
@@ -520,9 +520,9 @@ int glbCreateWindowMFC(GlbWindow &window, CRect rect, char* calibFileName, CWnd*
 
     HDC    hDC;
     HGLRC  hRC;
-    GL_Init(hDC, hRC, hWnd, rect.Width(), rect.Height(), mirror);//OpenGLÏà¹ØµÄ³õÊ¼»¯
+    GL_Init(hDC, hRC, hWnd, rect.Width(), rect.Height(), mirror);//OpenGLç›¸å…³çš„åˆå§‹åŒ–
     
-    glbInitDistort(window.m_calib, calibFileName);//´ÓiniÖĞ¶ÁÈ¡¾µÍ·»û±ä²ÎÊı
+    glbInitDistort(window.m_calib, calibFileName);//ä»iniä¸­è¯»å–é•œå¤´ç•¸å˜å‚æ•°
 
     window.m_hWnd = hWnd;
     window.m_hDC = hDC;
@@ -538,8 +538,8 @@ void glbSwitchWindow(GlbWindow window)
 
 void glbClearWindow()
 {
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);			// Çå³ıÆÁÄ»ºÍÉî¶È»º´æ
-	//glLoadIdentity();							                // ÖØÖÃµ±Ç°µÄÄ£ĞÍ¹Û²ì¾ØÕó
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);			// æ¸…é™¤å±å¹•å’Œæ·±åº¦ç¼“å­˜
+	//glLoadIdentity();							                // é‡ç½®å½“å‰çš„æ¨¡å‹è§‚å¯ŸçŸ©é˜µ
 	//glMatrixMode( GL_PROJECTION );
 	//glLoadIdentity();
 	//float W_H_Rate = 640/480.0f;
@@ -649,76 +649,76 @@ void glbDrawTexture(
     float mHeight = height/nRow;
     float mWidth = width/nCol;
 
-    //¼ÆËãÍ¼Ïñ¡°ÖĞĞÄµã¡±µÄÎ»ÖÃ
-    GlbPoint3d pRect;//¡°ÖĞĞÄµã¡±µÄÖ±½Ç×ø±ê
-    glbPointGeo2PointRect(pGeo, pRect);//½«¡°ÖĞĞÄµã¡±×ª»»ÎªÖ±½Ç×ø±ê
-    if(bPointOnGlobe)//Èç¹û¡°ÖĞĞÄµã¡±ÔÚµØÇòÉÏ
+    //è®¡ç®—å›¾åƒâ€œä¸­å¿ƒç‚¹â€çš„ä½ç½®
+    GlbPoint3d pRect;//â€œä¸­å¿ƒç‚¹â€çš„ç›´è§’åæ ‡
+    glbPointGeo2PointRect(pGeo, pRect);//å°†â€œä¸­å¿ƒç‚¹â€è½¬æ¢ä¸ºç›´è§’åæ ‡
+    if(bPointOnGlobe)//å¦‚æœâ€œä¸­å¿ƒç‚¹â€åœ¨åœ°çƒä¸Š
     {
-        glbGlobePoint2ScreenPoint(pRect, GlobeRotMat, pRect);//½«¡°ÖĞĞÄµã¡±×ª»»ÖÁÆÁÄ»ÉÏ
+        glbGlobePoint2ScreenPoint(pRect, GlobeRotMat, pRect);//å°†â€œä¸­å¿ƒç‚¹â€è½¬æ¢è‡³å±å¹•ä¸Š
     }
 
-    GlbPivot pivot_v, pivot_h;//ºáÏòºÍ×İÏòĞı×ªÖá
-    GlbPoint3d pRectDirect;//¡°³¯Ïòµã¡±µÄÖ±½Ç×ø±ê
-    glbPointGeo2PointRect(pGeoDirect, pRectDirect);//½«¡°³¯Ïòµã¡±×ª»»ÎªÖ±½Ç×ø±ê
-    if(bDirOnGlobe)//Èç¹û¡°³¯Ïòµã¡±ÔÚµØÇòÉÏ
+    GlbPivot pivot_v, pivot_h;//æ¨ªå‘å’Œçºµå‘æ—‹è½¬è½´
+    GlbPoint3d pRectDirect;//â€œæœå‘ç‚¹â€çš„ç›´è§’åæ ‡
+    glbPointGeo2PointRect(pGeoDirect, pRectDirect);//å°†â€œæœå‘ç‚¹â€è½¬æ¢ä¸ºç›´è§’åæ ‡
+    if(bDirOnGlobe)//å¦‚æœâ€œæœå‘ç‚¹â€åœ¨åœ°çƒä¸Š
     {
-        glbGlobePoint2ScreenPoint(pRectDirect, GlobeRotMat, pRectDirect);//½«¡°³¯Ïòµã¡±×ª»»ÖÁÆÁÄ»ÉÏ
+        glbGlobePoint2ScreenPoint(pRectDirect, GlobeRotMat, pRectDirect);//å°†â€œæœå‘ç‚¹â€è½¬æ¢è‡³å±å¹•ä¸Š
     }
 
-    glbCreateNormPivot( //Éú³ÉÌùÍ¼×ªÖá
-        pRect, //¡°ÖĞĞÄµã¡±Ö±½Ç×ø±ê
-        pRectDirect, //¡°³¯Ïòµã¡±Ö±½Ç×ø±ê
-        bHeadDirect, //³¯Ïò
-        pivot_h, //Éú³ÉÌùÍ¼ËùĞèµÄ×İÏò×ªÖá£¨ÖáÊÇ×İÏòµÄ£¬Ğı×ª½«ÊÇºáÏòµÄ£©
-        pivot_v  //Éú³ÉÌùÍ¼ËùĞèµÄºáÏò×ªÖá
+    glbCreateNormPivot( //ç”Ÿæˆè´´å›¾è½¬è½´
+        pRect, //â€œä¸­å¿ƒç‚¹â€ç›´è§’åæ ‡
+        pRectDirect, //â€œæœå‘ç‚¹â€ç›´è§’åæ ‡
+        bHeadDirect, //æœå‘
+        pivot_h, //ç”Ÿæˆè´´å›¾æ‰€éœ€çš„çºµå‘è½¬è½´ï¼ˆè½´æ˜¯çºµå‘çš„ï¼Œæ—‹è½¬å°†æ˜¯æ¨ªå‘çš„ï¼‰
+        pivot_v  //ç”Ÿæˆè´´å›¾æ‰€éœ€çš„æ¨ªå‘è½¬è½´
     );
 
-    if(mode == GLB_TEX_BELT)//Èç¹ûÌùÍ¼ÊÇÀàĞÍÊÇ¡°Ìõ·ù¡±
+    if(mode == GLB_TEX_BELT)//å¦‚æœè´´å›¾æ˜¯ç±»å‹æ˜¯â€œæ¡å¹…â€
     {
-        pivot_h = pRectDirect;  //×İÏò×ªÖá = ÇòĞÄºÍ¡°³¯Ïòµã¡±µÄÁ¬Ïß
+        pivot_h = pRectDirect;  //çºµå‘è½¬è½´ = çƒå¿ƒå’Œâ€œæœå‘ç‚¹â€çš„è¿çº¿
     }
 
-    GlbPoint3d **PointArr = new GlbPoint3d*[nRow+1];//ÌùÍ¼¹Ø½ÚµãµÄ¶şÎ¬Êı×é
+    GlbPoint3d **PointArr = new GlbPoint3d*[nRow+1];//è´´å›¾å…³èŠ‚ç‚¹çš„äºŒç»´æ•°ç»„
     for(int x=0; x<=nRow; x++)
     {
         PointArr[x] = new GlbPoint3d[nCol+1];
     }
 
-    float angle_h0 = -width/2.0f; //ÌùÍ¼ÖĞĞÄµãµ½×óÉÏ½ÇµÄĞı×ª½Ç¶È
-    float angle_v0 = -height/2.0f;//ÌùÍ¼ÖĞĞÄµãµ½×óÉÏ½ÇµÄĞı×ª½Ç¶È
-    glPointSize(1.0f);//£¿£¿£¿£¿
+    float angle_h0 = -width/2.0f; //è´´å›¾ä¸­å¿ƒç‚¹åˆ°å·¦ä¸Šè§’çš„æ—‹è½¬è§’åº¦
+    float angle_v0 = -height/2.0f;//è´´å›¾ä¸­å¿ƒç‚¹åˆ°å·¦ä¸Šè§’çš„æ—‹è½¬è§’åº¦
+    glPointSize(1.0f);//ï¼Ÿï¼Ÿï¼Ÿï¼Ÿ
 
-    for(int x=0; x<=nCol; x++)//Ğ´ÈëÌùÍ¼¹Ø½ÚµãµÄ×ø±ê
+    for(int x=0; x<=nCol; x++)//å†™å…¥è´´å›¾å…³èŠ‚ç‚¹çš„åæ ‡
     {
         for(int y=0; y<=nRow; y++)
         {
-            float angle_h = angle_h0 + x * mWidth; //ÖĞĞÄµãµ½´Ë¹Ø½ÚµãµÄĞı×ª½Ç¶È
-            float angle_v = angle_v0 + y * mHeight;//ÖĞĞÄµãµ½´Ë¹Ø½ÚµãµÄĞı×ª½Ç¶È
+            float angle_h = angle_h0 + x * mWidth; //ä¸­å¿ƒç‚¹åˆ°æ­¤å…³èŠ‚ç‚¹çš„æ—‹è½¬è§’åº¦
+            float angle_v = angle_v0 + y * mHeight;//ä¸­å¿ƒç‚¹åˆ°æ­¤å…³èŠ‚ç‚¹çš„æ—‹è½¬è§’åº¦
 
-            GlbPoint3d p_img;//´Ë¹Ø½ÚµãµÄÖ±½Ç×ø±ê
-            glbPivotingPoint(pRect, pivot_v, angle_v, p_img);//ÏÈ´ÓÖĞĞÄµã×İÏòĞı×ª
-            glbPivotingPoint(p_img, pivot_h, angle_h, p_img);//ÔÙºáÏòĞı×ª
-            GlbPoint2d r_pRound;//Ô²±ı×ø±ê
-            glbPointRect2PointRound(p_img, r_pRound, calib);//½«Ö±½Ç×ø±ê×ª»»ÎªÔ²±ı×ø±ê
+            GlbPoint3d p_img;//æ­¤å…³èŠ‚ç‚¹çš„ç›´è§’åæ ‡
+            glbPivotingPoint(pRect, pivot_v, angle_v, p_img);//å…ˆä»ä¸­å¿ƒç‚¹çºµå‘æ—‹è½¬
+            glbPivotingPoint(p_img, pivot_h, angle_h, p_img);//å†æ¨ªå‘æ—‹è½¬
+            GlbPoint2d r_pRound;//åœ†é¥¼åæ ‡
+            glbPointRect2PointRound(p_img, r_pRound, calib);//å°†ç›´è§’åæ ‡è½¬æ¢ä¸ºåœ†é¥¼åæ ‡
 
-            PointArr[y][x].m_x = r_pRound.m_x;//¸³Öµ
+            PointArr[y][x].m_x = r_pRound.m_x;//èµ‹å€¼
             PointArr[y][x].m_y = r_pRound.m_y;
         }
     }
 
-    glLoadIdentity();	//OpenGL²Ù×÷
+    glLoadIdentity();	//OpenGLæ“ä½œ
     glColor3f(1.0f,1.0f,1.0f);
     glBindTexture(GL_TEXTURE_2D, Image);	
 
-    float mRectWidth = 1.0f/nCol;//ËØ²Ä·Ö¸îµÄĞ¡¿é¿í¶È£¨ËØ²ÄµÄ×ø±êÊÇ0µ½1Ö®¼äµÄĞ¡Êı£©
-    float mRectHeight = 1.0f/nRow;//ËØ²Ä·Ö¸îµÄĞ¡¿é¸ß¶È
+    float mRectWidth = 1.0f/nCol;//ç´ æåˆ†å‰²çš„å°å—å®½åº¦ï¼ˆç´ æçš„åæ ‡æ˜¯0åˆ°1ä¹‹é—´çš„å°æ•°ï¼‰
+    float mRectHeight = 1.0f/nRow;//ç´ æåˆ†å‰²çš„å°å—é«˜åº¦
 
-    glBegin(GL_QUADS);						// »æÖÆÕı·½ĞÎ
-    for(int x=0; x<nCol; x++)//¿ªÊ¼ÌùÍ¼
+    glBegin(GL_QUADS);						// ç»˜åˆ¶æ­£æ–¹å½¢
+    for(int x=0; x<nCol; x++)//å¼€å§‹è´´å›¾
     {
         for(int y=0; y<nRow; y++)
         {
-            GlbPoint2d pRound[4];//¿éµÄËÄ¸ö½ÇµÄÔ²±ı×ø±ê
+            GlbPoint2d pRound[4];//å—çš„å››ä¸ªè§’çš„åœ†é¥¼åæ ‡
             pRound[0].m_x = PointArr[y][x].m_x;
             pRound[0].m_y = PointArr[y][x].m_y;
             pRound[1].m_x = PointArr[y][x+1].m_x;
@@ -728,8 +728,8 @@ void glbDrawTexture(
             pRound[3].m_x = PointArr[y+1][x].m_x;
             pRound[3].m_y = PointArr[y+1][x].m_y;
 
-            float th = 0.4f;//¿é´óĞ¡µÄãĞÖµ£¨Ì«´óµÄ¿é½«²»»áÏÔÊ¾£©
-            if( fabs(pRound[0].m_x-pRound[1].m_x) < th &&//ÅĞ¶Ï¿éÊÇ·ñ¹ı´ó
+            float th = 0.4f;//å—å¤§å°çš„é˜ˆå€¼ï¼ˆå¤ªå¤§çš„å—å°†ä¸ä¼šæ˜¾ç¤ºï¼‰
+            if( fabs(pRound[0].m_x-pRound[1].m_x) < th &&//åˆ¤æ–­å—æ˜¯å¦è¿‡å¤§
                 fabs(pRound[0].m_x-pRound[2].m_x) < th &&
                 fabs(pRound[1].m_x-pRound[3].m_x) < th &&
                 fabs(pRound[2].m_x-pRound[3].m_x) < th &&
@@ -740,23 +740,23 @@ void glbDrawTexture(
                 fabs(pRound[2].m_y-pRound[3].m_y) < th)
             {
                 glTexCoord2f((x) * mRectWidth, 1- (y) * mRectHeight); 
-                glVertex3f(pRound[0].m_x, pRound[0].m_y, layer);				// ×óÉÏ
+                glVertex3f(pRound[0].m_x, pRound[0].m_y, layer);				// å·¦ä¸Š
 
                 glTexCoord2f((x+1) * mRectWidth, 1- (y) * mRectHeight); 
-                glVertex3f(pRound[1].m_x, pRound[1].m_y, layer);				// ÓÒÉÏ
+                glVertex3f(pRound[1].m_x, pRound[1].m_y, layer);				// å³ä¸Š
 
                 glTexCoord2f((x+1) * mRectWidth, 1- (y+1) * mRectHeight); 
-                glVertex3f(pRound[2].m_x, pRound[2].m_y, layer);				// ÓÒÏÂ
+                glVertex3f(pRound[2].m_x, pRound[2].m_y, layer);				// å³ä¸‹
 
                 glTexCoord2f((x) * mRectWidth, 1- (y+1) * mRectHeight); 
-                glVertex3f(pRound[3].m_x, pRound[3].m_y, layer);				// ×óÏÂ
+                glVertex3f(pRound[3].m_x, pRound[3].m_y, layer);				// å·¦ä¸‹
             }
         }
     }
-    glEnd();//»æÖÆ½áÊø
+    glEnd();//ç»˜åˆ¶ç»“æŸ
 
 
-    for(int x=0; x<=nRow; x++)//Ïú»Ù´æ·Å¹Ø½Úµã×ø±êµÄ¶şÎ¬Êı×é
+    for(int x=0; x<=nRow; x++)//é”€æ¯å­˜æ”¾å…³èŠ‚ç‚¹åæ ‡çš„äºŒç»´æ•°ç»„
     {
         delete [nCol+1] (PointArr[x]);
         PointArr[x] = NULL;
@@ -764,7 +764,7 @@ void glbDrawTexture(
     delete [nRow+1] PointArr;
     PointArr = NULL;
 
-    //Êä³öpClose
+    //è¾“å‡ºpClose
     glbPivotingPoint(pRect, pivot_v, height/2.0f, pClose);
     glbPivotingPoint(pClose, pivot_h, width/2.0f, pClose);
 }
@@ -795,12 +795,12 @@ void glbDrawLineOnScreen(GlbCalib calib, GlbPointGeo geoStartPoint, GlbPointGeo 
 	int nStep = (int)(angle/FACET_SCACLE_IN_ANGLE)+1;
 	float mAngle = angle/nStep;
 
-	glLoadIdentity();											// ÖØÖÃµ±Ç°µÄÄ£ĞÍ¹Û²ì¾ØÕó
+	glLoadIdentity();											// é‡ç½®å½“å‰çš„æ¨¡å‹è§‚å¯ŸçŸ©é˜µ
 	glBindTexture(GL_TEXTURE_2D, 0);
 	glColor3f(1.0f,1.0f,0.0f);
-	glLineWidth(0.5);//ÉèÖÃ²»±ÕºÏÕÛÏß´óĞ¡  
+	glLineWidth(0.5);//è®¾ç½®ä¸é—­åˆæŠ˜çº¿å¤§å°  
 
-	//¿¹¾â³İ
+	//æŠ—é”¯é½¿
 	glEnable(GL_LINE_SMOOTH);
 	//glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
 	//glEnable(GL_BLEND);
@@ -815,7 +815,7 @@ void glbDrawLineOnScreen(GlbCalib calib, GlbPointGeo geoStartPoint, GlbPointGeo 
 		glbPointRect2PointRound(p3d2, p2d2, calib);
 		if(fabs(p2d1.m_x-p2d2.m_x)<MAX_FACET_SHOW_THRESHOLD && fabs(p2d1.m_y-p2d2.m_y)<MAX_FACET_SHOW_THRESHOLD)
 		{
-			glBegin(GL_LINES);//»­²»±ÕºÏÕÛÏß 
+			glBegin(GL_LINES);//ç”»ä¸é—­åˆæŠ˜çº¿ 
 			glVertex3f(p2d1.m_x,p2d1.m_y, (GLfloat)layer);
 			glVertex3f(p2d2.m_x,p2d2.m_y, (GLfloat)layer);
 			glEnd();
@@ -833,19 +833,19 @@ void glbDrawGlobe(GlbImage Image, GlbRotmat GlobeRotMat, GlbCalib calib)
 	pGeoDirect.m_lng = 0;
 
 	glbDrawTexture(
-		Image,	//²ÄÖÊµÄ±àºÅ
+		Image,	//æè´¨çš„ç¼–å·
         GlobeRotMat,
         calib,
-		pGeo,			//ÌùÍ¼µÄÖĞĞÄµã
-		true,	//ÖĞĞÄµã×ø±êÊÇÔÚ globe×ø±êÏµ(true) or screen×ø±êÏµ(false)
-		pGeoDirect,	//ÌùÍ¼·½ÏòµÄ²Î¿¼µã
-		true,		//·½Ïò²Î¿¼µãÊµÔÚ globe×ø±êÏµ(true) or screen×ø±êÏµ(false)
-		true,		//Í¼Æ¬³¯Ïò²Î¿¼µã(ture) or ±³Ïò²Î¿¼µã(false)
-		360,			//ÌùÍ¼µÄ¿í¶È(µ¥Î»:½Ç¶È)
-		180,			//ÌùÍ¼µÄ¸ß¶È(µ¥Î»:½Ç¶È)
-		0,			//ÌùÍ¼ËùÔÚµÄ²ã
+		pGeo,			//è´´å›¾çš„ä¸­å¿ƒç‚¹
+		true,	//ä¸­å¿ƒç‚¹åæ ‡æ˜¯åœ¨ globeåæ ‡ç³»(true) or screenåæ ‡ç³»(false)
+		pGeoDirect,	//è´´å›¾æ–¹å‘çš„å‚è€ƒç‚¹
+		true,		//æ–¹å‘å‚è€ƒç‚¹å®åœ¨ globeåæ ‡ç³»(true) or screenåæ ‡ç³»(false)
+		true,		//å›¾ç‰‡æœå‘å‚è€ƒç‚¹(ture) or èƒŒå‘å‚è€ƒç‚¹(false)
+		360,			//è´´å›¾çš„å®½åº¦(å•ä½:è§’åº¦)
+		180,			//è´´å›¾çš„é«˜åº¦(å•ä½:è§’åº¦)
+		0,			//è´´å›¾æ‰€åœ¨çš„å±‚
 		GLB_TEX_BELT,
-		pClose		//·µ»ØÌùÍ¼ÓÒÉÏ½ÇµÄ×ø±ê
+		pClose		//è¿”å›è´´å›¾å³ä¸Šè§’çš„åæ ‡
 		);
 }
 
@@ -863,19 +863,19 @@ void glbDrawBelt(GlbImage Image,
 {
 	GlbPoint3d pClose;
 	glbDrawTexture(
-		Image,	//²ÄÖÊµÄ±àºÅ
+		Image,	//æè´¨çš„ç¼–å·
         GlobeRotMat,
         calib,
-		pGeo,			//ÌùÍ¼µÄÖĞĞÄµã
-		bPointOnGlobe,	//ÖĞĞÄµã×ø±êÊÇÔÚ globe×ø±êÏµ(true) or screen×ø±êÏµ(false)
-		pGeoDirect,	//ÌùÍ¼·½ÏòµÄ²Î¿¼µã
-		bDirOnGlobe,		//·½Ïò²Î¿¼µãÊµÔÚ globe×ø±êÏµ(true) or screen×ø±êÏµ(false)
-		bHeadDirect,		//Í¼Æ¬³¯Ïò²Î¿¼µã(ture) or ±³Ïò²Î¿¼µã(false)
-		width,			//ÌùÍ¼µÄ¿í¶È(µ¥Î»:½Ç¶È)
-		height,			//ÌùÍ¼µÄ¸ß¶È(µ¥Î»:½Ç¶È)
-		layer,			//ÌùÍ¼ËùÔÚµÄ²ã
+		pGeo,			//è´´å›¾çš„ä¸­å¿ƒç‚¹
+		bPointOnGlobe,	//ä¸­å¿ƒç‚¹åæ ‡æ˜¯åœ¨ globeåæ ‡ç³»(true) or screenåæ ‡ç³»(false)
+		pGeoDirect,	//è´´å›¾æ–¹å‘çš„å‚è€ƒç‚¹
+		bDirOnGlobe,		//æ–¹å‘å‚è€ƒç‚¹å®åœ¨ globeåæ ‡ç³»(true) or screenåæ ‡ç³»(false)
+		bHeadDirect,		//å›¾ç‰‡æœå‘å‚è€ƒç‚¹(ture) or èƒŒå‘å‚è€ƒç‚¹(false)
+		width,			//è´´å›¾çš„å®½åº¦(å•ä½:è§’åº¦)
+		height,			//è´´å›¾çš„é«˜åº¦(å•ä½:è§’åº¦)
+		layer,			//è´´å›¾æ‰€åœ¨çš„å±‚
 		GLB_TEX_BELT,
-		pClose		//·µ»ØÌùÍ¼ÓÒÉÏ½ÇµÄ×ø±ê
+		pClose		//è¿”å›è´´å›¾å³ä¸Šè§’çš„åæ ‡
 		);
 }
 

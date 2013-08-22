@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 //#include "windows.h"
 #include <vector>
 #include "GlbRot.h"
@@ -47,39 +47,39 @@ public:
     GlbCalib m_calib;
 };
 
-GLBCORE_API int glbDetectScreen(vector<GlbRect> &screens);//¼ì²âÆÁÄ»µÄ¸öÊı¼°·Ö±æÂÊ£¬·µ»ØÆÁÄ»¸öÊı
+GLBCORE_API int glbDetectScreen(vector<GlbRect> &screens);//æ£€æµ‹å±å¹•çš„ä¸ªæ•°åŠåˆ†è¾¨ç‡ï¼Œè¿”å›å±å¹•ä¸ªæ•°
 
-GLBCORE_API GlbImage glbLoadImage(const char* filename);    //ÔØÈëÍ¼Ïñ£¨Ö§³Ödds,jpg,bmp,png£©
-GLBCORE_API GlbImage glbLoadImageFromOpencv(IplImage* pImage, bool bMipmap = true);       //´ÓOpenCVÍ¼Ïñ×ª»»
-GLBCORE_API void glbReleaseImage(GlbImage* pImage);         //ÊÍ·ÅÍ¼Ïñ
+GLBCORE_API GlbImage glbLoadImage(const char* filename);    //è½½å…¥å›¾åƒï¼ˆæ”¯æŒdds,jpg,bmp,pngï¼‰
+GLBCORE_API GlbImage glbLoadImageFromOpencv(IplImage* pImage, bool bMipmap = true);       //ä»OpenCVå›¾åƒè½¬æ¢
+GLBCORE_API void glbReleaseImage(GlbImage* pImage);         //é‡Šæ”¾å›¾åƒ
 
 GLBCORE_API int glbCreateWindow(GlbWindow &window, GlbRect windowSize, char *calibFileName, bool fullscreen, bool mirror, HINSTANCE hInstance=0);
 GLBCORE_API int glbCreateWindowMFC(GlbWindow &window, CRect rect, char *calibFileName, CWnd* parentWindow, bool mirror);
 GLBCORE_API void glbSwitchWindow(GlbWindow window);
 GLBCORE_API void glbDestoryWindow(GlbWindow window, HINSTANCE hInstance=0);
 
-GLBCORE_API void glbClearWindow();                                    //Çå¿Õ´°¿ÚÄÚÈİ
-GLBCORE_API void glbDrawImage(GlbImage image);              //ÔÚ´°¿ÚÖĞ»­Í¼,µ«²¢Ã»ÓĞÏÔÊ¾
+GLBCORE_API void glbClearWindow();                                    //æ¸…ç©ºçª—å£å†…å®¹
+GLBCORE_API void glbDrawImage(GlbImage image);              //åœ¨çª—å£ä¸­ç”»å›¾,ä½†å¹¶æ²¡æœ‰æ˜¾ç¤º
 
-GLBCORE_API int glbUpdateWindow(GlbWindow window, int ms);                    //¸üĞÂ´°¿ÚÖĞÄÚÈİ,·µ»Ø0±íÊ¾´°¿ÚÍË³ö£¬·µ»Ø1±íÊ¾Õı³£ÔËĞĞ
+GLBCORE_API int glbUpdateWindow(GlbWindow window, int ms);                    //æ›´æ–°çª—å£ä¸­å†…å®¹,è¿”å›0è¡¨ç¤ºçª—å£é€€å‡ºï¼Œè¿”å›1è¡¨ç¤ºæ­£å¸¸è¿è¡Œ
 
 GLBCORE_API void glbDrawLineOnGlobe(GlbPointGeo geoStartPoint, GlbRotmat GlobeRotMat, GlbCalib calib, GlbPointGeo geoEndPoint, int layer);
 GLBCORE_API void glbDrawLineOnScreen(GlbCalib calib, GlbPointGeo geoStartPoint, GlbPointGeo geoEndPoint, int layer);
 GLBCORE_API void glbDrawGlobe(GlbImage Image, GlbRotmat GlobeRotMat, GlbCalib calib);
 GLBCORE_API void glbDrawTexture(
-                    GlbImage Image,     //²ÄÖÊµÄ±àºÅ
+                    GlbImage Image,     //æè´¨çš„ç¼–å·
                     GlbRotmat GlobeRotMat,
                     GlbCalib calib,
-                    GlbPointGeo pGeo,       //ÌùÍ¼µÄÖĞĞÄµã
-                    bool bPointOnGlobe,     //ÖĞĞÄµã×ø±êÊÇÔÚ globe×ø±êÏµ(true) or screen×ø±êÏµ(false)
-                    GlbPointGeo pGeoDirect, //ÌùÍ¼·½ÏòµÄ²Î¿¼µã
-                    bool bDirOnGlobe,       //·½Ïò²Î¿¼µãÊµÔÚ globe×ø±êÏµ(true) or screen×ø±êÏµ(false)
-                    bool bHeadDirect,       //Í¼Æ¬³¯Ïò²Î¿¼µã(ture) or ±³Ïò²Î¿¼µã(false)
-                    float width,            //ÌùÍ¼µÄ¿í¶È(µ¥Î»:½Ç¶È)
-                    float height,           //ÌùÍ¼µÄ¸ß¶È(µ¥Î»:½Ç¶È)
-                    float layer,            //ÌùÍ¼ËùÔÚµÄ²ã
+                    GlbPointGeo pGeo,       //è´´å›¾çš„ä¸­å¿ƒç‚¹
+                    bool bPointOnGlobe,     //ä¸­å¿ƒç‚¹åæ ‡æ˜¯åœ¨ globeåæ ‡ç³»(true) or screenåæ ‡ç³»(false)
+                    GlbPointGeo pGeoDirect, //è´´å›¾æ–¹å‘çš„å‚è€ƒç‚¹
+                    bool bDirOnGlobe,       //æ–¹å‘å‚è€ƒç‚¹å®åœ¨ globeåæ ‡ç³»(true) or screenåæ ‡ç³»(false)
+                    bool bHeadDirect,       //å›¾ç‰‡æœå‘å‚è€ƒç‚¹(ture) or èƒŒå‘å‚è€ƒç‚¹(false)
+                    float width,            //è´´å›¾çš„å®½åº¦(å•ä½:è§’åº¦)
+                    float height,           //è´´å›¾çš„é«˜åº¦(å•ä½:è§’åº¦)
+                    float layer,            //è´´å›¾æ‰€åœ¨çš„å±‚
                     GlbTexMode mode,
-                    GlbPoint3d &pClose      //·µ»ØÌùÍ¼ÓÒÉÏ½ÇµÄ×ø±ê
+                    GlbPoint3d &pClose      //è¿”å›è´´å›¾å³ä¸Šè§’çš„åæ ‡
 );
 
 GLBCORE_API void glbDrawBelt(

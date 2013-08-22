@@ -1,4 +1,4 @@
-#include "stdafx.h"
+ï»¿#include "stdafx.h"
 #include "IDtest.h"
 #include <windows.h>
 #include "md5.h"
@@ -18,13 +18,13 @@ CString _getWmiInfo(IWbemClassObject *pClassObject, LPCTSTR lpszName)
 			if( pClassObject->Get( bstrName , 0 , &varValue , NULL , 0 ) == S_OK )
 			{
 
-				// ¶Ô²»Í¬µÄÊı¾İÀàĞÍ·Ö±ğ´¦Àí
-				if( varValue.vt == VT_BSTR )	//×Ö·û´®
+				// å¯¹ä¸åŒçš„æ•°æ®ç±»å‹åˆ†åˆ«å¤„ç†
+				if( varValue.vt == VT_BSTR )	//å­—ç¬¦ä¸²
 				{
 					str = CString(varValue.bstrVal) ;
 				}
 				else 
-					if( varValue.vt == VT_ARRAY ) //Êı×é
+					if( varValue.vt == VT_ARRAY ) //æ•°ç»„
 					{
 						long iLowBound = 0 , iUpBound = 0 ;
                         SafeArrayGetLBound( varValue.parray , 1 , &iLowBound ) ;
@@ -93,7 +93,7 @@ CString _getWmiInfo(IWbemClassObject *pClassObject, LPCTSTR lpszName)
 						}
 					}
 					
-					// ´òÓ¡³öÓ²¼şĞÅÏ¢
+					// æ‰“å°å‡ºç¡¬ä»¶ä¿¡æ¯
 					//cout<<CString(bstrName)<<" = "<<str<<endl;
 			}
 			else
@@ -106,17 +106,17 @@ CString _getWmiInfo(IWbemClassObject *pClassObject, LPCTSTR lpszName)
 CString GetSeiralNumberOrID( LPCTSTR lpszClass, LPCTSTR lpszName)
 {
 	CString str("");
-	// ³õÊ¼»¯COMÄ£¿é
+	// åˆå§‹åŒ–COMæ¨¡å—
     CoUninitialize();
     HRESULT hres= CoInitialize(NULL);
 	if ( hres != S_OK)
 		return str;	
 
-    // »ñÈ¡·ÃÎÊ WMI È¨ÏŞ
+    // è·å–è®¿é—® WMI æƒé™
 
     if( CoInitializeSecurity( NULL, -1, NULL, NULL, RPC_C_AUTHN_LEVEL_PKT, RPC_C_IMP_LEVEL_IMPERSONATE,NULL, EOAC_NONE, 0 ) == S_OK )
 	{
-		// Í¨¹ı IWbemLocator ºÍ IWbemServices ÕâÁ½¸ö COM ½Ó¿Ú·ÃÎÊ WMI, »ñÈ¡ÏµÍ³ĞÅÏ¢
+		// é€šè¿‡ IWbemLocator å’Œ IWbemServices è¿™ä¸¤ä¸ª COM æ¥å£è®¿é—® WMI, è·å–ç³»ç»Ÿä¿¡æ¯
 		
 		CComPtr<IWbemLocator> spWbemLocator ;
 		if( spWbemLocator.CoCreateInstance( CLSID_WbemAdministrativeLocator , 0 , CLSCTX_INPROC_SERVER| CLSCTX_LOCAL_SERVER ) == S_OK )
@@ -124,7 +124,7 @@ CString GetSeiralNumberOrID( LPCTSTR lpszClass, LPCTSTR lpszName)
 			CComPtr<IWbemServices> spWbemServices ;
 			if( spWbemLocator->ConnectServer( L"root\\cimv2" , NULL, NULL, NULL, 0, NULL, NULL, &spWbemServices ) == S_OK )
 			{
-				// ¼ìË÷Ö¸¶¨ĞÅÏ¢
+				// æ£€ç´¢æŒ‡å®šä¿¡æ¯
 
 				USES_CONVERSION ;
 				CComPtr<IEnumWbemClassObject> spEnumWbemClassObject ;
@@ -168,16 +168,16 @@ bool ID_test(const char* license)
     CString ProcessorID = GetSeiralNumberOrID("Win32_Processor", "ProcessorID");
     CString MemoryID = GetSeiralNumberOrID("Win32_PhysicalMemory", "SerialNumber");
     CString HardDiskID = GetSeiralNumberOrID("Win32_DiskDrive", "PNPDeviceID");
-    cout << "BoardID: " << BoardID << endl;	// µ×°å
+    cout << "BoardID: " << BoardID << endl;	// åº•æ¿
     cout << "ProcessorID: " << ProcessorID << endl;	// CPU
-    cout << "MemoryID: " << MemoryID << endl;	// ÄÚ´æ
-    cout << "HardDiskID: " << HardDiskID << endl;	// Ó²ÅÌ
+    cout << "MemoryID: " << MemoryID << endl;	// å†…å­˜
+    cout << "HardDiskID: " << HardDiskID << endl;	// ç¡¬ç›˜
 
     CString MachineID = BoardID + ProcessorID + MemoryID + HardDiskID;
     
     if(MachineID == "")
     {
-		AfxMessageBox("Èí¼şÃ»ÓĞÕıÈ·µÄ°²×°µ½ÄúµÄ¼ÆËã»ú£¬ÇëÓëÎÒÈí¼şÌá¹©ÉÌÁªÏµ");
+		AfxMessageBox("è½¯ä»¶æ²¡æœ‰æ­£ç¡®çš„å®‰è£…åˆ°æ‚¨çš„è®¡ç®—æœºï¼Œè¯·ä¸æˆ‘è½¯ä»¶æä¾›å•†è”ç³»");
     }
 	char *ID_CODE = CreateKey(MachineID.GetBuffer());
 	ID_CODE[10] = '\0';
@@ -186,8 +186,8 @@ bool ID_test(const char* license)
 	if(strcmp(LICENSE_KEY,license) != 0)
 	{
 		char msg[200];
-		sprintf_s(msg, 100, "ÄúÊ¹ÓÃµÄÈí¼şÎ´Í¨¹ıÑéÖ¤£¬Çë½«ÏÂÁĞÓÃ»§ÂëÌá¹©¸øÀ¶±¦Ê¯ÇòÏÔ¿Æ¼¼£º%s", ID_CODE);
-		MessageBox(NULL, msg,"Èí¼şĞèÒª×¢²á",MB_OK|MB_ICONEXCLAMATION);
+		sprintf_s(msg, 100, "æ‚¨ä½¿ç”¨çš„è½¯ä»¶æœªé€šè¿‡éªŒè¯ï¼Œè¯·å°†ä¸‹åˆ—ç”¨æˆ·ç æä¾›ç»™è“å®çŸ³çƒæ˜¾ç§‘æŠ€ï¼š%s", ID_CODE);
+		MessageBox(NULL, msg,"è½¯ä»¶éœ€è¦æ³¨å†Œ",MB_OK|MB_ICONEXCLAMATION);
         delete ID_CODE;
         delete LICENSE_KEY;
 		return 0;

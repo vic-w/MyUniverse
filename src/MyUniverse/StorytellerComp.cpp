@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+﻿#include "StdAfx.h"
 #include "StorytellerComp.h"
 
 void StorytellerEular2GlobeEular(GlbEularAngle storytellerEular, GlbEularAngle offsetEular, GlbEularAngle &globeEular)

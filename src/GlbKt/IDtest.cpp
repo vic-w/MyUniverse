@@ -1,4 +1,4 @@
-#include "stdafx.h"
+ï»¿#include "stdafx.h"
 #include "IDtest.h"
 #include <windows.h>
 #include "md5.h"
@@ -215,7 +215,7 @@ void ID_test(const char* license)
 	if(strcmp(LICENSE_KEY,license) != 0)
 	{
 		char msg[200];
-		sprintf_s(msg, 100, "ÄúÊ¹ÓÃµÄÈí¼şÎ´Í¨¹ıÑéÖ¤£¬Çë½«ÏÂÁĞÓÃ»§ÂëÌá¹©¸øÀ¶±¦Ê¯ÇòÏÔ¿Æ¼¼£º%s", ID_CODE);
+		sprintf_s(msg, 100, "æ‚¨ä½¿ç”¨çš„è½¯ä»¶æœªé€šè¿‡éªŒè¯ï¼Œè¯·å°†ä¸‹åˆ—ç”¨æˆ·ç æä¾›ç»™è“å®çŸ³çƒæ˜¾ç§‘æŠ€ï¼š%s", ID_CODE);
 		MessageBox(NULL, msg,"ERROR",MB_OK|MB_ICONEXCLAMATION);
 		delete pSN;
 		delete pSRC;

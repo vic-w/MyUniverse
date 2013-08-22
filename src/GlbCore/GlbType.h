@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "gl.h"
 #include "glu.h"
 #include "glaux.h"
@@ -29,7 +29,7 @@ struct DDS_IMAGE_DATA
 #define FOURCC_DXT4  (MAKEFOURCC('D','X','T','4'))
 #define FOURCC_DXT5  (MAKEFOURCC('D','X','T','5'))
 
-typedef struct _DDCOLORKEY //Õâ¸ö½á¹¹Ìå±¾À´ÔÚddraw.hÖĞ
+typedef struct _DDCOLORKEY //è¿™ä¸ªç»“æ„ä½“æœ¬æ¥åœ¨ddraw.hä¸­
 {
     DWORD       dwColorSpaceLowValue;   // low boundary of color space that is to
                                         // be treated as Color Key, inclusive
@@ -37,7 +37,7 @@ typedef struct _DDCOLORKEY //Õâ¸ö½á¹¹Ìå±¾À´ÔÚddraw.hÖĞ
                                         // to be treated as Color Key, inclusive
 } DDCOLORKEY;
 
-typedef struct _DDPIXELFORMAT//Õâ¸ö½á¹¹Ìå±¾À´ÔÚddraw.hÖĞ
+typedef struct _DDPIXELFORMAT//è¿™ä¸ªç»“æ„ä½“æœ¬æ¥åœ¨ddraw.hä¸­
 {
     DWORD       dwSize;                 // size of structure
     DWORD       dwFlags;                // pixel format flags
@@ -92,7 +92,7 @@ typedef struct _DDPIXELFORMAT//Õâ¸ö½á¹¹Ìå±¾À´ÔÚddraw.hÖĞ
     };
 } DDPIXELFORMAT;
 
-typedef struct _DDSCAPS2//Õâ¸ö½á¹¹Ìå±¾À´ÔÚddraw.hÖĞ
+typedef struct _DDSCAPS2//è¿™ä¸ªç»“æ„ä½“æœ¬æ¥åœ¨ddraw.hä¸­
 {
     DWORD       dwCaps;         // capabilities of surface wanted
     DWORD       dwCaps2;
@@ -104,7 +104,7 @@ typedef struct _DDSCAPS2//Õâ¸ö½á¹¹Ìå±¾À´ÔÚddraw.hÖĞ
     };
 } DDSCAPS2;
 
-typedef struct _DDSURFACEDESC2 //Õâ¸ö½á¹¹Ìå±¾À´ÔÚddraw.hÖĞ
+typedef struct _DDSURFACEDESC2 //è¿™ä¸ªç»“æ„ä½“æœ¬æ¥åœ¨ddraw.hä¸­
 {
     DWORD               dwSize;                 // size of the DDSURFACEDESC structure
     DWORD               dwFlags;                // determines what fields are valid

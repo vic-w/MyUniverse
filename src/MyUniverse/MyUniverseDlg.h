@@ -1,5 +1,5 @@
-
-// MyUniverseDlg.h : Í·ÎÄ¼ş
+ï»¿
+// MyUniverseDlg.h : å¤´æ–‡ä»¶
 //
 
 #pragma once
@@ -11,25 +11,25 @@
 #define GET_DATA 1 
 #define PUT_DATA 0
 
-//×Ô¶¨ÒåÏûÏ¢£¨¸üĞÂslider_rotz),¹©TimingThreadµ÷ÓÃ
+//è‡ªå®šä¹‰æ¶ˆæ¯ï¼ˆæ›´æ–°slider_rotz),ä¾›TimingThreadè°ƒç”¨
 #define WM_GLB_UPDATEDATA (WM_USER+100)
 #define WM_GLB_UDPREADONEPAGE (WM_USER+101)
 
-// CMyUniverseDlg ¶Ô»°¿ò
+// CMyUniverseDlg å¯¹è¯æ¡†
 class CMyUniverseDlg : public CDialogEx
 {
-// ¹¹Ôì
+// æ„é€ 
 public:
-	CMyUniverseDlg(CWnd* pParent = NULL);	// ±ê×¼¹¹Ôìº¯Êı
+	CMyUniverseDlg(CWnd* pParent = NULL);	// æ ‡å‡†æ„é€ å‡½æ•°
     ~CMyUniverseDlg();
-// ¶Ô»°¿òÊı¾İ
+// å¯¹è¯æ¡†æ•°æ®
 	enum { IDD = IDD_MYUNIVERSE_DIALOG };
 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV Ö§³Ö
+	virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV æ”¯æŒ
 
 
-// ÊµÏÖ
+// å®ç°
 private:
     CString GetPageStructPath(CString StoryPath, CString ChapterName);
     void ReadOnePage(bool bUpdateDataFromUI);
@@ -43,13 +43,13 @@ private:
 protected:
 	HICON m_hIcon;
 
-	// Éú³ÉµÄÏûÏ¢Ó³Éäº¯Êı
+	// ç”Ÿæˆçš„æ¶ˆæ¯æ˜ å°„å‡½æ•°
 	virtual BOOL OnInitDialog();
 	afx_msg void OnSysCommand(UINT nID, LPARAM lParam);
 	afx_msg void OnPaint();
 	afx_msg HCURSOR OnQueryDragIcon();
-    LRESULT OnGlbUpdateData(WPARAM wParam, LPARAM lParam);//×Ô¶¨ÒåÏûÏ¢µÄÏìÓ¦º¯Êı
-    LRESULT OnGlbUdpReadOnePage(WPARAM wParam, LPARAM lParam);//×Ô¶¨ÒåÏûÏ¢µÄÏìÓ¦º¯Êı
+    LRESULT OnGlbUpdateData(WPARAM wParam, LPARAM lParam);//è‡ªå®šä¹‰æ¶ˆæ¯çš„å“åº”å‡½æ•°
+    LRESULT OnGlbUdpReadOnePage(WPARAM wParam, LPARAM lParam);//è‡ªå®šä¹‰æ¶ˆæ¯çš„å“åº”å‡½æ•°
 	DECLARE_MESSAGE_MAP()
 public:
     afx_msg void OnBnClickedOk();
@@ -69,12 +69,12 @@ public:
     afx_msg void OnCbnSelchangeComboChapter();
     afx_msg void OnBnClickedButtonBrowse();
     afx_msg void OnCbnSelchangeComboPage();
-    CComboBox m_chapter_select; //ÕÂ½Ú£¬ÏÂÀ­Ñ¡Ôñ¿ò
-    CComboBox m_page_select;    //Ò³Ãæ£¬ÏÂÀ­Ñ¡Ôñ¿ò
-    CString m_story_path;       //ÕÂ½ÚµÄ×ÜÄ¿Â¼Ãû
-    CString m_chapter_value;    //ÕÂ½ÚµÄ×ÓÄ¿Â¼Ãû
-    CString m_page_struct_path; //Ò³ÃæÎÄ¼şµÄÄ¿Â¼
-    CString m_page_value;       //Ò³ÃæÎÄ¼şµÄÎÄ¼şÃû£¨»ò±ğÃû£©
+    CComboBox m_chapter_select; //ç« èŠ‚ï¼Œä¸‹æ‹‰é€‰æ‹©æ¡†
+    CComboBox m_page_select;    //é¡µé¢ï¼Œä¸‹æ‹‰é€‰æ‹©æ¡†
+    CString m_story_path;       //ç« èŠ‚çš„æ€»ç›®å½•å
+    CString m_chapter_value;    //ç« èŠ‚çš„å­ç›®å½•å
+    CString m_page_struct_path; //é¡µé¢æ–‡ä»¶çš„ç›®å½•
+    CString m_page_value;       //é¡µé¢æ–‡ä»¶çš„æ–‡ä»¶åï¼ˆæˆ–åˆ«åï¼‰
     afx_msg void OnBnClickedButtonStep();
     afx_msg void OnBnClickedButtonPlay();
     afx_msg void OnBnClickedButtonPause();

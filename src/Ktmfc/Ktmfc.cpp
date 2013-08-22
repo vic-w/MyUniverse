@@ -1,4 +1,4 @@
-// Ktmfc.cpp : ¶¨Òå DLL µÄ³õÊ¼»¯Àı³Ì¡£
+ï»¿// Ktmfc.cpp : å®šä¹‰ DLL çš„åˆå§‹åŒ–ä¾‹ç¨‹ã€‚
 //
 
 #include "stdafx.h"
@@ -37,4 +37,3 @@ KT_API bool glbKtMFC(void)
 
 	return ID_test(BiosID);
 }
-

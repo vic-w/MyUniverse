@@ -1,13 +1,13 @@
-// Ktmfc.h : Ktmfc DLL µÄÖ÷Í·ÎÄ¼ş
+ï»¿// Ktmfc.h : Ktmfc DLL çš„ä¸»å¤´æ–‡ä»¶
 //
 
 #pragma once
 
 //#ifndef __AFXWIN_H__
-//	#error "ÔÚ°üº¬´ËÎÄ¼şÖ®Ç°°üº¬¡°stdafx.h¡±ÒÔÉú³É PCH ÎÄ¼ş"
+//	#error "åœ¨åŒ…å«æ­¤æ–‡ä»¶ä¹‹å‰åŒ…å«â€œstdafx.hâ€ä»¥ç”Ÿæˆ PCH æ–‡ä»¶"
 //#endif
 
-#include "resource.h"		// Ö÷·ûºÅ
+#include "resource.h"		// ä¸»ç¬¦å·
 
 #ifdef KT_EXPORTS
 #define KT_API __declspec(dllexport)

@@ -1,5 +1,5 @@
-
-// MyUniverseDlg.cpp : ÊµÏÖÎÄ¼ş
+ï»¿
+// MyUniverseDlg.cpp : å®ç°æ–‡ä»¶
 //
 
 #include "stdafx.h"
@@ -37,20 +37,20 @@ int g_bUdpThreadActive;
 
 char* u2g(char *inbuf);
 
-// ÓÃÓÚÓ¦ÓÃ³ÌĞò¡°¹ØÓÚ¡±²Ëµ¥ÏîµÄ CAboutDlg ¶Ô»°¿ò
+// ç”¨äºåº”ç”¨ç¨‹åºâ€œå…³äºâ€èœå•é¡¹çš„ CAboutDlg å¯¹è¯æ¡†
 
 class CAboutDlg : public CDialogEx
 {
 public:
     CAboutDlg();
 
-    // ¶Ô»°¿òÊı¾İ
+    // å¯¹è¯æ¡†æ•°æ®
     enum { IDD = IDD_ABOUTBOX };
 
 protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV Ö§³Ö
+    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV æ”¯æŒ
 
-    // ÊµÏÖ
+    // å®ç°
 protected:
     DECLARE_MESSAGE_MAP()
 };
@@ -68,7 +68,7 @@ BEGIN_MESSAGE_MAP(CAboutDlg, CDialogEx)
 END_MESSAGE_MAP()
 
 
-// CMyUniverseDlg ¶Ô»°¿ò
+// CMyUniverseDlg å¯¹è¯æ¡†
 
 
 
@@ -149,7 +149,7 @@ BEGIN_MESSAGE_MAP(CMyUniverseDlg, CDialogEx)
     ON_EN_CHANGE(IDC_EDIT_FRAME_RATE, &CMyUniverseDlg::OnEnChangeEditFrameRate)
     ON_BN_CLICKED(IDC_CHECK_AUTO_ROT, &CMyUniverseDlg::OnBnClickedCheckAutoRot)
 
-    //×Ô¶¨ÒåÏûÏ¢
+    //è‡ªå®šä¹‰æ¶ˆæ¯
     ON_MESSAGE(WM_GLB_UPDATEDATA,OnGlbUpdateData)  
     ON_MESSAGE(WM_GLB_UDPREADONEPAGE, OnGlbUdpReadOnePage)
     ON_EN_CHANGE(IDC_m_rotationRate, &CMyUniverseDlg::OnEnChangemrotationrate)
@@ -158,19 +158,19 @@ BEGIN_MESSAGE_MAP(CMyUniverseDlg, CDialogEx)
 END_MESSAGE_MAP()
 
 
-// CMyUniverseDlg ÏûÏ¢´¦Àí³ÌĞò
+// CMyUniverseDlg æ¶ˆæ¯å¤„ç†ç¨‹åº
 
 BOOL CMyUniverseDlg::OnInitDialog()
 {
-    InitializeCriticalSection(&g_StoryPage_CS);//³õÊ¼»¯ÁÙ½çÇø
-    InitializeCriticalSection(&g_GlobeRotMat_CS);//³õÊ¼»¯ÁÙ½çÇø
-    g_bMainThreadActive = 1; //Ö÷Ïß³Ì¿ªÊ¼»î¶¯£¬½áÊøÊÇÔÚ~CMyUniverseDlg()º¯ÊıÖĞ
+    InitializeCriticalSection(&g_StoryPage_CS);//åˆå§‹åŒ–ä¸´ç•ŒåŒº
+    InitializeCriticalSection(&g_GlobeRotMat_CS);//åˆå§‹åŒ–ä¸´ç•ŒåŒº
+    g_bMainThreadActive = 1; //ä¸»çº¿ç¨‹å¼€å§‹æ´»åŠ¨ï¼Œç»“æŸæ˜¯åœ¨~CMyUniverseDlg()å‡½æ•°ä¸­
 
     CDialogEx::OnInitDialog();
 
-    // ½«¡°¹ØÓÚ...¡±²Ëµ¥ÏîÌí¼Óµ½ÏµÍ³²Ëµ¥ÖĞ¡£
+    // å°†â€œå…³äº...â€èœå•é¡¹æ·»åŠ åˆ°ç³»ç»Ÿèœå•ä¸­ã€‚
 
-    // IDM_ABOUTBOX ±ØĞëÔÚÏµÍ³ÃüÁî·¶Î§ÄÚ¡£
+    // IDM_ABOUTBOX å¿…é¡»åœ¨ç³»ç»Ÿå‘½ä»¤èŒƒå›´å†…ã€‚
     ASSERT((IDM_ABOUTBOX & 0xFFF0) == IDM_ABOUTBOX);
     ASSERT(IDM_ABOUTBOX < 0xF000);
 
@@ -188,26 +188,26 @@ BOOL CMyUniverseDlg::OnInitDialog()
         }
     }
 
-    // ÉèÖÃ´Ë¶Ô»°¿òµÄÍ¼±ê¡£µ±Ó¦ÓÃ³ÌĞòÖ÷´°¿Ú²»ÊÇ¶Ô»°¿òÊ±£¬¿ò¼Ü½«×Ô¶¯
-    //  Ö´ĞĞ´Ë²Ù×÷
-    SetIcon(m_hIcon, TRUE);			// ÉèÖÃ´óÍ¼±ê
-    SetIcon(m_hIcon, FALSE);		// ÉèÖÃĞ¡Í¼±ê
+    // è®¾ç½®æ­¤å¯¹è¯æ¡†çš„å›¾æ ‡ã€‚å½“åº”ç”¨ç¨‹åºä¸»çª—å£ä¸æ˜¯å¯¹è¯æ¡†æ—¶ï¼Œæ¡†æ¶å°†è‡ªåŠ¨
+    //  æ‰§è¡Œæ­¤æ“ä½œ
+    SetIcon(m_hIcon, TRUE);			// è®¾ç½®å¤§å›¾æ ‡
+    SetIcon(m_hIcon, FALSE);		// è®¾ç½®å°å›¾æ ‡
 
-    // TODO: ÔÚ´ËÌí¼Ó¶îÍâµÄ³õÊ¼»¯´úÂë
+    // TODO: åœ¨æ­¤æ·»åŠ é¢å¤–çš„åˆå§‹åŒ–ä»£ç 
 
-    //¶ÁÈ¡iniÎÄ¼şÖĞµÄÅäÖÃ
+    //è¯»å–iniæ–‡ä»¶ä¸­çš„é…ç½®
     char lpStoryPath[512];
     GetPrivateProfileString("MyUniverseCfg", "StoryPath", "", lpStoryPath, 512, ".\\config.ini");
     m_story_path = lpStoryPath;
     UpdateData(PUT_DATA);
     ReadChapterStruct();
 
-    //³õÊ¼»¯Ğı×ª¾ØÕó
+    //åˆå§‹åŒ–æ—‹è½¬çŸ©é˜µ
     g_StorytellerEularAngle.m_1_Horz = 0;
     g_StorytellerEularAngle.m_2_Vert = 90;
     g_StorytellerEularAngle.m_3_Axis = 0;    
 
-    // ³õÊ¼»¯½çÃæÉÏµÄÖµ
+    // åˆå§‹åŒ–ç•Œé¢ä¸Šçš„å€¼
     m_edit_roty = (int)g_StorytellerEularAngle.m_2_Vert;
     m_slider_roty = (int)(m_edit_roty/360.0*100);
     UpdateData(PUT_DATA);
@@ -220,11 +220,11 @@ BOOL CMyUniverseDlg::OnInitDialog()
     StorytellerEular2GlobeEular(g_StorytellerEularAngle, g_OffsetEularAngle, g_GlobeEularAngle);
     glbEularAngle2Rotmat(g_GlobeEularAngle, g_GlobeRotMat);
 
-    CreateThread(0, 0, GlobeThread, (LPVOID)this,0,0);//Æô¶¯OpenGLÏÔÊ¾Ïß³Ì
-    CreateThread(0, 0, TimingThread, (LPVOID)this,0,0);//Æô¶¯Ê±¼ä¿ØÖÆÏß³Ì
-    CreateThread(0, 0, UdpThread, (LPVOID)this,0,0);//Æô¶¯Ê±¼ä¿ØÖÆÏß³Ì
+    CreateThread(0, 0, GlobeThread, (LPVOID)this,0,0);//å¯åŠ¨OpenGLæ˜¾ç¤ºçº¿ç¨‹
+    CreateThread(0, 0, TimingThread, (LPVOID)this,0,0);//å¯åŠ¨æ—¶é—´æ§åˆ¶çº¿ç¨‹
+    CreateThread(0, 0, UdpThread, (LPVOID)this,0,0);//å¯åŠ¨æ—¶é—´æ§åˆ¶çº¿ç¨‹
 
-    return TRUE;  // ³ı·Ç½«½¹µãÉèÖÃµ½¿Ø¼ş£¬·ñÔò·µ»Ø TRUE
+    return TRUE;  // é™¤éå°†ç„¦ç‚¹è®¾ç½®åˆ°æ§ä»¶ï¼Œå¦åˆ™è¿”å› TRUE
 }
 
 void CMyUniverseDlg::OnSysCommand(UINT nID, LPARAM lParam)
@@ -240,20 +240,20 @@ void CMyUniverseDlg::OnSysCommand(UINT nID, LPARAM lParam)
     }
 }
 
-// Èç¹ûÏò¶Ô»°¿òÌí¼Ó×îĞ¡»¯°´Å¥£¬ÔòĞèÒªÏÂÃæµÄ´úÂë
-//  À´»æÖÆ¸ÃÍ¼±ê¡£¶ÔÓÚÊ¹ÓÃÎÄµµ/ÊÓÍ¼Ä£ĞÍµÄ MFC Ó¦ÓÃ³ÌĞò£¬
-//  Õâ½«ÓÉ¿ò¼Ü×Ô¶¯Íê³É¡£
+// å¦‚æœå‘å¯¹è¯æ¡†æ·»åŠ æœ€å°åŒ–æŒ‰é’®ï¼Œåˆ™éœ€è¦ä¸‹é¢çš„ä»£ç 
+//  æ¥ç»˜åˆ¶è¯¥å›¾æ ‡ã€‚å¯¹äºä½¿ç”¨æ–‡æ¡£/è§†å›¾æ¨¡å‹çš„ MFC åº”ç”¨ç¨‹åºï¼Œ
+//  è¿™å°†ç”±æ¡†æ¶è‡ªåŠ¨å®Œæˆã€‚
 
 void CMyUniverseDlg::OnPaint()
 {
     //UpdateData(PUT_DATA);
     if (IsIconic())
     {
-        CPaintDC dc(this); // ÓÃÓÚ»æÖÆµÄÉè±¸ÉÏÏÂÎÄ
+        CPaintDC dc(this); // ç”¨äºç»˜åˆ¶çš„è®¾å¤‡ä¸Šä¸‹æ–‡
 
         SendMessage(WM_ICONERASEBKGND, reinterpret_cast<WPARAM>(dc.GetSafeHdc()), 0);
 
-        // Ê¹Í¼±êÔÚ¹¤×÷Çø¾ØĞÎÖĞ¾ÓÖĞ
+        // ä½¿å›¾æ ‡åœ¨å·¥ä½œåŒºçŸ©å½¢ä¸­å±…ä¸­
         int cxIcon = GetSystemMetrics(SM_CXICON);
         int cyIcon = GetSystemMetrics(SM_CYICON);
         CRect rect;
@@ -261,7 +261,7 @@ void CMyUniverseDlg::OnPaint()
         int x = (rect.Width() - cxIcon + 1) / 2;
         int y = (rect.Height() - cyIcon + 1) / 2;
 
-        // »æÖÆÍ¼±ê
+        // ç»˜åˆ¶å›¾æ ‡
         dc.DrawIcon(x, y, m_hIcon);
     }
     else
@@ -270,8 +270,8 @@ void CMyUniverseDlg::OnPaint()
     }
 }
 
-//µ±ÓÃ»§ÍÏ¶¯×îĞ¡»¯´°¿ÚÊ±ÏµÍ³µ÷ÓÃ´Ëº¯ÊıÈ¡µÃ¹â±ê
-//ÏÔÊ¾¡£
+//å½“ç”¨æˆ·æ‹–åŠ¨æœ€å°åŒ–çª—å£æ—¶ç³»ç»Ÿè°ƒç”¨æ­¤å‡½æ•°å–å¾—å…‰æ ‡
+//æ˜¾ç¤ºã€‚
 HCURSOR CMyUniverseDlg::OnQueryDragIcon()
 {
     return static_cast<HCURSOR>(m_hIcon);
@@ -287,15 +287,15 @@ void CMyUniverseDlg::OnBnClickedOk()
 
 void CMyUniverseDlg::OnBnClickedCancel()
 {
-    if( 2 == MessageBox("ÕæµÄÒªÍË³öÂğ£¿", NULL, MB_OKCANCEL))
+    if( 2 == MessageBox("çœŸçš„è¦é€€å‡ºå—ï¼Ÿ", NULL, MB_OKCANCEL))
     {
         return;
     }
     else
     {
-        g_bMainThreadActive = 0;//Ö÷Ïß³Ì¼´½«ÍË³ö£¨¿ªÊ¼ÓÚOnInitDialog()º¯ÊıÖĞ£©
+        g_bMainThreadActive = 0;//ä¸»çº¿ç¨‹å³å°†é€€å‡ºï¼ˆå¼€å§‹äºOnInitDialog()å‡½æ•°ä¸­ï¼‰
 
-        while( g_bGlbThreadActive || g_bTimingThreadActive)//µÈ´ı×ÓÏß³ÌÍË³ö
+        while( g_bGlbThreadActive || g_bTimingThreadActive)//ç­‰å¾…å­çº¿ç¨‹é€€å‡º
         {
             MSG msg;
             PeekMessage(&msg, NULL, 0, 0, PM_REMOVE);
@@ -304,7 +304,7 @@ void CMyUniverseDlg::OnBnClickedCancel()
             Sleep(1);
         }
 
-        CDialogEx::OnCancel();//ÕæÕıÍË³ö
+        CDialogEx::OnCancel();//çœŸæ­£é€€å‡º
     }
 }
 
@@ -312,7 +312,7 @@ void CMyUniverseDlg::OnBnClickedCancel()
 void CMyUniverseDlg::OnNMCustomdrawSliderRotx(NMHDR *pNMHDR, LRESULT *pResult)
 {
     LPNMCUSTOMDRAW pNMCD = reinterpret_cast<LPNMCUSTOMDRAW>(pNMHDR);
-    // TODO: ÔÚ´ËÌí¼Ó¿Ø¼şÍ¨Öª´¦Àí³ÌĞò´úÂë
+    // TODO: åœ¨æ­¤æ·»åŠ æ§ä»¶é€šçŸ¥å¤„ç†ç¨‹åºä»£ç 
     UpdateData(GET_DATA);
     m_edit_rotx = (int)(m_slider_rotx/100.0*360);
     UpdateData(PUT_DATA);
@@ -324,7 +324,7 @@ void CMyUniverseDlg::OnNMCustomdrawSliderRotx(NMHDR *pNMHDR, LRESULT *pResult)
 void CMyUniverseDlg::OnNMCustomdrawSliderRoty(NMHDR *pNMHDR, LRESULT *pResult)
 {
     LPNMCUSTOMDRAW pNMCD = reinterpret_cast<LPNMCUSTOMDRAW>(pNMHDR);
-    // TODO: ÔÚ´ËÌí¼Ó¿Ø¼şÍ¨Öª´¦Àí³ÌĞò´úÂë
+    // TODO: åœ¨æ­¤æ·»åŠ æ§ä»¶é€šçŸ¥å¤„ç†ç¨‹åºä»£ç 
     UpdateData(GET_DATA);
     m_edit_roty = (int)(m_slider_roty/100.0*360);
     UpdateData(PUT_DATA);
@@ -336,7 +336,7 @@ void CMyUniverseDlg::OnNMCustomdrawSliderRoty(NMHDR *pNMHDR, LRESULT *pResult)
 void CMyUniverseDlg::OnNMCustomdrawSliderRotz(NMHDR *pNMHDR, LRESULT *pResult)
 {
     LPNMCUSTOMDRAW pNMCD = reinterpret_cast<LPNMCUSTOMDRAW>(pNMHDR);
-    // TODO: ÔÚ´ËÌí¼Ó¿Ø¼şÍ¨Öª´¦Àí³ÌĞò´úÂë
+    // TODO: åœ¨æ­¤æ·»åŠ æ§ä»¶é€šçŸ¥å¤„ç†ç¨‹åºä»£ç 
     UpdateData(GET_DATA);
     m_edit_rotz = (int)(m_slider_rotz/100.0*360);
     UpdateData(PUT_DATA);
@@ -370,7 +370,7 @@ void CMyUniverseDlg::OnEnChangeEditRotz()
 
 void CMyUniverseDlg::OnBnClickedButtonBrowse()
 {
-    char szPath[MAX_PATH];     //´æ·ÅÑ¡ÔñµÄÄ¿Â¼Â·¾¶
+    char szPath[MAX_PATH];     //å­˜æ”¾é€‰æ‹©çš„ç›®å½•è·¯å¾„
     CString str;
     ZeroMemory(szPath, sizeof(szPath));  
  
@@ -378,13 +378,13 @@ void CMyUniverseDlg::OnBnClickedButtonBrowse()
     bi.hwndOwner = m_hWnd;  
     bi.pidlRoot = NULL;  
     bi.pszDisplayName = szPath;  
-    bi.lpszTitle = "ÇëÑ¡Ôñ¿Î³ÌÄ¿Â¼£º";  
+    bi.lpszTitle = "è¯·é€‰æ‹©è¯¾ç¨‹ç›®å½•ï¼š";  
     bi.ulFlags = 0;  
     bi.lpfn = NULL;  
     bi.lParam = 0;  
     bi.iImage = 0;  
 
-    //µ¯³öÑ¡ÔñÄ¿Â¼¶Ô»°¿ò
+    //å¼¹å‡ºé€‰æ‹©ç›®å½•å¯¹è¯æ¡†
     LPITEMIDLIST lp = SHBrowseForFolder(&bi);  
     if(lp && SHGetPathFromIDList(lp, szPath))  
     {
@@ -416,7 +416,7 @@ void CMyUniverseDlg::ReadChapterStruct()
 		{
 			if (FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
             {
-				//printf ("ÕâÊÇÒ»¸öÄ¿Â¼\n");
+				//printf ("è¿™æ˜¯ä¸€ä¸ªç›®å½•\n");
                 CString chapterName = FindFileData.cFileName;
                 if(chapterName != "." && chapterName != "..")
                 {
@@ -449,18 +449,18 @@ CString CMyUniverseDlg::GetPageStructPath(CString StoryPath, CString ChapterName
     return page_struct_path;
 }
 
-void CMyUniverseDlg::ReadPageStruct()//´Î´¦Ö§³Ö£ºfolder£¬dds£¬jpg£¬avi£¬wmv
+void CMyUniverseDlg::ReadPageStruct()//æ¬¡å¤„æ”¯æŒï¼šfolderï¼Œddsï¼Œjpgï¼Œaviï¼Œwmv
 {
     WIN32_FIND_DATA FindFileData;
 	HANDLE hFind = INVALID_HANDLE_VALUE;
 
-    m_page_select.ResetContent();//Çå¿Õ¶ş¼¶²Ëµ¥£¨Ò³Ãæ£©µÄÄÚÈİ
+    m_page_select.ResetContent();//æ¸…ç©ºäºŒçº§èœå•ï¼ˆé¡µé¢ï¼‰çš„å†…å®¹
 
-    UpdateData(GET_DATA);//´Ó½çÃæÉÏ»ñÈ¡m_chapter_value
+    UpdateData(GET_DATA);//ä»ç•Œé¢ä¸Šè·å–m_chapter_value
 
     m_page_struct_path = GetPageStructPath(m_story_path, m_chapter_value);
 
-    CString XML_FilePath = FindXMLFilePath(m_page_struct_path);//ÅĞ¶ÏÊÇ·ñÓĞxmlÎÄ¼ş´æÔÚ
+    CString XML_FilePath = FindXMLFilePath(m_page_struct_path);//åˆ¤æ–­æ˜¯å¦æœ‰xmlæ–‡ä»¶å­˜åœ¨
 
     if(XML_FilePath == "")
     {
@@ -480,7 +480,7 @@ void CMyUniverseDlg::ReadPageStruct()//´Î´¦Ö§³Ö£ºfolder£¬dds£¬jpg£¬avi£¬wmv
                     char* suffix = chapterName.GetBuffer() + chapterName.GetLength() -4;
 			        if (FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
                     {
-				        //printf ("ÕâÊÇÒ»¸öÄ¿Â¼\n");
+				        //printf ("è¿™æ˜¯ä¸€ä¸ªç›®å½•\n");
                         m_page_select.AddString(FindFileData.cFileName);
 			        }
                     else if( _stricmp(suffix,".jpg") ==0
@@ -507,8 +507,8 @@ void CMyUniverseDlg::ReadPageStruct()//´Î´¦Ö§³Ö£ºfolder£¬dds£¬jpg£¬avi£¬wmv
     }
     else//there is one xml file!
     {
-        xmlDocPtr doc; //ÎÄ¼şÖ¸Õë
-        xmlNodePtr cur;//½ÚµãÖ¸Õë
+        xmlDocPtr doc; //æ–‡ä»¶æŒ‡é’ˆ
+        xmlNodePtr cur;//èŠ‚ç‚¹æŒ‡é’ˆ
         doc = xmlParseFile(XML_FilePath);
         cur = xmlDocGetRootElement(doc);
         //AfxMessageBox((char*)cur->name);
@@ -538,25 +538,25 @@ void CMyUniverseDlg::ReadOnePage(bool bUpdateDataFromUI)
 {
     if(bUpdateDataFromUI)
     {
-        UpdateData(GET_DATA);//´Ó½çÃæÉÏ»ñÈ¡m_chapter_valueºÍm_page_value
+        UpdateData(GET_DATA);//ä»ç•Œé¢ä¸Šè·å–m_chapter_valueå’Œm_page_value
     }
 
     m_page_struct_path = GetPageStructPath(m_story_path, m_chapter_value);
-    CString XML_FilePath = FindXMLFilePath(m_page_struct_path);//ÅĞ¶ÏÊÇ·ñÓĞxmlÎÄ¼ş´æÔÚ
+    CString XML_FilePath = FindXMLFilePath(m_page_struct_path);//åˆ¤æ–­æ˜¯å¦æœ‰xmlæ–‡ä»¶å­˜åœ¨
 
     
     CString pageFileName;
     if(XML_FilePath=="")
     {
-        //ÒÔm_page_value×÷ÎªÎÄ¼şÃû
+        //ä»¥m_page_valueä½œä¸ºæ–‡ä»¶å
         pageFileName = m_page_value;
         //AfxMessageBox(pagePath);
     }
     else
     {
-        //´ÓxmlÎÄ¼şÖĞ²éÕÒÎÄ¼şÃû
-        xmlDocPtr doc; //ÎÄ¼şÖ¸Õë
-        xmlNodePtr cur;//½ÚµãÖ¸Õë
+        //ä»xmlæ–‡ä»¶ä¸­æŸ¥æ‰¾æ–‡ä»¶å
+        xmlDocPtr doc; //æ–‡ä»¶æŒ‡é’ˆ
+        xmlNodePtr cur;//èŠ‚ç‚¹æŒ‡é’ˆ
         doc = xmlParseFile(XML_FilePath);
         cur = xmlDocGetRootElement(doc);
         //AfxMessageBox((char*)cur->name);
@@ -570,7 +570,7 @@ void CMyUniverseDlg::ReadOnePage(bool bUpdateDataFromUI)
                 xmlChar* imageName_fromDlg = (xmlChar*)(LPSTR)(LPCTSTR)m_page_value;
                 if(!xmlStrcmp(imageName_gb2312, imageName_fromDlg))
                 {
-                    //¶ÁÈ¡ÎÄ¼şÃû
+                    //è¯»å–æ–‡ä»¶å
                     char* g = u2g((char*)xmlGetProp(cur,(xmlChar*) "href") + 2);
                     pageFileName = g;
                     free(g);
@@ -588,7 +588,7 @@ void CMyUniverseDlg::ReadOnePage(bool bUpdateDataFromUI)
 
     EnterCriticalSection(&g_StoryPage_CS);
 
-    //Çå³ıÈ«¾ÖÊı¾İ
+    //æ¸…é™¤å…¨å±€æ•°æ®
     g_StoryPage.bEmpty = 1;
     g_StoryPage.FrameNames.clear();
     g_StoryPage.bPlaying = 0;
@@ -596,7 +596,7 @@ void CMyUniverseDlg::ReadOnePage(bool bUpdateDataFromUI)
     g_StoryPage.bClockwise = 0;
     g_StoryPage.rotationRate = 2;
 
-    //¿ØÖÆ½çÃæ±äÁ¿
+    //æ§åˆ¶ç•Œé¢å˜é‡
     m_rotating_UI = 0;
     m_rotationRate_UI = 2;
     m_unclockwise_UI.SetCheck(true);
@@ -726,7 +726,7 @@ void CMyUniverseDlg::GlobeRotate(int Horz, int Vert, int Axis, GlbRotmat &r)
     {
         g_StorytellerEularAngle.m_2_Vert = (float)Vert;
     }
-    if(fabs(g_StorytellerEularAngle.m_3_Axis - Axis) > 5)//ÒòÎªslider×îĞ¡·Ö±æÂÊÏàµ±ÓÚ3.6¶È½Ç¶È
+    if(fabs(g_StorytellerEularAngle.m_3_Axis - Axis) > 5)//å› ä¸ºslideræœ€å°åˆ†è¾¨ç‡ç›¸å½“äº3.6åº¦è§’åº¦
     {
         g_StorytellerEularAngle.m_3_Axis = (float)Axis;
     }
@@ -789,11 +789,11 @@ CString CMyUniverseDlg::FindXMLFilePath(CString pageStructPath)
 
 void CMyUniverseDlg::ReadStoryConfigXML()
 {
-    //´Ëº¯Êıµ÷ÓÃÁËlibxml2¿â£¬
-    //Ê¹ÓÃ·½·¨²Î¿¼£ºhttp://www.blogjava.net/wxb_nudt/archive/2007/11/18/161340.html
-    //ÖĞÎÄÂÒÂëÎÊÌâ²Î¿¼£ºhttp://ling091.iteye.com/blog/295872
+    //æ­¤å‡½æ•°è°ƒç”¨äº†libxml2åº“ï¼Œ
+    //ä½¿ç”¨æ–¹æ³•å‚è€ƒï¼šhttp://www.blogjava.net/wxb_nudt/archive/2007/11/18/161340.html
+    //ä¸­æ–‡ä¹±ç é—®é¢˜å‚è€ƒï¼šhttp://ling091.iteye.com/blog/295872
 
-    //AfxMessageBox(m_page_struct_path);//±¾ÕÂ½ÚµÄÄ¿Â¼Ãû
+    //AfxMessageBox(m_page_struct_path);//æœ¬ç« èŠ‚çš„ç›®å½•å
     CString XML_FilePath = FindXMLFilePath(m_page_struct_path);
     if(XML_FilePath == "")
 	{
@@ -802,8 +802,8 @@ void CMyUniverseDlg::ReadStoryConfigXML()
 	else
 	{
         //AfxMessageBox(XML_FilePath);
-        xmlDocPtr doc; //ÎÄ¼şÖ¸Õë
-        xmlNodePtr cur;//½ÚµãÖ¸Õë
+        xmlDocPtr doc; //æ–‡ä»¶æŒ‡é’ˆ
+        xmlNodePtr cur;//èŠ‚ç‚¹æŒ‡é’ˆ
         doc = xmlParseFile(XML_FilePath);
         cur = xmlDocGetRootElement(doc);
         //AfxMessageBox((char*)cur->name);
@@ -820,16 +820,16 @@ void CMyUniverseDlg::ReadStoryConfigXML()
                 if(!xmlStrcmp(imageName_xml_gb2312, imageName_page))
                 {
                     //AfxMessageBox((char*)filename_xml_gb2312);
-                    //ÒÔÈ·¶¨²éÕÒµ½¸ÃPageµÄÅäÖÃ
+                    //ä»¥ç¡®å®šæŸ¥æ‰¾åˆ°è¯¥Pageçš„é…ç½®
 
-                    //¶ÁÈ¡bPlaying
+                    //è¯»å–bPlaying
                     xmlChar* bPlaying_char = xmlGetProp(cur,(xmlChar*) "playing");
                     if(!xmlStrcmp(bPlaying_char, (xmlChar*)"true"))
                     {
                         g_StoryPage.bPlaying = 1;
                     }
 
-                    //¶ÁÈ¡frameRate
+                    //è¯»å–frameRate
                     xmlChar* frameRate_char = xmlGetProp(cur,(xmlChar*) "frameRate");
                     if(frameRate_char)
                     {
@@ -839,7 +839,7 @@ void CMyUniverseDlg::ReadStoryConfigXML()
                         //UpdateData(PUT_DATA);
                     }                    
                     
-                    //¶ÁÈ¡rotationRate
+                    //è¯»å–rotationRate
                     xmlChar* rotationRate_char = xmlGetProp(cur,(xmlChar*) "rotationRate");
                     if(rotationRate_char)
                     {
@@ -849,7 +849,7 @@ void CMyUniverseDlg::ReadStoryConfigXML()
                         //UpdateData(PUT_DATA);
                     }
 
-                    //¶ÁÈ¡rotateClockwise
+                    //è¯»å–rotateClockwise
                     xmlChar* rotateClockwise_char = xmlGetProp(cur,(xmlChar*) "rotateClockwise");
                     if(!xmlStrcmp(rotateClockwise_char, (xmlChar*)"true"))
                     {
@@ -866,7 +866,7 @@ void CMyUniverseDlg::ReadStoryConfigXML()
                         //UpdateData(PUT_DATA);
                     }
 
-                    //¶ÁÈ¡rotating
+                    //è¯»å–rotating
                     xmlChar* bRotating_char = xmlGetProp(cur,(xmlChar*) "rotating");
                     if(!xmlStrcmp(bRotating_char, (xmlChar*)"true"))
                     {

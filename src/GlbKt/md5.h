@@ -1,4 +1,4 @@
-#ifndef MD5_H_H_
+ï»¿#ifndef MD5_H_H_
 
 #define MD5_H_H_
 
@@ -43,11 +43,11 @@ typedef unsigned       int uint4;
 typedef unsigned short int uint2;
 typedef unsigned      char uchar;
 
-char* PrintMD5(uchar md5Digest[16]);  ///Ôö¼ÓMD5_API
-char* MD5String(char* szString);      ///Ôö¼ÓMD5_API
-char* MD5File(char* szFilename);      ///Ôö¼ÓMD5_API
+char* PrintMD5(uchar md5Digest[16]);  ///å¢žåŠ MD5_API
+char* MD5String(char* szString);      ///å¢žåŠ MD5_API
+char* MD5File(char* szFilename);      ///å¢žåŠ MD5_API
 
-class md5                             ///Ôö¼ÓMD5_API
+class md5                             ///å¢žåŠ MD5_API
 {
 // Methods
 public:

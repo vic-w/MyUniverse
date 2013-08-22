@@ -1,10 +1,10 @@
-#include "stdafx.h"
+ï»¿#include "stdafx.h"
 #include "GlbRot.h"
 #include <math.h>
 #include "opencv.hpp"
 #include "Ktmfc.h"
 
-//#define N_CALIB  (12) //±ê¶¨Î³ÏßµÄÌõÊı
+//#define N_CALIB  (12) //æ ‡å®šçº¬çº¿çš„æ¡æ•°
 //float latitude_calib[N_CALIB+1];
 
 float glbVectorNorm(GlbPoint3d Vec)
@@ -38,8 +38,8 @@ void glbCrossMul(GlbPoint3d Vec1, GlbPoint3d Vec2, GlbPoint3d &VecDST)
 
 void glbPointGeo2PointRect(GlbPointGeo pGeo, GlbPoint3d &pRect)
 {
-	float latitude = pGeo.m_lat / 180.0f * PI;//Î³¶È
-	float longitude = pGeo.m_lng / 180.0f * PI;//¾­¶È
+	float latitude = pGeo.m_lat / 180.0f * PI;//çº¬åº¦
+	float longitude = pGeo.m_lng / 180.0f * PI;//ç»åº¦
 
 	pRect.m_x = cos(longitude)*cos(latitude);
 	pRect.m_y = sin(latitude);
@@ -136,7 +136,7 @@ void glbPointRect2PointRound(GlbPoint3d p3, GlbPointRound &p2, GlbCalib calib)
 
 
 	float latitude = asin(p3.m_y);
-	float R = (PI/2.0f - latitude)/PI; //·¶Î§[0,1]
+	float R = (PI/2.0f - latitude)/PI; //èŒƒå›´[0,1]
 	float r_xz = sqrt(pow(p3.m_x, 2) + pow(p3.m_z, 2));
 	if( r_xz < 0.0001 )
 	{
@@ -159,7 +159,7 @@ void glbPointRound2PointRect(GlbPoint2d p2, GlbPoint3d &p3, GlbCalib calib)
 
 	R = glbUnDistortRadius(R, calib);
 
-	float iR = R;//·¶Î§[0,1]
+	float iR = R;//èŒƒå›´[0,1]
 	float latitude = PI/2.0f - iR * PI;
 	p3.m_y = sin(latitude);
 
@@ -191,8 +191,8 @@ void glbCreateGlbRotmat(GlbRotmat &r)
 
 void glbEularAngle2Rotmat(GlbEularAngle angle, GlbRotmat &r)
 {
-    //Å·À­½ÇĞı×ªË³Ğò Y1 - Z2 - Y3
-    //²Î¿¼£ºhttp://en.wikipedia.org/wiki/Euler_angles
+    //æ¬§æ‹‰è§’æ—‹è½¬é¡ºåº Y1 - Z2 - Y3
+    //å‚è€ƒï¼šhttp://en.wikipedia.org/wiki/Euler_angles
 
     float a1 = angle.m_1_Horz/180.0f*PI;
     float a2 = angle.m_2_Vert/180.0f*PI;
@@ -241,7 +241,7 @@ void glbRotVector2RotMat(GlbPoint3d angle, GlbRotmat &r)
 
 float glbAngleBetweenPoints(GlbPoint3d p1, GlbPoint3d p2)
 {
-	//´Óp1×ªµ½p2
+	//ä»p1è½¬åˆ°p2
 	if(p1.m_x == p2.m_x && p1.m_y == p2.m_y && p1.m_z == p2.m_z)
 	{
 		return 0.0f;
@@ -261,23 +261,23 @@ float glbAngleBetweenPoints(GlbPoint3d p1, GlbPoint3d p2)
 		d=-1;
 	}
 
-	float a = fabs(acos( d ) / PI * 180.0f); //Ğı×ª½Ç
+	float a = fabs(acos( d ) / PI * 180.0f); //æ—‹è½¬è§’
 
 	return a;
 }
 
 void glbMovingPoints2RotMat(GlbPoint3d p1, GlbPoint3d p2, GlbRotmat &r)
 {
-	//´Óp1×ªµ½p2
+	//ä»p1è½¬åˆ°p2
 	if(p1.m_x == p2.m_x && p1.m_y == p2.m_y && p1.m_z == p2.m_z)
 	{
         glbCreateGlbRotmat(r);
 		return;
 	}
 
-	float a = glbAngleBetweenPoints(p1, p2)/180.0f*PI; //¼ÆËãĞı×ª½Ç¶È
+	float a = glbAngleBetweenPoints(p1, p2)/180.0f*PI; //è®¡ç®—æ—‹è½¬è§’åº¦
 	GlbPivot pivot;
-	glbPivotBetweenPoints(p1, p2, pivot); //¼ÆËãĞı×ªÖá
+	glbPivotBetweenPoints(p1, p2, pivot); //è®¡ç®—æ—‹è½¬è½´
 
     glbAnglePivot2RotMat(pivot, a, r);
 }
@@ -352,7 +352,7 @@ GLBROT_API void glbInitDistort(GlbCalib &calib, char* calibFileName)
         exit(0);
     }
 
-    //¶ÁÈ¡Î³¶È±ê¶¨ĞÅÏ¢
+    //è¯»å–çº¬åº¦æ ‡å®šä¿¡æ¯
 	for(int i=0; i<N_CALIB+1; i++)
 	{
 		char Name[20],Default[20], Value[20];
@@ -361,7 +361,7 @@ GLBROT_API void glbInitDistort(GlbCalib &calib, char* calibFileName)
 		//GetPrivateProfileString("CALIB", Name, Default, Value, 10, ".\\calib.ini");
 		GetPrivateProfileString("CALIB", Name, Default, Value, 10, calibFileName);
 		sscanf_s(Value,"%f", calib.latitude+i );
-		//£¡£¡£¡£¡£¡todo:ÕâÀïĞè¼ÓÈëÅĞ¶ÏÎ¬¶È±ê¶¨ÖµÊÇ·ñºÏÀí£¡£¡£¡£¡£¡
+		//ï¼ï¼ï¼ï¼ï¼todo:è¿™é‡Œéœ€åŠ å…¥åˆ¤æ–­ç»´åº¦æ ‡å®šå€¼æ˜¯å¦åˆç†ï¼ï¼ï¼ï¼ï¼
 	}
 }
 
@@ -415,13 +415,13 @@ void glbCloneGlbRotmat( GlbRotmat r, GlbRotmat &r_dst )
 
 void glbPivotBetweenPoints( GlbPoint3d p1, GlbPoint3d p2, GlbPivot &pivot)
 {
-	GlbPoint3d axle;//Ğı×ªÖá£¨p1²æ³Ëp2£©
+	GlbPoint3d axle;//æ—‹è½¬è½´ï¼ˆp1å‰ä¹˜p2ï¼‰
 	glbCrossMul(p1, p2, axle);
 
 	float m_axle = 1;
 	m_axle = glbVectorNorm(axle);
 	
-	//Ğı×ªÖáµ¥Î»ÏòÁ¿
+	//æ—‹è½¬è½´å•ä½å‘é‡
 	pivot.m_x = axle.m_x / m_axle;
 	pivot.m_y = axle.m_y / m_axle;
 	pivot.m_z = axle.m_z / m_axle;

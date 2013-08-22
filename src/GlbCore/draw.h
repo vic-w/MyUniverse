@@ -1,4 +1,4 @@
-#ifndef DRAW_H_H_H
+ï»¿#ifndef DRAW_H_H_H
 #define DRAW_H_H_H
 
 #include "rotation.h"
@@ -7,8 +7,8 @@
 
 using namespace std;
 
-#define FACET_SCACLE_IN_ANGLE (6) //Ã¿¸öÃæÆ¬Õ¼µÄ×îĞ¡½Ç¶È
-#define MAX_FACET_SHOW_THRESHOLD (0.4f)//ÄÜÏÔÊ¾µÄ×î´óÃæÆ¬µÄsize
+#define FACET_SCACLE_IN_ANGLE (6) //æ¯ä¸ªé¢ç‰‡å çš„æœ€å°è§’åº¦
+#define MAX_FACET_SHOW_THRESHOLD (0.4f)//èƒ½æ˜¾ç¤ºçš„æœ€å¤§é¢ç‰‡çš„size
 
 //#define GLB_TEX_RECT (1)
 //#define GLB_TEX_BELT (2)
@@ -22,16 +22,16 @@ enum GlbTexMode
 class GlbObject
 {
 private:
-	GLuint TextureID;					//²ÄÖÊµÄ±àºÅ
-	string filename;					//²ÄÖÊµÄÎÄ¼şÃû
-	GlbPointGeo m_CenterPoint;			//ÌùÍ¼µÄÖĞĞÄµã
-	bool m_bCenterPointOnGlobe;			//ÖĞĞÄµã×ø±êÊÇÔÚ globe×ø±êÏµ(true) or screen×ø±êÏµ(false)
-	GlbPointGeo m_DirectPoint;			//ÌùÍ¼·½ÏòµÄ²Î¿¼µã
-	bool m_bDirectPointOnGlobe;			//·½Ïò²Î¿¼µãÊµÔÚ globe×ø±êÏµ(true) or screen×ø±êÏµ(false)
-	bool m_bHeadDirect;					//Í¼Æ¬³¯Ïò²Î¿¼µã(ture) or ±³Ïò²Î¿¼µã(false)
-	float m_width;						//ÌùÍ¼µÄ¿í¶È(µ¥Î»:½Ç¶È)
-	float m_height;						//ÌùÍ¼µÄ¸ß¶È(µ¥Î»:½Ç¶È)
-	unsigned int m_layer;				//ÌùÍ¼ËùÔÚµÄ²ã
+	GLuint TextureID;					//æè´¨çš„ç¼–å·
+	string filename;					//æè´¨çš„æ–‡ä»¶å
+	GlbPointGeo m_CenterPoint;			//è´´å›¾çš„ä¸­å¿ƒç‚¹
+	bool m_bCenterPointOnGlobe;			//ä¸­å¿ƒç‚¹åæ ‡æ˜¯åœ¨ globeåæ ‡ç³»(true) or screenåæ ‡ç³»(false)
+	GlbPointGeo m_DirectPoint;			//è´´å›¾æ–¹å‘çš„å‚è€ƒç‚¹
+	bool m_bDirectPointOnGlobe;			//æ–¹å‘å‚è€ƒç‚¹å®åœ¨ globeåæ ‡ç³»(true) or screenåæ ‡ç³»(false)
+	bool m_bHeadDirect;					//å›¾ç‰‡æœå‘å‚è€ƒç‚¹(ture) or èƒŒå‘å‚è€ƒç‚¹(false)
+	float m_width;						//è´´å›¾çš„å®½åº¦(å•ä½:è§’åº¦)
+	float m_height;						//è´´å›¾çš„é«˜åº¦(å•ä½:è§’åº¦)
+	unsigned int m_layer;				//è´´å›¾æ‰€åœ¨çš„å±‚
 	GlbTexMode m_mode;
 };
 
@@ -49,17 +49,17 @@ void DrawLineOnGlobe(GlbPointGeo geoStartPoint, GlbPointGeo geoEndPoint, int lay
 void DrawLineOnScreen(GlbPointGeo geoStartPoint, GlbPointGeo geoEndPoint, int layer);
 void DrawGlobe(GLuint texture);
 void DrawTexture(
-				 GLuint TextureName,	//²ÄÖÊµÄ±àºÅ
-				 GlbPointGeo pGeo,			//ÌùÍ¼µÄÖĞĞÄµã
-				 bool bPointOnGlobe,	//ÖĞĞÄµã×ø±êÊÇÔÚ globe×ø±êÏµ(true) or screen×ø±êÏµ(false)
-				 GlbPointGeo pGeoDirect,	//ÌùÍ¼·½ÏòµÄ²Î¿¼µã
-				 bool bDirOnGlobe,		//·½Ïò²Î¿¼µãÊµÔÚ globe×ø±êÏµ(true) or screen×ø±êÏµ(false)
-				 bool bHeadDirect,		//Í¼Æ¬³¯Ïò²Î¿¼µã(ture) or ±³Ïò²Î¿¼µã(false)
-				 float width,			//ÌùÍ¼µÄ¿í¶È(µ¥Î»:½Ç¶È)
-				 float height,			//ÌùÍ¼µÄ¸ß¶È(µ¥Î»:½Ç¶È)
-				 float layer,			//ÌùÍ¼ËùÔÚµÄ²ã
+				 GLuint TextureName,	//æè´¨çš„ç¼–å·
+				 GlbPointGeo pGeo,			//è´´å›¾çš„ä¸­å¿ƒç‚¹
+				 bool bPointOnGlobe,	//ä¸­å¿ƒç‚¹åæ ‡æ˜¯åœ¨ globeåæ ‡ç³»(true) or screenåæ ‡ç³»(false)
+				 GlbPointGeo pGeoDirect,	//è´´å›¾æ–¹å‘çš„å‚è€ƒç‚¹
+				 bool bDirOnGlobe,		//æ–¹å‘å‚è€ƒç‚¹å®åœ¨ globeåæ ‡ç³»(true) or screenåæ ‡ç³»(false)
+				 bool bHeadDirect,		//å›¾ç‰‡æœå‘å‚è€ƒç‚¹(ture) or èƒŒå‘å‚è€ƒç‚¹(false)
+				 float width,			//è´´å›¾çš„å®½åº¦(å•ä½:è§’åº¦)
+				 float height,			//è´´å›¾çš„é«˜åº¦(å•ä½:è§’åº¦)
+				 float layer,			//è´´å›¾æ‰€åœ¨çš„å±‚
 				 GlbTexMode mode,
-				 GlbPoint3d &pClose		//·µ»ØÌùÍ¼ÓÒÉÏ½ÇµÄ×ø±ê
+				 GlbPoint3d &pClose		//è¿”å›è´´å›¾å³ä¸Šè§’çš„åæ ‡
 				 );
 
 void DrawBelt(GLuint TextureName,

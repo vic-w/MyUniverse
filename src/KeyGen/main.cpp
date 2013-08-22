@@ -1,11 +1,11 @@
-
+ï»¿
 #include <stdio.h>
 #include "../Ktmfc/md5.h"
 #include <Windows.h>
 
 void main()
 {
-	printf("ÇëÊäÈë10Î»µÄÓÃ»§Âë:");
+	printf("è¯·è¾“å…¥10ä½çš„ç”¨æˆ·ç :");
 	char s[100];
 	do
 	{
@@ -13,7 +13,7 @@ void main()
 	}
 	while(strlen(s) != 10);
 
-	printf("\nĞí¿ÉÖ¤ÃÜÂëÎª£º%s\n",MD5String(s));
+	printf("\nè®¸å¯è¯å¯†ç ä¸ºï¼š%s\n",MD5String(s));
 	system("pause");
 
 }
