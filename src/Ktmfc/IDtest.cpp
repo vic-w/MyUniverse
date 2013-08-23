@@ -102,7 +102,7 @@ CString _getWmiInfo(IWbemClassObject *pClassObject, LPCTSTR lpszName)
 			return str;
 }
 
- 
+BOOL bInit = FALSE; 
 CString GetSeiralNumberOrID( LPCTSTR lpszClass, LPCTSTR lpszName)
 {
 	CString str("");
@@ -113,8 +113,13 @@ CString GetSeiralNumberOrID( LPCTSTR lpszClass, LPCTSTR lpszName)
 		return str;	
 
     // 获取访问 WMI 权限
-
-    if( CoInitializeSecurity( NULL, -1, NULL, NULL, RPC_C_AUTHN_LEVEL_PKT, RPC_C_IMP_LEVEL_IMPERSONATE,NULL, EOAC_NONE, 0 ) == S_OK )
+	if (!bInit)
+	{
+		hres = CoInitializeSecurity( NULL, -1, NULL, NULL, RPC_C_AUTHN_LEVEL_PKT, RPC_C_IMP_LEVEL_IMPERSONATE,NULL, EOAC_NONE, 0 );
+		if (hres  == S_OK)
+			bInit = TRUE;
+	}
+    if(bInit)
 	{
 		// 通过 IWbemLocator 和 IWbemServices 这两个 COM 接口访问 WMI, 获取系统信息
 		
@@ -144,7 +149,9 @@ CString GetSeiralNumberOrID( LPCTSTR lpszClass, LPCTSTR lpszName)
 						}
 					}
 				}
+				spWbemServices.Release();
 			}
+			spWbemLocator.Release();
 		}
 	}
 
@@ -164,16 +171,14 @@ char * CreateKey(char *pSRC)
 
 bool ID_test(const char* license)
 {
+	CString SystemModel = GetSeiralNumberOrID("Win32_ComputerSystem", "Model");
     CString BoardID = GetSeiralNumberOrID("Win32_BaseBoard", "SerialNumber");
     CString ProcessorID = GetSeiralNumberOrID("Win32_Processor", "ProcessorID");
-    CString MemoryID = GetSeiralNumberOrID("Win32_PhysicalMemory", "SerialNumber");
-    CString HardDiskID = GetSeiralNumberOrID("Win32_DiskDrive", "PNPDeviceID");
+	cout << "SystemModel: " << SystemModel << endl; //机型
     cout << "BoardID: " << BoardID << endl;	// 底板
     cout << "ProcessorID: " << ProcessorID << endl;	// CPU
-    cout << "MemoryID: " << MemoryID << endl;	// 内存
-    cout << "HardDiskID: " << HardDiskID << endl;	// 硬盘
 
-    CString MachineID = BoardID + ProcessorID + MemoryID + HardDiskID;
+    CString MachineID = SystemModel + BoardID + ProcessorID; // + MemoryID + HardDiskID;
     
     if(MachineID == "")
     {
