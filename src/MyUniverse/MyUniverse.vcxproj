@@ -41,13 +41,13 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <LibraryPath>..\debug;..\..\3rdparty\tinyxml;..\..\3rdparty\opencv231\lib\Release;..\..\3rdparty\libxml2\lib;..\..\3rdparty\iconv;$(LibraryPath)</LibraryPath>
+    <LibraryPath>..\debug;..\..\3rdparty\tinyxml;..\..\3rdparty\opencv231\lib\Debug;..\..\3rdparty\libxml2\lib;..\..\3rdparty\iconv;$(LibraryPath)</LibraryPath>
     <IncludePath>..\GlbRot;..\GlbCore;..\..\3rdparty\tinyxml;..\..\3rdparty\opencv231\include;..\..\3rdparty\libxml2\include;..\..\3rdparty\iconv;..\GlbKt;..\Ktmfc;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <IncludePath>..\GlbCore;..\GlbRot;..\..\3rdparty\libxml2\include;..\..\3rdparty\iconv;..\..\3rdparty\opencv231\include;..\KtMfc;$(IncludePath)</IncludePath>
-    <LibraryPath>..\release;..\..\3rdparty\iconv;..\..\3rdparty\libxml2\lib;$(LibraryPath)</LibraryPath>
+    <LibraryPath>..\release;..\..\3rdparty\tinyxml;..\..\3rdparty\opencv231\lib\Release;..\..\3rdparty\libxml2\lib;..\..\3rdparty\iconv;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

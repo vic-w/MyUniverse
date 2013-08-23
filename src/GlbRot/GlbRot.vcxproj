@@ -40,12 +40,12 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <IncludePath>..\..\3rdparty\opencv231\include;..\..\3rdparty\OpenGL;..\GlbKt;..\ktmfc;$(IncludePath)</IncludePath>
-    <LibraryPath>..\..\3rdparty\opencv231\lib\Release;..\debug;$(LibraryPath)</LibraryPath>
+    <LibraryPath>..\..\3rdparty\opencv231\lib\Debug;..\debug;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <IncludePath>..\..\3rdparty\opencv231\include;..\KtMfc;$(IncludePath)</IncludePath>
-    <LibraryPath>..\..\3rdparty\lib\release;..\release;$(LibraryPath)</LibraryPath>
+    <LibraryPath>..\..\3rdparty\opencv231\lib\Release;..\release;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

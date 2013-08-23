@@ -43,7 +43,7 @@
     <LinkIncremental>true</LinkIncremental>
     <ReferencePath>$(ReferencePath)</ReferencePath>
     <IncludePath>..\..\3rdparty\OpenGL;..\..\3rdparty\opencv231\include;..\GlbRot;$(IncludePath)</IncludePath>
-    <LibraryPath>..\..\3rdparty\OpenGL;..\..\3rdparty\opencv231\lib\Release;..\Debug;$(LibraryPath)</LibraryPath>
+    <LibraryPath>..\..\3rdparty\OpenGL;..\..\3rdparty\opencv231\lib\Debug;..\Debug;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
