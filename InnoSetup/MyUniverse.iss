@@ -11,7 +11,7 @@
 ; NOTE: The value of AppId uniquely identifies this application.
 ; Do not use the same AppId value in installers for other applications.
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
-AppId={{D3718FD9-9B53-4A27-892A-462B4F8E9AC8}
+AppId={{D5770244-400A-4643-89FE-10700A8BD18D}
 AppName={#MyAppName}
 AppVersion={#MyAppVersion}
 ;AppVerName={#MyAppName} {#MyAppVersion}
@@ -42,9 +42,10 @@ Source: "Files\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createa
 Name: "{group}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
 Name: "{group}\Uninstall"; Filename: "{uninstallexe}"
 Name: "{commondesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon
+Name: "{commondesktop}\PPT控制MyUniverse"; Filename: "{app}\MyUniverseControl.pptm"; Tasks: desktopicon
 
-;[Run]
- ;
+[Run]
+Filename: "{app}\regMyUniverseControl.exe"; StatusMsg: "Registering MyUniverseControl";
 
 [Registry]
 Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\MyUniverse.exe"; ValueType: string; ValueName: ""; ValueData: "{app}\MyUniverse.exe"
