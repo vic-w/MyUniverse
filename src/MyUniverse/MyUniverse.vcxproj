@@ -59,7 +59,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>GlbCore.lib;GlbRot.lib;opencv_highgui231.lib;libxml2.lib;iconv.lib;Ktmfc.lib</AdditionalDependencies>
+      <AdditionalDependencies>GlbCore.lib;GlbRot.lib;opencv_highgui231d.lib;libxml2.lib;iconv.lib;Ktmfc.lib</AdditionalDependencies>
     </Link>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>

@@ -60,7 +60,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>opengl32.lib;glu32.lib;glaux.lib;opencv_highgui231.lib;opencv_core231.lib;GlbRot.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glu32.lib;glaux.lib;opencv_highgui231d.lib;opencv_core231d.lib;GlbRot.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ModuleDefinitionFile>GlbCore.def</ModuleDefinitionFile>
     </Link>
   </ItemDefinitionGroup>

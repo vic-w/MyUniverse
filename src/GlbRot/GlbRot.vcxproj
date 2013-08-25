@@ -57,7 +57,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>opencv_core231.lib;opencv_calib3d231.lib;Ktmfc.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opencv_core231d.lib;opencv_calib3d231d.lib;Ktmfc.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ModuleDefinitionFile>GlbRot.def</ModuleDefinitionFile>
     </Link>
   </ItemDefinitionGroup>

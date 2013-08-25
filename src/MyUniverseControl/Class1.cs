@@ -231,12 +231,12 @@ namespace MyUniverseControl
             IntPtr ptr = Marshal.AllocHGlobal(1056);
             Marshal.Copy(Buffer, 0, ptr, 1056);
             command = Marshal.ReadInt32(ptr);
-            ctrl1_ret0 = Marshal.ReadInt32(ptr + 4);
-            iParam1 = Marshal.ReadInt32(ptr + 8);
-            iParam2 = Marshal.ReadInt32(ptr + 12);
-            double* pfParam1 = (double*)(ptr + 16); //fParam1
+            ctrl1_ret0 = Marshal.ReadInt32(new IntPtr((byte*)ptr + 4));
+            iParam1 = Marshal.ReadInt32(new IntPtr((byte*)ptr + 8));
+            iParam2 = Marshal.ReadInt32(new IntPtr((byte*)ptr + 12));
+            double* pfParam1 = (double*)(new IntPtr((byte*)ptr + 16)); //fParam1
             fParam1 = *pfParam1;
-            double* pfParam2 = (double*)(ptr + 24); //fParam2
+            double* pfParam2 = (double*)(new IntPtr((byte*)ptr + 24)); //fParam2
             fParam2 = *pfParam2;
             ReadString(ptr, ref cParam1, 32, 512);
             ReadString(ptr, ref cParam2, 544, 512);
@@ -254,9 +254,9 @@ namespace MyUniverseControl
             Marshal.WriteInt32(ptr, 4, 1);          //ctrl1_ret0
             Marshal.WriteInt32(ptr, 8, iParam1);    //iParam1
             Marshal.WriteInt32(ptr, 12, iParam2);   //iParam2
-            double* pfParam1 = (double*)(ptr + 16); //fParam1
+            double* pfParam1 = (double*)(new IntPtr((byte*)ptr + 16)); //fParam1
             *pfParam1 = fParam1;
-            double* pfParam2 = (double*)(ptr + 24); //fParam2
+            double* pfParam2 = (double*)(new IntPtr((byte*)ptr + 24)); //fParam2
             *pfParam2 = fParam2;
             WriteString(ptr, cParam1, 32, 512);     //cParam1
             WriteString(ptr, cParam2, 544, 512);    //cParam2
