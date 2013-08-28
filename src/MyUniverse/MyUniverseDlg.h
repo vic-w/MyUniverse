@@ -92,4 +92,5 @@ public:
     CButton m_clockwise_UI;
     afx_msg void OnBnClickedUnclockwise();
     afx_msg void OnBnClickedClockwise();
+	afx_msg void OnBnClickedRotReset();
 };

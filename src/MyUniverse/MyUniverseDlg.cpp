@@ -155,6 +155,7 @@ BEGIN_MESSAGE_MAP(CMyUniverseDlg, CDialogEx)
     ON_EN_CHANGE(IDC_m_rotationRate, &CMyUniverseDlg::OnEnChangemrotationrate)
     ON_BN_CLICKED(IDC_UNCLOCKWISE, &CMyUniverseDlg::OnBnClickedUnclockwise)
     ON_BN_CLICKED(IDC_CLOCKWISE, &CMyUniverseDlg::OnBnClickedClockwise)
+	ON_BN_CLICKED(IDC_ROT_RESET, &CMyUniverseDlg::OnBnClickedRotReset)
 END_MESSAGE_MAP()
 
 
@@ -1026,4 +1027,23 @@ void CMyUniverseDlg::OnBnClickedUnclockwise()
 void CMyUniverseDlg::OnBnClickedClockwise()
 {
     g_StoryPage.bClockwise = 1;
+}
+
+
+void CMyUniverseDlg::OnBnClickedRotReset()
+{
+	//EnterCriticalSection(&g_GlobeRotMat_CS);
+
+ //   g_StorytellerEularAngle.m_1_Horz = (float)0;
+
+ //   g_StorytellerEularAngle.m_2_Vert = (float)0;
+ //
+ //   g_StorytellerEularAngle.m_3_Axis = (float)0;
+
+ //   StorytellerEular2GlobeEular(g_StorytellerEularAngle, g_OffsetEularAngle, g_GlobeEularAngle);
+ //   glbEularAngle2Rotmat(g_GlobeEularAngle, r);
+ //   LeaveCriticalSection(&g_GlobeRotMat_CS);
+	m_slider_rotx_ctrl.SetPos(0);
+	m_slider_roty_ctrl.SetPos(25);
+	m_slider_rotz_ctrl.SetPos(0);
 }
