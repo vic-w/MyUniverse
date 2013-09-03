@@ -6,8 +6,12 @@
 #include <malloc.h>
 #include "opencv.hpp"
 
+#ifndef UseOpenGLExtension2LoadDDS
+#include "IL/il.h"
+#else 
 DDS_IMAGE_DATA* glbLoadDDSFile(const char* filename);
 PFNGLCOMPRESSEDTEXIMAGE2DARBPROC glCompressedTexImage2DARB;
+#endif
 
 //HWND   g_hWnd                = NULL;
 //HDC    g_hDC                 = NULL;
@@ -59,14 +63,18 @@ GlbImage glbLoadImageFromOpencv(IplImage* pImage, bool bMipmap)
     return TextureID;
 }
 
+BOOL bInit = FALSE;
 GlbImage glbLoadImage(const char* filename)  //载入图像（支持dds,jpg,bmp,png）
 {
     int fileNameLen = strlen(filename);
-    const char* suffix = filename + fileNameLen - 4;
+    const char* suffix = filename + fileNameLen - 4; //Bug: break with ".jpeg"!
     //printf("filename = %s, suffix = %s\n", filename, suffix);
 
     if(_stricmp(suffix,".dds") == 0)
     {
+
+#ifdef UseOpenGLExtension2LoadDDS
+
         GLuint TextureID = -1;
         DDS_IMAGE_DATA *pDDSImageData = glbLoadDDSFile(filename);
 
@@ -100,7 +108,7 @@ GlbImage glbLoadImage(const char* filename)  //载入图像（支持dds,jpg,bmp,
                 if( nHeight == 0 ) nHeight = 1;
 
                 nSize = ((nWidth+3)/4) * ((nHeight+3)/4) * nBlockSize;
-
+				assert(NULL != glCompressedTexImage2DARB);
                 glCompressedTexImage2DARB( GL_TEXTURE_2D,
                     i,
                     pDDSImageData->format,
@@ -138,6 +146,58 @@ GlbImage glbLoadImage(const char* filename)  //载入图像（支持dds,jpg,bmp,
             free( pDDSImageData );
         }
         return TextureID;
+
+#else
+		//Devil begin
+		if (!bInit)
+		{
+			ilInit();
+			ilOriginFunc(IL_ORIGIN_UPPER_LEFT);
+			ilEnable(IL_ORIGIN_SET);
+			bInit = TRUE;
+		}
+
+		ILuint imageID;
+		ilGenImages(1, &imageID);
+		ilBindImage(imageID);
+
+		ilLoadImage(filename);
+
+		int const width  = ilGetInteger(IL_IMAGE_WIDTH);
+		int const height = ilGetInteger(IL_IMAGE_HEIGHT);
+		//int const type   = ilGetInteger(IL_IMAGE_TYPE); // matches OpenGL
+		//int const format = ilGetInteger(IL_IMAGE_FORMAT); // matches OpenGL
+
+		unsigned int size = width * height * 4;
+		ILubyte* data = new unsigned char[size];
+		ilCopyPixels(0, 0, 0, width, height,
+		1, IL_BGRA, IL_UNSIGNED_BYTE, data);
+
+		ilDeleteImage(imageID);
+
+		GLuint textureID = 0;
+		// Generate one new texture Id.
+		glGenTextures(1,&textureID);
+		// Make this texture the active one, so that each
+		// subsequent glTex* calls will affect it.
+		glBindTexture(GL_TEXTURE_2D, textureID);
+
+		// Specify a linear filter for both the minification and
+		// magnification.
+
+		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
+		glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+
+		// Finally, generate the texture data in OpenGL.
+		gluBuild2DMipmaps(GL_TEXTURE_2D, 3, width, height, GL_BGRA_EXT, GL_UNSIGNED_BYTE, data);
+		//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+		
+		delete[] data;
+		return textureID;
+		//Devil end
+#endif
+
     }
     else if(_stricmp(suffix,".jpg") == 0 
         || _stricmp(suffix,".bmp") == 0 
@@ -367,68 +427,76 @@ LRESULT CALLBACK WinProc( HWND   hWnd,
     return 0;
 }
 
-
 void GL_Init(HDC &hDC, HGLRC &hRC, HWND hWnd, long winWidth, long winHeight, bool mirror)
 {
-    GLuint PixelFormat;
+	GLuint PixelFormat;
 
-    PIXELFORMATDESCRIPTOR pfd;
-    memset(&pfd, 0, sizeof(PIXELFORMATDESCRIPTOR));
+	PIXELFORMATDESCRIPTOR pfd;
+	memset(&pfd, 0, sizeof(PIXELFORMATDESCRIPTOR));
 
-    pfd.nSize      = sizeof(PIXELFORMATDESCRIPTOR);
-    pfd.nVersion   = 1;
-    pfd.dwFlags    = PFD_DRAW_TO_WINDOW |PFD_SUPPORT_OPENGL | PFD_DOUBLEBUFFER;
-    pfd.iPixelType = PFD_TYPE_RGBA;
-    pfd.cColorBits = 16;
-    pfd.cDepthBits = 16;
+	pfd.nSize      = sizeof(PIXELFORMATDESCRIPTOR);
+	pfd.nVersion   = 1;
+	pfd.dwFlags    = PFD_DRAW_TO_WINDOW |PFD_SUPPORT_OPENGL | PFD_DOUBLEBUFFER;
+	pfd.iPixelType = PFD_TYPE_RGBA;
+	pfd.cColorBits = 16;
+	pfd.cDepthBits = 16;
 
-    hDC = GetDC( hWnd );
-    PixelFormat = ChoosePixelFormat( hDC, &pfd );
-    SetPixelFormat( hDC, PixelFormat, &pfd);
-    hRC = wglCreateContext( hDC );
-    wglMakeCurrent( hDC, hRC );
+	hDC = GetDC( hWnd );
+	PixelFormat = ChoosePixelFormat( hDC, &pfd );
+	SetPixelFormat( hDC, PixelFormat, &pfd);
+	hRC = wglCreateContext( hDC );
+	wglMakeCurrent( hDC, hRC );
 
-    glClearColor( 0.35f, 0.53f, 0.7f, 1.0f );
-    glEnable(GL_TEXTURE_2D);
+	glClearColor( 0.35f, 0.53f, 0.7f, 1.0f );
+	glEnable(GL_TEXTURE_2D);
 
-    //glMatrixMode( GL_PROJECTION );
-    //glLoadIdentity();
-    //gluPerspective( 45.0f, 640.0f / 480.0f, 0.1f, 100.0f);
+	/*glEnable(GL_ALPHA_TEST);
+	glAlphaFunc(GL_GREATER, 0.0f);
+*/
+	//glMatrixMode( GL_PROJECTION );
+	//glLoadIdentity();
+	//gluPerspective( 45.0f, 640.0f / 480.0f, 0.1f, 100.0f);
 
-    //glLoadIdentity();							                // 重置当前的模型观察矩阵
+	//glLoadIdentity();							                // 重置当前的模型观察矩阵
 	glMatrixMode( GL_PROJECTION );
 	//glLoadIdentity();
 	float W_H_Rate = winWidth/(float)winHeight;
-    if(mirror)
-    {
-        W_H_Rate = -W_H_Rate;
-    }
+	if(mirror)
+	{
+		W_H_Rate = -W_H_Rate;
+	}
 	glOrtho( -W_H_Rate, W_H_Rate, -1, 1, -10, 20);
 
-    //
-    // If the required extension is present, get the addresses of its 
-    // functions that we wish to use...
-    //
-
-    char *ext = (char*)glGetString( GL_EXTENSIONS );
-
-    if( strstr( ext, "ARB_texture_compression" ) == NULL )
-    {
-        MessageBox(NULL,"ARB_texture_compression extension was not found",
-            "ERROR",MB_OK|MB_ICONEXCLAMATION);
-        return;
-    }
-    else
-    {
-        glCompressedTexImage2DARB = (PFNGLCOMPRESSEDTEXIMAGE2DARBPROC)wglGetProcAddress("glCompressedTexImage2DARB");
-        glCompressedTexImage2DARB;
-        if( !glCompressedTexImage2DARB )
-        {
-            MessageBox(NULL,"One or more ARB_texture_compression functions were not found",
-                "ERROR",MB_OK|MB_ICONEXCLAMATION);
-            return;
-        }
-    }
+#ifdef UseOpenGLExtension2LoadDDS
+	//
+	// If the required extension is present, get the addresses of its 
+	// functions that we wish to use...
+	//
+	//Many system returns "Microsoft"
+	char *vendor = (char*)glGetString(GL_VENDOR);
+	//Many system returns "GDI Generic"
+	char *renderer = (char*)glGetString(GL_RENDERER);
+	//Many system returns "GL_WIN_swap_hint GL_EXT_bgra GL_EXT_paletted_texture"
+	char *ext = (char*)glGetString( GL_EXTENSIONS );
+	
+	if( strstr( ext, "ARB_texture_compression" ) == NULL )
+	{
+		MessageBox(NULL,"ARB_texture_compression extension was not found",
+			"ERROR",MB_OK|MB_ICONEXCLAMATION);
+		return;
+	}
+	else
+	{
+		glCompressedTexImage2DARB = (PFNGLCOMPRESSEDTEXIMAGE2DARBPROC)wglGetProcAddress("glCompressedTexImage2DARB");
+        
+		if( !glCompressedTexImage2DARB )
+		{
+			MessageBox(NULL,"One or more ARB_texture_compression functions were not found",
+				"ERROR",MB_OK|MB_ICONEXCLAMATION);
+			return;
+		}
+	}
+#endif
 }
 
 
@@ -579,7 +647,6 @@ void glbDrawImage( GlbImage image )
     glDrawArrays( GL_QUADS, 0, 4 );
 
     glDisable(GL_BLEND);
-
     //SwapBuffers( g_hDC );
 }
 

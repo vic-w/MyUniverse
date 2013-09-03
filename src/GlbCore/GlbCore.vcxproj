@@ -42,13 +42,13 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <ReferencePath>$(ReferencePath)</ReferencePath>
-    <IncludePath>..\..\3rdparty\OpenGL;..\..\3rdparty\opencv231\include;..\GlbRot;$(IncludePath)</IncludePath>
-    <LibraryPath>..\..\3rdparty\OpenGL;..\..\3rdparty\opencv231\lib\Debug;..\Debug;$(LibraryPath)</LibraryPath>
+    <IncludePath>..\..\3rdparty\OpenGL;..\..\3rdparty\DevIL-SDK-x86-1.7.8\include;..\..\3rdparty\opencv231\include;..\GlbRot;$(IncludePath)</IncludePath>
+    <LibraryPath>..\..\3rdparty\OpenGL;..\..\3rdparty\DevIL-SDK-x86-1.7.8\lib;..\..\3rdparty\opencv231\lib\Debug;..\Debug;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>..\GlbRot;..\..\3rdparty\OpenGL;..\..\3rdparty\opencv231\include;$(IncludePath)</IncludePath>
-    <LibraryPath>..\..\3rdparty\OpenGL;..\GlbRot;..\..\3rdparty\opencv231\lib\release;..\release;$(LibraryPath)</LibraryPath>
+    <IncludePath>..\GlbRot;..\..\3rdparty\OpenGL;..\..\3rdparty\DevIL-SDK-x86-1.7.8\include;..\..\3rdparty\opencv231\include;$(IncludePath)</IncludePath>
+    <LibraryPath>..\..\3rdparty\OpenGL;..\GlbRot;..\..\3rdparty\DevIL-SDK-x86-1.7.8\lib;..\..\3rdparty\opencv231\lib\release;..\release;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -60,7 +60,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>opengl32.lib;glu32.lib;glaux.lib;opencv_highgui231d.lib;opencv_core231d.lib;GlbRot.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glu32.lib;glaux.lib;opencv_highgui231d.lib;opencv_core231d.lib;ILU.lib;ILUT.lib;DevIL.lib;GlbRot.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ModuleDefinitionFile>GlbCore.def</ModuleDefinitionFile>
     </Link>
   </ItemDefinitionGroup>
@@ -78,7 +78,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>opengl32.lib;glu32.lib;glaux.lib;opencv_highgui231.lib;opencv_core231.lib;GlbRot.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glu32.lib;glaux.lib;opencv_highgui231.lib;opencv_core231.lib;GlbRot.lib;ILU.lib;ILUT.lib;DevIL.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ModuleDefinitionFile>GlbCore.def</ModuleDefinitionFile>
     </Link>
   </ItemDefinitionGroup>
