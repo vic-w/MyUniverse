@@ -162,6 +162,7 @@ GlbImage glbLoadImage(const char* filename)  //载入图像（支持dds,jpg,bmp,
 		ilBindImage(imageID);
 
 		ilLoadImage(filename);
+		ilActiveMipmap(1);
 
 		int const width  = ilGetInteger(IL_IMAGE_WIDTH);
 		int const height = ilGetInteger(IL_IMAGE_HEIGHT);
@@ -194,6 +195,7 @@ GlbImage glbLoadImage(const char* filename)  //载入图像（支持dds,jpg,bmp,
 		//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
 		
 		delete[] data;
+
 		return textureID;
 		//Devil end
 #endif
