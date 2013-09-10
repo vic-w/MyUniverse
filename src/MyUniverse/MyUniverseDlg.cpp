@@ -12,6 +12,7 @@
 #include "opencv.hpp"
 #include "Ktmfc.h"
 #include "StorytellerComp.h"
+#include <iostream>
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -68,10 +69,54 @@ BEGIN_MESSAGE_MAP(CAboutDlg, CDialogEx)
 END_MESSAGE_MAP()
 
 
+// 用于输入授权码的 CInpuLicenseDlg 对话框
+
+class CInpuLicenseDlg : public CDialogEx
+{
+public:
+    CInpuLicenseDlg();
+
+    // 对话框数据
+    enum { IDD = IDD_INPUTLICENSE_DIALOG };
+
+protected:
+    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 支持
+
+    // 实现
+protected:
+    DECLARE_MESSAGE_MAP()
+public:
+//	void SaveLicenseKey(CString key);
+	afx_msg void OnBnClickedOk();
+};
+
+CInpuLicenseDlg::CInpuLicenseDlg() : CDialogEx(CInpuLicenseDlg::IDD)
+{
+}
+
+void CInpuLicenseDlg::DoDataExchange(CDataExchange* pDX)
+{
+    CDialogEx::DoDataExchange(pDX);
+}
+
+BEGIN_MESSAGE_MAP(CInpuLicenseDlg, CDialogEx)
+	ON_BN_CLICKED(IDOK, &CInpuLicenseDlg::OnBnClickedOk)
+END_MESSAGE_MAP()
+
+void CInpuLicenseDlg::OnBnClickedOk()
+{
+	FILE* file = fopen("license.dat", "w");
+	char* key = new char[32+1];
+	GetDlgItemText(IDC_EDIT1, key, 32+1);
+	fwrite( key, sizeof( char ), strlen(key), file );
+	fclose(file);
+	delete[] key;
+	// TODO: Add your control notification handler code here
+	CDialogEx::OnOK();
+}
+
+
 // CMyUniverseDlg 对话框
-
-
-
 
 CMyUniverseDlg::CMyUniverseDlg(CWnd* pParent /*=NULL*/)
     : CDialogEx(CMyUniverseDlg::IDD, pParent)
@@ -196,6 +241,12 @@ BOOL CMyUniverseDlg::OnInitDialog()
 
     // TODO: 在此添加额外的初始化代码
 
+	
+    /*if(!glbKtMFC()) //glbKtMFC在这里调用会失败，原因不明，需要调试
+    {
+		
+    }*/
+
     //读取ini文件中的配置
     char lpStoryPath[512];
     GetPrivateProfileString("MyUniverseCfg", "StoryPath", "", lpStoryPath, 512, ".\\config.ini");
@@ -224,6 +275,14 @@ BOOL CMyUniverseDlg::OnInitDialog()
     CreateThread(0, 0, GlobeThread, (LPVOID)this,0,0);//启动OpenGL显示线程
     CreateThread(0, 0, TimingThread, (LPVOID)this,0,0);//启动时间控制线程
     CreateThread(0, 0, UdpThread, (LPVOID)this,0,0);//启动时间控制线程
+
+	if(!glbKtMFC()) //如果glbKtMFC在这里调用，就能成功，原因不明，需要调试
+    {
+		CInpuLicenseDlg dlgInputLic;
+		dlgInputLic.DoModal();
+		
+		exit(0); //TODO : fix memory leak!
+    }
 
     return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
@@ -277,8 +336,6 @@ HCURSOR CMyUniverseDlg::OnQueryDragIcon()
 {
     return static_cast<HCURSOR>(m_hIcon);
 }
-
-
 
 void CMyUniverseDlg::OnBnClickedOk()
 {
@@ -409,7 +466,7 @@ void CMyUniverseDlg::ReadChapterStruct()
 	
 	if(hFind == INVALID_HANDLE_VALUE)
 	{
-		//AfxMessageBox ("Invalid file handle.\n");
+		//AfxMessageBox (_T("Invalid file handle.\n"));
 	}
 	else
 	{
@@ -431,7 +488,7 @@ void CMyUniverseDlg::ReadChapterStruct()
 		if (dwError != ERROR_NO_MORE_FILES) 
 		{
 			//printf ("FindNextFile error. Error is %u\n", dwError);
-            //AfxMessageBox("ERROR_NO_MORE_FILES");
+            //AfxMessageBox(_T("ERROR_NO_MORE_FILES"));
 		}
 	}
     m_chapter_select.SetCurSel(0);
@@ -502,7 +559,7 @@ void CMyUniverseDlg::ReadPageStruct()//次处支持：folder，dds，jpg，avi�
 		    if (dwError != ERROR_NO_MORE_FILES) 
 		    {
 			    //printf ("FindNextFile error. Error is %u\n", dwError);
-                //AfxMessageBox("ERROR_NO_MORE_FILES");
+                //AfxMessageBox(_T("ERROR_NO_MORE_FILES"));
 		    }
 	    }
     }
@@ -605,7 +662,7 @@ void CMyUniverseDlg::ReadOnePage(bool bUpdateDataFromUI)
 
     if( _stricmp(suffix,".jpg") == 0)
     {
-        //AfxMessageBox("this is a jpg file");
+        //AfxMessageBox(_T("this is a jpg file"));
         g_StoryPage.bEmpty = 0;
         g_StoryPage.bMovie = 0;
         g_StoryPage.pagePath = pagePath;
@@ -613,7 +670,7 @@ void CMyUniverseDlg::ReadOnePage(bool bUpdateDataFromUI)
     }
     else if( _stricmp(suffix,".bmp") == 0)
     {
-        //AfxMessageBox("this is a bmp file");
+        //AfxMessageBox(_T("this is a bmp file"));
         g_StoryPage.bEmpty = 0;
         g_StoryPage.bMovie = 0;
         g_StoryPage.pagePath = pagePath;
@@ -621,7 +678,7 @@ void CMyUniverseDlg::ReadOnePage(bool bUpdateDataFromUI)
     }
     else if( _stricmp(suffix,".png") == 0)
     {
-        //AfxMessageBox("this is a png file");
+        //AfxMessageBox(_T("this is a png file"));
         g_StoryPage.bEmpty = 0;
         g_StoryPage.bMovie = 0;
         g_StoryPage.pagePath = pagePath;
@@ -629,7 +686,7 @@ void CMyUniverseDlg::ReadOnePage(bool bUpdateDataFromUI)
     }
     else if( _stricmp(suffix,".dds") == 0)
     {
-        //AfxMessageBox("this is a dds file");
+        //AfxMessageBox(_T("this is a dds file"));
         g_StoryPage.bEmpty = 0;
         g_StoryPage.bMovie = 0;
         g_StoryPage.pagePath = pagePath;
@@ -659,7 +716,7 @@ void CMyUniverseDlg::ReadOnePage(bool bUpdateDataFromUI)
     }
     else
     {
-        //AfxMessageBox("this is a folder");
+        //AfxMessageBox(_T("this is a folder"));
         g_StoryPage.bEmpty = 0;
         g_StoryPage.bMovie = 1;
         g_StoryPage.pagePath = pagePath;
@@ -700,7 +757,7 @@ void CMyUniverseDlg::ReadFolderContent(CString folderPath, CString suffix)
 
 	if(hFind == INVALID_HANDLE_VALUE)
 	{
-		//AfxMessageBox ("Invalid file handle.\n");
+		//AfxMessageBox (_T("Invalid file handle.\n"));
 	}
 	else
 	{
@@ -776,7 +833,7 @@ CString CMyUniverseDlg::FindXMLFilePath(CString pageStructPath)
     hFind = FindFirstFile(pageStructPath+"*.xml", &FindFileData);
     if(hFind == INVALID_HANDLE_VALUE)
 	{
-		//AfxMessageBox ("Invalid file handle.\n");
+		//AfxMessageBox (_T("Invalid file handle.\n"));
         return "";
 	}
 	else
@@ -798,7 +855,7 @@ void CMyUniverseDlg::ReadStoryConfigXML()
     CString XML_FilePath = FindXMLFilePath(m_page_struct_path);
     if(XML_FilePath == "")
 	{
-		//AfxMessageBox ("Invalid file handle.\n");
+		//AfxMessageBox (_T("Invalid file handle.\n"));
 	}
 	else
 	{
@@ -1047,3 +1104,6 @@ void CMyUniverseDlg::OnBnClickedRotReset()
 	m_slider_roty_ctrl.SetPos(25);
 	m_slider_rotz_ctrl.SetPos(0);
 }
+
+
+

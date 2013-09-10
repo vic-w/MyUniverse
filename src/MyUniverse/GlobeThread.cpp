@@ -23,7 +23,7 @@ DWORD WINAPI GlobeThread(LPVOID lpParam)
     vector<GlbRect> screens;
     int nScreen = glbDetectScreen(screens);
 
-    bool mirror =!!GetPrivateProfileInt("MyUniverseCfg", "MirrorDisplay", 0, ".\\config.ini");
+    bool mirror =!!GetPrivateProfileInt(_T("MyUniverseCfg"), _T("MirrorDisplay"), 0, _T(".\\config.ini"));
     
     GlbWindow mainWindow;
     GlbWindow previewWindow;
@@ -61,7 +61,9 @@ DWORD WINAPI GlobeThread(LPVOID lpParam)
         glbUpdateWindow(previewWindow, 1);
     }while(g_bMainThreadActive);
 
+	g_StoryPage.FrameNames.clear();
     glbDestoryWindow(mainWindow, 0);
+	//glbDestoryWindow(previewWindow, 0); //?
     g_bGlbThreadActive = 0;
     return 1;
 }
@@ -142,7 +144,7 @@ void DrawStoryPagePreview(GlbWindow window)
                 pCapture = cvCaptureFromFile(g_StoryPage.pagePath);
                 if(!pCapture)
                 {
-                    AfxMessageBox("无法读取视频");
+                    AfxMessageBox(_T("无法读取视频"));
                     g_StoryPage.storyType = NONE;
                 }
                 videoPath = g_StoryPage.pagePath;
@@ -244,7 +246,7 @@ void DrawStoryPage(GlbWindow window)
                 pCapture = cvCaptureFromFile(g_StoryPage.pagePath);
                 if(!pCapture)
                 {
-                    AfxMessageBox("无法读取视频");
+                    AfxMessageBox(_T("无法读取视频"));
                     g_StoryPage.storyType = NONE;
                 }
                 videoPath = g_StoryPage.pagePath;

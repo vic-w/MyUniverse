@@ -20,7 +20,7 @@ using namespace std;
 
 KT_API bool glbKtMFC(void)
 {
-    static bool first = 1;
+    /*static bool first = 1; //?不解
     if(!first)
     {
         return true;
@@ -28,12 +28,13 @@ KT_API bool glbKtMFC(void)
     else
     {
         first = false;
-    }
+    }*/
 
     fstream file;
     file.open("license.dat");
     char BiosID[256];
     file >> BiosID; 
+	file.close();
 
 	return ID_test(BiosID);
 }

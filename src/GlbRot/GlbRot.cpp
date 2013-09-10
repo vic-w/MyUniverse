@@ -347,11 +347,6 @@ void glbCreateNormPivot(GlbPoint3d p, GlbPoint3d directPoint, bool bHeadDirect, 
 
 GLBROT_API void glbInitDistort(GlbCalib &calib, char* calibFileName)
 {
-    if(!glbKtMFC())
-    {
-        exit(0);
-    }
-
     //读取纬度标定信息
 	for(int i=0; i<N_CALIB+1; i++)
 	{
