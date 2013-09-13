@@ -197,10 +197,15 @@ bool ID_test(const char* license)
 		bool ret = (strcmp(LICENSE_KEY,license) == 0);
 		if (!ret)
 		{
-			/*char msg[200];
-			sprintf_s(msg, 100, "您使用的软件未通过验证，请将下列用户码提供给蓝宝石球显科技：%s", ID_CODE);
-			MessageBox(NULL, msg, "软件需要注册", MB_OK|MB_ICONEXCLAMATION);*/
 			//TODO: save ID_CODE to desktop\MyUniverseKey.dat
+			TCHAR path[MAX_PATH] = {0};
+
+			BOOL ok = SHGetSpecialFolderPath(NULL, path, CSIDL_DESKTOP, TRUE);
+			PathAppend(path, _T("MyUniverseKey.dat"));
+			
+			FILE* file = fopen(path, _T("w"));	
+			fwrite( ID_CODE, sizeof( char ), strlen(ID_CODE), file );
+			fclose(file);
 		}
 		delete ID_CODE;
 		delete LICENSE_KEY;

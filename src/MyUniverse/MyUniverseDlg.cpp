@@ -105,12 +105,16 @@ END_MESSAGE_MAP()
 
 void CInpuLicenseDlg::OnBnClickedOk()
 {
-	FILE* file = fopen("license.dat", "w");
-	char* key = new char[32+1];
-	GetDlgItemText(IDC_EDIT1, key, 32+1);
-	fwrite( key, sizeof( char ), strlen(key), file );
-	fclose(file);
-	delete[] key;
+	char* inputkey = new char[32+1];
+	UINT nChars = GetDlgItemText(IDC_EDIT1, inputkey, 32+1);
+	if (nChars > 0)
+	{
+		FILE* file = fopen("license.dat", "w");	
+		fwrite( inputkey, sizeof( char ), strlen(inputkey), file );
+		fclose(file);
+	}
+	delete[] inputkey;
+
 	// TODO: Add your control notification handler code here
 	CDialogEx::OnOK();
 }
