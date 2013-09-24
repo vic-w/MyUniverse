@@ -121,7 +121,6 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="glbCore.cpp" />
     <ClCompile Include="ogl_dds_texture_loader.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Disabled</Optimization>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -138,10 +137,11 @@
     <ResourceCompile Include="ogl_dds_texture_loader.rc" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="glbCore.h" />
-    <ClInclude Include="glbType.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="glext.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="GLAUX.LIB" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
