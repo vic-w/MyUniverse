@@ -78,8 +78,7 @@ GLBCORE_API void glbDrawTexture(
                     float width,            //贴图的宽度(单位:角度)
                     float height,           //贴图的高度(单位:角度)
                     float layer,            //贴图所在的层
-                    GlbTexMode mode,
-                    GlbPoint3d &pClose      //返回贴图右上角的坐标
+                    GlbTexMode mode
 );
 
 GLBCORE_API void glbDrawBelt(

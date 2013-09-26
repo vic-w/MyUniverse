@@ -371,12 +371,14 @@ LRESULT CALLBACK WinProc( HWND   hWnd,
             ptLastMousePosit.x = ptCurrentMousePosit.x = LOWORD (lParam);
             ptLastMousePosit.y = ptCurrentMousePosit.y = HIWORD (lParam);
             bMousing = true;
+			printf("L_button_down\n");
         }
         break;
 
     case WM_LBUTTONUP:
         {
             bMousing = false;
+			printf("L_button_up\n");
         }
         break;
 
@@ -389,6 +391,7 @@ LRESULT CALLBACK WinProc( HWND   hWnd,
             {
                 //g_fSpinX -= (ptCurrentMousePosit.x - ptLastMousePosit.x);
                 //g_fSpinY -= (ptCurrentMousePosit.y - ptLastMousePosit.y);
+				printf("mouse_move from (%d,%d) to (%d,%d)\n", ptLastMousePosit.x, ptLastMousePosit.y, ptCurrentMousePosit.x, ptCurrentMousePosit.y);
             }
 
             ptLastMousePosit.x = ptCurrentMousePosit.x;
@@ -707,8 +710,7 @@ void glbDrawTexture(
                     float width,
                     float height,
                     float layer,
-                    GlbTexMode mode,
-                    GlbPoint3d &pClose
+                    GlbTexMode mode
     )
 {
     int nRow = (int)(height/FACET_SCACLE_IN_ANGLE)+1;
@@ -833,9 +835,9 @@ void glbDrawTexture(
     delete [nRow+1] PointArr;
     PointArr = NULL;
 
-    //输出pClose
-    glbPivotingPoint(pRect, pivot_v, height/2.0f, pClose);
-    glbPivotingPoint(pClose, pivot_h, width/2.0f, pClose);
+    ////输出pClose
+    //glbPivotingPoint(pRect, pivot_v, height/2.0f, pClose);
+    //glbPivotingPoint(pClose, pivot_h, width/2.0f, pClose);
 }
 
 void glbDrawLineOnGlobe(GlbPointGeo geoStartPoint, GlbRotmat GlobeRotMat, GlbCalib calib, GlbPointGeo geoEndPoint, int layer)
@@ -894,7 +896,6 @@ void glbDrawLineOnScreen(GlbCalib calib, GlbPointGeo geoStartPoint, GlbPointGeo 
 
 void glbDrawGlobe(GlbImage Image, GlbRotmat GlobeRotMat, GlbCalib calib)
 {
-	GlbPoint3d pClose;
 	GlbPointGeo pGeo,pGeoDirect;
 	pGeo.m_lat = 0;
 	pGeo.m_lng = 0;
@@ -913,8 +914,7 @@ void glbDrawGlobe(GlbImage Image, GlbRotmat GlobeRotMat, GlbCalib calib)
 		360,			//贴图的宽度(单位:角度)
 		180,			//贴图的高度(单位:角度)
 		0,			//贴图所在的层
-		GLB_TEX_BELT,
-		pClose		//返回贴图右上角的坐标
+		GLB_TEX_BELT
 		);
 }
 
@@ -930,7 +930,6 @@ void glbDrawBelt(GlbImage Image,
 			  float height, 
 			  float layer )
 {
-	GlbPoint3d pClose;
 	glbDrawTexture(
 		Image,	//材质的编号
         GlobeRotMat,
@@ -943,8 +942,7 @@ void glbDrawBelt(GlbImage Image,
 		width,			//贴图的宽度(单位:角度)
 		height,			//贴图的高度(单位:角度)
 		layer,			//贴图所在的层
-		GLB_TEX_BELT,
-		pClose		//返回贴图右上角的坐标
+		GLB_TEX_BELT
 		);
 }
 
