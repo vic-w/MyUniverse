@@ -1,44 +1,42 @@
 ﻿#include "GlbCore.h"
 
-GlbRotmat g_GlobeRotMat;
-GlbEularAngle g_GlobeEularAngle;
 
 void main()
 {
-    GlbRect size(0,0,500,500);
-    GlbWindow mainWindow;
-    glbCreateWindow(mainWindow, size, ".\\calibmain.ini", true, false);
+	vector<GlbRect> screens;	//储存多屏幕信息
+	glbDetectScreen(screens);	//检测屏幕个数和分辨率
 
-    g_GlobeEularAngle.m_1_Horz = 0;
-    g_GlobeEularAngle.m_2_Vert = 30;
-    g_GlobeEularAngle.m_3_Axis = 0;
+	GlbRect rect(0,0,500,500);
 
-    glbSwitchWindow(mainWindow);
-    GlbImage Image = glbLoadImage("earth.jpg");    
-    GlbImage Image2 = glbLoadImage("a001.dds");    
+    GlbWindow mainWindow;		//窗口
+    glbCreateWindow(mainWindow, rect, ".\\calibmain.ini", true, false);	//生成一个窗口
+	
+	GlbRotmat GlobeRotMat;		//地球旋转量
+	glbCreateGlbRotmat(GlobeRotMat);	//初始化旋转量（北极向上）
+
+    glbSwitchWindow(mainWindow);	//切换到窗口（在读取图像之前）
+
+    GlbImage Image = glbLoadImage("earth.jpg");    //读取图像文件
+    GlbImage Image2 = glbLoadImage("icon.jpg");    
     
     do
     {
-        glbClearWindow();
-         g_GlobeEularAngle.m_3_Axis += 0.2f;
-        if(g_GlobeEularAngle.m_3_Axis>360)
-        {
-            g_GlobeEularAngle.m_3_Axis -= 360;
-        }
-        glbEularAngle2Rotmat(g_GlobeEularAngle, g_GlobeRotMat);
-        glbDrawGlobe(Image, g_GlobeRotMat, mainWindow.m_calib);
-        GlbPointGeo p1(40,120);
-        GlbPointGeo p2(90,120);
-        GlbPoint3d p3;
+        glbClearWindow();	//清除窗口内容
 
-        glbDrawTexture(Image2, g_GlobeRotMat, mainWindow.m_calib, 
-            p1, true, p2, false, true, 180, 30, 1, GLB_TEX_BELT, p3);
-        glbDrawLineOnGlobe(p1, g_GlobeRotMat, mainWindow.m_calib, p2, 2);
+        glbDrawGlobe(Image, GlobeRotMat, mainWindow.m_calib); //画地球底图
+
+        GlbPointGeo p1(40,120);	//北京的坐标
+        GlbPointGeo p2(90,120); //北极点坐标
+
+        glbDrawTexture(Image2, GlobeRotMat, mainWindow.m_calib, 
+            p1, true, p2, false, true, 40, 30, 1, GLB_TEX_RECT);		//画图
+        glbDrawLineOnGlobe(p1, GlobeRotMat, mainWindow.m_calib, p2, 2);	//画线
 
     }
     while(glbUpdateWindow(mainWindow,30));
 
-    glbReleaseImage(&Image);
+    glbReleaseImage(&Image);		//释放临时变量
+    glbReleaseImage(&Image2);
     glbDestoryWindow(mainWindow);
     return;
 }
