@@ -1,6 +1,7 @@
 ﻿#pragma once
 //#include "windows.h"
 #include <vector>
+#include <list> 
 #include "GlbRot.h"
 #include "opencv.hpp"
 #include <afxwin.h>
@@ -38,13 +39,25 @@ public:
     }
 };
 
+class GlbMove
+{
+public:
+	GlbPoint2d m_pFrom;
+	GlbPoint2d m_pTo;
+	long m_nTrackID;
+};
+
 class GlbWindow
 {
 public:
-    HWND   m_hWnd;
-    HDC    m_hDC;
-    HGLRC  m_hRC;
+    HWND	m_hWnd;
+    HDC		m_hDC;
+    HGLRC	m_hRC;
+	int		m_width;
+	int		m_height;
     GlbCalib m_calib;
+	list<GlbPoint2d> m_touchSignal;
+	list<GlbMove> m_moveSignal;
 };
 
 GLBCORE_API int glbDetectScreen(vector<GlbRect> &screens);//检测屏幕的个数及分辨率，返回屏幕个数

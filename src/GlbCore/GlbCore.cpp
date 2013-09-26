@@ -23,6 +23,19 @@ PFNGLCOMPRESSEDTEXIMAGE2DARBPROC glCompressedTexImage2DARB;
 #define FACET_SCACLE_IN_ANGLE (6) //每个面片占的最小角度
 #define MAX_FACET_SHOW_THRESHOLD (0.4f)//能显示的最大面片的size
 
+class HWND_GLBWINDOW_PARE //每个HWND对应一个GlbWindow
+{
+public:
+	HWND hWnd;
+	GlbWindow* window;
+};
+
+vector<HWND_GLBWINDOW_PARE> g_HWND_GLBWINDOW_PARE; //此全局变量是用来在WindowProc函数中找到hWnd对应的GlbWindow
+
+int glbDeleteHwndGlbWindowPare(GlbWindow *window);
+bool glbGetWindowPtr(const HWND hWnd, GlbWindow **pWindow);
+int glbCreateWindow(GlbWindow &window, GlbRect windowSize, char *calibFileName, bool fullscreen, bool mirror, HINSTANCE hInstance);
+
 GlbImage glbLoadImageFromOpencv(IplImage* pImage, bool bMipmap)
 {
     GLuint TextureID = -1;
@@ -349,6 +362,9 @@ LRESULT CALLBACK WinProc( HWND   hWnd,
     static POINT ptCurrentMousePosit;
     static bool bMousing;
 
+	GlbWindow *pWindow;
+	glbGetWindowPtr(hWnd, &pWindow);
+
     switch( msg )
     {
     case WM_KEYDOWN:
@@ -371,14 +387,14 @@ LRESULT CALLBACK WinProc( HWND   hWnd,
             ptLastMousePosit.x = ptCurrentMousePosit.x = LOWORD (lParam);
             ptLastMousePosit.y = ptCurrentMousePosit.y = HIWORD (lParam);
             bMousing = true;
-			printf("L_button_down\n");
+			printf("L_button_down %X\n", pWindow);
         }
         break;
 
     case WM_LBUTTONUP:
         {
             bMousing = false;
-			printf("L_button_up\n");
+			printf("L_button_up %X\n", pWindow);
         }
         break;
 
@@ -391,7 +407,7 @@ LRESULT CALLBACK WinProc( HWND   hWnd,
             {
                 //g_fSpinX -= (ptCurrentMousePosit.x - ptLastMousePosit.x);
                 //g_fSpinY -= (ptCurrentMousePosit.y - ptLastMousePosit.y);
-				printf("mouse_move from (%d,%d) to (%d,%d)\n", ptLastMousePosit.x, ptLastMousePosit.y, ptCurrentMousePosit.x, ptCurrentMousePosit.y);
+				printf("mouse_move from (%d,%d) to (%d,%d) %X\n", ptLastMousePosit.x, ptLastMousePosit.y, ptCurrentMousePosit.x, ptCurrentMousePosit.y, pWindow);
             }
 
             ptLastMousePosit.x = ptCurrentMousePosit.x;
@@ -504,9 +520,51 @@ void GL_Init(HDC &hDC, HGLRC &hRC, HWND hWnd, long winWidth, long winHeight, boo
 #endif
 }
 
+int glbAddHwndGlbWindowPare(HWND hWnd, GlbWindow *window)
+{
+	HWND_GLBWINDOW_PARE pare;
+	pare.hWnd = hWnd;
+	pare.window = window;
+	g_HWND_GLBWINDOW_PARE.push_back(pare);
+	return g_HWND_GLBWINDOW_PARE.size();
+}
+
+int glbDeleteHwndGlbWindowPare(GlbWindow *window)
+{
+	vector<HWND_GLBWINDOW_PARE>::iterator i;
+	for(i=g_HWND_GLBWINDOW_PARE.begin(); i!=g_HWND_GLBWINDOW_PARE.end();)
+	{
+		if(i->window == window)
+		{
+			i = g_HWND_GLBWINDOW_PARE.erase(i);
+		}
+		else
+		{
+			i++;
+		}
+	}
+	return g_HWND_GLBWINDOW_PARE.size();
+}
+
+bool glbGetWindowPtr(const HWND hWnd, GlbWindow **pWindow)
+{
+	vector<HWND_GLBWINDOW_PARE>::iterator i;
+	for(i=g_HWND_GLBWINDOW_PARE.begin(); i!=g_HWND_GLBWINDOW_PARE.end(); i++)
+	{
+		if(i->hWnd == hWnd)
+		{
+			*pWindow = i->window;
+			return true;
+		}
+	}
+	return false;
+}
 
 int glbCreateWindow(GlbWindow &window, GlbRect windowSize, char *calibFileName, bool fullscreen, bool mirror, HINSTANCE hInstance)
 {
+	window.m_width = windowSize.m_width;
+	window.m_height = windowSize.m_height;
+
     WNDCLASSEX winClass; 
 
     winClass.lpszClassName = "GLB_WINDOWS_CLASS";
@@ -557,6 +615,8 @@ int glbCreateWindow(GlbWindow &window, GlbRect windowSize, char *calibFileName, 
         return 0;
     }
 
+	glbAddHwndGlbWindowPare(hWnd, &window);//将hWnd和window加入查找表，以便在WindowProc中查询
+
     ShowWindow( hWnd, SW_SHOW );
     UpdateWindow( hWnd );
 
@@ -574,6 +634,9 @@ int glbCreateWindow(GlbWindow &window, GlbRect windowSize, char *calibFileName, 
 
 int glbCreateWindowMFC(GlbWindow &window, CRect rect, char* calibFileName, CWnd* parentWindow, bool mirror)
 {
+	window.m_width = rect.Width();
+	window.m_height = rect.Height();
+
     HWND parentHWnd = parentWindow->m_hWnd;
     CString className = AfxRegisterWndClass(CS_HREDRAW |
         CS_VREDRAW | CS_OWNDC, NULL,
@@ -657,6 +720,7 @@ void glbDrawImage( GlbImage image )
 
 void glbDestoryWindow(GlbWindow window, HINSTANCE   hInstance )   
 {
+	glbDeleteHwndGlbWindowPare(&window);
 
     if( window.m_hRC != NULL )
     {
