@@ -363,7 +363,7 @@ LRESULT CALLBACK WinProc( HWND   hWnd,
     static bool bMousing;
 
 	GlbWindow *pWindow;
-	glbGetWindowPtr(hWnd, &pWindow);
+	glbGetWindowPtr(hWnd, &pWindow);//从查找表中取得pWindow的值
 
     switch( msg )
     {
@@ -405,10 +405,14 @@ LRESULT CALLBACK WinProc( HWND   hWnd,
 
             if( bMousing )
             {
-                //g_fSpinX -= (ptCurrentMousePosit.x - ptLastMousePosit.x);
-                //g_fSpinY -= (ptCurrentMousePosit.y - ptLastMousePosit.y);
 				printf("mouse_move from (%d,%d) to (%d,%d) %X\n", ptLastMousePosit.x, ptLastMousePosit.y, ptCurrentMousePosit.x, ptCurrentMousePosit.y, pWindow);
-            }
+				GlbMove move;
+				move.m_pFrom.m_x = ptLastMousePosit.x;
+				move.m_pFrom.m_y = ptLastMousePosit.y;
+				move.m_pTo.m_x = ptCurrentMousePosit.x;
+				move.m_pTo.m_y = ptCurrentMousePosit.y;
+
+			}
 
             ptLastMousePosit.x = ptCurrentMousePosit.x;
             ptLastMousePosit.y = ptCurrentMousePosit.y;
