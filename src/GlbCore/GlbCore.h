@@ -100,6 +100,8 @@ GLBCORE_API void glbDrawLine(	GlbPointGeo geoStartPoint, bool bStartPointOnGlobe
 										GlbPointGeo geoEndPoint, bool bEndPointOnGlobe, 
 										GlbRotmat GlobeRotMat, GlbCalib calib, int layer);
 GLBCORE_API void glbDrawLineOnScreen(GlbCalib calib, GlbPointGeo geoStartPoint, GlbPointGeo geoEndPoint, int layer);
+GLBCORE_API void glbDrawCircle(GlbPointGeo geoCenterPoint, bool bCenterPointOnGlobe, float radius, GlbRotmat GlobeRotMat, GlbCalib calib,  int layer);
+
 GLBCORE_API void glbDrawGlobe(GlbImage Image, GlbRotmat GlobeRotMat, GlbCalib calib);
 GLBCORE_API void glbDrawTexture(
                     GlbImage Image,     //材质的编号

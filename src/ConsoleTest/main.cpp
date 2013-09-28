@@ -31,6 +31,7 @@ void main()
         glbDrawTexture(Image2, GlobeRotMat, mainWindow.m_calib, 
             p1, true, p2, false, true, 40, 30, 1, GLB_TEX_RECT);		//画图
         glbDrawLine(p1, true, p2, false, GlobeRotMat, mainWindow.m_calib, 2);		//画线
+		glbDrawCircle(p1, true, 30, GlobeRotMat, mainWindow.m_calib, 3);
 
 		vector<GlbMove> move;
 		vector<GlbPoint2d> touch;
@@ -39,7 +40,7 @@ void main()
 		vector<GlbMove>::iterator it;
 		for( it=move.begin(); it!=move.end(); it++)
 		{
-			printf("from: (%f,%f) to (%f,%f)\n" , it->m_pFrom.m_x, it->m_pFrom.m_y, it->m_pTo.m_x, it->m_pTo.m_y);
+			//printf("from: (%f,%f) to (%f,%f)\n" , it->m_pFrom.m_x, it->m_pFrom.m_y, it->m_pTo.m_x, it->m_pTo.m_y);
 			GlbPoint3d from3d, to3d;
 			glbPointRound2PointRect(it->m_pFrom, from3d, mainWindow.m_calib);
 			glbPointRound2PointRect(it->m_pTo, to3d, mainWindow.m_calib);

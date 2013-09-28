@@ -388,14 +388,14 @@ LRESULT CALLBACK WinProc( HWND   hWnd,
             ptLastMousePosit.x = ptCurrentMousePosit.x = LOWORD (lParam);
             ptLastMousePosit.y = ptCurrentMousePosit.y = HIWORD (lParam);
             bMousing = true;
-			printf("L_button_down %X\n", pWindow);
+			//printf("L_button_down %X\n", pWindow);
         }
         break;
 
     case WM_LBUTTONUP:
         {
             bMousing = false;
-			printf("L_button_up %X\n", pWindow);
+			//printf("L_button_up %X\n", pWindow);
         }
         break;
 
@@ -406,7 +406,7 @@ LRESULT CALLBACK WinProc( HWND   hWnd,
 
             if( bMousing )
             {
-				printf("mouse_move from (%d,%d) to (%d,%d) %X\n", ptLastMousePosit.x, ptLastMousePosit.y, ptCurrentMousePosit.x, ptCurrentMousePosit.y, pWindow);
+				//printf("mouse_move from (%d,%d) to (%d,%d) %X\n", ptLastMousePosit.x, ptLastMousePosit.y, ptCurrentMousePosit.x, ptCurrentMousePosit.y, pWindow);
 				GlbMove move;
 
 				float radius = (float)pWindow->m_height/2;
@@ -996,6 +996,52 @@ void glbDrawLineOnScreen(GlbCalib calib, GlbPointGeo geoStartPoint, GlbPointGeo 
 			glVertex3f(p2d2.m_x,p2d2.m_y, (GLfloat)layer);
 			glEnd();
 		}
+	}
+}
+
+void glbDrawCircle(GlbPointGeo geoCenterPoint, bool bCenterPointOnGlobe, float radius, GlbRotmat GlobeRotMat, GlbCalib calib,  int layer)
+{
+	GlbPoint3d center3d;
+	glbPointGeo2PointRect(geoCenterPoint, center3d);
+
+	if(bCenterPointOnGlobe)
+	{
+		//如果是地球上的点，转化成屏幕上的点
+		glbGlobePoint2ScreenPoint(center3d, GlobeRotMat, center3d);
+	}
+
+	//取北极点的方向为画圆的起始方向
+	GlbPointGeo polar(90,0);
+	GlbPoint3d polar3d;
+	glbPointGeo2PointRect(polar, polar3d);
+
+	float angle = glbAngleBetweenPoints(center3d, polar3d);
+	if(angle<1)
+	{
+		//如果中心点距北极点不足1度，则取南极点
+		polar.m_lat = -90;
+		glbPointGeo2PointRect(polar, polar3d);
+	}
+	GlbPivot pivot;
+	//计算出中心点到极点的转轴
+	glbPivotBetweenPoints(center3d, polar3d, pivot);
+
+	GlbPoint3d circlePoint1,circlePoint2;
+	//将中心点转向极点radius度
+	glbPivotingPoint(center3d, pivot, radius, circlePoint1);
+
+	for(int i=0; i<60; i++)
+	{
+		//将circlePoint1绕中心点旋转6度，循环60次，画成360度的圆圈
+		glbPivotingPoint(circlePoint1, center3d, 6, circlePoint2);
+
+		GlbPointGeo p1Geo, p2Geo;
+		glbPointRect2PointGeo(circlePoint1, p1Geo);
+		glbPointRect2PointGeo(circlePoint2, p2Geo);
+
+		glbDrawLineOnScreen(calib, p1Geo, p2Geo, layer);
+
+		circlePoint1 = circlePoint2;
 	}
 }
 
