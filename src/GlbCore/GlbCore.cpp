@@ -361,6 +361,7 @@ LRESULT CALLBACK WinProc( HWND   hWnd,
 {
     static POINT ptLastMousePosit;
     static POINT ptCurrentMousePosit;
+    static POINT HitPoint;
     static bool bMousing;
 
 	GlbWindow *pWindow;
@@ -385,8 +386,9 @@ LRESULT CALLBACK WinProc( HWND   hWnd,
 
     case WM_LBUTTONDOWN:
         {
-            ptLastMousePosit.x = ptCurrentMousePosit.x = LOWORD (lParam);
-            ptLastMousePosit.y = ptCurrentMousePosit.y = HIWORD (lParam);
+            HitPoint.x = ptLastMousePosit.x = ptCurrentMousePosit.x = LOWORD (lParam);
+            HitPoint.y = ptLastMousePosit.y = ptCurrentMousePosit.y = HIWORD (lParam);
+			
             bMousing = true;
 			//printf("L_button_down %X\n", pWindow);
         }
@@ -395,6 +397,22 @@ LRESULT CALLBACK WinProc( HWND   hWnd,
     case WM_LBUTTONUP:
         {
             bMousing = false;
+			ptCurrentMousePosit.x = LOWORD (lParam);
+            ptCurrentMousePosit.y = HIWORD (lParam);
+			if( (abs(HitPoint.x - ptCurrentMousePosit.x)<=1) && (abs(HitPoint.y - ptCurrentMousePosit.y)<=1) )
+			{
+				//printf("click\n");
+				float radius = (float)pWindow->m_height/2;
+				GlbPoint2d point;
+				point.m_x = (ptLastMousePosit.x - pWindow->m_width/2 )/radius;
+				point.m_y = (pWindow->m_height/2 - ptLastMousePosit.y)/radius;
+								
+				pWindow->EnterTouchCS();
+
+				pWindow->m_touchSignal.push_back(point);
+
+				pWindow->LeaveTouchCS();
+			}
 			//printf("L_button_up %X\n", pWindow);
         }
         break;

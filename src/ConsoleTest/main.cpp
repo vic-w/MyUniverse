@@ -29,25 +29,39 @@ void main()
         GlbPointGeo p2(90,120); //北极点坐标
 
         glbDrawTexture(Image2, GlobeRotMat, mainWindow.m_calib, 
-            p1, true, p2, false, true, 40, 30, 1, GLB_TEX_RECT);		//画图
+            p1, true, p2, false, true, 40, 30, 1, GLB_TEX_RECT);					//画图
         glbDrawLine(p1, true, p2, false, GlobeRotMat, mainWindow.m_calib, 2);		//画线
-		glbDrawCircle(p1, true, 30, GlobeRotMat, mainWindow.m_calib, 3);
+		glbDrawCircle(p1, true, 30, GlobeRotMat, mainWindow.m_calib, 3);			//画圆
 
 		vector<GlbMove> move;
 		vector<GlbPoint2d> touch;
-		glbPopTouchSignal(mainWindow, move, touch);
+		glbPopTouchSignal(mainWindow, move, touch);	//取得触摸点击信号
 
-		vector<GlbMove>::iterator it;
-		for( it=move.begin(); it!=move.end(); it++)
+		//根据触摸移动信号转动地球
+		vector<GlbMove>::iterator m_it;
+		for( m_it=move.begin(); m_it!=move.end(); m_it++)
 		{
 			//printf("from: (%f,%f) to (%f,%f)\n" , it->m_pFrom.m_x, it->m_pFrom.m_y, it->m_pTo.m_x, it->m_pTo.m_y);
 			GlbPoint3d from3d, to3d;
-			glbPointRound2PointRect(it->m_pFrom, from3d, mainWindow.m_calib);
-			glbPointRound2PointRect(it->m_pTo, to3d, mainWindow.m_calib);
+			glbPointRound2PointRect(m_it->m_pFrom, from3d, mainWindow.m_calib);
+			glbPointRound2PointRect(m_it->m_pTo, to3d, mainWindow.m_calib);
 
 			GlbRotmat rotation;
 			glbMovingPoints2RotMat(from3d, to3d, rotation);
 			glbRotmatMul(rotation, GlobeRotMat, GlobeRotMat);
+		}
+
+		//在点击处画一个圆圈
+		vector<GlbPoint2d>::iterator t_it;
+		for( t_it=touch.begin(); t_it!=touch.end(); t_it++)
+		{
+			GlbPoint3d point3d;
+			glbPointRound2PointRect(*t_it, point3d, mainWindow.m_calib);
+
+			GlbPointGeo pointGeo;
+			glbPointRect2PointGeo(point3d, pointGeo);
+
+			glbDrawCircle(pointGeo, false, 5, GlobeRotMat, mainWindow.m_calib, 4);
 		}
 		
     }
