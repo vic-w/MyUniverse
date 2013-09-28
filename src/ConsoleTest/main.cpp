@@ -62,6 +62,9 @@ void main()
 			glbPointRect2PointGeo(point3d, pointGeo);
 
 			glbDrawCircle(pointGeo, false, 5, GlobeRotMat, mainWindow.m_calib, 4);
+
+			int HitLayer = glbGetTopLayer(mainWindow, *t_it);
+			printf("Hit layer = %d\n", HitLayer);
 		}
 		
     }

@@ -132,5 +132,6 @@ GLBCORE_API void glbDrawBelt(
                 float layer
     );
 
-//GLBCORE_API void glbShowFrameRate();
+GLBCORE_API int glbGetTopLayer(GlbWindow &window, GlbPoint2d pTouch);
 
+//GLBCORE_API void glbShowFrameRate();
