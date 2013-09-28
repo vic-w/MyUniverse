@@ -1,4 +1,4 @@
-﻿#pragma o/nce
+﻿#pragma once
 //#include "windows.h"
 #include <vector>
 #include <list> 
@@ -96,7 +96,9 @@ GLBCORE_API void glbDrawImage(GlbImage image);              //在窗口中画图
 
 GLBCORE_API int glbUpdateWindow(GlbWindow window, int ms);                    //更新窗口中内容,返回0表示窗口退出，返回1表示正常运行
 
-GLBCORE_API void glbDrawLineOnGlobe(GlbPointGeo geoStartPoint, GlbRotmat GlobeRotMat, GlbCalib calib, GlbPointGeo geoEndPoint, int layer);
+GLBCORE_API void glbDrawLine(	GlbPointGeo geoStartPoint, bool bStartPointOnGlobe, 
+										GlbPointGeo geoEndPoint, bool bEndPointOnGlobe, 
+										GlbRotmat GlobeRotMat, GlbCalib calib, int layer);
 GLBCORE_API void glbDrawLineOnScreen(GlbCalib calib, GlbPointGeo geoStartPoint, GlbPointGeo geoEndPoint, int layer);
 GLBCORE_API void glbDrawGlobe(GlbImage Image, GlbRotmat GlobeRotMat, GlbCalib calib);
 GLBCORE_API void glbDrawTexture(

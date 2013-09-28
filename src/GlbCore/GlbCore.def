@@ -9,7 +9,7 @@ EXPORTS
    glbClearWindow   @6   NONAME  
    glbDrawImage   @7   NONAME  
    glbUpdateWindow   @8   NONAME  
-   glbDrawLineOnGlobe   @9   NONAME  
+   glbDrawLine   @9   NONAME  
    glbDrawLineOnScreen   @10   NONAME  
    glbDrawGlobe   @11   NONAME  
    glbDrawTexture   @12   NONAME  

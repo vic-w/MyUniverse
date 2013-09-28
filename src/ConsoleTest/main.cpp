@@ -30,7 +30,7 @@ void main()
 
         glbDrawTexture(Image2, GlobeRotMat, mainWindow.m_calib, 
             p1, true, p2, false, true, 40, 30, 1, GLB_TEX_RECT);		//画图
-        glbDrawLineOnGlobe(p1, GlobeRotMat, mainWindow.m_calib, p2, 2);	//画线
+        glbDrawLine(p1, true, p2, false, GlobeRotMat, mainWindow.m_calib, 2);		//画线
 
 		vector<GlbMove> move;
 		vector<GlbPoint2d> touch;

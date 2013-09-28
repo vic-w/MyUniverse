@@ -932,13 +932,26 @@ void glbDrawTexture(
     //glbPivotingPoint(pClose, pivot_h, width/2.0f, pClose);
 }
 
-void glbDrawLineOnGlobe(GlbPointGeo geoStartPoint, GlbRotmat GlobeRotMat, GlbCalib calib, GlbPointGeo geoEndPoint, int layer)
+void glbDrawLine(
+	GlbPointGeo geoStartPoint, 
+	bool bStartPointOnGlobe, 
+	GlbPointGeo geoEndPoint, 
+	bool bEndPointOnGlobe, 
+	GlbRotmat GlobeRotMat, 
+	GlbCalib calib, 
+	int layer)
 {
 	GlbPoint3d rectStartPoint, rectEndPoint;
 	glbPointGeo2PointRect(geoStartPoint, rectStartPoint);
 	glbPointGeo2PointRect(geoEndPoint, rectEndPoint);
-	glbGlobePoint2ScreenPoint(rectStartPoint, GlobeRotMat, rectStartPoint);
-	glbGlobePoint2ScreenPoint(rectEndPoint, GlobeRotMat, rectEndPoint);
+	if(bStartPointOnGlobe)
+	{
+		glbGlobePoint2ScreenPoint(rectStartPoint, GlobeRotMat, rectStartPoint);
+	}
+	if(bEndPointOnGlobe)
+	{
+		glbGlobePoint2ScreenPoint(rectEndPoint, GlobeRotMat, rectEndPoint);
+	}
 	GlbPointGeo geoStartPoint2, geoEndPoint2;
 	glbPointRect2PointGeo(rectStartPoint, geoStartPoint2);
 	glbPointRect2PointGeo(rectEndPoint, geoEndPoint2);
