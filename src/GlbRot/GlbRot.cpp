@@ -275,7 +275,7 @@ void glbMovingPoints2RotMat(GlbPoint3d p1, GlbPoint3d p2, GlbRotmat &r)
 		return;
 	}
 
-	float a = glbAngleBetweenPoints(p1, p2)/180.0f*PI; //计算旋转角度
+	float a = glbAngleBetweenPoints(p1, p2); //计算旋转角度
 	GlbPivot pivot;
 	glbPivotBetweenPoints(p1, p2, pivot); //计算旋转轴
 

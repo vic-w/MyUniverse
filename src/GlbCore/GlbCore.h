@@ -1,4 +1,4 @@
-﻿#pragma once
+﻿#pragma o/nce
 //#include "windows.h"
 #include <vector>
 #include <list> 
@@ -56,8 +56,27 @@ public:
 	int		m_width;
 	int		m_height;
     GlbCalib m_calib;
-	list<GlbPoint2d> m_touchSignal;
-	list<GlbMove> m_moveSignal;
+
+	CRITICAL_SECTION m_touch_cs; //触摸信号互斥临界区
+	vector<GlbPoint2d> m_touchSignal;
+	vector<GlbMove> m_moveSignal;
+public:
+	GlbWindow()
+	{
+		InitializeCriticalSection(&m_touch_cs);
+	}
+	~GlbWindow()
+	{
+		//DeleteCriticalSection(&m_touch_cs);
+	}
+	void EnterTouchCS()
+	{
+		EnterCriticalSection(&m_touch_cs);
+	}
+	void LeaveTouchCS()
+	{
+		LeaveCriticalSection(&m_touch_cs);
+	}
 };
 
 GLBCORE_API int glbDetectScreen(vector<GlbRect> &screens);//检测屏幕的个数及分辨率，返回屏幕个数
@@ -70,6 +89,7 @@ GLBCORE_API int glbCreateWindow(GlbWindow &window, GlbRect windowSize, char *cal
 GLBCORE_API int glbCreateWindowMFC(GlbWindow &window, CRect rect, char *calibFileName, CWnd* parentWindow, bool mirror);
 GLBCORE_API void glbSwitchWindow(GlbWindow window);
 GLBCORE_API void glbDestoryWindow(GlbWindow window, HINSTANCE hInstance=0);
+GLBCORE_API void glbPopTouchSignal(GlbWindow &window, vector<GlbMove> &move, vector<GlbPoint2d> &touch); 
 
 GLBCORE_API void glbClearWindow();                                    //清空窗口内容
 GLBCORE_API void glbDrawImage(GlbImage image);              //在窗口中画图,但并没有显示

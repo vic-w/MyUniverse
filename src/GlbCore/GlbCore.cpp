@@ -23,18 +23,19 @@ PFNGLCOMPRESSEDTEXIMAGE2DARBPROC glCompressedTexImage2DARB;
 #define FACET_SCACLE_IN_ANGLE (6) //每个面片占的最小角度
 #define MAX_FACET_SHOW_THRESHOLD (0.4f)//能显示的最大面片的size
 
-class HWND_GLBWINDOW_PARE //每个HWND对应一个GlbWindow
+class HWND_GLBWINDOW_PAIR //每个HWND对应一个GlbWindow
 {
 public:
 	HWND hWnd;
 	GlbWindow* window;
 };
 
-vector<HWND_GLBWINDOW_PARE> g_HWND_GLBWINDOW_PARE; //此全局变量是用来在WindowProc函数中找到hWnd对应的GlbWindow
+vector<HWND_GLBWINDOW_PAIR> g_HWND_GLBWINDOW_PAIR; //此全局变量是用来在WindowProc函数中找到hWnd对应的GlbWindow
 
-int glbDeleteHwndGlbWindowPare(GlbWindow *window);
+int glbAddHwndGlbWindowPair(HWND hWnd, GlbWindow *window);
+int glbDeleteHwndGlbWindowPair(GlbWindow *window);
 bool glbGetWindowPtr(const HWND hWnd, GlbWindow **pWindow);
-int glbCreateWindow(GlbWindow &window, GlbRect windowSize, char *calibFileName, bool fullscreen, bool mirror, HINSTANCE hInstance);
+
 
 GlbImage glbLoadImageFromOpencv(IplImage* pImage, bool bMipmap)
 {
@@ -407,10 +408,20 @@ LRESULT CALLBACK WinProc( HWND   hWnd,
             {
 				printf("mouse_move from (%d,%d) to (%d,%d) %X\n", ptLastMousePosit.x, ptLastMousePosit.y, ptCurrentMousePosit.x, ptCurrentMousePosit.y, pWindow);
 				GlbMove move;
-				move.m_pFrom.m_x = ptLastMousePosit.x;
-				move.m_pFrom.m_y = ptLastMousePosit.y;
-				move.m_pTo.m_x = ptCurrentMousePosit.x;
-				move.m_pTo.m_y = ptCurrentMousePosit.y;
+
+				float radius = (float)pWindow->m_height/2;
+
+				move.m_pFrom.m_x = (ptLastMousePosit.x - pWindow->m_width/2 )/radius;
+				move.m_pFrom.m_y = (pWindow->m_height/2 - ptLastMousePosit.y)/radius;
+				move.m_pTo.m_x = (ptCurrentMousePosit.x - pWindow->m_width/2 )/radius;
+				move.m_pTo.m_y = (pWindow->m_height/2 - ptCurrentMousePosit.y)/radius;
+				move.m_nTrackID = 0;
+
+				pWindow->EnterTouchCS();
+
+				pWindow->m_moveSignal.push_back(move);
+
+				pWindow->LeaveTouchCS();
 
 			}
 
@@ -524,36 +535,36 @@ void GL_Init(HDC &hDC, HGLRC &hRC, HWND hWnd, long winWidth, long winHeight, boo
 #endif
 }
 
-int glbAddHwndGlbWindowPare(HWND hWnd, GlbWindow *window)
+int glbAddHwndGlbWindowPair(HWND hWnd, GlbWindow *window)
 {
-	HWND_GLBWINDOW_PARE pare;
-	pare.hWnd = hWnd;
-	pare.window = window;
-	g_HWND_GLBWINDOW_PARE.push_back(pare);
-	return g_HWND_GLBWINDOW_PARE.size();
+	HWND_GLBWINDOW_PAIR pair;
+	pair.hWnd = hWnd;
+	pair.window = window;
+	g_HWND_GLBWINDOW_PAIR.push_back(pair);
+	return g_HWND_GLBWINDOW_PAIR.size();
 }
 
-int glbDeleteHwndGlbWindowPare(GlbWindow *window)
+int glbDeleteHwndGlbWindowPair(GlbWindow *window)
 {
-	vector<HWND_GLBWINDOW_PARE>::iterator i;
-	for(i=g_HWND_GLBWINDOW_PARE.begin(); i!=g_HWND_GLBWINDOW_PARE.end();)
+	vector<HWND_GLBWINDOW_PAIR>::iterator i;
+	for(i=g_HWND_GLBWINDOW_PAIR.begin(); i!=g_HWND_GLBWINDOW_PAIR.end();)
 	{
 		if(i->window == window)
 		{
-			i = g_HWND_GLBWINDOW_PARE.erase(i);
+			i = g_HWND_GLBWINDOW_PAIR.erase(i);
 		}
 		else
 		{
 			i++;
 		}
 	}
-	return g_HWND_GLBWINDOW_PARE.size();
+	return g_HWND_GLBWINDOW_PAIR.size();
 }
 
 bool glbGetWindowPtr(const HWND hWnd, GlbWindow **pWindow)
 {
-	vector<HWND_GLBWINDOW_PARE>::iterator i;
-	for(i=g_HWND_GLBWINDOW_PARE.begin(); i!=g_HWND_GLBWINDOW_PARE.end(); i++)
+	vector<HWND_GLBWINDOW_PAIR>::iterator i;
+	for(i=g_HWND_GLBWINDOW_PAIR.begin(); i!=g_HWND_GLBWINDOW_PAIR.end(); i++)
 	{
 		if(i->hWnd == hWnd)
 		{
@@ -563,6 +574,19 @@ bool glbGetWindowPtr(const HWND hWnd, GlbWindow **pWindow)
 	}
 	return false;
 }
+
+void glbPopTouchSignal(GlbWindow &window, vector<GlbMove> &move, vector<GlbPoint2d> &touch)
+{
+	window.EnterTouchCS();
+
+	move = window.m_moveSignal;
+	touch = window.m_touchSignal;
+	window.m_moveSignal.clear();
+	window.m_touchSignal.clear();
+
+	window.LeaveTouchCS();
+}
+
 
 int glbCreateWindow(GlbWindow &window, GlbRect windowSize, char *calibFileName, bool fullscreen, bool mirror, HINSTANCE hInstance)
 {
@@ -619,7 +643,7 @@ int glbCreateWindow(GlbWindow &window, GlbRect windowSize, char *calibFileName, 
         return 0;
     }
 
-	glbAddHwndGlbWindowPare(hWnd, &window);//将hWnd和window加入查找表，以便在WindowProc中查询
+	glbAddHwndGlbWindowPair(hWnd, &window);//将hWnd和window加入查找表，以便在WindowProc中查询
 
     ShowWindow( hWnd, SW_SHOW );
     UpdateWindow( hWnd );
@@ -724,7 +748,7 @@ void glbDrawImage( GlbImage image )
 
 void glbDestoryWindow(GlbWindow window, HINSTANCE   hInstance )   
 {
-	glbDeleteHwndGlbWindowPare(&window);
+	glbDeleteHwndGlbWindowPair(&window);
 
     if( window.m_hRC != NULL )
     {

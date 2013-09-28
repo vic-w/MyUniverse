@@ -32,8 +32,25 @@ void main()
             p1, true, p2, false, true, 40, 30, 1, GLB_TEX_RECT);		//画图
         glbDrawLineOnGlobe(p1, GlobeRotMat, mainWindow.m_calib, p2, 2);	//画线
 
+		vector<GlbMove> move;
+		vector<GlbPoint2d> touch;
+		glbPopTouchSignal(mainWindow, move, touch);
+
+		vector<GlbMove>::iterator it;
+		for( it=move.begin(); it!=move.end(); it++)
+		{
+			printf("from: (%f,%f) to (%f,%f)\n" , it->m_pFrom.m_x, it->m_pFrom.m_y, it->m_pTo.m_x, it->m_pTo.m_y);
+			GlbPoint3d from3d, to3d;
+			glbPointRound2PointRect(it->m_pFrom, from3d, mainWindow.m_calib);
+			glbPointRound2PointRect(it->m_pTo, to3d, mainWindow.m_calib);
+
+			GlbRotmat rotation;
+			glbMovingPoints2RotMat(from3d, to3d, rotation);
+			glbRotmatMul(rotation, GlobeRotMat, GlobeRotMat);
+		}
+		
     }
-    while(glbUpdateWindow(mainWindow,30));
+    while(glbUpdateWindow(mainWindow,0));
 
     glbReleaseImage(&Image);		//释放临时变量
     glbReleaseImage(&Image2);
