@@ -504,6 +504,8 @@ void GL_Init(HDC &hDC, HGLRC &hRC, HWND hWnd, long winWidth, long winHeight, boo
 	glClearColor( 0.35f, 0.53f, 0.7f, 1.0f );
 	glEnable(GL_TEXTURE_2D);
 
+	glEnable(GL_DEPTH_TEST);//开启深度检测（important！！！）
+
 	/*glEnable(GL_ALPHA_TEST);
 	glAlphaFunc(GL_GREATER, 0.0f);
 */
@@ -1150,14 +1152,14 @@ int glbGetTopLayer(GlbWindow &window, GlbPoint2d pTouch)
 {
 	int width = window.m_width;
 	int height = window.m_height;
-	float Radius = height/2.0;
-	int win_x = width/2.0 + Radius * pTouch.m_x;
-	int win_y = Radius + Radius * pTouch.m_y;
+	float Radius = height/2.0f;
+	int win_x = (int)(width/2.0 + Radius * pTouch.m_x);
+	int win_y = (int)(Radius + Radius * pTouch.m_y);
 
 	GLfloat zbuf;
 	//glReadBuffer(GL_DEPTH_ATTACHMENT_EXT);
 	glReadPixels(win_x, win_y, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &zbuf);
-	printf_s( "win_x, win_y, zbuf: %d, %d, %f.\n", win_x, win_y, zbuf);
+	//printf_s( "win_x, win_y, zbuf: %d, %d, %f.\n", win_x, win_y, zbuf);
 
 	GLint		viewport[4];
 	GLdouble	mvmatrix[16];
@@ -1167,6 +1169,6 @@ int glbGetTopLayer(GlbWindow &window, GlbPoint2d pTouch)
 	glGetDoublev(GL_MODELVIEW_MATRIX, mvmatrix);
 	glGetDoublev(GL_PROJECTION_MATRIX, projmatrix);
 	gluUnProject( win_x, win_y, zbuf, mvmatrix, projmatrix, viewport, &obj_x, &obj_y, &obj_z);
-	printf_s( "Object Coordinate: %f, %f, %f.\n", obj_x, obj_y, obj_z );
+	//printf_s( "Object Coordinate: %f, %f, %f.\n", obj_x, obj_y, obj_z );
 	return (int)(obj_z+0.5);
 }
