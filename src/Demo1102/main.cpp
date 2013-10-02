@@ -1,5 +1,7 @@
 ﻿#include "GlbCore.h"
 
+int nMode=1;
+bool bShowMenu=false;
 
 void main()
 {
@@ -16,26 +18,42 @@ void main()
 
     glbSwitchWindow(mainWindow);	//切换到窗口（在读取图像之前）
 
-    GlbImage Image = glbLoadImage("earth.jpg");    //读取图像文件
-    GlbImage Image2 = glbLoadImage("icon.jpg");    
-    
+    GlbImage earth_img = glbLoadImage("earth.jpg");    //读取图像文件
+    GlbImage icon_img = glbLoadImage("icon.jpg");    
+    GlbImage menu_img = glbLoadImage("demo1102\\menu.png");    
+    GlbImage mode1_img = glbLoadImage("demo1102\\mode1.png");    
+    GlbImage mode2_img = glbLoadImage("demo1102\\mode2.png");    
+    GlbImage mode3_img = glbLoadImage("demo1102\\mode3.png");    
+    GlbImage mode4_img = glbLoadImage("demo1102\\mode4.png");    
+    GlbImage mode5_img = glbLoadImage("demo1102\\mode5.png");    
+
     do
     {
         glbClearWindow();	//清除窗口内容
 
-        glbDrawGlobe(Image, GlobeRotMat, mainWindow.m_calib); //画地球底图
-
-        GlbPointGeo p1(40,120);	//北京的坐标
-        GlbPointGeo p2(90,120); //北极点坐标
-
-        glbDrawTexture(Image2, GlobeRotMat, mainWindow.m_calib, 
-            p1, true, p2, false, true, 40, 30, 1, GLB_TEX_RECT);					//画图
-        glbDrawLine(p1, true, p2, false, GlobeRotMat, mainWindow.m_calib, 2);		//画线
-		glbDrawCircle(p1, true, 30, GlobeRotMat, mainWindow.m_calib, 3);			//画圆
+        glbDrawGlobe(earth_img, GlobeRotMat, mainWindow.m_calib); //画地球底图
 
 		vector<GlbMove> move;
 		vector<GlbPoint2d> touch;
 		glbPopTouchSignal(mainWindow, move, touch);	//取得触摸点击信号
+
+        GlbPointGeo p1(90,0);
+        GlbPointGeo p2(90,0);
+        //画菜单按钮
+        glbDrawTexture(menu_img, GlobeRotMat, mainWindow.m_calib, p1, false, p2, false, true, 20, 20, 1, GLB_TEX_RECT);
+        if(bShowMenu)
+        {
+            p1.m_lat = 60; p1.m_lng = 0;
+            glbDrawTexture(mode1_img, GlobeRotMat, mainWindow.m_calib, p1, false, p2, false, true, 20, 20, 2, GLB_TEX_RECT);
+            p1.m_lng = 72;
+            glbDrawTexture(mode2_img, GlobeRotMat, mainWindow.m_calib, p1, false, p2, false, true, 20, 20, 3, GLB_TEX_RECT);
+            p1.m_lng = 144;
+            glbDrawTexture(mode3_img, GlobeRotMat, mainWindow.m_calib, p1, false, p2, false, true, 20, 20, 4, GLB_TEX_RECT);
+            p1.m_lng = -144;
+            glbDrawTexture(mode4_img, GlobeRotMat, mainWindow.m_calib, p1, false, p2, false, true, 20, 20, 5, GLB_TEX_RECT);
+            p1.m_lng = -72;
+            glbDrawTexture(mode5_img, GlobeRotMat, mainWindow.m_calib, p1, false, p2, false, true, 20, 20, 6, GLB_TEX_RECT);
+        }
 
 		//根据触摸移动信号转动地球
 		vector<GlbMove>::iterator m_it;
@@ -61,17 +79,35 @@ void main()
 			GlbPointGeo pointGeo;
 			glbPointRect2PointGeo(point3d, pointGeo);
 
-			glbDrawCircle(pointGeo, false, 5, GlobeRotMat, mainWindow.m_calib, 4);
+			glbDrawCircle(pointGeo, false, 5, GlobeRotMat, mainWindow.m_calib, 1024);
 
 			int HitLayer = glbGetTopLayer(mainWindow, *t_it);
 			printf("Hit layer = %d\n", HitLayer);
+            if(HitLayer == 1)
+            {
+                bShowMenu = !bShowMenu;
+            }
+            else if(HitLayer >= 2 && HitLayer <= 6)
+            {
+                nMode = HitLayer - 1;
+                printf("switch to mode %d\n", nMode);
+                bShowMenu = false;
+            }
+            
 		}
 		
     }
     while(glbUpdateWindow(mainWindow,0));
 
-    glbReleaseImage(&Image);		//释放临时变量
-    glbReleaseImage(&Image2);
+    glbReleaseImage(&earth_img);		//释放临时变量
+    glbReleaseImage(&icon_img);
+    glbReleaseImage(&menu_img);		//释放临时变量
+    glbReleaseImage(&mode1_img);
+    glbReleaseImage(&mode2_img);		//释放临时变量
+    glbReleaseImage(&mode3_img);
+    glbReleaseImage(&mode4_img);		//释放临时变量
+    glbReleaseImage(&mode5_img);
+
     glbDestoryWindow(mainWindow);
     return;
 }
