@@ -18,14 +18,14 @@ void main()
 
     glbSwitchWindow(mainWindow);	//切换到窗口（在读取图像之前）
 
-    GlbImage earth_img = glbLoadImage("earth.jpg");    //读取图像文件
-    GlbImage icon_img = glbLoadImage("icon.jpg");    
-    GlbImage menu_img = glbLoadImage("demo1102\\menu.png");    
-    GlbImage mode1_img = glbLoadImage("demo1102\\mode1.png");    
-    GlbImage mode2_img = glbLoadImage("demo1102\\mode2.png");    
-    GlbImage mode3_img = glbLoadImage("demo1102\\mode3.png");    
-    GlbImage mode4_img = glbLoadImage("demo1102\\mode4.png");    
-    GlbImage mode5_img = glbLoadImage("demo1102\\mode5.png");    
+    GlbImage earth_img = glbLoadImage("image\\earth.jpg");    //读取图像文件
+    GlbImage icon_img = glbLoadImage("image\\icon.png");    
+    GlbImage menu_img = glbLoadImage("image\\menu.png");    
+    GlbImage mode1_img = glbLoadImage("image\\mode1.png");    
+    GlbImage mode2_img = glbLoadImage("image\\mode2.png");    
+    GlbImage mode3_img = glbLoadImage("image\\mode3.png");    
+    GlbImage mode4_img = glbLoadImage("image\\mode4.png");    
+    GlbImage mode5_img = glbLoadImage("image\\mode5.png");    
 
     do
     {
@@ -94,7 +94,7 @@ void main()
                 bShowMenu = false;
             }
             
-		}
+		} 
 		
     }
     while(glbUpdateWindow(mainWindow,0));
