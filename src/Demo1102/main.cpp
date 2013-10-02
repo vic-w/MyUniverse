@@ -39,8 +39,29 @@ void main()
 
         GlbPointGeo p1(90,0);
         GlbPointGeo p2(90,0);
+
         //画菜单按钮
-        glbDrawTexture(menu_img, GlobeRotMat, mainWindow.m_calib, p1, false, p2, false, true, 20, 20, 1, GLB_TEX_RECT);
+		if(nMode == 1)
+		{
+			glbDrawTexture(mode1_img, GlobeRotMat, mainWindow.m_calib, p1, false, p2, false, true, 20, 20, 1, GLB_TEX_RECT);
+		}
+		else if(nMode ==2)
+		{
+			glbDrawTexture(mode2_img, GlobeRotMat, mainWindow.m_calib, p1, false, p2, false, true, 20, 20, 1, GLB_TEX_RECT);
+		}
+		else if(nMode ==3)
+		{
+			glbDrawTexture(mode3_img, GlobeRotMat, mainWindow.m_calib, p1, false, p2, false, true, 20, 20, 1, GLB_TEX_RECT);
+		}
+		else if(nMode ==4)
+		{
+			glbDrawTexture(mode4_img, GlobeRotMat, mainWindow.m_calib, p1, false, p2, false, true, 20, 20, 1, GLB_TEX_RECT);
+		}
+		else if(nMode ==5)
+		{
+			glbDrawTexture(mode5_img, GlobeRotMat, mainWindow.m_calib, p1, false, p2, false, true, 20, 20, 1, GLB_TEX_RECT);
+		}
+
         if(bShowMenu)
         {
             p1.m_lat = 60; p1.m_lng = 0;

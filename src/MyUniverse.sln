@@ -36,6 +36,9 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "KeyGen", "KeyGen\KeyGen.vcxproj", "{A1AD1E23-B83F-4688-966E-F91F03584573}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Demo1102", "Demo1102\Demo1102.vcxproj", "{4070BA76-1150-4B60-B115-51D633CE57A8}"
+	ProjectSection(ProjectDependencies) = postProject
+		{6C0DF790-FA8E-451B-9250-F8CF00581BB8} = {6C0DF790-FA8E-451B-9250-F8CF00581BB8}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

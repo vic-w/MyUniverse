@@ -64,7 +64,14 @@ GlbImage glbLoadImageFromOpencv(IplImage* pImage, bool bMipmap)
 
     if(bMipmap)
     {
-        gluBuild2DMipmaps(GL_TEXTURE_2D, 3, sizeX, sizeY, GL_BGR_EXT, GL_UNSIGNED_BYTE, pImage->imageData);
+		if(pImage->nChannels == 4)
+		{
+			gluBuild2DMipmaps(GL_TEXTURE_2D, 4, sizeX, sizeY, GL_BGRA_EXT, GL_UNSIGNED_BYTE, pImage->imageData);
+		}
+		else
+		{
+			gluBuild2DMipmaps(GL_TEXTURE_2D, 3, sizeX, sizeY, GL_BGR_EXT, GL_UNSIGNED_BYTE, pImage->imageData);
+		}
     }
     else
     {
@@ -220,7 +227,7 @@ GlbImage glbLoadImage(const char* filename)  //载入图像（支持dds,jpg,bmp,
         || _stricmp(suffix,".png") == 0)
     {
         GLuint TextureID = -1;
-        IplImage *pImage = cvLoadImage(filename);
+        IplImage *pImage = cvLoadImage(filename, CV_LOAD_IMAGE_UNCHANGED);//只有加了UNCHANGED参数才能读到png文件的alpha通道，否则会被强制转换为RGB图像
 
         if(!pImage)
         {
@@ -505,6 +512,10 @@ void GL_Init(HDC &hDC, HGLRC &hRC, HWND hWnd, long winWidth, long winHeight, boo
 	glEnable(GL_TEXTURE_2D);
 
 	glEnable(GL_DEPTH_TEST);//开启深度检测（important！！！）
+
+	//以下两句是开启alpha通道的透明效果
+	glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
+	glEnable(GL_BLEND);
 
 	/*glEnable(GL_ALPHA_TEST);
 	glAlphaFunc(GL_GREATER, 0.0f);
