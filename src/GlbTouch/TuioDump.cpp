@@ -73,10 +73,12 @@ void TuioDump::removeTuioCursor(TuioCursor *tcur) {
 
 	x0 = path.begin()->getX();
 	y0 = path.begin()->getY();
-	t0 = path.begin()->getStartTime().getMicroseconds();
+	t0 = path.begin()->getStartTime().getTotalMilliseconds();
+
 	x1 = path.back().getX();
 	y1 = path.back().getY();
-	t1 = TuioTime::getSessionTime().getMicroseconds();
+	t1 = TuioTime::getSessionTime().getTotalMilliseconds();
+
 
 	//std::cout<<"x0:"<<x0<<" y0:"<<y0<<" t0:"<<t0<<std::endl;
 	//std::cout<<"x1:"<<x1<<" y1:"<<y1<<" t1:"<<t1<<std::endl;
@@ -86,7 +88,7 @@ void TuioDump::removeTuioCursor(TuioCursor *tcur) {
 	long T_th = 1000;
 	long t_th = 10;
 
-	if( fabs(x0-x1)< d_th && fabs(y0-y1)<d_th /*&& t1-t0>t_th && t1-t0<T_th*/)
+	if( fabs(x0-x1)< d_th && fabs(y0-y1)<d_th && t1-t0>t_th && t1-t0<T_th)
 	{
 		GlbPoint2d pTouch;
 		int width = m_pWindow->m_width;
