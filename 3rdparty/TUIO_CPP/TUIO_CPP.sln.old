@@ -1,12 +1,12 @@
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TuioDump", "TuioDump.vcxproj", "{5E2EAE4F-8668-4647-98CA-562358EACC10}"
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Studio 2005
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TuioDump", "TuioDump.vcproj", "{5E2EAE4F-8668-4647-98CA-562358EACC10}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TuioDemo", "TuioDemo.vcxproj", "{8737A4B6-C44F-4397-9BB5-432646375E9F}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TuioDemo", "TuioDemo.vcproj", "{8737A4B6-C44F-4397-9BB5-432646375E9F}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libTUIO", "libTUIO.vcxproj", "{E1C28E7D-466C-4D0A-AEB1-CFFD0F6F5645}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libTUIO", "libTUIO.vcproj", "{E1C28E7D-466C-4D0A-AEB1-CFFD0F6F5645}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SimpleSimulator", "SimpleSimulator.vcxproj", "{810E065A-EC96-4C3F-8C8B-7EAE285DC797}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SimpleSimulator", "SimpleSimulator.vcproj", "{810E065A-EC96-4C3F-8C8B-7EAE285DC797}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
