@@ -5,7 +5,6 @@
 #include <stdio.h>
 #include <malloc.h>
 #include "opencv.hpp"
-#include "TuioDump.h"
 
 #ifndef UseOpenGLExtension2LoadDDS
 #include "IL/il.h"
@@ -1183,11 +1182,4 @@ int glbGetTopLayer(GlbWindow &window, GlbPoint2d pTouch)
 	gluUnProject( win_x, win_y, zbuf, mvmatrix, projmatrix, viewport, &obj_x, &obj_y, &obj_z);
 	//printf_s( "Object Coordinate: %f, %f, %f.\n", obj_x, obj_y, obj_z );
 	return (int)(obj_z+0.5);
-}
-
-void glbListenTouchSignal(GlbWindow &window, int port)
-{
-	window.m_TuioPort = port;
-
-	CreateThread(0, 0, TuioThread, (LPVOID)(&window),0,0);//启动TUIO监听线程
 }

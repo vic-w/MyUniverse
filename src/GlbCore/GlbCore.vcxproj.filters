@@ -13,9 +13,6 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="TUIO">
-      <UniqueIdentifier>{4d4b7cd2-684f-4c4e-ab35-11d17652690c}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="ReadMe.txt" />
@@ -36,70 +33,7 @@
     <ClInclude Include="GlbType.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\3rdparty\TUIO_CPP\TUIO\TuioClient.h">
-      <Filter>TUIO</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\3rdparty\TUIO_CPP\TUIO\TuioContainer.h">
-      <Filter>TUIO</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\3rdparty\TUIO_CPP\TUIO\TuioCursor.h">
-      <Filter>TUIO</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\3rdparty\TUIO_CPP\TUIO\TuioListener.h">
-      <Filter>TUIO</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\3rdparty\TUIO_CPP\TUIO\TuioObject.h">
-      <Filter>TUIO</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\3rdparty\TUIO_CPP\TUIO\TuioPoint.h">
-      <Filter>TUIO</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\3rdparty\TUIO_CPP\TUIO\TuioServer.h">
-      <Filter>TUIO</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\3rdparty\TUIO_CPP\TUIO\TuioTime.h">
-      <Filter>TUIO</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\3rdparty\TUIO_CPP\oscpack\osc\MessageMappingOscPacketListener.h">
-      <Filter>TUIO</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\3rdparty\TUIO_CPP\oscpack\osc\OscException.h">
-      <Filter>TUIO</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\3rdparty\TUIO_CPP\oscpack\osc\OscHostEndianness.h">
-      <Filter>TUIO</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\3rdparty\TUIO_CPP\oscpack\osc\OscOutboundPacketStream.h">
-      <Filter>TUIO</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\3rdparty\TUIO_CPP\oscpack\osc\OscPacketListener.h">
-      <Filter>TUIO</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\3rdparty\TUIO_CPP\oscpack\osc\OscPrintReceivedElements.h">
-      <Filter>TUIO</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\3rdparty\TUIO_CPP\oscpack\osc\OscReceivedElements.h">
-      <Filter>TUIO</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\3rdparty\TUIO_CPP\oscpack\osc\OscTypes.h">
-      <Filter>TUIO</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\3rdparty\TUIO_CPP\oscpack\ip\IpEndpointName.h">
-      <Filter>TUIO</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\3rdparty\TUIO_CPP\oscpack\ip\NetworkingUtils.h">
-      <Filter>TUIO</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\3rdparty\TUIO_CPP\oscpack\ip\PacketListener.h">
-      <Filter>TUIO</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\3rdparty\TUIO_CPP\oscpack\ip\TimerListener.h">
-      <Filter>TUIO</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\3rdparty\TUIO_CPP\oscpack\ip\UdpSocket.h">
-      <Filter>TUIO</Filter>
-    </ClInclude>
-    <ClInclude Include="TuioDump.h">
+    <ClInclude Include="GlbCoreType.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
@@ -108,39 +42,6 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="GlbCore.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\3rdparty\TUIO_CPP\TUIO\TuioClient.cpp">
-      <Filter>TUIO</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\3rdparty\TUIO_CPP\TUIO\TuioServer.cpp">
-      <Filter>TUIO</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\3rdparty\TUIO_CPP\TUIO\TuioTime.cpp">
-      <Filter>TUIO</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\3rdparty\TUIO_CPP\oscpack\osc\OscOutboundPacketStream.cpp">
-      <Filter>TUIO</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\3rdparty\TUIO_CPP\oscpack\osc\OscPrintReceivedElements.cpp">
-      <Filter>TUIO</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\3rdparty\TUIO_CPP\oscpack\osc\OscReceivedElements.cpp">
-      <Filter>TUIO</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\3rdparty\TUIO_CPP\oscpack\osc\OscTypes.cpp">
-      <Filter>TUIO</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\3rdparty\TUIO_CPP\oscpack\ip\IpEndpointName.cpp">
-      <Filter>TUIO</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\3rdparty\TUIO_CPP\oscpack\ip\win32\NetworkingUtils.cpp">
-      <Filter>TUIO</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\3rdparty\TUIO_CPP\oscpack\ip\win32\UdpSocket.cpp">
-      <Filter>TUIO</Filter>
-    </ClCompile>
-    <ClCompile Include="TuioDump.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

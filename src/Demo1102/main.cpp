@@ -1,4 +1,5 @@
 ﻿#include "GlbCore.h"
+#include "GlbTouch.h"
 
 int nMode=1;
 bool bShowMenu=false;
@@ -26,6 +27,8 @@ void main()
     GlbImage mode3_img = glbLoadImage("image\\mode3.png");    
     GlbImage mode4_img = glbLoadImage("image\\mode4.png");    
     GlbImage mode5_img = glbLoadImage("image\\mode5.png");    
+
+	glbListenTouchSignal(mainWindow, 3333);//在3333端口监听TUIO信号
 
     do
     {

@@ -87,70 +87,18 @@
     <None Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\3rdparty\TUIO_CPP\oscpack\ip\IpEndpointName.h" />
-    <ClInclude Include="..\..\3rdparty\TUIO_CPP\oscpack\ip\NetworkingUtils.h" />
-    <ClInclude Include="..\..\3rdparty\TUIO_CPP\oscpack\ip\PacketListener.h" />
-    <ClInclude Include="..\..\3rdparty\TUIO_CPP\oscpack\ip\TimerListener.h" />
-    <ClInclude Include="..\..\3rdparty\TUIO_CPP\oscpack\ip\UdpSocket.h" />
-    <ClInclude Include="..\..\3rdparty\TUIO_CPP\oscpack\osc\MessageMappingOscPacketListener.h" />
-    <ClInclude Include="..\..\3rdparty\TUIO_CPP\oscpack\osc\OscException.h" />
-    <ClInclude Include="..\..\3rdparty\TUIO_CPP\oscpack\osc\OscHostEndianness.h" />
-    <ClInclude Include="..\..\3rdparty\TUIO_CPP\oscpack\osc\OscOutboundPacketStream.h" />
-    <ClInclude Include="..\..\3rdparty\TUIO_CPP\oscpack\osc\OscPacketListener.h" />
-    <ClInclude Include="..\..\3rdparty\TUIO_CPP\oscpack\osc\OscPrintReceivedElements.h" />
-    <ClInclude Include="..\..\3rdparty\TUIO_CPP\oscpack\osc\OscReceivedElements.h" />
-    <ClInclude Include="..\..\3rdparty\TUIO_CPP\oscpack\osc\OscTypes.h" />
-    <ClInclude Include="..\..\3rdparty\TUIO_CPP\TUIO\TuioClient.h" />
-    <ClInclude Include="..\..\3rdparty\TUIO_CPP\TUIO\TuioContainer.h" />
-    <ClInclude Include="..\..\3rdparty\TUIO_CPP\TUIO\TuioCursor.h" />
-    <ClInclude Include="..\..\3rdparty\TUIO_CPP\TUIO\TuioListener.h" />
-    <ClInclude Include="..\..\3rdparty\TUIO_CPP\TUIO\TuioObject.h" />
-    <ClInclude Include="..\..\3rdparty\TUIO_CPP\TUIO\TuioPoint.h" />
-    <ClInclude Include="..\..\3rdparty\TUIO_CPP\TUIO\TuioServer.h" />
-    <ClInclude Include="..\..\3rdparty\TUIO_CPP\TUIO\TuioTime.h" />
     <ClInclude Include="GlbCore.h" />
+    <ClInclude Include="GlbCoreType.h" />
     <ClInclude Include="GlbType.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
-    <ClInclude Include="TuioDump.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\3rdparty\TUIO_CPP\oscpack\ip\IpEndpointName.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="..\..\3rdparty\TUIO_CPP\oscpack\ip\win32\NetworkingUtils.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="..\..\3rdparty\TUIO_CPP\oscpack\ip\win32\UdpSocket.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="..\..\3rdparty\TUIO_CPP\oscpack\osc\OscOutboundPacketStream.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="..\..\3rdparty\TUIO_CPP\oscpack\osc\OscPrintReceivedElements.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="..\..\3rdparty\TUIO_CPP\oscpack\osc\OscReceivedElements.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="..\..\3rdparty\TUIO_CPP\oscpack\osc\OscTypes.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="..\..\3rdparty\TUIO_CPP\TUIO\TuioClient.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="..\..\3rdparty\TUIO_CPP\TUIO\TuioServer.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="..\..\3rdparty\TUIO_CPP\TUIO\TuioTime.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
-    </ClCompile>
     <ClCompile Include="GlbCore.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="TuioDump.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

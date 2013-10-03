@@ -46,7 +46,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>..\GlbRot;..\GlbCore;..\GlbKt;..\..\3rdparty\opencv231\include;$(IncludePath)</IncludePath>
+    <IncludePath>..\GlbRot;..\GlbCore;..\GlbKt;..\..\3rdparty\opencv231\include;..\GlbTouch;$(IncludePath)</IncludePath>
     <LibraryPath>..\Release;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -82,7 +82,7 @@ copy "$(ProjectDir)image\*.*" "$(TargetDir)image\"</Command>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>GlbCore.lib;GlbRot.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>GlbCore.lib;GlbRot.lib;GlbTouch.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>mkdir $(TargetDir)image
