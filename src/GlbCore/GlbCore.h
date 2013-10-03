@@ -56,6 +56,7 @@ public:
 	int		m_width;
 	int		m_height;
     GlbCalib m_calib;
+	int     m_TuioPort;
 
 	CRITICAL_SECTION m_touch_cs; //触摸信号互斥临界区
 	vector<GlbPoint2d> m_touchSignal;
@@ -133,5 +134,7 @@ GLBCORE_API void glbDrawBelt(
     );
 
 GLBCORE_API int glbGetTopLayer(GlbWindow &window, GlbPoint2d pTouch);
+
+GLBCORE_API void glbListenTouchSignal(GlbWindow &window, int port);
 
 //GLBCORE_API void glbShowFrameRate();
