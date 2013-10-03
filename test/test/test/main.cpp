@@ -1,24 +1,14 @@
+#include <afx.h>
+#include <iostream>
 #include "opencv.hpp"
-#include "libxml\tree.h"
-#include "libxml\parser.h"
+
+using namespace std;
+
+//此工程已经设置好了OpenCV的include和lib目录，编译后自动拷贝OpenCV的dll到TargetDir
+//可以直接添加代码
 
 void main()
 {
-    xmlDocPtr doc; //文件指针
-   xmlNodePtr cur;//节点指针
-   doc = xmlParseFile("b.xml");
-   cur = xmlDocGetRootElement(doc);
-   if(xmlStrcmp(cur->name, (const xmlChar*)"root") )
-   {
-     xmlFreeDoc(doc);
-     return;
-   }
-   cur = cur->xmlChildrenNode;
-   //parseNode(doc, cur);//处理节点
-   //xmlSaveFormatFileEnc("tconfig.xml", doc, "UTF-8", 1 );//保存修改
-   xmlFreeDoc(doc); //释放内存
-   xmlCleanupParser();
-   xmlMemoryDump();
-   return;
-	system("pause");
+
 }
+
