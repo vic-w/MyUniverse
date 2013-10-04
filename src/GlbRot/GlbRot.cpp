@@ -440,25 +440,32 @@ void glbRotmatMul( GlbRotmat mat1, GlbRotmat mat2, GlbRotmat &mat_dst )
 	glbCloneGlbRotmat(t, mat_dst);
 }
 
-//int GetTopLayer(GlbPoint2d pTouch)
-//{
-//	float Radius = g_nFullHeight/2.0;
-//	int win_x = g_nFullWidth/2.0 + Radius * pTouch.m_x;
-//	int win_y = Radius + Radius * pTouch.m_y;
-//
-//	GLfloat zbuf;
-//	//glReadBuffer(GL_DEPTH_ATTACHMENT_EXT);
-//	glReadPixels(win_x, win_y, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &zbuf);
-//	//printf_s( "win_x, win_y, zbuf: %d, %d, %f.\n", win_x, win_y, zbuf);
-//
-//	GLint		viewport[4];
-//	GLdouble	mvmatrix[16];
-//	GLdouble	projmatrix[16];
-//	GLdouble	obj_x, obj_y, obj_z;
-//	glGetIntegerv(GL_VIEWPORT, viewport);
-//	glGetDoublev(GL_MODELVIEW_MATRIX, mvmatrix);
-//	glGetDoublev(GL_PROJECTION_MATRIX, projmatrix);
-//	gluUnProject( win_x, win_y, zbuf, mvmatrix, projmatrix, viewport, &obj_x, &obj_y, &obj_z);
-//	//printf_s( "Object Coordinate: %f, %f, %f.\n", obj_x, obj_y, obj_z );
-//	return (int)(obj_z+0.5);
-//}
+float glbAngleABC(GlbPointGeo A, GlbPointGeo B, GlbPointGeo C)
+{
+	//此函数的大致思路是：将B点转至北极，然后比较A点与C点的经度，得出∠ABC的值
+
+	GlbPoint3d A3d,B3d,C3d, Polar3d(0,1,0);
+	glbPointGeo2PointRect(A, A3d);
+	glbPointGeo2PointRect(B, B3d);
+	glbPointGeo2PointRect(C, C3d);
+
+	//将B点转至北极
+	float angle = glbAngleBetweenPoints(B3d, Polar3d);
+	GlbPivot pivot;
+	glbPivotBetweenPoints(B3d, Polar3d, pivot);
+
+	//旋转后的AC点
+	GlbPoint3d Ap3d, Cp3d;
+	glbPivotingPoint(A3d, pivot, angle, Ap3d);
+	glbPivotingPoint(C3d, pivot, angle, Cp3d);
+	GlbPointGeo ApGeo, CpGeo;
+	glbPointRect2PointGeo(Ap3d, ApGeo);
+	glbPointRect2PointGeo(Cp3d, CpGeo);
+
+	float returnValue = CpGeo.m_lng - ApGeo.m_lng;
+	if(returnValue < 0)
+	{
+		returnValue += 360;
+	}
+	return returnValue;
+}
