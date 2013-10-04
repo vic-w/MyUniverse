@@ -82,8 +82,8 @@ void main()
         }
 
 		//画多边形
-		float angle = glbDrawPolygon(	polygon, true, false, GlobeRotMat, mainWindow.m_calib, 7);
-		printf("angle = %f\n",angle);
+		float length = 6371 / 180.0 * 3.14 * glbDrawPolygon(polygon, true, false, GlobeRotMat, mainWindow.m_calib, 7);
+		printf("多边形长度 = %f公里\n",length);
 
 		//根据触摸移动信号转动地球
 		vector<GlbMove>::iterator m_it;
