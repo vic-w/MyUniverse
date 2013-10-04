@@ -30,6 +30,8 @@ void main()
 
 	glbListenTouchSignal(mainWindow, 3333);//在3333端口监听TUIO信号
 
+	vector<GlbPointGeo> polygon;
+
     do
     {
         glbClearWindow();	//清除窗口内容
@@ -79,6 +81,10 @@ void main()
             glbDrawTexture(mode5_img, GlobeRotMat, mainWindow.m_calib, p1, false, p2, false, true, 20, 20, 6, GLB_TEX_RECT);
         }
 
+		//画多边形
+		float angle = glbDrawPolygon(	polygon, true, false, GlobeRotMat, mainWindow.m_calib, 7);
+		printf("angle = %f\n",angle);
+
 		//根据触摸移动信号转动地球
 		vector<GlbMove>::iterator m_it;
 		for( m_it=move.begin(); m_it!=move.end(); m_it++)
@@ -97,17 +103,23 @@ void main()
 		vector<GlbPoint2d>::iterator t_it;
 		for( t_it=touch.begin(); t_it!=touch.end(); t_it++)
 		{
-			GlbPoint3d point3d;
-			glbPointRound2PointRect(*t_it, point3d, mainWindow.m_calib);
+			GlbPoint3d point3d_screen, point3d_globe;
+			glbPointRound2PointRect(*t_it, point3d_screen, mainWindow.m_calib);
 
-			GlbPointGeo pointGeo;
-			glbPointRect2PointGeo(point3d, pointGeo);
+			GlbPointGeo pointGeo_screen, pointGeo_globe;
+			glbPointRect2PointGeo(point3d_screen, pointGeo_screen);
 
-			glbDrawCircle(pointGeo, false, 5, GlobeRotMat, mainWindow.m_calib, 10);
+			glbDrawCircle(pointGeo_screen, false, 5, GlobeRotMat, mainWindow.m_calib, 10);
 
 			int HitLayer = glbGetTopLayer(mainWindow, *t_it);
 			printf("Hit layer = %d\n", HitLayer);
-            if(HitLayer == 1)
+			if(HitLayer == 0)
+			{
+				glbScreenPoint2GlobePoint(point3d_screen, GlobeRotMat, point3d_globe);
+				glbPointRect2PointGeo(point3d_globe, pointGeo_globe);
+				polygon.push_back(pointGeo_globe);
+			}
+            else if(HitLayer == 1)
             {
                 bShowMenu = !bShowMenu;
             }
