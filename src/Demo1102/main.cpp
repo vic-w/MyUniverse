@@ -1,11 +1,13 @@
 ﻿#include "GlbCore.h"
 #include "GlbTouch.h"
+#include "city.h"
 
 int nMode=1;
 bool bShowMenu=false;
 
 void main()
 {
+	vector<CCity> cities = CCity::getCities();
 	vector<GlbRect> screens;	//储存多屏幕信息
 	glbDetectScreen(screens);	//检测屏幕个数和分辨率
 
