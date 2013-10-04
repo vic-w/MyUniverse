@@ -1002,7 +1002,9 @@ float glbDrawPolygon(	vector<GlbPointGeo> points, bool bOnGlobe, bool bClosed,
 
 		if(bClosed)
 		{
-			angle += glbDrawLine(*points.end(), bOnGlobe, *points.begin(), bOnGlobe, GlobeRotMat, calib, layer);
+			GlbPointGeo p1 = *(points.end()-1);
+			GlbPointGeo p2 = *points.begin();
+			angle += glbDrawLine(p1, bOnGlobe, p2, bOnGlobe, GlobeRotMat, calib, layer);
 		}
 	}
 	return angle;

@@ -82,7 +82,7 @@ void main()
         }
 
 		//画多边形
-		float length = 6371 / 180.0 * 3.14 * glbDrawPolygon(polygon, true, false, GlobeRotMat, mainWindow.m_calib, 7);
+		float length = 6371.0f / 180.0f * 3.14f * glbDrawPolygon(polygon, true, false, GlobeRotMat, mainWindow.m_calib, 7);
 		printf("多边形长度 = %f公里\n",length);
 
 		//根据触摸移动信号转动地球
