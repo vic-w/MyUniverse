@@ -1,3 +1,4 @@
+#include <afxwin.h>
 #include "city.h"
 #include "libxml.h"
 #include "libxml\xpath.h"
@@ -11,6 +12,52 @@ CCity::CCity(void)
 
 CCity::~CCity(void)
 {
+}
+
+//http://stackoverflow.com/questions/8308236/performing-arithmetic-on-systemtime
+SYSTEMTIME add( SYSTEMTIME s, double seconds ) {
+
+    FILETIME f;
+    SystemTimeToFileTime( &s, &f );
+
+    ULARGE_INTEGER u  ; 
+    memcpy( &u  , &f , sizeof( u ) );
+
+    const double c_dSecondsPer100nsInterval = 100. * 1.E-9;
+    u.QuadPart += seconds / c_dSecondsPer100nsInterval; 
+
+    memcpy( &f, &u, sizeof( f ) );
+
+    FileTimeToSystemTime( &f, &s );
+    return s;
+ }
+
+char* CCity::getLocalTimeString()
+{
+	SYSTEMTIME st = {0};
+	GetSystemTime(&st); //UTC time
+
+	// Convert to local time provided timezone information.
+	SYSTEMTIME localTime = add(st, timezone*60*60);
+	char* csLocalTime = new char[32];
+	sprintf(csLocalTime, "%ld:%ld:%ld", localTime.wHour,
+							 localTime.wMinute,
+							 localTime.wSecond);
+	return csLocalTime;
+}
+
+char* CCity::getTimezoneDiffString(CCity city1, CCity city2)
+{
+	char* timeDiffString = new char[64];
+	sprintf(timeDiffString, "%s和%s的时差为%2.1f小时", city2.displayname, city1.displayname, city2.timezone - city1.timezone);
+	return timeDiffString;
+}
+
+char* CCity::getTimezoneDiffString(CCity city1)
+{
+	char* timeDiffString = new char[64];
+	sprintf(timeDiffString, "%s和北京的时差为%2.1f小时", city1.displayname, city1.timezone - 8);
+	return timeDiffString;
 }
 
 int code_convert(char* from_charset, char* to_charset, char* inbuf,
@@ -116,8 +163,8 @@ vector<CCity> CCity::getCities()
 			cities.push_back(city);
 			node = node->next->next; //TODO: fix this
 		}
+		xmlFreeDoc(doc);
 	}
     
-	xmlFreeDoc(doc);
 	return cities;
 }

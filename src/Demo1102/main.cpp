@@ -7,7 +7,11 @@ bool bShowMenu=false;
 
 void main()
 {
-	vector<CCity> cities = CCity::getCities();
+	vector<CCity> cities = CCity::getCities(); //读取Xml中的城市列表
+	printf("%s\n", cities[5].getLocalTimeString()); //读取某个城市的当地时间
+	printf("%s\n", CCity::getTimezoneDiffString(cities[2], cities[5]));//两个城市之间的时间差
+	printf("%s\n", CCity::getTimezoneDiffString(cities[5]));//某个城市和北京的时间差
+
 	vector<GlbRect> screens;	//储存多屏幕信息
 	glbDetectScreen(screens);	//检测屏幕个数和分辨率
 
