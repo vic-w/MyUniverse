@@ -957,13 +957,9 @@ void glbDrawTexture(
     }
     delete [nRow+1] PointArr;
     PointArr = NULL;
-
-    ////输出pClose
-    //glbPivotingPoint(pRect, pivot_v, height/2.0f, pClose);
-    //glbPivotingPoint(pClose, pivot_h, width/2.0f, pClose);
 }
 
-void glbDrawLine(
+float glbDrawLine(
 	GlbPointGeo geoStartPoint, 
 	bool bStartPointOnGlobe, 
 	GlbPointGeo geoEndPoint, 
@@ -986,10 +982,33 @@ void glbDrawLine(
 	GlbPointGeo geoStartPoint2, geoEndPoint2;
 	glbPointRect2PointGeo(rectStartPoint, geoStartPoint2);
 	glbPointRect2PointGeo(rectEndPoint, geoEndPoint2);
-	glbDrawLineOnScreen(calib, geoStartPoint2, geoEndPoint2, layer);
+	float angle = glbDrawLineOnScreen(calib, geoStartPoint2, geoEndPoint2, layer);
+	return angle;
 }
 
-void glbDrawLineOnScreen(GlbCalib calib, GlbPointGeo geoStartPoint, GlbPointGeo geoEndPoint, int layer)
+float glbDrawPolygon(	vector<GlbPointGeo> points, bool bOnGlobe, bool bClosed,
+										GlbRotmat GlobeRotMat, GlbCalib calib, int layer)
+{
+	float angle=0.0;
+	vector<GlbPointGeo>::iterator it;
+	if(points.size() >= 2)
+	{
+		for(it=points.begin(); it!=(points.end()-1); it++)
+		{
+			GlbPointGeo p1 = *it;
+			GlbPointGeo p2 = *(it+1);
+			angle += glbDrawLine(p1, bOnGlobe, p2, bOnGlobe, GlobeRotMat, calib, layer);
+		}
+
+		if(bClosed)
+		{
+			angle += glbDrawLine(*points.end(), bOnGlobe, *points.begin(), bOnGlobe, GlobeRotMat, calib, layer);
+		}
+	}
+	return angle;
+}
+
+float glbDrawLineOnScreen(GlbCalib calib, GlbPointGeo geoStartPoint, GlbPointGeo geoEndPoint, int layer)
 {
 	GlbPoint3d rectStartPoint, rectEndPoint;
 	glbPointGeo2PointRect(geoStartPoint, rectStartPoint);
@@ -1028,10 +1047,12 @@ void glbDrawLineOnScreen(GlbCalib calib, GlbPointGeo geoStartPoint, GlbPointGeo 
 			glEnd();
 		}
 	}
+	return angle;
 }
 
-void glbDrawCircle(GlbPointGeo geoCenterPoint, bool bCenterPointOnGlobe, float radius, GlbRotmat GlobeRotMat, GlbCalib calib,  int layer)
+float glbDrawCircle(GlbPointGeo geoCenterPoint, bool bCenterPointOnGlobe, float radius, GlbRotmat GlobeRotMat, GlbCalib calib,  int layer)
 {
+	float perimeter=0.0;
 	GlbPoint3d center3d;
 	glbPointGeo2PointRect(geoCenterPoint, center3d);
 
@@ -1070,10 +1091,11 @@ void glbDrawCircle(GlbPointGeo geoCenterPoint, bool bCenterPointOnGlobe, float r
 		glbPointRect2PointGeo(circlePoint1, p1Geo);
 		glbPointRect2PointGeo(circlePoint2, p2Geo);
 
-		glbDrawLineOnScreen(calib, p1Geo, p2Geo, layer);
+		perimeter += glbDrawLineOnScreen(calib, p1Geo, p2Geo, layer);
 
 		circlePoint1 = circlePoint2;
 	}
+	return perimeter;
 }
 
 void glbDrawGlobe(GlbImage Image, GlbRotmat GlobeRotMat, GlbCalib calib)

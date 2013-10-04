@@ -35,13 +35,22 @@ GLBCORE_API void glbDrawImage(GlbImage image);              //在窗口中画图
 
 GLBCORE_API int glbUpdateWindow(GlbWindow window, int ms);                    //更新窗口中内容,返回0表示窗口退出，返回1表示正常运行
 
-GLBCORE_API void glbDrawLine(	GlbPointGeo geoStartPoint, bool bStartPointOnGlobe, 
+//画线,返回绕地心的角度
+GLBCORE_API float glbDrawLine(	GlbPointGeo geoStartPoint, bool bStartPointOnGlobe, 
 										GlbPointGeo geoEndPoint, bool bEndPointOnGlobe, 
 										GlbRotmat GlobeRotMat, GlbCalib calib, int layer);
-GLBCORE_API void glbDrawLineOnScreen(GlbCalib calib, GlbPointGeo geoStartPoint, GlbPointGeo geoEndPoint, int layer);
-GLBCORE_API void glbDrawCircle(GlbPointGeo geoCenterPoint, bool bCenterPointOnGlobe, float radius, GlbRotmat GlobeRotMat, GlbCalib calib,  int layer);
+//画多边形
+GLBCORE_API float glbDrawPolygon(	vector<GlbPointGeo> points, bool bOnGlobe, bool bClosed,
+										GlbRotmat GlobeRotMat, GlbCalib calib, int layer);
 
+//画线（基础）
+GLBCORE_API float glbDrawLineOnScreen(GlbCalib calib, GlbPointGeo geoStartPoint, GlbPointGeo geoEndPoint, int layer);
+//画圆
+GLBCORE_API float glbDrawCircle(GlbPointGeo geoCenterPoint, bool bCenterPointOnGlobe, float radius, GlbRotmat GlobeRotMat, GlbCalib calib,  int layer);
+
+//画星球的底图
 GLBCORE_API void glbDrawGlobe(GlbImage Image, GlbRotmat GlobeRotMat, GlbCalib calib);
+//画图
 GLBCORE_API void glbDrawTexture(
                     GlbImage Image,     //材质的编号
                     GlbRotmat GlobeRotMat,
@@ -56,7 +65,7 @@ GLBCORE_API void glbDrawTexture(
                     float layer,            //贴图所在的层
                     GlbTexMode mode
 );
-
+//画带状图
 GLBCORE_API void glbDrawBelt(
                 GlbImage Image,
                 GlbRotmat GlobeRotMat,
@@ -71,6 +80,7 @@ GLBCORE_API void glbDrawBelt(
                 float layer
     );
 
+//识别图层编号
 GLBCORE_API int glbGetTopLayer(GlbWindow &window, GlbPoint2d pTouch);
 
 
