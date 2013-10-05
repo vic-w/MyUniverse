@@ -532,7 +532,7 @@ void GL_Init(HDC &hDC, HGLRC &hRC, HWND hWnd, long winWidth, long winHeight, boo
 	{
 		W_H_Rate = -W_H_Rate;
 	}
-	glOrtho( -W_H_Rate, W_H_Rate, -1, 1, -10, 20);
+	glOrtho( -W_H_Rate, W_H_Rate, -1, 1, -10000, 10000);
 
 #ifdef UseOpenGLExtension2LoadDDS
 	//
