@@ -2,8 +2,62 @@
 #include "GlbTouch.h"
 #include "city.h"
 
+//全局变量
 int nMode=1;
 bool bShowMenu=false;
+
+enum ENUM_LAYERS
+{
+    LAYER_GLOBE = 0,
+    LAYER_CITY_ICON_START = 100,
+	LAYER_LINES = 400,
+	LAYER_CITY_DETAIL = 500,
+	LAYER_MENU_START = 1000
+};
+
+//mode1 城市
+class CMode1
+{
+public:
+	GlbImage m_icon;
+	GlbRotmat *m_pGlobeRotMat;
+	GlbWindow *m_pWindow;
+	vector<CCity> m_cities;
+	bool m_bShowDetail;
+	int m_nShowCity;
+public:
+	CMode1(GlbRotmat *pGlobeRotMat, GlbWindow *pWindow)
+	{
+		m_cities = CCity::getCities();
+		m_icon = glbLoadImage("image\\icon.png");
+		m_pGlobeRotMat = pGlobeRotMat;
+		m_pWindow = pWindow;
+	}
+	void draw()
+	{
+		vector<CCity>::iterator it;
+		int layer = LAYER_CITY_ICON_START;
+		for(it=m_cities.begin(); it!=m_cities.end(); it++)
+		{
+			GlbPointGeo p1(it->latitude, it->longitude);
+			GlbPointGeo p2(90,0);
+			glbDrawTexture(m_icon, *m_pGlobeRotMat, m_pWindow->m_calib, p1, true, p2, true, true, 5, 5, layer++, GLB_TEX_RECT);
+		}
+		if(m_bShowDetail)
+		{
+
+			//glbDrawTexture(m_icon, *m_pGlobeRotMat, m_pWindow->m_calib, p1, true, p2, true, true, 5, 5, layer++, GLB_TEX_RECT);
+		}
+	}
+	void reset()
+	{
+	}
+};
+//mode2 时间
+//mode3 时差
+//mode4 多边形
+//mode5 天气
+
 
 void main()
 {
@@ -37,12 +91,15 @@ void main()
 	glbListenTouchSignal(mainWindow, 3333);//在3333端口监听TUIO信号
 
 	vector<GlbPointGeo> polygon;
+	CMode1 mode1(&GlobeRotMat, &mainWindow);
 
     do
     {
         glbClearWindow();	//清除窗口内容
 
         glbDrawGlobe(earth_img, GlobeRotMat, mainWindow.m_calib); //画地球底图
+
+		mode1.draw();
 
 		vector<GlbMove> move;
 		vector<GlbPoint2d> touch;
@@ -54,42 +111,42 @@ void main()
         //画菜单按钮
 		if(nMode == 1)
 		{
-			glbDrawTexture(mode1_img, GlobeRotMat, mainWindow.m_calib, p1, false, p2, false, true, 20, 20, 1, GLB_TEX_RECT);
+			glbDrawTexture(mode1_img, GlobeRotMat, mainWindow.m_calib, p1, false, p2, false, true, 20, 20, LAYER_MENU_START, GLB_TEX_RECT);
 		}
 		else if(nMode ==2)
 		{
-			glbDrawTexture(mode2_img, GlobeRotMat, mainWindow.m_calib, p1, false, p2, false, true, 20, 20, 1, GLB_TEX_RECT);
+			glbDrawTexture(mode2_img, GlobeRotMat, mainWindow.m_calib, p1, false, p2, false, true, 20, 20, LAYER_MENU_START, GLB_TEX_RECT);
 		}
 		else if(nMode ==3)
 		{
-			glbDrawTexture(mode3_img, GlobeRotMat, mainWindow.m_calib, p1, false, p2, false, true, 20, 20, 1, GLB_TEX_RECT);
+			glbDrawTexture(mode3_img, GlobeRotMat, mainWindow.m_calib, p1, false, p2, false, true, 20, 20, LAYER_MENU_START, GLB_TEX_RECT);
 		}
 		else if(nMode ==4)
 		{
-			glbDrawTexture(mode4_img, GlobeRotMat, mainWindow.m_calib, p1, false, p2, false, true, 20, 20, 1, GLB_TEX_RECT);
+			glbDrawTexture(mode4_img, GlobeRotMat, mainWindow.m_calib, p1, false, p2, false, true, 20, 20, LAYER_MENU_START, GLB_TEX_RECT);
 		}
 		else if(nMode ==5)
 		{
-			glbDrawTexture(mode5_img, GlobeRotMat, mainWindow.m_calib, p1, false, p2, false, true, 20, 20, 1, GLB_TEX_RECT);
+			glbDrawTexture(mode5_img, GlobeRotMat, mainWindow.m_calib, p1, false, p2, false, true, 20, 20, LAYER_MENU_START, GLB_TEX_RECT);
 		}
 
         if(bShowMenu)
         {
             p1.m_lat = 60; p1.m_lng = 0;
-            glbDrawTexture(mode1_img, GlobeRotMat, mainWindow.m_calib, p1, false, p2, false, true, 20, 20, 2, GLB_TEX_RECT);
+            glbDrawTexture(mode1_img, GlobeRotMat, mainWindow.m_calib, p1, false, p2, false, true, 20, 20, LAYER_MENU_START+1, GLB_TEX_RECT);
             p1.m_lng = 72;
-            glbDrawTexture(mode2_img, GlobeRotMat, mainWindow.m_calib, p1, false, p2, false, true, 20, 20, 3, GLB_TEX_RECT);
+            glbDrawTexture(mode2_img, GlobeRotMat, mainWindow.m_calib, p1, false, p2, false, true, 20, 20, LAYER_MENU_START+2, GLB_TEX_RECT);
             p1.m_lng = 144;
-            glbDrawTexture(mode3_img, GlobeRotMat, mainWindow.m_calib, p1, false, p2, false, true, 20, 20, 4, GLB_TEX_RECT);
+            glbDrawTexture(mode3_img, GlobeRotMat, mainWindow.m_calib, p1, false, p2, false, true, 20, 20, LAYER_MENU_START+3, GLB_TEX_RECT);
             p1.m_lng = -144;
-            glbDrawTexture(mode4_img, GlobeRotMat, mainWindow.m_calib, p1, false, p2, false, true, 20, 20, 5, GLB_TEX_RECT);
+            glbDrawTexture(mode4_img, GlobeRotMat, mainWindow.m_calib, p1, false, p2, false, true, 20, 20, LAYER_MENU_START+4, GLB_TEX_RECT);
             p1.m_lng = -72;
-            glbDrawTexture(mode5_img, GlobeRotMat, mainWindow.m_calib, p1, false, p2, false, true, 20, 20, 6, GLB_TEX_RECT);
+            glbDrawTexture(mode5_img, GlobeRotMat, mainWindow.m_calib, p1, false, p2, false, true, 20, 20, LAYER_MENU_START+5, GLB_TEX_RECT);
         }
 
 		//画多边形
-		float length = 6371.0f / 180.0f * 3.14f * glbDrawPolygon(polygon, true, false, GlobeRotMat, mainWindow.m_calib, 7);
-		printf("多边形长度 = %f公里\n",length);
+		float length = 6371.0f / 180.0f * 3.14f * glbDrawPolygon(polygon, true, false, GlobeRotMat, mainWindow.m_calib, LAYER_LINES);
+		//printf("多边形长度 = %f公里\n",length);
 
 		//根据触摸移动信号转动地球
 		vector<GlbMove>::iterator m_it;
@@ -115,7 +172,7 @@ void main()
 			GlbPointGeo pointGeo_screen, pointGeo_globe;
 			glbPointRect2PointGeo(point3d_screen, pointGeo_screen);
 
-			glbDrawCircle(pointGeo_screen, false, 5, GlobeRotMat, mainWindow.m_calib, 10);
+			glbDrawCircle(pointGeo_screen, false, 5, GlobeRotMat, mainWindow.m_calib, LAYER_LINES);
 
 			int HitLayer = glbGetTopLayer(mainWindow, *t_it);
 			printf("Hit layer = %d\n", HitLayer);
@@ -124,14 +181,16 @@ void main()
 				glbScreenPoint2GlobePoint(point3d_screen, GlobeRotMat, point3d_globe);
 				glbPointRect2PointGeo(point3d_globe, pointGeo_globe);
 				polygon.push_back(pointGeo_globe);
+				float length = 6371.0f / 180.0f * 3.14f * glbDrawPolygon(polygon, true, false, GlobeRotMat, mainWindow.m_calib, LAYER_LINES);
+				printf("多边形长度 = %f公里\n",length);
 			}
-            else if(HitLayer == 1)
+            else if(HitLayer == LAYER_MENU_START)
             {
                 bShowMenu = !bShowMenu;
             }
-            else if(HitLayer >= 2 && HitLayer <= 6)
+            else if(HitLayer >LAYER_MENU_START && HitLayer <= LAYER_MENU_START+5)
             {
-                nMode = HitLayer - 1;
+                nMode = HitLayer - LAYER_MENU_START;
                 printf("switch to mode %d\n", nMode);
                 bShowMenu = false;
             }

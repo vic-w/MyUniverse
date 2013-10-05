@@ -41,13 +41,13 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>..\GlbRot;..\GlbCore;..\GlbKt;..\..\3rdparty\libxml2\include;..\..\3rdparty\opencv231\include;..\GlbTouch;$(IncludePath)</IncludePath>
-    <LibraryPath>..\Debug;$(LibraryPath)</LibraryPath>
+    <IncludePath>..\GlbRot;..\GlbCore;..\GlbKt;..\..\3rdparty\libxml2\include;..\..\3rdparty\opencv231\include;..\GlbTouch;..\..\3rdparty\iconv;$(IncludePath)</IncludePath>
+    <LibraryPath>..\Debug;..\..\3rdparty\libxml2\lib;..\..\3rdparty\iconv;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>..\GlbRot;..\GlbCore;..\GlbKt;..\..\3rdparty\opencv231\include;..\GlbTouch;$(IncludePath)</IncludePath>
-    <LibraryPath>..\Release;$(LibraryPath)</LibraryPath>
+    <IncludePath>..\GlbRot;..\GlbCore;..\GlbKt;..\..\3rdparty\opencv231\include;..\GlbTouch;..\..\3rdparty\libxml2\include;..\..\3rdparty\iconv;$(IncludePath)</IncludePath>
+    <LibraryPath>..\Release;..\..\3rdparty\libxml2\lib;..\..\3rdparty\iconv;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -67,7 +67,11 @@
     <PostBuildEvent>
       <Command>copy "$(ProjectDir)cities.xml" "$(TargetDir)"
 mkdir $(TargetDir)image
-copy "$(ProjectDir)image\*.*" "$(TargetDir)image\"</Command>
+copy "$(ProjectDir)image\*.*" "$(TargetDir)image\"
+mkdir $(TargetDir)image\cities
+copy "$(ProjectDir)image\cities\*.*" "$(TargetDir)image\cities"
+copy cities.xml $(TargetDir)
+</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -89,7 +93,11 @@ copy "$(ProjectDir)image\*.*" "$(TargetDir)image\"</Command>
     </Link>
     <PostBuildEvent>
       <Command>mkdir $(TargetDir)image
-copy "$(ProjectDir)image\*.*" "$(TargetDir)image\"</Command>
+copy "$(ProjectDir)image\*.*" "$(TargetDir)image\"
+mkdir $(TargetDir)image\cities
+copy "$(ProjectDir)image\cities\*.*" "$(TargetDir)image\cities"
+copy cities.xml $(TargetDir)
+</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
