@@ -193,7 +193,7 @@ public:
         else if(status == 2)
         {
             GlbPointGeo p1(m_cities[city1].latitude, m_cities[city1].longitude);
-            glbDrawCircle(p1, true, 10, *m_pGlobeRotMat, m_pWindow->m_calib, LAYER_LINES);
+            glbDrawCircle(p1, true, 3, *m_pGlobeRotMat, m_pWindow->m_calib, LAYER_LINES);
             GlbPointGeo p2(m_cities[city2].latitude, m_cities[city2].longitude);
             GlbPointGeo polar(90,0);
             glbDrawLine(p1, true, p2, true, *m_pGlobeRotMat, m_pWindow->m_calib, LAYER_LINES);
