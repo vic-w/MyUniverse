@@ -819,6 +819,10 @@ int code_convert(char* from_charset, char* to_charset, char* inbuf,
 
 char* u2g(char *inbuf)  
 {
+	if (strlen(inbuf) == 0)
+	{
+		return inbuf;
+	}
     int nOutLen = 2 * strlen(inbuf) - 1;
     char* szOut = (char*)malloc(nOutLen);
     if (-1 == code_convert("utf-8","gb2312",inbuf,strlen(inbuf),szOut,nOutLen))
