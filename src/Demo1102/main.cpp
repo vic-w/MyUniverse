@@ -188,7 +188,7 @@ public:
         else if(status == 1)
         {
             GlbPointGeo p(m_cities[city1].latitude, m_cities[city1].longitude);
-            glbDrawCircle(p, true, 10, *m_pGlobeRotMat, m_pWindow->m_calib, LAYER_LINES);
+            glbDrawCircle(p, true, 3, *m_pGlobeRotMat, m_pWindow->m_calib, LAYER_LINES);
         }
         else if(status == 2)
         {
@@ -242,8 +242,7 @@ public:
 	GlbRotmat *m_pGlobeRotMat;
 	GlbWindow *m_pWindow;
 	vector<CCity> m_cities;
-	bool m_bShowDetail;
-	int m_nShowCity;
+	bool m_bClosed;
     vector<GlbPointGeo> polygon;
 public:
 	CMode4(GlbRotmat *pGlobeRotMat, GlbWindow *pWindow)
@@ -252,8 +251,7 @@ public:
 		m_icon = glbLoadImage("image\\icon.png");
 		m_pGlobeRotMat = pGlobeRotMat;
 		m_pWindow = pWindow;
-        m_bShowDetail = false;
-        m_nShowCity = 0;
+        m_bClosed = false;
 	}
     ~CMode4()
     {
@@ -270,31 +268,41 @@ public:
 			GlbPointGeo p2(90,0);
 			glbDrawTexture(m_icon, *m_pGlobeRotMat, m_pWindow->m_calib, p1, true, p2, true, true, 5, 5, layer++, GLB_TEX_RECT);
 		}
-		if(m_bShowDetail)
-		{
-            GlbPointGeo p1(m_cities[m_nShowCity].latitude, m_cities[m_nShowCity].longitude);
-			GlbPointGeo p2(90,0);
-			glbDrawTexture(cityView, *m_pGlobeRotMat, m_pWindow->m_calib, p1, true, p2, false, true, 40, 30, LAYER_CITY_DETAIL, GLB_TEX_RECT);
-		}
+        float length = 6371.0f / 180.0f * 3.14f * glbDrawPolygon(polygon, true, m_bClosed, *m_pGlobeRotMat, m_pWindow->m_calib, LAYER_LINES);
+        if(polygon.size()>0)
+        {
+            glbDrawCircle(polygon[0], true, 3, *m_pGlobeRotMat, m_pWindow->m_calib, LAYER_LINES);
+        }
 	}
 	void reset()
 	{
-        m_bShowDetail = false;
+        polygon.clear();
+        m_bClosed = false;
         glbReleaseImage(&cityView);
 	}
-    void onClick(int layer)
+    void onClick(int layer, GlbPoint2d point2d_screen)
     {
-        if(layer >= LAYER_CITY_ICON_START && layer < LAYER_CITY_ICON_START+m_cities.size() && !m_bShowDetail)
+        if(layer <= LAYER_LINES && !m_bClosed)
         {
-            m_nShowCity = layer - LAYER_CITY_ICON_START;
-            cityView = glbLoadImage( "image\\text.jpg" );
-            m_bShowDetail = true;
-        }
-        else if(layer == LAYER_CITY_DETAIL)
-        {
-            m_bShowDetail = false;
-            glbReleaseImage(&cityView);
-            glbReleaseImage(&cityView);
+            GlbPoint3d point3d_screen, point3d_globe;
+			glbPointRound2PointRect(point2d_screen, point3d_screen, m_pWindow->m_calib);
+
+            glbScreenPoint2GlobePoint(point3d_screen, *m_pGlobeRotMat, point3d_globe);
+            GlbPointGeo pointGeo_globe;
+		    glbPointRect2PointGeo(point3d_globe, pointGeo_globe);
+			polygon.push_back(pointGeo_globe);
+
+            if(polygon.size()>1)
+            {
+                GlbPoint3d startPoint3d;
+                glbPointGeo2PointRect(polygon[0], startPoint3d);
+                if( glbAngleBetweenPoints(startPoint3d, point3d_globe) < 3 )
+                {
+                    m_bClosed = true;
+                }
+            }
+            //cityView = glbLoadImage( "image\\text.jpg" );
+            //m_bShowDetail = true;
         }
     }
 };
@@ -526,6 +534,11 @@ void main()
             else if(HitLayer >LAYER_MENU_START && HitLayer <= LAYER_MENU_START+5)
             {
                 nMode = HitLayer - LAYER_MENU_START;
+                mode1.reset();
+                mode2.reset();
+                mode3.reset();
+                mode4.reset();
+                mode5.reset();
                 printf("switch to mode %d\n", nMode);
                 bShowMenu = false;
             }
@@ -545,7 +558,7 @@ void main()
             }
             else if(nMode == 4)
             {
-                mode4.onClick(HitLayer);
+                mode4.onClick(HitLayer, *t_it);
             }
             else if(nMode == 5)
             {
