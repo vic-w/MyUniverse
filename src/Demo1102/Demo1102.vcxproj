@@ -65,7 +65,8 @@
       <AdditionalLibraryDirectories>..\..\3rdparty\libxml2\lib;..\..\3rdparty\iconv;</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
-      <Command>mkdir $(TargetDir)image
+      <Command>copy "$(ProjectDir)cities.xml" "$(TargetDir)"
+mkdir $(TargetDir)image
 copy "$(ProjectDir)image\*.*" "$(TargetDir)image\"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
