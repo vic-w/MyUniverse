@@ -12,7 +12,8 @@ enum ENUM_LAYERS
     LAYER_CITY_ICON_START = 100,
 	LAYER_LINES = 400,
 	LAYER_CITY_DETAIL = 500,
-	LAYER_MENU_START = 1000
+	LAYER_MENU_START = 1000,
+    LAYER_CIRCLE = 1100
 };
 
 //mode1 城市
@@ -20,6 +21,7 @@ class CMode1
 {
 public:
 	GlbImage m_icon;
+    GlbImage cityView;
 	GlbRotmat *m_pGlobeRotMat;
 	GlbWindow *m_pWindow;
 	vector<CCity> m_cities;
@@ -32,7 +34,14 @@ public:
 		m_icon = glbLoadImage("image\\icon.png");
 		m_pGlobeRotMat = pGlobeRotMat;
 		m_pWindow = pWindow;
+        m_bShowDetail = false;
+        m_nShowCity = 0;
 	}
+    ~CMode1()
+    {
+        glbReleaseImage(&m_icon);
+        glbReleaseImage(&cityView);
+    }
 	void draw()
 	{
 		vector<CCity>::iterator it;
@@ -45,18 +54,314 @@ public:
 		}
 		if(m_bShowDetail)
 		{
-
-			//glbDrawTexture(m_icon, *m_pGlobeRotMat, m_pWindow->m_calib, p1, true, p2, true, true, 5, 5, layer++, GLB_TEX_RECT);
+            GlbPointGeo p1(m_cities[m_nShowCity].latitude, m_cities[m_nShowCity].longitude);
+			GlbPointGeo p2(90,0);
+			glbDrawTexture(cityView, *m_pGlobeRotMat, m_pWindow->m_calib, p1, true, p2, false, true, 40, 30, LAYER_CITY_DETAIL, GLB_TEX_RECT);
+            
 		}
 	}
 	void reset()
 	{
+        m_bShowDetail = false;
+        glbReleaseImage(&cityView);
 	}
+    void onClick(int layer)
+    {
+        if(layer >= LAYER_CITY_ICON_START && layer < LAYER_CITY_ICON_START+m_cities.size() && !m_bShowDetail)
+        {
+            m_nShowCity = layer - LAYER_CITY_ICON_START;
+            cityView = glbLoadImage( m_cities[m_nShowCity].path );
+            m_bShowDetail = true;
+        }
+        else if(layer == LAYER_CITY_DETAIL)
+        {
+            m_bShowDetail = false;
+            glbReleaseImage(&cityView);
+            glbReleaseImage(&cityView);
+        }
+    }
 };
 //mode2 时间
+class CMode2
+{
+public:
+	GlbImage m_icon;
+    GlbImage cityView;
+	GlbRotmat *m_pGlobeRotMat;
+	GlbWindow *m_pWindow;
+	vector<CCity> m_cities;
+	bool m_bShowDetail;
+	int m_nShowCity;
+public:
+	CMode2(GlbRotmat *pGlobeRotMat, GlbWindow *pWindow)
+	{
+		m_cities = CCity::getCities();
+		m_icon = glbLoadImage("image\\icon.png");
+		m_pGlobeRotMat = pGlobeRotMat;
+		m_pWindow = pWindow;
+        m_bShowDetail = false;
+        m_nShowCity = 0;
+	}
+    ~CMode2()
+    {
+        glbReleaseImage(&m_icon);
+        glbReleaseImage(&cityView);
+    }
+    void draw()
+	{
+		vector<CCity>::iterator it;
+		int layer = LAYER_CITY_ICON_START;
+		for(it=m_cities.begin(); it!=m_cities.end(); it++)
+		{
+			GlbPointGeo p1(it->latitude, it->longitude);
+			GlbPointGeo p2(90,0);
+			glbDrawTexture(m_icon, *m_pGlobeRotMat, m_pWindow->m_calib, p1, true, p2, true, true, 5, 5, layer++, GLB_TEX_RECT);
+		}
+		if(m_bShowDetail)
+		{
+            GlbPointGeo p1(m_cities[m_nShowCity].latitude, m_cities[m_nShowCity].longitude);
+			GlbPointGeo p2(90,0);
+			glbDrawTexture(cityView, *m_pGlobeRotMat, m_pWindow->m_calib, p1, true, p2, false, true, 40, 30, LAYER_CITY_DETAIL, GLB_TEX_RECT);
+		}
+	}
+	void reset()
+	{
+        m_bShowDetail = false;
+        glbReleaseImage(&cityView);
+	}
+    void onClick(int layer)
+    {
+        if(layer >= LAYER_CITY_ICON_START && layer < LAYER_CITY_ICON_START+m_cities.size() && !m_bShowDetail)
+        {
+            m_nShowCity = layer - LAYER_CITY_ICON_START;
+            cityView = glbLoadImage( "image\\text.jpg" );
+            m_bShowDetail = true;
+        }
+        else if(layer == LAYER_CITY_DETAIL)
+        {
+            m_bShowDetail = false;
+            glbReleaseImage(&cityView);
+            glbReleaseImage(&cityView);
+        }
+    }
+};
 //mode3 时差
+class CMode3
+{
+public:
+	GlbImage m_icon;
+    GlbImage cityView;
+	GlbRotmat *m_pGlobeRotMat;
+	GlbWindow *m_pWindow;
+	vector<CCity> m_cities;
+    int city1;
+    int city2;
+	int  status;//0 没有选择， 1 选择了第一个城市， 2 选择了第二个城市，并显示信息
+
+public:
+	CMode3(GlbRotmat *pGlobeRotMat, GlbWindow *pWindow)
+	{
+		m_cities = CCity::getCities();
+		m_icon = glbLoadImage("image\\icon.png");
+		m_pGlobeRotMat = pGlobeRotMat;
+		m_pWindow = pWindow;
+        status = 0;
+	}
+    ~CMode3()
+    {
+        glbReleaseImage(&m_icon);
+        glbReleaseImage(&cityView);
+    }
+    void draw()
+	{
+		vector<CCity>::iterator it;
+		int layer = LAYER_CITY_ICON_START;
+		for(it=m_cities.begin(); it!=m_cities.end(); it++)
+		{
+			GlbPointGeo p1(it->latitude, it->longitude);
+			GlbPointGeo p2(90,0);
+			glbDrawTexture(m_icon, *m_pGlobeRotMat, m_pWindow->m_calib, p1, true, p2, true, true, 5, 5, layer++, GLB_TEX_RECT);
+		}
+		if(status == 0)
+		{
+		}
+        else if(status == 1)
+        {
+            GlbPointGeo p(m_cities[city1].latitude, m_cities[city1].longitude);
+            glbDrawCircle(p, true, 10, *m_pGlobeRotMat, m_pWindow->m_calib, LAYER_LINES);
+        }
+        else if(status == 2)
+        {
+            GlbPointGeo p1(m_cities[city1].latitude, m_cities[city1].longitude);
+            glbDrawCircle(p1, true, 10, *m_pGlobeRotMat, m_pWindow->m_calib, LAYER_LINES);
+            GlbPointGeo p2(m_cities[city2].latitude, m_cities[city2].longitude);
+            GlbPointGeo polar(90,0);
+            glbDrawLine(p1, true, p2, true, *m_pGlobeRotMat, m_pWindow->m_calib, LAYER_LINES);
+            glbDrawTexture(cityView, *m_pGlobeRotMat, m_pWindow->m_calib, p2, true, polar, false, true, 40, 30, LAYER_CITY_DETAIL, GLB_TEX_RECT);
+        }
+	}
+	void reset()
+	{
+        status = 0;
+        glbReleaseImage(&cityView);
+	}
+    void onClick(int layer)
+    {
+        if(layer >= LAYER_CITY_ICON_START && layer < LAYER_CITY_ICON_START+m_cities.size() && status == 0)
+        {
+            city1 = layer - LAYER_CITY_ICON_START;
+            status = 1;
+        }
+        else if(layer >= LAYER_CITY_ICON_START && layer < LAYER_CITY_ICON_START+m_cities.size() && status == 1)
+        {
+            city2 = layer - LAYER_CITY_ICON_START;
+            if(city1 != city2)
+            {
+                cityView = glbLoadImage( "image\\text.jpg" );
+                status = 2;
+            }
+            else
+            {
+                glbReleaseImage(&cityView);
+                status = 0;
+            }
+        }
+        else if(layer == LAYER_CITY_DETAIL)
+        {
+            glbReleaseImage(&cityView);
+            status =0;
+        }
+    }
+};
 //mode4 多边形
+class CMode4
+{
+public:
+	GlbImage m_icon;
+    GlbImage cityView;
+	GlbRotmat *m_pGlobeRotMat;
+	GlbWindow *m_pWindow;
+	vector<CCity> m_cities;
+	bool m_bShowDetail;
+	int m_nShowCity;
+    vector<GlbPointGeo> polygon;
+public:
+	CMode4(GlbRotmat *pGlobeRotMat, GlbWindow *pWindow)
+	{
+		m_cities = CCity::getCities();
+		m_icon = glbLoadImage("image\\icon.png");
+		m_pGlobeRotMat = pGlobeRotMat;
+		m_pWindow = pWindow;
+        m_bShowDetail = false;
+        m_nShowCity = 0;
+	}
+    ~CMode4()
+    {
+        glbReleaseImage(&m_icon);
+        glbReleaseImage(&cityView);
+    }
+    void draw()
+	{
+		vector<CCity>::iterator it;
+		int layer = LAYER_CITY_ICON_START;
+		for(it=m_cities.begin(); it!=m_cities.end(); it++)
+		{
+			GlbPointGeo p1(it->latitude, it->longitude);
+			GlbPointGeo p2(90,0);
+			glbDrawTexture(m_icon, *m_pGlobeRotMat, m_pWindow->m_calib, p1, true, p2, true, true, 5, 5, layer++, GLB_TEX_RECT);
+		}
+		if(m_bShowDetail)
+		{
+            GlbPointGeo p1(m_cities[m_nShowCity].latitude, m_cities[m_nShowCity].longitude);
+			GlbPointGeo p2(90,0);
+			glbDrawTexture(cityView, *m_pGlobeRotMat, m_pWindow->m_calib, p1, true, p2, false, true, 40, 30, LAYER_CITY_DETAIL, GLB_TEX_RECT);
+		}
+	}
+	void reset()
+	{
+        m_bShowDetail = false;
+        glbReleaseImage(&cityView);
+	}
+    void onClick(int layer)
+    {
+        if(layer >= LAYER_CITY_ICON_START && layer < LAYER_CITY_ICON_START+m_cities.size() && !m_bShowDetail)
+        {
+            m_nShowCity = layer - LAYER_CITY_ICON_START;
+            cityView = glbLoadImage( "image\\text.jpg" );
+            m_bShowDetail = true;
+        }
+        else if(layer == LAYER_CITY_DETAIL)
+        {
+            m_bShowDetail = false;
+            glbReleaseImage(&cityView);
+            glbReleaseImage(&cityView);
+        }
+    }
+};
 //mode5 天气
+class CMode5
+{
+public:
+	GlbImage m_icon;
+    GlbImage cityView;
+	GlbRotmat *m_pGlobeRotMat;
+	GlbWindow *m_pWindow;
+	vector<CCity> m_cities;
+	bool m_bShowDetail;
+	int m_nShowCity;
+public:
+	CMode5(GlbRotmat *pGlobeRotMat, GlbWindow *pWindow)
+	{
+		m_cities = CCity::getCities();
+		m_icon = glbLoadImage("image\\icon.png");
+		m_pGlobeRotMat = pGlobeRotMat;
+		m_pWindow = pWindow;
+        m_bShowDetail = false;
+        m_nShowCity = 0;
+	}
+    ~CMode5()
+    {
+        glbReleaseImage(&m_icon);
+        glbReleaseImage(&cityView);
+    }
+    void draw()
+	{
+		vector<CCity>::iterator it;
+		int layer = LAYER_CITY_ICON_START;
+		for(it=m_cities.begin(); it!=m_cities.end(); it++)
+		{
+			GlbPointGeo p1(it->latitude, it->longitude);
+			GlbPointGeo p2(90,0);
+			glbDrawTexture(m_icon, *m_pGlobeRotMat, m_pWindow->m_calib, p1, true, p2, true, true, 5, 5, layer++, GLB_TEX_RECT);
+		}
+		if(m_bShowDetail)
+		{
+            GlbPointGeo p1(m_cities[m_nShowCity].latitude, m_cities[m_nShowCity].longitude);
+			GlbPointGeo p2(90,0);
+			glbDrawTexture(cityView, *m_pGlobeRotMat, m_pWindow->m_calib, p1, true, p2, false, true, 40, 30, LAYER_CITY_DETAIL, GLB_TEX_RECT);
+		}
+	}
+	void reset()
+	{
+        m_bShowDetail = false;
+        glbReleaseImage(&cityView);
+	}
+    void onClick(int layer)
+    {
+        if(layer >= LAYER_CITY_ICON_START && layer < LAYER_CITY_ICON_START+m_cities.size() && !m_bShowDetail)
+        {
+            m_nShowCity = layer - LAYER_CITY_ICON_START;
+            cityView = glbLoadImage( "image\\text.jpg" );
+            m_bShowDetail = true;
+        }
+        else if(layer == LAYER_CITY_DETAIL)
+        {
+            m_bShowDetail = false;
+            glbReleaseImage(&cityView);
+            glbReleaseImage(&cityView);
+        }
+    }
+};
 
 
 void main()
@@ -90,8 +395,13 @@ void main()
 
 	glbListenTouchSignal(mainWindow, 3333);//在3333端口监听TUIO信号
 
-	vector<GlbPointGeo> polygon;
+
+    //建立5个mode
 	CMode1 mode1(&GlobeRotMat, &mainWindow);
+	CMode2 mode2(&GlobeRotMat, &mainWindow);
+	CMode3 mode3(&GlobeRotMat, &mainWindow);
+	CMode4 mode4(&GlobeRotMat, &mainWindow);
+	CMode5 mode5(&GlobeRotMat, &mainWindow);
 
     do
     {
@@ -99,7 +409,29 @@ void main()
 
         glbDrawGlobe(earth_img, GlobeRotMat, mainWindow.m_calib); //画地球底图
 
-		mode1.draw();
+        if(nMode == 1)
+        {
+		    mode1.draw();
+        }
+        else if(nMode == 2)
+        {
+            mode2.draw();
+        }
+        else if(nMode == 3)
+        {
+            mode3.draw();
+        }
+        else if(nMode == 4)
+        {
+            mode4.draw();
+        }
+        else if(nMode == 5)
+        {
+            mode5.draw();
+        }
+        else
+        {
+        }
 
 		vector<GlbMove> move;
 		vector<GlbPoint2d> touch;
@@ -145,7 +477,7 @@ void main()
         }
 
 		//画多边形
-		float length = 6371.0f / 180.0f * 3.14f * glbDrawPolygon(polygon, true, false, GlobeRotMat, mainWindow.m_calib, LAYER_LINES);
+		//float length = 6371.0f / 180.0f * 3.14f * glbDrawPolygon(polygon, true, false, GlobeRotMat, mainWindow.m_calib, LAYER_LINES);
 		//printf("多边形长度 = %f公里\n",length);
 
 		//根据触摸移动信号转动地球
@@ -172,17 +504,20 @@ void main()
 			GlbPointGeo pointGeo_screen, pointGeo_globe;
 			glbPointRect2PointGeo(point3d_screen, pointGeo_screen);
 
-			glbDrawCircle(pointGeo_screen, false, 5, GlobeRotMat, mainWindow.m_calib, LAYER_LINES);
+			glbDrawCircle(pointGeo_screen, false, 5, GlobeRotMat, mainWindow.m_calib, LAYER_CIRCLE);
 
 			int HitLayer = glbGetTopLayer(mainWindow, *t_it);
 			printf("Hit layer = %d\n", HitLayer);
-			if(HitLayer == 0)
+
+            //判断menu的点击
+			if(HitLayer == LAYER_GLOBE)
 			{
-				glbScreenPoint2GlobePoint(point3d_screen, GlobeRotMat, point3d_globe);
-				glbPointRect2PointGeo(point3d_globe, pointGeo_globe);
-				polygon.push_back(pointGeo_globe);
-				float length = 6371.0f / 180.0f * 3.14f * glbDrawPolygon(polygon, true, false, GlobeRotMat, mainWindow.m_calib, LAYER_LINES);
-				printf("多边形长度 = %f公里\n",length);
+                //划线
+				//glbScreenPoint2GlobePoint(point3d_screen, GlobeRotMat, point3d_globe);
+				//glbPointRect2PointGeo(point3d_globe, pointGeo_globe);
+				//polygon.push_back(pointGeo_globe);
+				//float length = 6371.0f / 180.0f * 3.14f * glbDrawPolygon(polygon, true, false, GlobeRotMat, mainWindow.m_calib, LAYER_LINES);
+				//printf("多边形长度 = %f公里\n",length);
 			}
             else if(HitLayer == LAYER_MENU_START)
             {
@@ -194,7 +529,31 @@ void main()
                 printf("switch to mode %d\n", nMode);
                 bShowMenu = false;
             }
-            
+
+            //判断mode中的点击
+            if(nMode == 1)
+            {
+		        mode1.onClick(HitLayer);
+            }
+            else if(nMode == 2)
+            {
+                mode2.onClick(HitLayer);
+            }
+            else if(nMode == 3)
+            {
+                mode3.onClick(HitLayer);
+            }
+            else if(nMode == 4)
+            {
+                mode4.onClick(HitLayer);
+            }
+            else if(nMode == 5)
+            {
+                mode5.onClick(HitLayer);
+            }
+            else
+            {
+            }
 		} 
 		
     }
