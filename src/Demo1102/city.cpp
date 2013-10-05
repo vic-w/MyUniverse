@@ -82,6 +82,11 @@ int code_convert(char* from_charset, char* to_charset, char* inbuf,
 
 char* u2g(char *inbuf)  
 {
+	if (strlen(inbuf) == 0)
+	{
+		return inbuf;
+	}
+
     int nOutLen = 2 * strlen(inbuf) - 1;
     char* szOut = (char*)malloc(nOutLen);
     if (-1 == code_convert("utf-8","gb2312",inbuf,strlen(inbuf),szOut,nOutLen))
@@ -157,6 +162,12 @@ vector<CCity> CCity::getCities()
 				}
 				else if ((!xmlStrcmp(attr->name, (const xmlChar *)"description"))){
 					city.description = u2g(val);
+				}
+				else if ((!xmlStrcmp(attr->name, (const xmlChar *)"temprature"))){
+					city.temprature = u2g(val);
+				}
+				else if ((!xmlStrcmp(attr->name, (const xmlChar *)"weatherCondition"))){
+					city.weatherCondition = u2g(val);
 				};
 				attr = attr->next;
 			}
