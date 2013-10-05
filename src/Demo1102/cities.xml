@@ -1,15 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <cities>
-  <city id="0" name="Beijing" displayname="北京" country="中国" displaycountry="false" latitude="40N" longitude="116E" timezone="+8" path="image\cities\beijing.jpg" population="18000000" description="北京是伟大的首都" temprature="" weatherCondition="">
+  <city id="0" name="Beijing" displayname="北京" country="China" countryDisplayName="中国" displaycountry="false" latitude="40N" longitude="116E" timezone="+8" path="image\cities\beijing.jpg" population="18000000" description="北京是伟大的首都" temprature="" weatherCondition="">
   </city>
-  <city id="1" name="Shanghai" displayname="上海" country="中国" displaycountry="false" latitude="31N" longitude="121E" timezone="+8" path="image\cities\shanghai.jpg" population="16000000" description="上海城市简介上海城市简介" temprature="" weatherCondition="">
+  <city id="1" name="Shanghai" displayname="上海" country="China" countryDisplayName="中国" displaycountry="false" latitude="31N" longitude="121E" timezone="+8" path="image\cities\shanghai.jpg" population="16000000" description="上海城市简介上海城市简介" temprature="" weatherCondition="">
   </city>
-  <city id="2" name="Hongkong" displayname="香港" country="中国" displaycountry="false" latitude="22N" longitude="114E" timezone="+8" path="image\cities\hongkong.jpg" population="7000000" description="香港城市简介香港城市简介" temprature="" weatherCondition="">
+  <city id="2" name="Hong Kong" displayname="香港" country="China" countryDisplayName="中国" displaycountry="false" latitude="22N" longitude="114E" timezone="+8" path="image\cities\hongkong.jpg" population="7000000" description="香港城市简介香港城市简介" temprature="" weatherCondition="">
   </city>
-  <city id="3" name="Tokyo" displayname="东京" country="日本" displaycountry="false" latitude="36N" longitude="140E" timezone="+9" path="image\cities\tokyo.jpg" population="10000000" description="东京城市简介东京城市简介" temprature="" weatherCondition="">
+  <city id="3" name="Tokyo" displayname="东京" country="Japan" countryDisplayName="日本" displaycountry="false" latitude="36N" longitude="140E" timezone="+9" path="image\cities\tokyo.jpg" population="10000000" description="东京城市简介东京城市简介" temprature="" weatherCondition="">
   </city>
-  <city id="4" name="New York" displayname="纽约" country="美国" displaycountry="false" latitude="40N" longitude="74W" timezone="-5" path="image\cities\newyork.jpg" population="10000000" description="纽约城市简介纽约城市简介" temprature="" weatherCondition="">
+  <city id="4" name="New York" displayname="纽约" country="USA" countryDisplayName="美国" displaycountry="false" latitude="40N" longitude="74W" timezone="-5" path="image\cities\newyork.jpg" population="10000000" description="纽约城市简介纽约城市简介" temprature="" weatherCondition="">
   </city>
-  <city id="5" name="Cairo" displayname="开罗" country="埃及" displaycountry="true" latitude="30N" longitude="31E" timezone="+2" path="image\cities\egypt.jpg" population="8000000" description="埃及国家简介埃及国家简介" temprature="" weatherCondition="">
+  <city id="5" name="Cairo" displayname="开罗" country="Egypt" countryDisplayName="埃及" displaycountry="true" latitude="30N" longitude="31E" timezone="+2" path="image\cities\egypt.jpg" population="8000000" description="埃及国家简介埃及国家简介" temprature="" weatherCondition="">
   </city>
 </cities>
