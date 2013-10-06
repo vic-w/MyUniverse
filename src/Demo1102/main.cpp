@@ -298,12 +298,22 @@ public:
                 glbPointGeo2PointRect(polygon[0], startPoint3d);
                 if( glbAngleBetweenPoints(startPoint3d, point3d_globe) < 3 )
                 {
+					polygon.pop_back();
                     m_bClosed = true;
                 }
             }
             //cityView = glbLoadImage( "image\\text.jpg" );
             //m_bShowDetail = true;
         }
+		if(polygon.size()>2)
+		{
+			GlbPointGeo A,B,C;
+			A = *(polygon.end()-3);
+			B = *(polygon.end()-2);
+			C = *(polygon.end()-1);
+			float angle = glbAngleABC(A,B,C);
+			printf("转角为%f度\n", angle);
+		}
     }
 };
 //mode5 天气

@@ -177,7 +177,7 @@ GLBROT_API void glbCloneGlbRotmat(GlbRotmat r, GlbRotmat &r_dst);
 GLBROT_API float glbAngleBetweenPoints(GlbPoint3d p1, GlbPoint3d p2);
 //计算屏幕上的点p1到p2的旋转轴
 GLBROT_API void glbPivotBetweenPoints(GlbPoint3d p1, GlbPoint3d p2, GlbPivot &pivot);
-//计算球面上∠ABC的值（以B为顶点的角度）
+//计算球面上∠ABC的值（以B为顶点的角度,方向为站在地球表面向右转的角度,取值范围0~360）
 GLBROT_API float glbAngleABC(GlbPointGeo A, GlbPointGeo B, GlbPointGeo C);
 
 //欧拉角 转换为 旋转矩阵
