@@ -185,6 +185,8 @@ GLBROT_API void glbPivotBetweenPoints(GlbPoint3d p1, GlbPoint3d p2, GlbPivot &pi
 GLBROT_API float glbAngleABC(GlbPointGeo A, GlbPointGeo B, GlbPointGeo C);
 //计算球面上多边形所占的立体角Ω（顺时针方向）,取值范围0~2*PI（乘以半径的平方即可得到多边形的面积）
 GLBROT_API float glbGetSteradian(vector<GlbPointGeo> polygon);
+//判断球面上两段劣弧AB和CD是否相交
+GLBROT_API bool glbLinesIntersect(GlbPointGeo A, GlbPointGeo B, GlbPointGeo C, GlbPointGeo D);
 
 //欧拉角 转换为 旋转矩阵
 GLBROT_API void glbEularAngle2Rotmat(GlbEularAngle angle, GlbRotmat &r);

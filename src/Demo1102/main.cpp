@@ -244,6 +244,7 @@ public:
 	vector<CCity> m_cities;
 	bool m_bClosed;
     vector<GlbPointGeo> polygon;
+	bool m_bIntersect; //多边形自相交
 public:
 	CMode4(GlbRotmat *pGlobeRotMat, GlbWindow *pWindow)
 	{
@@ -252,6 +253,7 @@ public:
 		m_pGlobeRotMat = pGlobeRotMat;
 		m_pWindow = pWindow;
         m_bClosed = false;
+		m_bIntersect = false;
 	}
     ~CMode4()
     {
@@ -278,6 +280,7 @@ public:
 	{
         polygon.clear();
         m_bClosed = false;
+		m_bIntersect = false;
         glbReleaseImage(&cityView);
 	}
     void onClick(int layer, GlbPoint2d point2d_screen)
@@ -290,8 +293,13 @@ public:
             glbScreenPoint2GlobePoint(point3d_screen, *m_pGlobeRotMat, point3d_globe);
             GlbPointGeo pointGeo_globe;
 		    glbPointRect2PointGeo(point3d_globe, pointGeo_globe);
-			polygon.push_back(pointGeo_globe);
+			
+			polygon.push_back(pointGeo_globe);//加入一个新点
 
+			//判断新加入的线段是否和之前的相交
+			m_bIntersect |= polygonIntersect_lastline(polygon, false);
+
+			//计算周长
 			if(polygon.size()>2)
 			{
 				GlbPointGeo A,B,C;
@@ -302,6 +310,7 @@ public:
 				printf("转角为%f度\n", angle);
 			}
 
+			//判断是否闭合
             if(polygon.size()>1)
             {
                 GlbPoint3d startPoint3d;
@@ -309,6 +318,10 @@ public:
                 if( glbAngleBetweenPoints(startPoint3d, point3d_globe) < 3 )
                 {
 					polygon.pop_back();
+
+					//判断最后加入的线段是否和之前的相交
+					m_bIntersect |= polygonIntersect_lastline(polygon, true);
+
                     m_bClosed = true;
 					float omiga = glbGetSteradian(polygon);
 					if(omiga > 2*PI)
@@ -316,13 +329,55 @@ public:
 						omiga = 4*PI - omiga;
 					}
 					float area = omiga * 6371.0f* 6371.0f;
-					printf("多边形的面积为%f平方公里\n", area);
+					if(m_bIntersect)
+					{
+						printf("多边形产生了自相交，无法计算面积\n");
+					}
+					else
+					{
+						printf("多边形的面积为%f平方公里\n", area);
+					}
                 }
             }
             //cityView = glbLoadImage( "image\\text.jpg" );
             //m_bShowDetail = true;
         }
     }
+	bool polygonIntersect_lastline(vector<GlbPointGeo> polygon, bool closed)
+	{
+		int nVertex = polygon.size();
+		if(nVertex < 3)
+		{
+			return false;
+		}
+		
+		GlbPointGeo A,B,C,D;
+		if(closed)
+		{
+			A = polygon[nVertex-1];//A为最后一个顶点
+			B = polygon[0];//B为第一个顶点
+		}
+		else
+		{
+			A = polygon[nVertex-2];//A为倒数第二个顶点
+			B = polygon[nVertex-1];//B为最后一个顶点
+		}
+
+		for(int i=0; i<(nVertex-2+(int)closed); i++)
+		{
+			//遍历polygon中的线段
+			C = polygon[i];
+			D = polygon[i+1];
+
+			if(glbLinesIntersect(A,B,C,D))
+			{
+				//如有一个相交，则返回true
+				return true;
+			}
+		}
+		//没有相交，返回false
+		return false;
+	}
 };
 //mode5 天气
 class CMode5

@@ -470,7 +470,7 @@ float glbAngleABC(GlbPointGeo A, GlbPointGeo B, GlbPointGeo C)
 	return returnValue;
 }
 
-GLBROT_API float glbGetSteradian(vector<GlbPointGeo> polygon)
+float glbGetSteradian(vector<GlbPointGeo> polygon)
 {
 	//计算方法参考 http://www.guokr.com/article/98934/
 	int nVertex = polygon.size();
@@ -509,4 +509,44 @@ GLBROT_API float glbGetSteradian(vector<GlbPointGeo> polygon)
 	float omiga = SumInnerAngle - (nVertex-2) * PI;
 
 	return omiga;
+}
+
+bool glbLinesIntersect(GlbPointGeo A, GlbPointGeo B, GlbPointGeo C, GlbPointGeo D)
+{
+	vector<GlbPointGeo> triangle;
+
+	//ABC是否顺时针	
+	triangle.push_back(A);
+	triangle.push_back(B);
+	triangle.push_back(C);
+	float ABC_area = glbGetSteradian(triangle);
+	bool ABC_clockwise =  ABC_area < 2*PI;
+
+	//ABD是否顺时针
+	triangle.clear();
+	triangle.push_back(A);
+	triangle.push_back(B);
+	triangle.push_back(D);
+	float ABD_area = glbGetSteradian(triangle);
+	bool ABD_clockwise = ABD_area < 2*PI;
+
+	//CDA是否顺时针
+	triangle.clear();
+	triangle.push_back(C);
+	triangle.push_back(D);
+	triangle.push_back(A);
+	float CDA_area = glbGetSteradian(triangle);
+	bool CDA_clockwise = CDA_area < 2*PI;
+
+	//CDB是否顺时针
+	triangle.clear();
+	triangle.push_back(C);
+	triangle.push_back(D);
+	triangle.push_back(B);
+	float CDB_area = glbGetSteradian(triangle);
+	bool CDB_clockwise = CDB_area < 2*PI;
+
+	bool bIntersect = (ABC_clockwise ^ ABD_clockwise) & (CDA_clockwise ^ CDB_clockwise);
+
+	return bIntersect;
 }
