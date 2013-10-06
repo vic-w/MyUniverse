@@ -310,7 +310,12 @@ public:
                 {
 					polygon.pop_back();
                     m_bClosed = true;
-					float area = glbGetSteradian(polygon) * 6371.0f* 6371.0f;
+					float omiga = glbGetSteradian(polygon);
+					if(omiga > 2*PI)
+					{
+						omiga = 4*PI - omiga;
+					}
+					float area = omiga * 6371.0f* 6371.0f;
 					printf("多边形的面积为%f平方公里\n", area);
                 }
             }

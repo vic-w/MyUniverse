@@ -492,25 +492,21 @@ GLBROT_API float glbGetSteradian(vector<GlbPointGeo> polygon)
 		B = polygon[i+1];
 		C = polygon[i+2];
 
-		SumInnerAngle += glbAngleABC(A, B, C) / 180.0 * PI;
+		SumInnerAngle += glbAngleABC(A, B, C) / 180.0f * PI;
 	}
 
 	//最后两个角
 	A = polygon[i];
 	B = polygon[i+1];
 	C = polygon[0];
-	SumInnerAngle += glbAngleABC(A, B, C) / 180.0 * PI;
+	SumInnerAngle += glbAngleABC(A, B, C) / 180.0f * PI;
 
 	A = polygon[i+1];
 	B = polygon[0];
 	C = polygon[1];
-	SumInnerAngle += glbAngleABC(A, B, C) / 180.0 * PI;
+	SumInnerAngle += glbAngleABC(A, B, C) / 180.0f * PI;
 
 	float omiga = SumInnerAngle - (nVertex-2) * PI;
 
-	if(omiga > 2*PI)
-	{
-		omiga = 4*PI - omiga;
-	}
 	return omiga;
 }
