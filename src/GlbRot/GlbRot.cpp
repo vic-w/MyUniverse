@@ -469,3 +469,48 @@ float glbAngleABC(GlbPointGeo A, GlbPointGeo B, GlbPointGeo C)
 	}
 	return returnValue;
 }
+
+GLBROT_API float glbGetSteradian(vector<GlbPointGeo> polygon)
+{
+	//计算方法参考 http://www.guokr.com/article/98934/
+	int nVertex = polygon.size();
+
+	if(nVertex < 3)
+	{
+		return 0;
+	}
+
+	float SumInnerAngle = 0;
+
+	int nTriangle = nVertex - 2;
+
+	GlbPointGeo A,B,C;
+	int i;
+	for(i=0; i<nTriangle; i++)
+	{
+		A = polygon[i];
+		B = polygon[i+1];
+		C = polygon[i+2];
+
+		SumInnerAngle += glbAngleABC(A, B, C) / 180.0 * PI;
+	}
+
+	//最后两个角
+	A = polygon[i];
+	B = polygon[i+1];
+	C = polygon[0];
+	SumInnerAngle += glbAngleABC(A, B, C) / 180.0 * PI;
+
+	A = polygon[i+1];
+	B = polygon[0];
+	C = polygon[1];
+	SumInnerAngle += glbAngleABC(A, B, C) / 180.0 * PI;
+
+	float omiga = SumInnerAngle - (nVertex-2) * PI;
+
+	if(omiga > 2*PI)
+	{
+		omiga = 4*PI - omiga;
+	}
+	return omiga;
+}

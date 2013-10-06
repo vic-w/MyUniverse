@@ -292,6 +292,16 @@ public:
 		    glbPointRect2PointGeo(point3d_globe, pointGeo_globe);
 			polygon.push_back(pointGeo_globe);
 
+			if(polygon.size()>2)
+			{
+				GlbPointGeo A,B,C;
+				A = *(polygon.end()-3);
+				B = *(polygon.end()-2);
+				C = *(polygon.end()-1);
+				float angle = glbAngleABC(A,B,C);
+				printf("转角为%f度\n", angle);
+			}
+
             if(polygon.size()>1)
             {
                 GlbPoint3d startPoint3d;
@@ -300,20 +310,13 @@ public:
                 {
 					polygon.pop_back();
                     m_bClosed = true;
+					float area = glbGetSteradian(polygon) * 6371.0f* 6371.0f;
+					printf("多边形的面积为%f平方公里\n", area);
                 }
             }
             //cityView = glbLoadImage( "image\\text.jpg" );
             //m_bShowDetail = true;
         }
-		if(polygon.size()>2)
-		{
-			GlbPointGeo A,B,C;
-			A = *(polygon.end()-3);
-			B = *(polygon.end()-2);
-			C = *(polygon.end()-1);
-			float angle = glbAngleABC(A,B,C);
-			printf("转角为%f度\n", angle);
-		}
     }
 };
 //mode5 天气
@@ -392,7 +395,7 @@ void main()
 	vector<GlbRect> screens;	//储存多屏幕信息
 	glbDetectScreen(screens);	//检测屏幕个数和分辨率
 
-	GlbRect rect(0,0,500,500);
+	GlbRect rect(0,0,900,900);
 
     GlbWindow mainWindow;		//窗口
     glbCreateWindow(mainWindow, rect, ".\\calibmain.ini", true, false);	//生成一个窗口

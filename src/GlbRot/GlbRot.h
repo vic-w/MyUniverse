@@ -1,5 +1,9 @@
 ﻿#pragma once
 
+#include <vector>
+
+using namespace std;
+
 #ifdef GLBROT_EXPORTS
 #define GLBROT_API __declspec(dllexport)
 #else
@@ -179,6 +183,8 @@ GLBROT_API float glbAngleBetweenPoints(GlbPoint3d p1, GlbPoint3d p2);
 GLBROT_API void glbPivotBetweenPoints(GlbPoint3d p1, GlbPoint3d p2, GlbPivot &pivot);
 //计算球面上∠ABC的值（以B为顶点的角度,方向为站在地球表面向右转的角度,取值范围0~360）
 GLBROT_API float glbAngleABC(GlbPointGeo A, GlbPointGeo B, GlbPointGeo C);
+//计算球面上多边形所占的立体角Ω,取值范围0~2*PI（乘以半径的平方即可得到多边形的面积）
+GLBROT_API float glbGetSteradian(vector<GlbPointGeo> polygon);
 
 //欧拉角 转换为 旋转矩阵
 GLBROT_API void glbEularAngle2Rotmat(GlbEularAngle angle, GlbRotmat &r);
