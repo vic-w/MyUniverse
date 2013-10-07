@@ -584,5 +584,11 @@ bool glbLinesIntersect(GlbPointGeo A, GlbPointGeo B, GlbPointGeo C, GlbPointGeo 
 
 	bool bIntersect = (ABC_clockwise ^ ABD_clockwise) & (CDA_clockwise ^ CDB_clockwise);
 
+	if( A==C || A==D || B==C || B==D)//fix it:这里的考虑欠周道
+	{
+		//线段是相连接的，不算相交 
+		bIntersect = false;
+	}
+
 	return bIntersect;
 }
