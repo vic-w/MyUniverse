@@ -135,6 +135,10 @@ public:
         {
             m_nShowCity = layer - LAYER_CITY_ICON_START;
             cityView = glbLoadImage( "image\\text.jpg" );
+            printf("%s：\n当地时间：%s\n%s\n", 
+                m_cities[m_nShowCity].displayname, 
+                m_cities[m_nShowCity].getLocalTimeString(), 
+                CCity::getTimezoneDiffString(m_cities[m_nShowCity]));
             m_bShowDetail = true;
         }
         else if(layer == LAYER_CITY_DETAIL)
@@ -219,6 +223,7 @@ public:
             {
                 cityView = glbLoadImage( "image\\text.jpg" );
                 status = 2;
+                printf("%s\n", CCity::getTimezoneDiffString(m_cities[city2], m_cities[city1]));
             }
             else
             {
@@ -346,6 +351,7 @@ public:
             //cityView = glbLoadImage( "image\\text.jpg" );
             //m_bShowDetail = true;
         }
+        printf("%d\n", m_bIntersect);
     }
 	bool polygonIntersect_lastline(vector<GlbPointGeo> polygon, bool closed)
 	{
@@ -376,6 +382,10 @@ public:
 			if(glbLinesIntersect(A,B,C,D))
 			{
 				//如有一个相交，则返回true
+                printf("相交了\n");
+                bool aa = glbLinesIntersect(A,B,C,D);
+                bool bb = glbArcsIntersect(A,B,C,D);
+                 bb = glbArcsIntersect(A,B,C,D);
 				return true;
 			}
 		}

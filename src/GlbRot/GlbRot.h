@@ -108,6 +108,15 @@ public:
         m_y *= f;
         m_z *= f;
         return *this;            //返回修改后的左值对象
+    }    
+    
+    GlbPoint3d operator -()
+    {
+        GlbPoint3d minusPoint;
+        minusPoint.m_x = -m_x;
+        minusPoint.m_y = -m_y;
+        minusPoint.m_z = -m_z;
+        return minusPoint;
     }
 }; 
 
@@ -195,6 +204,7 @@ GLBROT_API float glbAngleABC(GlbPointGeo A, GlbPointGeo B, GlbPointGeo C);
 //计算球面上多边形所占的立体角Ω（顺时针方向）,取值范围0~2*PI（乘以半径的平方即可得到多边形的面积）
 GLBROT_API float glbGetSteradian(vector<GlbPointGeo> polygon);
 //判断球面上两段劣弧AB和CD是否相交
+GLBROT_API bool glbArcsIntersect(GlbPointGeo A, GlbPointGeo B, GlbPointGeo C, GlbPointGeo D);
 GLBROT_API bool glbLinesIntersect(GlbPointGeo A, GlbPointGeo B, GlbPointGeo C, GlbPointGeo D);
 
 //欧拉角 转换为 旋转矩阵

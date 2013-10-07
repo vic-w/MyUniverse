@@ -547,8 +547,68 @@ float glbGetSteradian(vector<GlbPointGeo> polygon)
 	return omiga;
 }
 
+bool glbArcsIntersect(GlbPointGeo A, GlbPointGeo B, GlbPointGeo C, GlbPointGeo D)
+{
+    //参考 http://geospatialmethods.org/spheres/GCAIntersect.html
+
+
+    //将四个点转换为直角坐标
+    GlbPoint3d A3d,B3d,C3d,D3d;
+    glbPointGeo2PointRect(A, A3d);
+    glbPointGeo2PointRect(B, B3d);
+    glbPointGeo2PointRect(C, C3d);
+    glbPointGeo2PointRect(D, D3d);
+
+    GlbPoint3d Ap3d(0,1,0),Bp3d,Cp3d,Dp3d; //Ap 就是A'（A prime)，表示A转动后的位置
+    GlbPivot pivot;
+
+    //将A转至北极点，计算其他点的位置
+    float angle = glbAngleBetweenPoints(A3d, Ap3d);
+    glbPivotBetweenPoints(A3d, Ap3d, pivot);
+    glbPivotingPoint(B3d, pivot, angle, Bp3d);
+    glbPivotingPoint(C3d, pivot, angle, Cp3d);
+    glbPivotingPoint(D3d, pivot, angle, Dp3d);
+
+    GlbPivot Pivot_AB, Pivot_CD;
+
+    //计算AB和CD所在大圆的轴
+    glbPivotBetweenPoints(Ap3d, Bp3d, Pivot_AB);
+    glbPivotBetweenPoints(Cp3d, Dp3d, Pivot_CD);
+
+    //AB和CD所在的大圆有两个交点（即与两个轴垂直的第三轴，用叉乘计算得到）
+    GlbPoint3d Intersect1, Intersect2;
+    glbPivotBetweenPoints(Pivot_AB, Pivot_CD, Intersect1);
+    Intersect2 = -Intersect1;
+
+    //将两交点转换成经纬度坐标
+    GlbPointGeo Intersect1Geo, Intersect2Geo, BpGeo;
+    glbPointRect2PointGeo(Intersect1, Intersect1Geo);
+    glbPointRect2PointGeo(Intersect2, Intersect2Geo);
+    glbPointRect2PointGeo(Bp3d, BpGeo);
+
+    //分别判断两个交点和B'点的位置关系
+    if( fabs(BpGeo.m_lng - Intersect1Geo.m_lng) < 0.0001 )
+    {
+        if( BpGeo.m_lat < Intersect1Geo.m_lat )
+        {
+            return true;
+        }
+    }
+
+    if( fabs(BpGeo.m_lng - Intersect2Geo.m_lng) < 0.0001 )
+    {
+        if( BpGeo.m_lat < Intersect2Geo.m_lat )
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 bool glbLinesIntersect(GlbPointGeo A, GlbPointGeo B, GlbPointGeo C, GlbPointGeo D)
 {
+
 	vector<GlbPointGeo> triangle;
 
 	//ABC是否顺时针	
