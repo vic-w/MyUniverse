@@ -35,6 +35,15 @@ public:
         m_lng = p.m_lng;
         return *this;            //返回修改后的左值对象
     }
+	bool operator==(GlbPointGeo p)
+	{
+		return (m_lat == p.m_lat) && (m_lng == p.m_lng);
+	}	
+	
+	bool operator!=(GlbPointGeo p)
+	{
+		return (m_lat != p.m_lat) || (m_lng != p.m_lng);
+	}
 }; 
 
 class GlbPoint2d   

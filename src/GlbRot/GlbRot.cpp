@@ -470,9 +470,45 @@ float glbAngleABC(GlbPointGeo A, GlbPointGeo B, GlbPointGeo C)
 	return returnValue;
 }
 
+//此函数将polygon中的重复的点去除
+void glbEliminateIdenticalPointsInPolygon(vector<GlbPointGeo> polygon, vector<GlbPointGeo> &polygon_out)
+{
+	if(polygon.size()<2)
+	{
+		polygon_out = polygon;
+		return;
+	}
+	vector<GlbPointGeo> polygon_;//临时变量
+	polygon_.push_back(polygon[0]);//复制第一个点
+
+	vector<GlbPointGeo>::iterator it;
+	for(it=polygon.begin()+1; it!=polygon.end(); it++)
+	{
+		//判断是否有重合点
+		if( *it != *(it-1) )
+		{
+			//复制没有重合的点
+			polygon_.push_back(*it);
+		}
+	}
+
+	//判断是否首尾相接
+	if(*(polygon_.end()-1) == *(polygon_.begin()) )
+	{
+		polygon_.pop_back();
+	}
+
+	polygon_out = polygon_;
+	return;
+}
+
 float glbGetSteradian(vector<GlbPointGeo> polygon)
 {
 	//计算方法参考 http://www.guokr.com/article/98934/
+
+	//首先去除连续的相同点
+	glbEliminateIdenticalPointsInPolygon(polygon, polygon);
+	
 	int nVertex = polygon.size();
 
 	if(nVertex < 3)
