@@ -296,8 +296,6 @@ public:
 			
 			polygon.push_back(pointGeo_globe);//加入一个新点
 
-			//判断新加入的线段是否和之前的相交
-			m_bIntersect |= polygonIntersect_lastline(polygon, false);
 
 			//计算周长
 			if(polygon.size()>2)
@@ -315,8 +313,9 @@ public:
             {
                 GlbPoint3d startPoint3d;
                 glbPointGeo2PointRect(polygon[0], startPoint3d);
-                if( glbAngleBetweenPoints(startPoint3d, point3d_globe) < 3 )
+                if( glbAngleBetweenPoints(startPoint3d, point3d_globe) < 3 )//是点击到第一个点的周围
                 {
+                    //多边形闭合了
 					polygon.pop_back();
 
 					//判断最后加入的线段是否和之前的相交
@@ -335,8 +334,13 @@ public:
 					}
 					else
 					{
-						printf("多边形的面积为%f平方公里\n", area);
+						printf("多边形的面积为%d万平方公里\n", (int)(area/10000));
 					}
+                }
+                else//多边形没有闭合
+                {
+                    //判断新加入的线段是否和之前的相交
+                    m_bIntersect |= polygonIntersect_lastline(polygon, false);
                 }
             }
             //cityView = glbLoadImage( "image\\text.jpg" );
@@ -455,7 +459,7 @@ void main()
 	vector<GlbRect> screens;	//储存多屏幕信息
 	glbDetectScreen(screens);	//检测屏幕个数和分辨率
 
-	GlbRect rect(0,0,900,900);
+	GlbRect rect(0,0,screens[0].m_height,screens[0].m_height);
 
     GlbWindow mainWindow;		//窗口
     glbCreateWindow(mainWindow, rect, ".\\calibmain.ini", true, false);	//生成一个窗口
