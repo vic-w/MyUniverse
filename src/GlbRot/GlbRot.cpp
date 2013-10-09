@@ -581,74 +581,79 @@ bool glbArcsIntersect(GlbPointGeo A, GlbPointGeo B, GlbPointGeo C, GlbPointGeo D
     Intersect2 = -Intersect1;
 
     //将两交点转换成经纬度坐标
-    GlbPointGeo Intersect1Geo, Intersect2Geo, BpGeo;
+    GlbPointGeo Intersect1Geo, Intersect2Geo, BpGeo, CpGeo, DpGeo;
     glbPointRect2PointGeo(Intersect1, Intersect1Geo);
     glbPointRect2PointGeo(Intersect2, Intersect2Geo);
     glbPointRect2PointGeo(Bp3d, BpGeo);
+    glbPointRect2PointGeo(Cp3d, CpGeo);
+    glbPointRect2PointGeo(Dp3d, DpGeo);
 
-    //分别判断两个交点和B'点的位置关系
-    if( fabs(BpGeo.m_lng - Intersect1Geo.m_lng) < 0.0001 )
+    //分别判断两个交点和B'点的位置关系(以下实现的方法太恶心）
+    float B_lng = BpGeo.m_lng;
+    float C_lng = CpGeo.m_lng;
+    float D_lng = DpGeo.m_lng;
+    float CD_lng = D_lng - C_lng; //C到D在经度上的跨度
+    float DC_lng = -CD_lng;//D到C的跨度
+    bool C_is_front = false;
+    if(CD_lng < 0)
     {
-        if( BpGeo.m_lat < Intersect1Geo.m_lat )
+        CD_lng += 360.0f;
+    }
+    if(DC_lng < 0)
+    {
+        DC_lng += 360.0f;
+    }
+    float min_CD_lng = CD_lng;//CD的绝对跨度
+    if(CD_lng > DC_lng)
+    {
+        C_is_front = true;
+        min_CD_lng = DC_lng;
+    }
+    float mid_CD_lng;//CD的中点
+    if(C_is_front)//CD的中点，是处在后面的点加上CD绝对跨度的一半
+    {
+        mid_CD_lng = D_lng + min_CD_lng/2.0f;
+    }
+    else
+    {
+        mid_CD_lng = C_lng + min_CD_lng/2.0f;
+    }
+
+    if(mid_CD_lng > 180.0f)
+    {
+        mid_CD_lng -= 360.0f;
+    }
+
+    float B_mid = B_lng - mid_CD_lng;//B到CD中点的跨度
+    float mid_B = -B_mid;
+    if(B_mid < 0)
+    {
+        B_mid += 360.0f;
+    }
+    if(mid_B < 0)
+    {
+        mid_B += 360.0f;
+    }
+
+    float min_B_mid = B_mid>mid_B ? mid_B : B_mid;//B到CD中点的绝对跨度
+
+    if(min_B_mid < min_CD_lng/2.0f)//B到CD中点的绝对跨度 小于 CD绝对跨度的一半， 说明B在CD的跨度范围内
+    {
+        if( fabs(BpGeo.m_lng - Intersect1Geo.m_lng) < 0.0001 )//交点1 与 B经度相同
         {
-            return true;
+            if( BpGeo.m_lat < Intersect1Geo.m_lat )//交点1维度在B之上
+            {
+                return true;//两个弧相交
+            }
+        }
+        if( fabs(BpGeo.m_lng - Intersect2Geo.m_lng) < 0.0001 )//交点2 与 B经度相同
+        {
+            if( BpGeo.m_lat < Intersect2Geo.m_lat )//交点2维度在B之上
+            {
+                return true;//两个弧相交
+            }
         }
     }
 
-    if( fabs(BpGeo.m_lng - Intersect2Geo.m_lng) < 0.0001 )
-    {
-        if( BpGeo.m_lat < Intersect2Geo.m_lat )
-        {
-            return true;
-        }
-    }
-
-    return false;
-}
-
-bool glbLinesIntersect(GlbPointGeo A, GlbPointGeo B, GlbPointGeo C, GlbPointGeo D)
-{
-
-	vector<GlbPointGeo> triangle;
-
-	//ABC是否顺时针	
-	triangle.push_back(A);
-	triangle.push_back(B);
-	triangle.push_back(C);
-	float ABC_area = glbGetSteradian(triangle);
-	bool ABC_clockwise =  ABC_area < 2*PI;
-
-	//ABD是否顺时针
-	triangle.clear();
-	triangle.push_back(A);
-	triangle.push_back(B);
-	triangle.push_back(D);
-	float ABD_area = glbGetSteradian(triangle);
-	bool ABD_clockwise = ABD_area < 2*PI;
-
-	//CDA是否顺时针
-	triangle.clear();
-	triangle.push_back(C);
-	triangle.push_back(D);
-	triangle.push_back(A);
-	float CDA_area = glbGetSteradian(triangle);
-	bool CDA_clockwise = CDA_area < 2*PI;
-
-	//CDB是否顺时针
-	triangle.clear();
-	triangle.push_back(C);
-	triangle.push_back(D);
-	triangle.push_back(B);
-	float CDB_area = glbGetSteradian(triangle);
-	bool CDB_clockwise = CDB_area < 2*PI;
-
-	bool bIntersect = (ABC_clockwise ^ ABD_clockwise) & (CDA_clockwise ^ CDB_clockwise);
-
-	if( A==C || A==D || B==C || B==D)//fix it:这里的考虑欠周道
-	{
-		//线段是相连接的，不算相交 
-		bIntersect = false;
-	}
-
-	return bIntersect;
+    return false;//两个弧不相交
 }

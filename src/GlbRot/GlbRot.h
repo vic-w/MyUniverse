@@ -205,7 +205,6 @@ GLBROT_API float glbAngleABC(GlbPointGeo A, GlbPointGeo B, GlbPointGeo C);
 GLBROT_API float glbGetSteradian(vector<GlbPointGeo> polygon);
 //判断球面上两段劣弧AB和CD是否相交
 GLBROT_API bool glbArcsIntersect(GlbPointGeo A, GlbPointGeo B, GlbPointGeo C, GlbPointGeo D);
-GLBROT_API bool glbLinesIntersect(GlbPointGeo A, GlbPointGeo B, GlbPointGeo C, GlbPointGeo D);
 
 //欧拉角 转换为 旋转矩阵
 GLBROT_API void glbEularAngle2Rotmat(GlbEularAngle angle, GlbRotmat &r);

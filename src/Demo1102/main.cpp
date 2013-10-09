@@ -379,13 +379,10 @@ public:
 			C = polygon[i];
 			D = polygon[i+1];
 
-			if(glbLinesIntersect(A,B,C,D))
+			if(glbArcsIntersect(A,B,C,D))
 			{
 				//如有一个相交，则返回true
-                printf("相交了\n");
-                bool aa = glbLinesIntersect(A,B,C,D);
-                bool bb = glbArcsIntersect(A,B,C,D);
-                 bb = glbArcsIntersect(A,B,C,D);
+                //printf("相交了\n");
 				return true;
 			}
 		}
