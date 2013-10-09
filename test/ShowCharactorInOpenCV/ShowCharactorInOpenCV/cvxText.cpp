@@ -160,8 +160,8 @@ void CvxText::putWChar(IplImage *img, wchar_t wc, CvPoint &pos, CvScalar color)
 
     FT_UInt glyph_index = FT_Get_Char_Index(m_face, wc);
     FT_Load_Glyph(m_face, glyph_index, FT_LOAD_DEFAULT);
-    FT_Render_Glyph(m_face->glyph, FT_RENDER_MODE_MONO);
-
+    //FT_Render_Glyph(m_face->glyph, FT_RENDER_MODE_MONO);
+    FT_Render_Glyph(m_face->glyph, FT_RENDER_MODE_NORMAL);
     //
 
     FT_GlyphSlot slot = m_face->glyph;
@@ -176,9 +176,10 @@ void CvxText::putWChar(IplImage *img, wchar_t wc, CvPoint &pos, CvScalar color)
         for(int j = 0; j < cols; ++j)
         {
             int off  = ((img->origin==0)? i: (rows-1-i))
-                * slot->bitmap.pitch + j/8;
+                * slot->bitmap.pitch + j;
 
-            if(slot->bitmap.buffer[off] & (0xC0 >> (j%8)))
+            int pix = slot->bitmap.buffer[off];
+            if(pix)
             {
                 int r = (img->origin==0)? pos.y - (rows-1-i): pos.y + i;;
                 int c = pos.x + j;
@@ -193,7 +194,7 @@ void CvxText::putWChar(IplImage *img, wchar_t wc, CvPoint &pos, CvScalar color)
                     float p = m_fontDiaphaneity;
                     for(int k = 0; k < 4; ++k)
                     {
-                        scalar.val[k] = scalar.val[k]*(1-p) + color.val[k]*p;
+                        scalar.val[k] = scalar.val[k]*(1-p) + color.val[k]*p*pix/255.0;
                     }
 
                     cvSet2D(img, r, c, scalar);
