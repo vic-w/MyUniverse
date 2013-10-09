@@ -42,7 +42,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	double x3, y3, z3;
 	getxyz(20, 130, &x3, &y3, &z3);
 
-	//求两线的交点（应该在20N，120E)
+	//求两线的交点（应该在20N，120E附近，因为经过20N，110E和20N，130E的20N纬度线不是Great Circle）
 	double a = (y0*z1 - y1*z0 );
 	double b = (x1*z0 - x0*z1 );
 	double c = (x0*y1 - x1*y0 );
@@ -55,11 +55,11 @@ int _tmain(int argc, _TCHAR* argv[])
 	double k = sqrt(1/(g*g+h*h+1));
 
 	//交点1
-	double latC1 = asin(k) * 180/PI; //20N
+	double latC1 = asin(k) * 180/PI; //20.28N
 	double lngC1 = atan2(h, g)* 180/PI;//120E
 
 	//交点2
-	double latC2 = asin(-k)* 180/PI; //20S
+	double latC2 = asin(-k)* 180/PI; //20.28S
 	double lngC2 = atan2(-h, -g)* 180/PI;//60W
 
 	//再判断交点1和线A的两个端点之间的夹角是否为钝角，若为钝角则交点1在线A上。
