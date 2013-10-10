@@ -44,6 +44,34 @@ namespace WeatherForecastHelper
                 XmlDocument xDoc = new XmlDocument();
                 xDoc.Load(citiesXMLFile);
                 var nav = xDoc.CreateNavigator();
+
+                //如果上一次更新的时间和现在的时间相隔很近（如3个小时），则不需更新
+                var lastUpdateAttr = xDoc.DocumentElement.Attributes["lastUpdated"];
+                var updateIntervalInHoursAttr = xDoc.DocumentElement.Attributes["updateIntervalInHours"];
+                if (lastUpdateAttr != null && updateIntervalInHoursAttr != null)
+                {
+                    DateTime dtLastUpdate = DateTime.ParseExact(lastUpdateAttr.Value, "yyyy:MM:dd HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
+                    if (dtLastUpdate < DateTime.Now)
+                    {
+                        if (DateTime.Now.Subtract(dtLastUpdate) < (new TimeSpan(Int32.Parse(updateIntervalInHoursAttr.Value), 0, 0)))
+                        {
+                            return 0;
+                        }
+                    }
+                }
+                if (lastUpdateAttr == null) 
+                {
+                    lastUpdateAttr = xDoc.CreateAttribute("lastUpdated");
+                    xDoc.DocumentElement.Attributes.Append(lastUpdateAttr);
+                }
+                if (updateIntervalInHoursAttr == null)
+                {
+                    updateIntervalInHoursAttr = xDoc.CreateAttribute("updateIntervalInHours");
+                    updateIntervalInHoursAttr.Value = "3";
+                    xDoc.DocumentElement.Attributes.Append(updateIntervalInHoursAttr);
+                }
+                lastUpdateAttr.Value = DateTime.Now.ToString("yyyy:MM:dd HH:mm:ss");
+
                 //更新天气
                 var itor = nav.Select("cities/city");
                 while (itor.MoveNext())
@@ -80,7 +108,7 @@ namespace WeatherForecastHelper
                                 }
                                 else
                                     val = globalClient.GetWeather(cityName, "");
-                                
+
                                 //以下是返回的信息的示例
                                 /*<?xml version=\"1.0\" encoding=\"utf-16\"?>
                                 <CurrentWeather>
@@ -119,7 +147,7 @@ namespace WeatherForecastHelper
                                 {
                                     nav2.SetValue(temprature);
                                 }
-                                
+
                             }
                             if (nav2.Name == "weatherCondition")
                             {
