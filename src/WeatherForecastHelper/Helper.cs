@@ -41,7 +41,6 @@ namespace WeatherForecastHelper
                 XmlDocument xDoc = new XmlDocument();
                 xDoc.Load(citiesXMLFile);
                 var nav = xDoc.CreateNavigator();
-
                 //更新天气
                 var itor = nav.Select("cities/city");
                 while (itor.MoveNext())
@@ -79,18 +78,21 @@ namespace WeatherForecastHelper
                                 else
                                     val = globalClient.GetWeather(cityName, "");
                                 
-                                //val = "<?xml version=\"1.0\" encoding=\"utf-16\"?>
-                                //<CurrentWeather>
-                                //  <Location>Beijing, China (ZBAA) 39-56N 116-17E 55M</Location>
-                                //  <Time>Oct 05, 2013 - 12:30 AM EDT / 2013.10.05 0430 UTC</Time>
-                                //  <Wind> from the ESE (110 degrees) at 4 MPH (4 KT) (direction variable):0</Wind>
-                                //  <Visibility> 1 mile(s):0</Visibility>
-                                //  <Temperature> 71 F (22 C)</Temperature>
-                                //  <DewPoint> 51 F (11 C)</DewPoint>
-                                //  <RelativeHumidity> 49%</RelativeHumidity>
-                                //  <Pressure> 30.12 in. Hg (1020 hPa)</Pressure>
-                                //  <Status>Success</Status>
-                                //</CurrentWeather>"
+                                //以下是返回的信息的示例
+                                /*<?xml version=\"1.0\" encoding=\"utf-16\"?>
+                                <CurrentWeather>
+                                  <Location>Beijing, China (ZBAA) 39-56N 116-17E 55M</Location>
+                                  <Time>Oct 05, 2013 - 12:30 AM EDT / 2013.10.05 0430 UTC</Time>
+                                  <Wind> from the ESE (110 degrees) at 4 MPH (4 KT) (direction variable):0</Wind>
+                                  <Visibility> 1 mile(s):0</Visibility>
+                                  <Temperature> 71 F (22 C)</Temperature>
+                                  <DewPoint> 51 F (11 C)</DewPoint>
+                                  <RelativeHumidity> 49%</RelativeHumidity>
+                                  <Pressure> 30.12 in. Hg (1020 hPa)</Pressure>
+                                  <Status>Success</Status>
+                                </CurrentWeather>
+                                 */
+
                                 if (val.Contains("<Status>Success</Status>"))
                                 {
                                     using (XmlTextReader xtr = new XmlTextReader(new StringReader(val)))
@@ -131,6 +133,7 @@ namespace WeatherForecastHelper
                 }
 
                 xDoc.Save(citiesXMLFile);
+                System.Diagnostics.Trace.WriteLine("Execution duration: " + watch.ElapsedMilliseconds.ToString());
                 return 0;
             }
             catch (EndpointNotFoundException e)

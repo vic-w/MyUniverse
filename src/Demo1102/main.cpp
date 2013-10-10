@@ -458,6 +458,11 @@ public:
 
 void main()
 {
+	//更新Xml的信息
+	if (!CCity::updateXml())
+	{
+		return;
+	}
 	vector<CCity> cities = CCity::getCities(); //读取Xml中的城市列表
 	printf("%s\n", cities[5].getLocalTimeString()); //读取某个城市的当地时间
 	printf("%s\n", CCity::getTimezoneDiffString(cities[2], cities[5]));//两个城市之间的时间差

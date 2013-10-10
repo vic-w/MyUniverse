@@ -28,5 +28,6 @@ public:
 	static char* getTimezoneDiffString(CCity city1, CCity city2); //返回两个城市之间的时差
 	static char* getTimezoneDiffString(CCity city1); //返回两个城市之间的时差， 如果只有一个参数，则返回该城市与北京的时间差
 	static vector<CCity> getCities();
+	static bool updateXml();
 };
 

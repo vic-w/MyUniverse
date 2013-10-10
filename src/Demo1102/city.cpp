@@ -98,6 +98,43 @@ char* u2g(char *inbuf)
     return szOut;
 }  
 
+bool CCity::updateXml()
+{
+	SHELLEXECUTEINFO sei = {0};
+	sei.cbSize = sizeof(SHELLEXECUTEINFO);
+	sei.fMask = SEE_MASK_NOCLOSEPROCESS;
+	sei.hwnd = NULL;
+	sei.lpVerb = TEXT("runas"); //以管理员身份运行，如果XML文件放在C:\Program Files下， 需要以管理员运行才能修改文件。正确的做法是把需要写权限的文件移到AppData或者ProgramData目录下面去。
+	sei.lpFile = TEXT("WeatherForecastHelper.exe");
+	sei.nShow = SW_SHOWNORMAL;
+	if (!ShellExecuteEx(&sei))
+	{
+		DWORD dwStatus = GetLastError();
+		if (dwStatus == ERROR_CANCELLED)
+		{
+			printf("user cancelled the elevated request!");
+		}
+		else if (dwStatus == ERROR_FILE_NOT_FOUND)
+		{
+			printf("File not found!");			
+		}
+		return false;
+	}
+	else
+	{
+		WaitForSingleObject(sei.hProcess,INFINITE);
+		DWORD dwRet;
+		GetExitCodeProcess(sei.hProcess, &dwRet);
+		if (dwRet == 0)
+			return true;
+		else
+		{
+			printf("Failed to update xml, please check log.");
+			return false;
+		}
+	}
+}
+
 vector<CCity> CCity::getCities()
 {
 	vector<CCity> cities;
