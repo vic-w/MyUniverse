@@ -75,8 +75,9 @@ public:
             m_nShowCity = layer - LAYER_CITY_ICON_START;
 			
 			//kennyzx test
-			helper(m_cities[m_nShowCity].imgPath, 1, m_cities[m_nShowCity].displayname);
+			helper(m_cities[m_nShowCity].imgPath, 1, m_cities[m_nShowCity].displayname);//1为模式
             cityView = glbLoadImage("temp.jpg"); 
+
             m_bShowDetail = true;
         }
         else if(layer == LAYER_CITY_DETAIL)
@@ -234,9 +235,10 @@ public:
             city2 = layer - LAYER_CITY_ICON_START;
             if(city1 != city2)
             {
-                cityView = glbLoadImage( "image\\text.jpg" );
+				//kennyzx test
+				helper("image\\text.jpg", 3, CCity::getTimezoneDiffString(m_cities[city2], m_cities[city1]));//3为模式
+                cityView = glbLoadImage( "temp.jpg" );
                 status = 2;
-                printf("%s\n", CCity::getTimezoneDiffString(m_cities[city2], m_cities[city1]));
             }
             else
             {
@@ -456,7 +458,10 @@ public:
         if(layer >= LAYER_CITY_ICON_START && layer < LAYER_CITY_ICON_START+m_cities.size() && !m_bShowDetail)
         {
             m_nShowCity = layer - LAYER_CITY_ICON_START;
-            cityView = glbLoadImage( "image\\text.jpg" );
+			//kennyzx test
+			helper(m_cities[m_nShowCity].imgPath, 5, m_cities[m_nShowCity].weatherCondition);//5为模式
+            cityView = glbLoadImage( "temp.jpg" );
+            
             m_bShowDetail = true;
         }
         else if(layer == LAYER_CITY_DETAIL)
@@ -692,6 +697,7 @@ void main()
             }
 
             //判断mode中的点击
+
             if(nMode == 1)
             {
 		        mode1.onClick(HitLayer);
