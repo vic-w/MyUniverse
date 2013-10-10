@@ -106,6 +106,7 @@ bool CCity::updateXml()
 	sei.hwnd = NULL;
 	sei.lpVerb = TEXT("runas"); //以管理员身份运行，如果XML文件放在C:\Program Files下， 需要以管理员运行才能修改文件。正确的做法是把需要写权限的文件移到AppData或者ProgramData目录下面去。
 	sei.lpFile = TEXT("WeatherForecastHelper.exe");
+	//sei.lpParameters = TEXT("");
 	sei.nShow = SW_SHOWNORMAL;
 	if (!ShellExecuteEx(&sei))
 	{
@@ -138,7 +139,6 @@ bool CCity::updateXml()
 vector<CCity> CCity::getCities()
 {
 	vector<CCity> cities;
-
 	xmlInitParser();
     xmlDocPtr doc = xmlParseFile("cities.xml");
 	if (doc)
@@ -192,7 +192,7 @@ vector<CCity> CCity::getCities()
 					city.timezone = atof(val);
 				}
 				else if ((!xmlStrcmp(attr->name, (const xmlChar *)"path"))){
-					city.path = u2g(val);
+					city.imgPath = u2g(val);
 				}
 				else if ((!xmlStrcmp(attr->name, (const xmlChar *)"population"))){
 					city.population = atoi(val);
@@ -213,6 +213,5 @@ vector<CCity> CCity::getCities()
 		}
 		xmlFreeDoc(doc);
 	}
-    
 	return cities;
 }

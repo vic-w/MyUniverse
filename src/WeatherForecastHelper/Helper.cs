@@ -29,8 +29,11 @@ namespace WeatherForecastHelper
         /// -4： 其他错误
         /// </summary>
         /// <returns></returns>
-        static int Main()
+        static int Main(string[] args)
         {
+            foreach (string arg in args)
+                System.Diagnostics.Trace.WriteLine("kennnyzx: " + arg);
+
             System.Diagnostics.Stopwatch watch = new System.Diagnostics.Stopwatch();
             watch.Start();
             try

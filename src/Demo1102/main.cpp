@@ -6,6 +6,9 @@
 int nMode=1;
 bool bShowMenu=false;
 
+
+int helper(char* imgFile, char* myString);
+
 enum ENUM_LAYERS
 {
     LAYER_GLOBE = 0,
@@ -70,7 +73,9 @@ public:
         if(layer >= LAYER_CITY_ICON_START && layer < LAYER_CITY_ICON_START+m_cities.size() && !m_bShowDetail)
         {
             m_nShowCity = layer - LAYER_CITY_ICON_START;
-            cityView = glbLoadImage( m_cities[m_nShowCity].path );
+			//kennyzx test
+			helper(m_cities[m_nShowCity].imgPath, m_cities[m_nShowCity].displayname);
+            cityView = glbLoadImage("temp.jpg"); // m_cities[m_nShowCity].imgPath );
             m_bShowDetail = true;
         }
         else if(layer == LAYER_CITY_DETAIL)
@@ -80,6 +85,7 @@ public:
             glbReleaseImage(&cityView);
         }
     }
+
 };
 //mode2 时间
 class CMode2
@@ -455,6 +461,50 @@ public:
     }
 };
 
+//把中文字符写到图片上以供显示
+int helper(char* imgFile, char* myString)
+{
+	SHELLEXECUTEINFO sei = {0};
+	sei.cbSize = sizeof(SHELLEXECUTEINFO);
+	sei.fMask = SEE_MASK_NOCLOSEPROCESS;
+	sei.hwnd = NULL;
+	//sei.lpVerb = TEXT("runas"); //以管理员身份运行，如果XML文件放在C:\Program Files下， 需要以管理员运行才能修改文件。正确的做法是把需要写权限的文件移到AppData或者ProgramData目录下面去。
+	sei.lpFile = TEXT("text2ImageGenerator.exe");
+	CString param;
+	CString First(imgFile); 
+	CString Last(myString); 
+	
+	param.Format(_T("%s %s"), (LPCTSTR)First, (LPCTSTR)Last);
+	
+	sei.lpParameters = (LPCTSTR)param;
+	sei.nShow = SW_SHOWNORMAL;
+	if (!ShellExecuteEx(&sei))
+	{
+		DWORD dwStatus = GetLastError();
+		if (dwStatus == ERROR_CANCELLED)
+		{
+			printf("user cancelled the elevated request!");
+		}
+		else if (dwStatus == ERROR_FILE_NOT_FOUND)
+		{
+			printf("File not found!");			
+		}
+		return false;
+	}
+	else
+	{
+		WaitForSingleObject(sei.hProcess,INFINITE);
+		DWORD dwRet;
+		GetExitCodeProcess(sei.hProcess, &dwRet);
+		if (dwRet == 0)
+			return true;
+		else
+		{
+			printf("Failed to update xml, please check log.");
+			return false;
+		}
+	}
+}
 
 void main()
 {
@@ -463,6 +513,7 @@ void main()
 	{
 		return;
 	}
+
 	vector<CCity> cities = CCity::getCities(); //读取Xml中的城市列表
 	printf("%s\n", cities[5].getLocalTimeString()); //读取某个城市的当地时间
 	printf("%s\n", CCity::getTimezoneDiffString(cities[2], cities[5]));//两个城市之间的时间差
