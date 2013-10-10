@@ -7,7 +7,7 @@ int nMode=1;
 bool bShowMenu=false;
 
 
-int helper(char* imgFile, char* myString);
+int helper(char* imgFile, int mode, char* myString);
 
 enum ENUM_LAYERS
 {
@@ -73,9 +73,10 @@ public:
         if(layer >= LAYER_CITY_ICON_START && layer < LAYER_CITY_ICON_START+m_cities.size() && !m_bShowDetail)
         {
             m_nShowCity = layer - LAYER_CITY_ICON_START;
+			
 			//kennyzx test
-			helper(m_cities[m_nShowCity].imgPath, m_cities[m_nShowCity].displayname);
-            cityView = glbLoadImage("temp.jpg"); // m_cities[m_nShowCity].imgPath );
+			helper(m_cities[m_nShowCity].imgPath, 1, m_cities[m_nShowCity].displayname);
+            cityView = glbLoadImage("temp.jpg"); 
             m_bShowDetail = true;
         }
         else if(layer == LAYER_CITY_DETAIL)
@@ -140,11 +141,17 @@ public:
         if(layer >= LAYER_CITY_ICON_START && layer < LAYER_CITY_ICON_START+m_cities.size() && !m_bShowDetail)
         {
             m_nShowCity = layer - LAYER_CITY_ICON_START;
-            cityView = glbLoadImage( "image\\text.jpg" );
-            printf("%s：\n当地时间：%s\n%s\n", 
+
+			//kennyzx test
+			char strLocalTime[32];
+			sprintf(strLocalTime, "%s当地时间是%s", 
                 m_cities[m_nShowCity].displayname, 
-                m_cities[m_nShowCity].getLocalTimeString(), 
-                CCity::getTimezoneDiffString(m_cities[m_nShowCity]));
+                m_cities[m_nShowCity].getLocalTimeString());    
+			helper(m_cities[m_nShowCity].imgPath, 2, strLocalTime);//2为模式
+
+			
+            cityView = glbLoadImage("temp.jpg"); 
+            
             m_bShowDetail = true;
         }
         else if(layer == LAYER_CITY_DETAIL)
@@ -462,7 +469,7 @@ public:
 };
 
 //把中文字符写到图片上以供显示
-int helper(char* imgFile, char* myString)
+int helper(char* imgFile, int mode, char* myString)
 {
 	SHELLEXECUTEINFO sei = {0};
 	sei.cbSize = sizeof(SHELLEXECUTEINFO);
@@ -474,7 +481,7 @@ int helper(char* imgFile, char* myString)
 	CString First(imgFile); 
 	CString Last(myString); 
 	
-	param.Format(_T("%s %s"), (LPCTSTR)First, (LPCTSTR)Last);
+	param.Format(_T("%s %d %s"), (LPCTSTR)First, mode, (LPCTSTR)Last);
 	
 	sei.lpParameters = (LPCTSTR)param;
 	sei.nShow = SW_SHOWNORMAL;
@@ -508,6 +515,7 @@ int helper(char* imgFile, char* myString)
 
 void main()
 {
+	printf("更新Xml的信息...\n");
 	//更新Xml的信息
 	if (!CCity::updateXml())
 	{

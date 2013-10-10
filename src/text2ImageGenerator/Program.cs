@@ -26,7 +26,7 @@ namespace text2ImageGenerator
             });
             textStyles.Add("cityname", new TextStyle()
             {
-                atPoint = new Point(100, 50),
+                atPoint = new Point(50, 50),
                 color = Color.FromArgb(255, 255, 255, 255),
                 fontFamily = new FontFamily("Arial"),
                 fontSize = 40.0f,
@@ -37,14 +37,14 @@ namespace text2ImageGenerator
             });
             textStyles.Add("localtime", new TextStyle()
             { 
-                atPoint = new Point(150, 50),
+                atPoint = new Point(20, 20),
                 color = Color.FromArgb(255, 255, 255, 255),
                 fontFamily = new FontFamily("Arial"),
-                fontSize = 40.0f,
+                fontSize = 24.0f,
                 overAllAlignment = "TopRight",
                 fontStyle = FontStyle.Regular,
-                lineAlignment = StringAlignment.Far,
-                stringAlignment = StringAlignment.Far
+                lineAlignment = StringAlignment.Near,
+                stringAlignment = StringAlignment.Near
             });
         }
     }
@@ -57,26 +57,50 @@ namespace text2ImageGenerator
         /// <param name="args"></param>
         static int Main(string[] args)
         {
-            if (args.Length == 0)
-                return 0;
+            foreach (string arg in args)
+                System.Diagnostics.Trace.WriteLine("kennnyzx: " + arg);
+
+            if (args.Length != 1 && args.Length != 3)
+                return -1;
 
             else if (args.Length == 1)
             {
-                //generate a default image
+                //TODO: generate a default image
+                string myString = args[0];
                 return -1;
             }
-            else
+            else if (args.Length == 3)
             {
                 string bgImageFile = args[0];
                 if (File.Exists(bgImageFile))
                 {
-                    string myString = args[1];
-                    SaveAsImage(TextStyleCollection.textStyles["cityname"], bgImageFile, myString);
+                    string myString = args[2];
+                    switch (args[1])
+                    {
+                        case "1":
+                            SaveAsImage(TextStyleCollection.textStyles["cityname"], bgImageFile, myString);
+                            break;
+                        case "2":
+                            SaveAsImage(TextStyleCollection.textStyles["localtime"], bgImageFile, myString);
+                            break;
+                        case "3":
+                            SaveAsImage(TextStyleCollection.textStyles["default"], bgImageFile, myString);
+                            break;
+                        case "4":
+                            SaveAsImage(TextStyleCollection.textStyles["default"], bgImageFile, myString);
+                            break;
+                        case "5":
+                            SaveAsImage(TextStyleCollection.textStyles["default"], bgImageFile, myString);
+                            break;
+                    }
+
                     return 0;
                 }
                 else
                     return -1;
             }
+            else
+                return -1;
         }
 
         static void SaveAsImage(TextStyle textStyle, string bgImageFileName, string myString)
@@ -86,14 +110,15 @@ namespace text2ImageGenerator
                 Font font = new Font(textStyle.fontFamily, textStyle.fontSize, textStyle.fontStyle, GraphicsUnit.Pixel);
 
                 Point atpoint;
-                if (textStyle.overAllAlignment == "TopLeft")
-                    atpoint = new Point(textStyle.atPoint.X, textStyle.atPoint.Y);
-                else if (textStyle.overAllAlignment == "TopRight")
-                    atpoint = new Point(bitmap.Width - textStyle.atPoint.X, textStyle.atPoint.Y);
-                else if (textStyle.overAllAlignment == "BottomLeft")
-                    atpoint = new Point(textStyle.atPoint.X, bitmap.Height - textStyle.atPoint.Y);
-                else 
-                    atpoint = new Point(bitmap.Width - textStyle.atPoint.X, bitmap.Height - textStyle.atPoint.Y);
+                atpoint = new Point(textStyle.atPoint.X, textStyle.atPoint.Y);
+                //if (textStyle.overAllAlignment == "TopLeft")
+                //    atpoint = new Point(textStyle.atPoint.X, textStyle.atPoint.Y);
+                //else if (textStyle.overAllAlignment == "TopRight")
+                //    atpoint = new Point(bitmap.Width - textStyle.atPoint.X, textStyle.atPoint.Y);
+                //else if (textStyle.overAllAlignment == "BottomLeft")
+                //    atpoint = new Point(textStyle.atPoint.X, bitmap.Height - textStyle.atPoint.Y);
+                //else 
+                //    atpoint = new Point(bitmap.Width - textStyle.atPoint.X, bitmap.Height - textStyle.atPoint.Y);
 
                 SolidBrush brush = new SolidBrush(textStyle.color);
 
