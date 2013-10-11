@@ -457,13 +457,13 @@ LRESULT CALLBACK WinProc( HWND   hWnd,
 
     case WM_SIZE:
         {
-            int nWidth  = LOWORD(lParam); 
+            /*int nWidth  = LOWORD(lParam); 
             int nHeight = HIWORD(lParam);
             glViewport(0, 0, nWidth, nHeight);
 
             glMatrixMode( GL_PROJECTION );
             glLoadIdentity();
-            gluPerspective( 45.0, (GLdouble)nWidth / (GLdouble)nHeight, 0.1, 20000.0);
+            gluPerspective( 45.0, (GLdouble)nWidth / (GLdouble)nHeight, 0.1, 20000.0);*/
         }
         break;
 
