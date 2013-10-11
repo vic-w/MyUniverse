@@ -463,7 +463,7 @@ LRESULT CALLBACK WinProc( HWND   hWnd,
 
             glMatrixMode( GL_PROJECTION );
             glLoadIdentity();
-            gluPerspective( 45.0, (GLdouble)nWidth / (GLdouble)nHeight, 0.1, 100.0);
+            gluPerspective( 45.0, (GLdouble)nWidth / (GLdouble)nHeight, 0.1, 20000.0);
         }
         break;
 
@@ -522,7 +522,7 @@ void GL_Init(HDC &hDC, HGLRC &hRC, HWND hWnd, long winWidth, long winHeight, boo
 */
 	//glMatrixMode( GL_PROJECTION );
 	//glLoadIdentity();
-	//gluPerspective( 45.0f, 640.0f / 480.0f, 0.1f, 100.0f);
+	//gluPerspective( 45.0f, 640.0f / 480.0f, 0.1f, 20000.0f);
 
 	//glLoadIdentity();							                // 重置当前的模型观察矩阵
 	glMatrixMode( GL_PROJECTION );
