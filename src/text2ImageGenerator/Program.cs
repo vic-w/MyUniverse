@@ -173,10 +173,20 @@ namespace text2ImageGenerator
 
                 graphics.DrawString(myString, font, brush, atpoint, sf);
                 graphics.Dispose();
-                using (FileStream fs = new FileStream("temp.jpg", FileMode.Create, FileAccess.Write))
+
+                if (Path.GetExtension(bgImageFileName).ToUpper() == ".PNG")
                 {
-                    bitmap.Save(fs, System.Drawing.Imaging.ImageFormat.Jpeg);
-                    fs.Dispose();
+                    using (FileStream fs = new FileStream("temp.png", FileMode.Create, FileAccess.Write))
+                    {
+                        bitmap.Save(fs, System.Drawing.Imaging.ImageFormat.Png);
+                    }
+                }
+                else
+                {
+                    using (FileStream fs = new FileStream("temp.jpg", FileMode.Create, FileAccess.Write))
+                    {
+                        bitmap.Save(fs, System.Drawing.Imaging.ImageFormat.Jpeg);
+                    }
                 }
             }
         }
