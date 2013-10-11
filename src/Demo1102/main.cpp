@@ -236,8 +236,8 @@ public:
             if(city1 != city2)
             {
 				//kennyzx test
-				helper("image\\text.jpg", 3, CCity::getTimezoneDiffString(m_cities[city2], m_cities[city1]));//3为模式
-                cityView = glbLoadImage( "temp.jpg" );
+				helper("image\\textbg.png", 3, CCity::getTimezoneDiffString(m_cities[city2], m_cities[city1]));//3为模式
+                cityView = glbLoadImage( "temp.png" );
                 status = 2;
             }
             else
@@ -317,6 +317,7 @@ public:
 			polygon.push_back(pointGeo_globe);//加入一个新点
 
 
+			char msg[64];
 			//计算周长
 			if(polygon.size()>2)
 			{
@@ -350,11 +351,11 @@ public:
 					float area = omiga * 6371.0f* 6371.0f;
 					if(m_bIntersect)
 					{
-						printf("多边形产生了自相交，无法计算面积\n");
+						sprintf(msg, "多边形产生了自相交，无法计算面积\n");
 					}
 					else
 					{
-						printf("多边形的面积为%d万平方公里\n", (int)(area/10000));
+						sprintf(msg, "多边形的面积为%d万平方公里\n", (int)(area/10000));
 					}
                 }
                 else//多边形没有闭合
@@ -363,9 +364,15 @@ public:
                     m_bIntersect |= polygonIntersect_lastline(polygon, false);
                 }
             }
-            //cityView = glbLoadImage( "image\\text.jpg" );
+			//kennyzx test
+			helper("image\\textbg.png", 4, msg);//4为模式
+            cityView = glbLoadImage( "temp.png" );
             //m_bShowDetail = true;
         }
+		else
+		{
+
+		}
         printf("%d\n", m_bIntersect);
     }
 	bool polygonIntersect_lastline(vector<GlbPointGeo> polygon, bool closed)
@@ -522,10 +529,12 @@ void main()
 {
 	printf("更新Xml的信息...\n");
 	//更新Xml的信息
+#ifdef RELEASE
 	if (!CCity::updateXml())
 	{
 		return;
 	}
+#endif
 
 	vector<CCity> cities = CCity::getCities(); //读取Xml中的城市列表
 	printf("%s\n", cities[5].getLocalTimeString()); //读取某个城市的当地时间
