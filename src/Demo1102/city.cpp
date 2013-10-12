@@ -84,7 +84,7 @@ char* u2g(char *inbuf)
 {
 	if (strlen(inbuf) == 0)
 	{
-		return inbuf;
+		return "";
 	}
 
     int nOutLen = 2 * strlen(inbuf) - 1;
