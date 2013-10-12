@@ -6,8 +6,8 @@
 int nMode=1;
 bool bShowMenu=false;
 
-
-int helper(char* imgFile, int mode, char* myString);
+bool txt2ImgHelper(int mode, char* myString);
+bool txt2ImgHelper(char* imgFile, int mode, char* myString);
 
 enum ENUM_LAYERS
 {
@@ -75,8 +75,14 @@ public:
             m_nShowCity = layer - LAYER_CITY_ICON_START;
 			
 			//kennyzx test
-			helper(m_cities[m_nShowCity].imgPath, 1, m_cities[m_nShowCity].displayname);//1为模式
-            cityView = glbLoadImage("temp.jpg"); 
+			if (txt2ImgHelper(m_cities[m_nShowCity].imgPath, 1, m_cities[m_nShowCity].displayname)) //1为模式
+			{
+				cityView = glbLoadImage("temp.jpg"); 
+			}
+			else
+			{
+				cityView = glbLoadImage("error.png");
+			}
 
             m_bShowDetail = true;
         }
@@ -148,10 +154,15 @@ public:
 			sprintf(strLocalTime, "%s当地时间是%s", 
                 m_cities[m_nShowCity].displayname, 
                 m_cities[m_nShowCity].getLocalTimeString());    
-			helper(m_cities[m_nShowCity].imgPath, 2, strLocalTime);//2为模式
+			if(txt2ImgHelper(m_cities[m_nShowCity].imgPath, 2, strLocalTime))//2为模式
+			{
+				cityView = glbLoadImage("temp.jpg"); 
+			}
+			else
+			{
+				cityView = glbLoadImage("error.png");
+			}
 
-			
-            cityView = glbLoadImage("temp.jpg"); 
             
             m_bShowDetail = true;
         }
@@ -236,8 +247,14 @@ public:
             if(city1 != city2)
             {
 				//kennyzx test
-				helper("image\\textbg.png", 3, CCity::getTimezoneDiffString(m_cities[city2], m_cities[city1]));//3为模式
-                cityView = glbLoadImage( "temp.png" );
+				if (txt2ImgHelper(3, CCity::getTimezoneDiffString(m_cities[city2], m_cities[city1])))//3为模式
+				{
+					cityView = glbLoadImage( "temp.png" );
+				}
+				else
+				{
+					cityView = glbLoadImage("error.png");
+				}
                 status = 2;
             }
             else
@@ -365,8 +382,14 @@ public:
                 }
             }
 			//kennyzx test
-			helper("image\\textbg.png", 4, msg);//4为模式
-            cityView = glbLoadImage( "temp.png" );
+			if (txt2ImgHelper(4, msg))//4为模式
+			{
+				cityView = glbLoadImage( "temp.png" );
+			}
+			else
+			{
+				cityView = glbLoadImage( "error.png" );
+			}
             //m_bShowDetail = true;
         }
 		else
@@ -466,8 +489,14 @@ public:
         {
             m_nShowCity = layer - LAYER_CITY_ICON_START;
 			//kennyzx test
-			helper(m_cities[m_nShowCity].imgPath, 5, m_cities[m_nShowCity].weatherCondition);//5为模式
-            cityView = glbLoadImage( "temp.jpg" );
+			if (txt2ImgHelper(m_cities[m_nShowCity].imgPath, 5, m_cities[m_nShowCity].weatherCondition))//5为模式
+			{
+				cityView = glbLoadImage( "temp.jpg" );
+			}
+			else
+			{
+				cityView = glbLoadImage("error.png");
+			}
             
             m_bShowDetail = true;
         }
@@ -480,8 +509,7 @@ public:
     }
 };
 
-//把中文字符写到图片上以供显示
-int helper(char* imgFile, int mode, char* myString)
+bool invoketext2ImageGenerator(LPCTSTR param)
 {
 	SHELLEXECUTEINFO sei = {0};
 	sei.cbSize = sizeof(SHELLEXECUTEINFO);
@@ -489,13 +517,8 @@ int helper(char* imgFile, int mode, char* myString)
 	sei.hwnd = NULL;
 	//sei.lpVerb = TEXT("runas"); //以管理员身份运行，如果XML文件放在C:\Program Files下， 需要以管理员运行才能修改文件。正确的做法是把需要写权限的文件移到AppData或者ProgramData目录下面去。
 	sei.lpFile = TEXT("text2ImageGenerator.exe");
-	CString param;
-	CString First(imgFile); 
-	CString Last(myString); 
-	
-	param.Format(_T("%s %d %s"), (LPCTSTR)First, mode, (LPCTSTR)Last);
-	
-	sei.lpParameters = (LPCTSTR)param;
+		
+	sei.lpParameters = param;
 	sei.nShow = SW_SHOWNORMAL;
 	if (!ShellExecuteEx(&sei))
 	{
@@ -519,10 +542,34 @@ int helper(char* imgFile, int mode, char* myString)
 			return true;
 		else
 		{
-			printf("Failed to update xml, please check log.");
+			printf("Failed to invoke text2ImageGenerator, please check log.");
 			return false;
 		}
 	}
+}
+
+//把中文字符写到图片上以供显示， 不提供底图，返回透明图（png格式）
+bool txt2ImgHelper(int mode, char* myString)
+{
+	if (!myString || (strlen(myString)== 0))
+		return false;
+	CString param;
+	CString text(myString); 	
+	param.Format(_T("%s"), (LPCTSTR)text);
+	return invoketext2ImageGenerator(param);
+}
+
+//把中文字符写到图片上以供显示, 提供底图，底图可以为bmp，jpg或png格式
+bool txt2ImgHelper(char* imgFile, int mode, char* myString)
+{
+	if (!myString || (strlen(myString)== 0))
+		return false;
+	CString param;
+	CString img(imgFile); 
+	CString text(myString); 
+	
+	param.Format(_T("%s %d %s"), (LPCTSTR)img, mode, (LPCTSTR)text);
+	return invoketext2ImageGenerator(param);
 }
 
 void main()
