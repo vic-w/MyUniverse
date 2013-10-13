@@ -226,7 +226,7 @@ public:
             GlbPointGeo p2(m_cities[city2].latitude, m_cities[city2].longitude);
             GlbPointGeo polar(90,0);
             glbDrawLine(p1, true, p2, true, *m_pGlobeRotMat, m_pWindow->m_calib, LAYER_LINES);
-            glbDrawTexture(cityView, *m_pGlobeRotMat, m_pWindow->m_calib, p2, true, polar, false, true, 40, 30, LAYER_CITY_DETAIL, GLB_TEX_RECT);
+            glbDrawTexture(cityView, *m_pGlobeRotMat, m_pWindow->m_calib, p2, true, polar, false, true, 100, 15, LAYER_CITY_DETAIL, GLB_TEX_RECT);
         }
 	}
 	void reset()
