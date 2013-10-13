@@ -105,7 +105,7 @@ bool CCity::updateXml()
 	sei.fMask = SEE_MASK_NOCLOSEPROCESS;
 	sei.hwnd = NULL;
 	sei.lpVerb = TEXT("runas"); //以管理员身份运行，如果XML文件放在C:\Program Files下， 需要以管理员运行才能修改文件。正确的做法是把需要写权限的文件移到AppData或者ProgramData目录下面去。
-	sei.lpFile = TEXT("WeatherForecastHelper.exe");
+	sei.lpFile = TEXT("D:\\vic\\MyUniverse\\trunk\\src\\Debug\\WeatherForecastHelper.exe");
 	//sei.lpParameters = TEXT("");
 	sei.nShow = SW_SHOWNORMAL;
 	if (!ShellExecuteEx(&sei))

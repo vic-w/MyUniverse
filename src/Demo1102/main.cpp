@@ -226,7 +226,7 @@ public:
             GlbPointGeo p2(m_cities[city2].latitude, m_cities[city2].longitude);
             GlbPointGeo polar(90,0);
             glbDrawLine(p1, true, p2, true, *m_pGlobeRotMat, m_pWindow->m_calib, LAYER_LINES);
-            glbDrawTexture(cityView, *m_pGlobeRotMat, m_pWindow->m_calib, p2, true, polar, false, true, 100, 15, LAYER_CITY_DETAIL, GLB_TEX_RECT);
+            glbDrawTexture(cityView, *m_pGlobeRotMat, m_pWindow->m_calib, p2, true, polar, false, true, 60, 5, LAYER_CITY_DETAIL, GLB_TEX_RECT);
         }
 	}
 	void reset()
@@ -312,6 +312,19 @@ public:
         {
             glbDrawCircle(polygon[0], true, 3, *m_pGlobeRotMat, m_pWindow->m_calib, LAYER_LINES);
         }
+		if(polygon.size()>1 && m_bClosed)
+		{
+			GlbPointGeo p1,p2(90,0);
+			if(m_bClosed)
+			{
+				p1 = polygon[0];
+			}
+			else
+			{
+				p1 = polygon[polygon.size()-1];
+			}
+			glbDrawTexture(cityView, *m_pGlobeRotMat, m_pWindow->m_calib, p1, true, p2, false, true, 60, 5, LAYER_CITY_DETAIL, GLB_TEX_RECT);
+		}
 	}
 	void reset()
 	{
@@ -576,12 +589,12 @@ void main()
 {
 	printf("更新Xml的信息...\n");
 	//更新Xml的信息
-#ifdef RELEASE
-	if (!CCity::updateXml())
-	{
-		return;
-	}
-#endif
+//#ifdef RELEASE
+	//if (!CCity::updateXml())
+	//{
+	//	return;
+	//}
+//#endif
 
 	vector<CCity> cities = CCity::getCities(); //读取Xml中的城市列表
 	printf("%s\n", cities[5].getLocalTimeString()); //读取某个城市的当地时间

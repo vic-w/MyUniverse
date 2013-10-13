@@ -53,7 +53,7 @@ namespace text2ImageGenerator
                 atPoint = new Point(10, 10),
                 color = Color.FromArgb(255, 255, 255, 255),
                 fontFamily = new FontFamily("Arial"),
-                fontSize = 20.0f,
+                fontSize = 30.0f,
                 fontStyle = FontStyle.Regular,
                 overAllAlignment = "TopLeft",
                 lineAlignment = StringAlignment.Near,
