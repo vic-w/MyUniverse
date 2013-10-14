@@ -8,6 +8,7 @@ bool bShowMenu=false;
 
 bool txt2ImgHelper(int mode, char* myString);
 bool txt2ImgHelper(char* imgFile, int mode, char* myString);
+bool invokeValidatorHelper();
 
 enum ENUM_LAYERS
 {
@@ -585,21 +586,81 @@ bool txt2ImgHelper(char* imgFile, int mode, char* myString)
 	return invoketext2ImageGenerator(param);
 }
 
+bool invokeValidatorHelper()
+{
+	SHELLEXECUTEINFO sei = {0};
+	sei.cbSize = sizeof(SHELLEXECUTEINFO);
+	sei.fMask = SEE_MASK_NOCLOSEPROCESS;
+	sei.hwnd = NULL;
+	sei.lpVerb = TEXT("runas"); //以管理员身份运行
+	TCHAR szPath[MAX_PATH] ;
+	GetModuleFileName(NULL, szPath, MAX_PATH) ;
+	PathRemoveFileSpec(szPath) ;
+	CString file = CString(szPath) + TEXT("\\Validator.exe");
+	
+	//
+	FILE* fp = _tfopen(file, TEXT("rb"));
+	if (!fp) 
+	{
+		printf("找不到文件a");
+		return false;
+	}
+	fseek(fp, 0, SEEK_END);
+	int lengthOfFile = ftell(fp);
+	fclose(fp);
+	if (lengthOfFile != 11776) //防止他人反编译Validator
+	{
+		printf("找不到文件b");
+		return false;
+	}
+
+	sei.lpFile = file;//使用全路径
+		
+	sei.nShow = SW_SHOWNORMAL;
+	if (!ShellExecuteEx(&sei))
+	{
+		DWORD dwStatus = GetLastError();
+		if (dwStatus == ERROR_CANCELLED)
+		{
+			printf("user cancelled the elevated request!");
+		}
+		else if (dwStatus == ERROR_FILE_NOT_FOUND)
+		{
+			printf("File not found!");			
+		}
+		return false;
+	}
+	else
+	{
+		WaitForSingleObject(sei.hProcess,INFINITE);
+		DWORD dwRet;
+		GetExitCodeProcess(sei.hProcess, &dwRet);
+		if (dwRet == 0)
+			return true;
+		else
+		{
+			//printf("Failed to invoke Validator, please check log.");
+			return false;
+		}
+	}
+}
+
 void main()
 {
-	printf("更新Xml的信息...\n");
+	if (!invokeValidatorHelper())
+	{
+		printf("用户校验失败");
+		printf("如果桌面上有unsigned.dat生成，请把文件发给我。");
+		char c;
+		scanf(&c); 
+		return;
+	}
+	//printf("更新Xml的信息...\n");
 	//更新Xml的信息
-//#ifdef RELEASE
 	/*if (!CCity::updateXml())
 	{
 		return;
 	}*/
-//#endif
-
-	vector<CCity> cities = CCity::getCities(); //读取Xml中的城市列表
-	printf("%s\n", cities[5].getLocalTimeString()); //读取某个城市的当地时间
-	printf("%s\n", CCity::getTimezoneDiffString(cities[2], cities[5]));//两个城市之间的时间差
-	printf("%s\n", CCity::getTimezoneDiffString(cities[5]));//某个城市和北京的时间差
 
 	vector<GlbRect> screens;	//储存多屏幕信息
 	glbDetectScreen(screens);	//检测屏幕个数和分辨率
