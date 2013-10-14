@@ -75,14 +75,7 @@ public:
             m_nShowCity = layer - LAYER_CITY_ICON_START;
 			
 			//kennyzx test
-			if (txt2ImgHelper(m_cities[m_nShowCity].imgPath, 1, m_cities[m_nShowCity].displayname)) //1为模式
-			{
-				cityView = glbLoadImage("temp.jpg"); 
-			}
-			else
-			{
-				cityView = glbLoadImage("error.png");
-			}
+			cityView = glbLoadImage(m_cities[m_nShowCity].imgPath); 
 
             m_bShowDetail = true;
         }
@@ -151,8 +144,7 @@ public:
 
 			//kennyzx test
 			char strLocalTime[32];
-			sprintf(strLocalTime, "%s当地时间是%s", 
-                m_cities[m_nShowCity].displayname, 
+			sprintf(strLocalTime, "时间%s", 
                 m_cities[m_nShowCity].getLocalTimeString());    
 			if(txt2ImgHelper(m_cities[m_nShowCity].imgPath, 2, strLocalTime))//2为模式
 			{
@@ -502,7 +494,10 @@ public:
         {
             m_nShowCity = layer - LAYER_CITY_ICON_START;
 			//kennyzx test
-			if (txt2ImgHelper(m_cities[m_nShowCity].imgPath, 5, m_cities[m_nShowCity].weatherCondition))//5为模式
+			char strWeather[32];
+			sprintf(strWeather, "%s %s", 
+				m_cities[m_nShowCity].weatherCondition, m_cities[m_nShowCity].temprature);
+			if (txt2ImgHelper(m_cities[m_nShowCity].imgPath, 5, strWeather))//5为模式
 			{
 				cityView = glbLoadImage( "temp.jpg" );
 			}
@@ -522,6 +517,7 @@ public:
     }
 };
 
+
 bool invoketext2ImageGenerator(LPCTSTR param)
 {
 	SHELLEXECUTEINFO sei = {0};
@@ -529,7 +525,11 @@ bool invoketext2ImageGenerator(LPCTSTR param)
 	sei.fMask = SEE_MASK_NOCLOSEPROCESS;
 	sei.hwnd = NULL;
 	//sei.lpVerb = TEXT("runas"); //以管理员身份运行，如果XML文件放在C:\Program Files下， 需要以管理员运行才能修改文件。正确的做法是把需要写权限的文件移到AppData或者ProgramData目录下面去。
-	sei.lpFile = TEXT("text2ImageGenerator.exe");
+	TCHAR szPath[MAX_PATH] ;
+	GetModuleFileName(NULL, szPath, MAX_PATH) ;
+	PathRemoveFileSpec(szPath) ;
+	CString file = CString(szPath) + TEXT("\\text2ImageGenerator.exe");
+	sei.lpFile = file;//使用全路径
 		
 	sei.lpParameters = param;
 	sei.nShow = SW_SHOWNORMAL;
@@ -590,10 +590,10 @@ void main()
 	printf("更新Xml的信息...\n");
 	//更新Xml的信息
 //#ifdef RELEASE
-	//if (!CCity::updateXml())
-	//{
-	//	return;
-	//}
+	/*if (!CCity::updateXml())
+	{
+		return;
+	}*/
 //#endif
 
 	vector<CCity> cities = CCity::getCities(); //读取Xml中的城市列表

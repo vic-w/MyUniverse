@@ -14,6 +14,14 @@ CCity::~CCity(void)
 {
 }
 
+CString	GetCurAppFilePath() 
+{
+	TCHAR szPath[MAX_PATH] ;
+	GetModuleFileName(NULL, szPath, MAX_PATH) ;
+	PathRemoveFileSpec(szPath) ;
+	return	szPath ;
+}
+
 //http://stackoverflow.com/questions/8308236/performing-arithmetic-on-systemtime
 SYSTEMTIME add( SYSTEMTIME s, double seconds ) {
 
@@ -40,7 +48,7 @@ char* CCity::getLocalTimeString()
 	// Convert to local time provided timezone information.
 	SYSTEMTIME localTime = add(st, timezone*60*60);
 	char* csLocalTime = new char[32];
-	sprintf(csLocalTime, "%ld:%ld:%ld", localTime.wHour,
+	sprintf(csLocalTime, "%02d:%02d:%02d", localTime.wHour,
 							 localTime.wMinute,
 							 localTime.wSecond);
 	return csLocalTime;
@@ -104,8 +112,9 @@ bool CCity::updateXml()
 	sei.cbSize = sizeof(SHELLEXECUTEINFO);
 	sei.fMask = SEE_MASK_NOCLOSEPROCESS;
 	sei.hwnd = NULL;
-	sei.lpVerb = TEXT("runas"); //以管理员身份运行，如果XML文件放在C:\Program Files下， 需要以管理员运行才能修改文件。正确的做法是把需要写权限的文件移到AppData或者ProgramData目录下面去。
-	sei.lpFile = TEXT("D:\\vic\\MyUniverse\\trunk\\src\\Debug\\WeatherForecastHelper.exe");
+	sei.lpVerb = TEXT("runas"); //以管理员身份运行，如果XML文件放在C:\Program Files下， 需要以管理员运行才能修改文件。正确的做法是把需要写权限的文件移到AppData或者ProgramData目录下面去。	
+	CString file = GetCurAppFilePath() + TEXT("\\WeatherForecastHelper.exe");
+	sei.lpFile = file;//使用全路径
 	//sei.lpParameters = TEXT("");
 	sei.nShow = SW_SHOWNORMAL;
 	if (!ShellExecuteEx(&sei))
