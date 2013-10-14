@@ -26,6 +26,17 @@ namespace text2ImageGenerator
                 lineAlignment = StringAlignment.Far,
                 stringAlignment = StringAlignment.Far
             });
+            textStyles.Add("weather", new TextStyle()
+            {
+                atPoint = new Point(10, 10),
+                color = Color.FromKnownColor(KnownColor.White),
+                fontFamily = new FontFamily("Arial"),
+                fontSize = 32.0f,
+                fontStyle = FontStyle.Regular,
+                overAllAlignment = "BottomRight",
+                lineAlignment = StringAlignment.Far,
+                stringAlignment = StringAlignment.Far
+            });
             textStyles.Add("cityname", new TextStyle()
             {
                 atPoint = new Point(10, 10),
@@ -147,7 +158,7 @@ namespace text2ImageGenerator
                                 SaveAsImage(TextStyleCollection.textStyles["default"], bitmap, format, myString);
                                 break;
                             case "5":
-                                SaveAsImage(TextStyleCollection.textStyles["default"], bitmap, format, myString);
+                                SaveAsImage(TextStyleCollection.textStyles["weather"], bitmap, format, myString);
                                 break;
                             default:
                                 SaveAsImage(TextStyleCollection.textStyles["default"], bitmap, format, myString);
