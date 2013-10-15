@@ -63,14 +63,16 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>GlbCore.lib;GlbRot.lib;GlbTouch.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\..\3rdparty\libxml2\lib;..\..\3rdparty\iconv;</AdditionalLibraryDirectories>
+      <UACExecutionLevel>RequireAdministrator</UACExecutionLevel>
     </Link>
     <PostBuildEvent>
       <Command>copy "$(ProjectDir)cities.xml" "$(TargetDir)"
+copy "$(ProjectDir)image\error.png" "$(TargetDir)"
 mkdir $(TargetDir)image
 copy "$(ProjectDir)image\*.*" "$(TargetDir)image\"
 mkdir $(TargetDir)image\cities
 copy "$(ProjectDir)image\cities\*.*" "$(TargetDir)image\cities"
-copy cities.xml $(TargetDir)
+
 </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
@@ -90,6 +92,7 @@ copy cities.xml $(TargetDir)
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>GlbCore.lib;GlbRot.lib;GlbTouch.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <UACExecutionLevel>RequireAdministrator</UACExecutionLevel>
     </Link>
     <PostBuildEvent>
       <Command>mkdir $(TargetDir)image

@@ -649,10 +649,7 @@ void main()
 {
 	if (!invokeValidatorHelper())
 	{
-		printf("用户校验失败");
-		printf("如果桌面上有unsigned.dat生成，请把文件发给我。");
-		char c;
-		scanf(&c); 
+		MessageBox(NULL, TEXT("如果桌面上有unsigned.dat生成，请把文件发给我。"), TEXT("用户校验失败"), MB_OK|MB_ICONEXCLAMATION);
 		return;
 	}
 	//printf("更新Xml的信息...\n");

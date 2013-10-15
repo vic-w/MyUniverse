@@ -57,7 +57,12 @@ char* CCity::getLocalTimeString()
 char* CCity::getTimezoneDiffString(CCity city1, CCity city2)
 {
 	char* timeDiffString = new char[64];
-	sprintf(timeDiffString, "%s和%s的时差为%2.1f小时", city2.displayname, city1.displayname, city2.timezone - city1.timezone);
+	if (city2.timezone > city1.timezone)
+		sprintf(timeDiffString, "%s的时间比%s早%2.1f小时", city2.displayname, city1.displayname, abs(city2.timezone - city1.timezone));
+	else if (city2.timezone < city1.timezone) 
+		sprintf(timeDiffString, "%s的时间比%s晚%2.1f小时", city2.displayname, city1.displayname, abs(city2.timezone - city1.timezone));
+	else  //float point comparison?
+		sprintf(timeDiffString, "%s和%s处在同一个时区", city2.displayname, city1.displayname);
 	return timeDiffString;
 }
 
