@@ -163,6 +163,12 @@ vector<CCity> CCity::getCities()
 		xmlNode *node = xpathObj->nodesetval->nodeTab[0];
 		while (node)
 		{
+			if (!xmlStrcmp(node->name, (const xmlChar *)"text")) //deal with white space between nodes
+			{
+				node = node->next;
+				continue;
+			}
+
 			CCity city;
 			xmlAttr *attr = node->properties;
 			while ( attr )
@@ -223,7 +229,7 @@ vector<CCity> CCity::getCities()
 				attr = attr->next;
 			}
 			cities.push_back(city);
-			node = node->next->next; //TODO: fix this
+			node = node->next;
 		}
 		xmlFreeDoc(doc);
 	}
