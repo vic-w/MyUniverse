@@ -219,7 +219,7 @@ public:
             GlbPointGeo p2(m_cities[city2].latitude, m_cities[city2].longitude);
             GlbPointGeo polar(90,0);
             glbDrawLine(p1, true, p2, true, *m_pGlobeRotMat, m_pWindow->m_calib, LAYER_LINES);
-            glbDrawTexture(cityView, *m_pGlobeRotMat, m_pWindow->m_calib, p2, true, polar, false, true, 60, 5, LAYER_CITY_DETAIL, GLB_TEX_RECT);
+            glbDrawTexture(cityView, *m_pGlobeRotMat, m_pWindow->m_calib, p2, true, polar, false, true, 100, 10, LAYER_CITY_DETAIL, GLB_TEX_RECT);
         }
 	}
 	void reset()
@@ -316,7 +316,7 @@ public:
 			{
 				p1 = polygon[polygon.size()-1];
 			}
-			glbDrawTexture(cityView, *m_pGlobeRotMat, m_pWindow->m_calib, p1, true, p2, false, true, 60, 5, LAYER_CITY_DETAIL, GLB_TEX_RECT);
+			glbDrawTexture(cityView, *m_pGlobeRotMat, m_pWindow->m_calib, p1, true, p2, false, true, 100, 10, LAYER_CITY_DETAIL, GLB_TEX_RECT);
 		}
 	}
 	void reset()
@@ -380,6 +380,16 @@ public:
 					{
 						sprintf(msg, "多边形的面积为%d万平方公里\n", (int)(area/10000));
 					}
+                    
+                    //kennyzx test
+			        if (txt2ImgHelper(4, msg))//4为模式
+			        {
+				        cityView = glbLoadImage( "temp.png" );
+			        }
+			        else
+			        {
+				        cityView = glbLoadImage( "error.png" );
+			        }
                 }
                 else//多边形没有闭合
                 {
@@ -387,15 +397,7 @@ public:
                     m_bIntersect |= polygonIntersect_lastline(polygon, false);
                 }
             }
-			//kennyzx test
-			if (txt2ImgHelper(4, msg))//4为模式
-			{
-				cityView = glbLoadImage( "temp.png" );
-			}
-			else
-			{
-				cityView = glbLoadImage( "error.png" );
-			}
+
             //m_bShowDetail = true;
         }
 		else
@@ -665,7 +667,7 @@ void main()
 	GlbRect rect(0,0,screens[0].m_height,screens[0].m_height);
 
     GlbWindow mainWindow;		//窗口
-    glbCreateWindow(mainWindow, rect, ".\\calibmain.ini", true, false);	//生成一个窗口
+    glbCreateWindow(mainWindow, screens.back(), ".\\calibmain.ini", true, false);	//生成一个窗口
 	
 	GlbRotmat GlobeRotMat;		//地球旋转量
 	glbCreateGlbRotmat(GlobeRotMat);	//初始化旋转量（北极向上）
@@ -731,28 +733,28 @@ void main()
         //画菜单按钮
 		if(nMode == 1)
 		{
-			glbDrawTexture(mode1_img, GlobeRotMat, mainWindow.m_calib, p1, false, p2, false, true, 20, 20, LAYER_MENU_START, GLB_TEX_RECT);
+			glbDrawTexture(mode1_img, GlobeRotMat, mainWindow.m_calib, p1, false, p2, false, true, 40, 40, LAYER_MENU_START, GLB_TEX_RECT);
 		}
 		else if(nMode ==2)
 		{
-			glbDrawTexture(mode2_img, GlobeRotMat, mainWindow.m_calib, p1, false, p2, false, true, 20, 20, LAYER_MENU_START, GLB_TEX_RECT);
+			glbDrawTexture(mode2_img, GlobeRotMat, mainWindow.m_calib, p1, false, p2, false, true, 40, 40, LAYER_MENU_START, GLB_TEX_RECT);
 		}
 		else if(nMode ==3)
 		{
-			glbDrawTexture(mode3_img, GlobeRotMat, mainWindow.m_calib, p1, false, p2, false, true, 20, 20, LAYER_MENU_START, GLB_TEX_RECT);
+			glbDrawTexture(mode3_img, GlobeRotMat, mainWindow.m_calib, p1, false, p2, false, true, 40, 40, LAYER_MENU_START, GLB_TEX_RECT);
 		}
 		else if(nMode ==4)
 		{
-			glbDrawTexture(mode4_img, GlobeRotMat, mainWindow.m_calib, p1, false, p2, false, true, 20, 20, LAYER_MENU_START, GLB_TEX_RECT);
+			glbDrawTexture(mode4_img, GlobeRotMat, mainWindow.m_calib, p1, false, p2, false, true, 40, 40, LAYER_MENU_START, GLB_TEX_RECT);
 		}
 		else if(nMode ==5)
 		{
-			glbDrawTexture(mode5_img, GlobeRotMat, mainWindow.m_calib, p1, false, p2, false, true, 20, 20, LAYER_MENU_START, GLB_TEX_RECT);
+			glbDrawTexture(mode5_img, GlobeRotMat, mainWindow.m_calib, p1, false, p2, false, true, 40, 40, LAYER_MENU_START, GLB_TEX_RECT);
 		}
 
         if(bShowMenu)
         {
-            p1.m_lat = 60; p1.m_lng = 0;
+            p1.m_lat = 30; p1.m_lng = 0;
             glbDrawTexture(mode1_img, GlobeRotMat, mainWindow.m_calib, p1, false, p2, false, true, 20, 20, LAYER_MENU_START+1, GLB_TEX_RECT);
             p1.m_lng = 72;
             glbDrawTexture(mode2_img, GlobeRotMat, mainWindow.m_calib, p1, false, p2, false, true, 20, 20, LAYER_MENU_START+2, GLB_TEX_RECT);
