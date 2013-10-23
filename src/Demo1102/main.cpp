@@ -10,6 +10,11 @@ bool bShowMenu=false;
 GlbPivot g_GlobeRotPivot(0,1,0);
 float g_GlobeRotSpeed = 0;
 
+//菜单转动惯量
+float g_MenuLng = 0;
+float g_MenuRotSpeed = 0;
+
+
 bool txt2ImgHelper(int mode, char* myString);
 bool txt2ImgHelper(char* imgFile, int mode, char* myString);
 bool invokeValidatorHelper();
@@ -707,6 +712,14 @@ void main()
 		glbRotmatMul(rotation, GlobeRotMat, GlobeRotMat);
 		g_GlobeRotSpeed *= 0.95;
 
+		//转动菜单
+		g_MenuLng += g_MenuRotSpeed;
+		while(g_MenuLng >180)
+		{
+			g_MenuLng -= 360;
+		}
+		g_MenuRotSpeed *= 0.95;
+
         glbDrawGlobe(earth_img, GlobeRotMat, mainWindow.m_calib); //画地球底图
 
         if(nMode == 1)
@@ -764,15 +777,15 @@ void main()
 
         if(bShowMenu)
         {
-            p1.m_lat = 30; p1.m_lng = 0;
+            p1.m_lat = 30; p1.m_lng = g_MenuLng + 0;
             glbDrawTexture(mode1_img, GlobeRotMat, mainWindow.m_calib, p1, false, p2, false, true, 20, 20, LAYER_MENU_START+1, GLB_TEX_RECT);
-            p1.m_lng = 72;
+            p1.m_lng = g_MenuLng + 72;
             glbDrawTexture(mode2_img, GlobeRotMat, mainWindow.m_calib, p1, false, p2, false, true, 20, 20, LAYER_MENU_START+2, GLB_TEX_RECT);
-            p1.m_lng = 144;
+            p1.m_lng = g_MenuLng + 144;
             glbDrawTexture(mode3_img, GlobeRotMat, mainWindow.m_calib, p1, false, p2, false, true, 20, 20, LAYER_MENU_START+3, GLB_TEX_RECT);
-            p1.m_lng = -144;
+            p1.m_lng = g_MenuLng -144;
             glbDrawTexture(mode4_img, GlobeRotMat, mainWindow.m_calib, p1, false, p2, false, true, 20, 20, LAYER_MENU_START+4, GLB_TEX_RECT);
-            p1.m_lng = -72;
+            p1.m_lng = g_MenuLng -72;
             glbDrawTexture(mode5_img, GlobeRotMat, mainWindow.m_calib, p1, false, p2, false, true, 20, 20, LAYER_MENU_START+5, GLB_TEX_RECT);
         }
 
@@ -789,12 +802,21 @@ void main()
 			glbPointRound2PointRect(m_it->m_pFrom, from3d, mainWindow.m_calib);
 			glbPointRound2PointRect(m_it->m_pTo, to3d, mainWindow.m_calib);
 
-			//GlbRotmat rotation;
-			//glbMovingPoints2RotMat(from3d, to3d, rotation);
-			//glbRotmatMul(rotation, GlobeRotMat, GlobeRotMat);
+			int HitLayer = glbGetTopLayer(mainWindow, m_it->m_pFrom);
 
-			g_GlobeRotSpeed = glbAngleBetweenPoints(from3d, to3d);
-			glbPivotBetweenPoints(from3d, to3d, g_GlobeRotPivot);
+			if(HitLayer < LAYER_MENU_START)
+			{
+				g_GlobeRotSpeed = glbAngleBetweenPoints(from3d, to3d);
+				glbPivotBetweenPoints(from3d, to3d, g_GlobeRotPivot);
+			}
+			else if(HitLayer >LAYER_MENU_START && HitLayer <= LAYER_MENU_START+5)
+			{
+				GlbPointGeo pFromGeo, pToGeo;
+				glbPointRect2PointGeo(from3d, pFromGeo);
+				glbPointRect2PointGeo(to3d, pToGeo);
+				GlbPointGeo MenuRot = pToGeo - pFromGeo;
+				g_MenuRotSpeed = MenuRot.m_lng;
+			}
 		}
 
 		//在点击处画一个圆圈

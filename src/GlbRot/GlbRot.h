@@ -44,6 +44,21 @@ public:
 	{
 		return (m_lat != p.m_lat) || (m_lng != p.m_lng);
 	}
+	GlbPointGeo operator-(GlbPointGeo &p)
+    {
+		GlbPointGeo ret;
+        ret.m_lat = m_lat - p.m_lat;
+		ret.m_lng = m_lng - p.m_lng;
+		if(ret.m_lng < -180)
+		{
+			ret.m_lng += 360.0f;
+		}
+		if(ret.m_lng > 180)
+		{
+			ret.m_lng -= 360.0f;
+		}
+        return ret;
+	}
 }; 
 
 class GlbPoint2d   
