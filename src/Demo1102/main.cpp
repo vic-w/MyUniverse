@@ -6,6 +6,10 @@
 int nMode=1;
 bool bShowMenu=false;
 
+//地球转动惯量
+GlbPivot g_GlobeRotPivot(0,1,0);
+float g_GlobeRotSpeed = 0;
+
 bool txt2ImgHelper(int mode, char* myString);
 bool txt2ImgHelper(char* imgFile, int mode, char* myString);
 bool invokeValidatorHelper();
@@ -697,6 +701,12 @@ void main()
     {
         glbClearWindow();	//清除窗口内容
 
+		//旋转地球
+		GlbRotmat rotation;
+		glbAnglePivot2RotMat(g_GlobeRotPivot, g_GlobeRotSpeed, rotation);
+		glbRotmatMul(rotation, GlobeRotMat, GlobeRotMat);
+		g_GlobeRotSpeed *= 0.95;
+
         glbDrawGlobe(earth_img, GlobeRotMat, mainWindow.m_calib); //画地球底图
 
         if(nMode == 1)
@@ -779,9 +789,12 @@ void main()
 			glbPointRound2PointRect(m_it->m_pFrom, from3d, mainWindow.m_calib);
 			glbPointRound2PointRect(m_it->m_pTo, to3d, mainWindow.m_calib);
 
-			GlbRotmat rotation;
-			glbMovingPoints2RotMat(from3d, to3d, rotation);
-			glbRotmatMul(rotation, GlobeRotMat, GlobeRotMat);
+			//GlbRotmat rotation;
+			//glbMovingPoints2RotMat(from3d, to3d, rotation);
+			//glbRotmatMul(rotation, GlobeRotMat, GlobeRotMat);
+
+			g_GlobeRotSpeed = glbAngleBetweenPoints(from3d, to3d);
+			glbPivotBetweenPoints(from3d, to3d, g_GlobeRotPivot);
 		}
 
 		//在点击处画一个圆圈
@@ -852,12 +865,13 @@ void main()
             }
 		} 
 		
+
     }
     while(glbUpdateWindow(mainWindow,0));
 
     glbReleaseImage(&earth_img);		//释放临时变量
     glbReleaseImage(&icon_img);
-    glbReleaseImage(&menu_img);		//释放临时变量
+    glbReleaseImage(&menu_img);			//释放临时变量
     glbReleaseImage(&mode1_img);
     glbReleaseImage(&mode2_img);		//释放临时变量
     glbReleaseImage(&mode3_img);
