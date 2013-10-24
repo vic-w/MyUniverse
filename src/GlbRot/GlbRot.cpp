@@ -657,3 +657,56 @@ bool glbArcsIntersect(GlbPointGeo A, GlbPointGeo B, GlbPointGeo C, GlbPointGeo D
 
     return false;//两个弧不相交
 }
+
+GLBROT_API void glbPointTex2PointGeo(
+                                        GlbRotmat GlobeRotMat,
+                                        GlbPointGeo pGeo,       //贴图的中心点
+                                        bool bPointOnGlobe,     //中心点坐标是在 globe坐标系(true) or screen坐标系(false)
+                                        GlbPointGeo pGeoDirect, //贴图方向的参考点
+                                        bool bDirOnGlobe,       //方向参考点实在 globe坐标系(true) or screen坐标系(false)
+                                        bool bHeadDirect,       //图片朝向参考点(ture) or 背向参考点(false)
+                                        float width,            //贴图的宽度(单位:角度)
+                                        float height,           //贴图的高度(单位:角度)
+                                        GlbTexMode mode,
+                                        GlbPointTex texPoint,
+                                        bool bTexPoint3dOnGlobe,
+                                        GlbPointGeo &texPointGeo)
+{
+    //计算图像“中心点”的位置
+    GlbPoint3d pRect;//“中心点”的直角坐标
+    glbPointGeo2PointRect(pGeo, pRect);//将“中心点”转换为直角坐标
+    if(bPointOnGlobe)//如果“中心点”在地球上
+    {
+        glbGlobePoint2ScreenPoint(pRect, GlobeRotMat, pRect);//将“中心点”转换至屏幕上
+    }
+
+    GlbPivot pivot_v, pivot_h;//横向和纵向旋转轴
+    GlbPoint3d pRectDirect;//“朝向点”的直角坐标
+    glbPointGeo2PointRect(pGeoDirect, pRectDirect);//将“朝向点”转换为直角坐标
+    if(bDirOnGlobe)//如果“朝向点”在地球上
+    {
+        glbGlobePoint2ScreenPoint(pRectDirect, GlobeRotMat, pRectDirect);//将“朝向点”转换至屏幕上
+    }
+
+    glbCreateNormPivot( //生成贴图转轴
+        pRect, //“中心点”直角坐标
+        pRectDirect, //“朝向点”直角坐标
+        bHeadDirect, //朝向
+        pivot_h, //生成贴图所需的纵向转轴（轴是纵向的，旋转将是横向的）
+        pivot_v  //生成贴图所需的横向转轴
+    );
+
+    if(mode == GLB_TEX_BELT)//如果贴图是类型是“条幅”
+    {
+        pivot_h = pRectDirect;  //纵向转轴 = 球心和“朝向点”的连线
+    }
+
+    float angle_h = width * (texPoint.m_x - 0.5f); //贴图中心点到左上角的旋转角度
+    float angle_v = height * (texPoint.m_y - 0.5f);//贴图中心点到左上角的旋转角度
+
+    GlbPoint3d p_img;//此关节点的直角坐标
+    glbPivotingPoint(pRect, pivot_v, angle_v, p_img);//先从中心点纵向旋转
+    glbPivotingPoint(p_img, pivot_h, angle_h, p_img);//再横向旋转
+
+
+}

@@ -145,6 +145,7 @@ public:
 
 typedef GlbPoint3d GlbPivot;
 typedef GlbPoint2d GlbPointRound;
+typedef GlbPoint2d GlbPointTex;
 
 class GlbEularAngle
 {
@@ -175,6 +176,12 @@ public:
     GlbPoint2d m_pFrom;
     GlbPoint2d m_pTo;
     long m_nTrackID;
+};
+
+enum GlbTexMode
+{
+    GLB_TEX_RECT,
+    GLB_TEX_BELT
 };
 
 //计算向量的长度（模）
@@ -233,6 +240,20 @@ GLBROT_API void glbAnglePivot2RotMat(GlbPivot pivot, float angle, GlbRotmat &r);
 GLBROT_API void glbPivotingPoint(GlbPoint3d p, GlbPivot pivot, float angle, GlbPoint3d &p_out);
 //生成贴图时所需的两个正交的旋转轴
 GLBROT_API void glbCreateNormPivot(GlbPoint3d p, GlbPoint3d directPoint, bool bHeadDirect, GlbPivot &pivot_h, GlbPivot &pivot_v);//生成p点到headPoint的旋转轴，以及其正交方向的旋转轴
+//贴图坐标转换为球面上的经纬度坐标
+GLBROT_API void glbPointTex2Point3d(
+                                        GlbRotmat GlobeRotMat,
+                                        GlbPointGeo pGeo,       //贴图的中心点
+                                        bool bPointOnGlobe,     //中心点坐标是在 globe坐标系(true) or screen坐标系(false)
+                                        GlbPointGeo pGeoDirect, //贴图方向的参考点
+                                        bool bDirOnGlobe,       //方向参考点实在 globe坐标系(true) or screen坐标系(false)
+                                        bool bHeadDirect,       //图片朝向参考点(ture) or 背向参考点(false)
+                                        float width,            //贴图的宽度(单位:角度)
+                                        float height,           //贴图的高度(单位:角度)
+                                        GlbTexMode mode,
+                                        GlbPointTex texPoint,
+                                        bool bTexPoint3dOnGlobe,
+                                        GlbPoint3d &texPoint3d);
 
 
 //从ini中读取畸变矫正信息

@@ -6,11 +6,6 @@
 
 using namespace std;
 
-enum GlbTexMode
-{
-    GLB_TEX_RECT,
-    GLB_TEX_BELT
-};
 
 class GlbRect
 {
