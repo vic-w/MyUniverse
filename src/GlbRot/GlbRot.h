@@ -241,7 +241,7 @@ GLBROT_API void glbPivotingPoint(GlbPoint3d p, GlbPivot pivot, float angle, GlbP
 //生成贴图时所需的两个正交的旋转轴
 GLBROT_API void glbCreateNormPivot(GlbPoint3d p, GlbPoint3d directPoint, bool bHeadDirect, GlbPivot &pivot_h, GlbPivot &pivot_v);//生成p点到headPoint的旋转轴，以及其正交方向的旋转轴
 //贴图坐标转换为球面上的经纬度坐标
-GLBROT_API void glbPointTex2Point3d(
+GLBROT_API void glbPointTex2PointGeo(
                                         GlbRotmat GlobeRotMat,
                                         GlbPointGeo pGeo,       //贴图的中心点
                                         bool bPointOnGlobe,     //中心点坐标是在 globe坐标系(true) or screen坐标系(false)
@@ -253,7 +253,7 @@ GLBROT_API void glbPointTex2Point3d(
                                         GlbTexMode mode,
                                         GlbPointTex texPoint,
                                         bool bTexPoint3dOnGlobe,
-                                        GlbPoint3d &texPoint3d);
+                                        GlbPointGeo &texPointGeo);
 
 
 //从ini中读取畸变矫正信息

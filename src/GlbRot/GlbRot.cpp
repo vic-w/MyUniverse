@@ -702,11 +702,16 @@ GLBROT_API void glbPointTex2PointGeo(
     }
 
     float angle_h = width * (texPoint.m_x - 0.5f); //贴图中心点到左上角的旋转角度
-    float angle_v = height * (texPoint.m_y - 0.5f);//贴图中心点到左上角的旋转角度
+    float angle_v = -height * (texPoint.m_y - 0.5f);//贴图中心点到左上角的旋转角度
 
     GlbPoint3d p_img;//此关节点的直角坐标
     glbPivotingPoint(pRect, pivot_v, angle_v, p_img);//先从中心点纵向旋转
     glbPivotingPoint(p_img, pivot_h, angle_h, p_img);//再横向旋转
 
+	if(bTexPoint3dOnGlobe)//如果“中心点”在地球上
+    {
+        glbScreenPoint2GlobePoint(p_img, GlobeRotMat, p_img);//将“中心点”转换至屏幕上
+    }
 
+	glbPointRect2PointGeo(p_img, texPointGeo);
 }

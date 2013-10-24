@@ -25,6 +25,10 @@ enum ENUM_LAYERS
     LAYER_CITY_ICON_START = 100,
 	LAYER_LINES = 400,
 	LAYER_CITY_DETAIL = 500,
+	LAYER_CITY_DETAIL_CLOSE = 510,
+	LAYER_CITY_DETAIL_RETURN = 520,
+	LAYER_CITY_DETAIL_FORWARD = 530,
+	LAYER_CITY_DETAIL_BACKWARD = 540,
 	LAYER_MENU_START = 1000,
     LAYER_CIRCLE = 1100
 };
@@ -40,6 +44,11 @@ public:
 	vector<CCity> m_cities;
 	bool m_bShowDetail;
 	int m_nShowCity;
+	GlbImage icon_menu;
+	GlbImage icon_close;
+	GlbImage icon_frwd;
+	GlbImage icon_back;
+
 public:
 	CMode1(GlbRotmat *pGlobeRotMat, GlbWindow *pWindow)
 	{
@@ -49,6 +58,10 @@ public:
 		m_pWindow = pWindow;
         m_bShowDetail = false;
         m_nShowCity = 0;
+		icon_menu = glbLoadImage("image\\city_menu.png");
+		icon_close = glbLoadImage("image\\close.png");
+		icon_frwd = glbLoadImage("image\\frwd.png");
+		icon_back = glbLoadImage("image\\back.png");
 	}
     ~CMode1()
     {
@@ -69,8 +82,26 @@ public:
 		{
             GlbPointGeo p1(m_cities[m_nShowCity].latitude, m_cities[m_nShowCity].longitude);
 			GlbPointGeo p2(90,0);
-			glbDrawTexture(cityView, *m_pGlobeRotMat, m_pWindow->m_calib, p1, true, p2, false, true, 40, 30, LAYER_CITY_DETAIL, GLB_TEX_RECT);
-            
+			glbDrawTexture(cityView, *m_pGlobeRotMat, m_pWindow->m_calib, p1, true, p2, false, true, 60, 45, LAYER_CITY_DETAIL, GLB_TEX_RECT);
+			
+			GlbPointGeo texPointGeo00,texPointGeo01,texPointGeo10,texPointGeo11;
+			GlbPointTex texPoint(0,0);
+			glbPointTex2PointGeo(*m_pGlobeRotMat, p1, true, p2, false, true, 60, 45, GLB_TEX_RECT, texPoint, false, texPointGeo00);
+			texPoint.m_x = 1, texPoint.m_y = 0;
+			glbPointTex2PointGeo(*m_pGlobeRotMat, p1, true, p2, false, true, 60, 45, GLB_TEX_RECT, texPoint, false, texPointGeo10);
+			texPoint.m_x = 1, texPoint.m_y = 0.5;
+			glbPointTex2PointGeo(*m_pGlobeRotMat, p1, true, p2, false, true, 60, 45, GLB_TEX_RECT, texPoint, false, texPointGeo11);
+			texPoint.m_x = 0, texPoint.m_y = 0.5;
+			glbPointTex2PointGeo(*m_pGlobeRotMat, p1, true, p2, false, true, 60, 45, GLB_TEX_RECT, texPoint, false, texPointGeo01);
+			//画返回图标
+            glbDrawTexture(icon_menu, *m_pGlobeRotMat, m_pWindow->m_calib, texPointGeo00, false, texPointGeo01, false, true, 5, 5, LAYER_CITY_DETAIL_RETURN, GLB_TEX_RECT);
+			//画关闭图标
+            glbDrawTexture(icon_close, *m_pGlobeRotMat, m_pWindow->m_calib, texPointGeo10, false, texPointGeo11, false, true, 5, 5, LAYER_CITY_DETAIL_CLOSE, GLB_TEX_RECT);
+			//画前进图标
+            glbDrawTexture(icon_frwd, *m_pGlobeRotMat, m_pWindow->m_calib, texPointGeo11, false, texPointGeo10, false, true, 9, 9, LAYER_CITY_DETAIL_FORWARD, GLB_TEX_RECT);
+			//画后退图标
+            glbDrawTexture(icon_back, *m_pGlobeRotMat, m_pWindow->m_calib, texPointGeo01, false, texPointGeo00, false, true, 9, 9, LAYER_CITY_DETAIL_BACKWARD, GLB_TEX_RECT);
+
 		}
 	}
 	void reset()
