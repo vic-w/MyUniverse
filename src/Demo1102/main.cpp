@@ -88,16 +88,16 @@ public:
 			glbDrawTexture(cityView, *m_pGlobeRotMat, m_pWindow->m_calib, p1, true, p2, false, true, 60, 45, LAYER_CITY_DETAIL, GLB_TEX_RECT);
 			
 			GlbPointGeo texPointGeo00,texPointGeo01,texPointGeo10,texPointGeo11;
-			GlbPointTex texPoint(0,0);
+			GlbPointTex texPoint(0.05,0.05);
 			glbPointTex2PointGeo(*m_pGlobeRotMat, p1, true, p2, false, true, 60, 45, GLB_TEX_RECT, texPoint, false, texPointGeo00);
-			texPoint.m_x = 1, texPoint.m_y = 0;
+			texPoint.m_x = 0.95, texPoint.m_y = 0.05;
 			glbPointTex2PointGeo(*m_pGlobeRotMat, p1, true, p2, false, true, 60, 45, GLB_TEX_RECT, texPoint, false, texPointGeo10);
-			texPoint.m_x = 1, texPoint.m_y = 0.5;
+			texPoint.m_x = 0.95, texPoint.m_y = 0.5;
 			glbPointTex2PointGeo(*m_pGlobeRotMat, p1, true, p2, false, true, 60, 45, GLB_TEX_RECT, texPoint, false, texPointGeo11);
-			texPoint.m_x = 0, texPoint.m_y = 0.5;
+			texPoint.m_x = 0.05, texPoint.m_y = 0.5;
 			glbPointTex2PointGeo(*m_pGlobeRotMat, p1, true, p2, false, true, 60, 45, GLB_TEX_RECT, texPoint, false, texPointGeo01);
 			//画返回图标
-            glbDrawTexture(icon_menu, *m_pGlobeRotMat, m_pWindow->m_calib, texPointGeo00, false, texPointGeo01, false, true, 5, 5, LAYER_CITY_DETAIL_RETURN, GLB_TEX_RECT);
+            //glbDrawTexture(icon_menu, *m_pGlobeRotMat, m_pWindow->m_calib, texPointGeo00, false, texPointGeo01, false, true, 5, 5, LAYER_CITY_DETAIL_RETURN, GLB_TEX_RECT);
 			//画关闭图标
             glbDrawTexture(icon_close, *m_pGlobeRotMat, m_pWindow->m_calib, texPointGeo10, false, texPointGeo11, false, true, 5, 5, LAYER_CITY_DETAIL_CLOSE, GLB_TEX_RECT);
 			//画前进图标
@@ -105,9 +105,6 @@ public:
 			//画后退图标
             glbDrawTexture(icon_back, *m_pGlobeRotMat, m_pWindow->m_calib, texPointGeo01, false, texPointGeo00, false, true, 9, 9, LAYER_CITY_DETAIL_BACKWARD, GLB_TEX_RECT);
             
-			GlbImage menu = menu_icon.getImage("宗教");
-			glbDrawTexture(menu, *m_pGlobeRotMat, m_pWindow->m_calib, texPointGeo01, false, texPointGeo00, false, true, 9, 9, LAYER_CITY_DETAIL_BACKWARD+100, GLB_TEX_RECT);
-
 		}
 	}
 	void reset()
@@ -265,7 +262,7 @@ public:
             GlbPointGeo p2(m_cities[city2].latitude, m_cities[city2].longitude);
             GlbPointGeo polar(90,0);
             glbDrawLine(p1, true, p2, true, *m_pGlobeRotMat, m_pWindow->m_calib, LAYER_LINES);
-            glbDrawTexture(cityView, *m_pGlobeRotMat, m_pWindow->m_calib, p2, true, polar, false, true, 100, 10, LAYER_CITY_DETAIL, GLB_TEX_RECT);
+            glbDrawTexture(cityView, *m_pGlobeRotMat, m_pWindow->m_calib, p2, true, polar, false, true, 80, 8, LAYER_CITY_DETAIL, GLB_TEX_RECT);
         }
 	}
 	void reset()
@@ -362,7 +359,7 @@ public:
 			{
 				p1 = polygon[polygon.size()-1];
 			}
-			glbDrawTexture(cityView, *m_pGlobeRotMat, m_pWindow->m_calib, p1, true, p2, false, true, 100, 10, LAYER_CITY_DETAIL, GLB_TEX_RECT);
+			glbDrawTexture(cityView, *m_pGlobeRotMat, m_pWindow->m_calib, p1, true, p2, false, true, 40, 16, LAYER_CITY_DETAIL, GLB_TEX_RECT);
 		}
 	}
 	void reset()
@@ -420,11 +417,11 @@ public:
 					float area = omiga * 6371.0f* 6371.0f;
 					if(m_bIntersect)
 					{
-						sprintf(msg, "多边形产生了自相交，无法计算面积\n");
+						sprintf(msg, "多边形产生了自相交，$无法计算面积\n");
 					}
 					else
 					{
-						sprintf(msg, "多边形的面积为%d万平方公里\n", (int)(area/10000));
+						sprintf(msg, "多边形的面积为$%d万平方公里\n", (int)(area/10000));
 					}
                     
                     //kennyzx test
