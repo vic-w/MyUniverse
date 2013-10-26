@@ -181,7 +181,7 @@ vector<CCity> populatetestdata()
 
 	CCity city2;
 	city2.id = 1;
-	city1.name="东京";
+	city2.name="东京";
 	city2.country = "日本";
 	city2.displayname = "东京";
 	city2.latitude  = 36;
