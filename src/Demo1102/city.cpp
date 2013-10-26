@@ -154,7 +154,7 @@ vector<CCity> CCity::getCities()
 {
 	vector<CCity> cities;
 	xmlInitParser();
-    xmlDocPtr doc = xmlParseFile("cities.xml");
+    xmlDocPtr doc = xmlParseFile("世界文化.xml");
 	if (doc)
 	{
 		xmlXPathContext *xpathCtx = xmlXPathNewContext( doc );
@@ -191,22 +191,22 @@ vector<CCity> CCity::getCities()
 					city.displaycountry = (strcmp(val, "true") == 0);
 				}
 				else if ((!xmlStrcmp(attr->name, (const xmlChar *)"latitude"))){
-					bool northsphere = (val[strlen(val)-1] == 'N');
-					val[strlen(val)]='\0';
+					/*bool northsphere = (val[strlen(val)-1] == 'N');
+					val[strlen(val)]='\0';*/
 					city.latitude = atof(val);
-					if (!northsphere)
+					/*if (!northsphere)
 					{
 						city.latitude = -city.latitude;
-					}
+					}*/
 				}
 				else if ((!xmlStrcmp(attr->name, (const xmlChar *)"longitude"))){
-					bool eastsphere = (val[strlen(val)-1] == 'E');
-					val[strlen(val)]='\0';
+					/*bool eastsphere = (val[strlen(val)-1] == 'E');
+					val[strlen(val)]='\0';*/
 					city.longitude = atof(val);
-					if (!eastsphere)
+					/*if (!eastsphere)
 					{
 						city.longitude = -city.longitude;
-					}
+					}*/
 				}
 				else if ((!xmlStrcmp(attr->name, (const xmlChar *)"timezone"))){
 					city.timezone = atof(val);
@@ -214,7 +214,7 @@ vector<CCity> CCity::getCities()
 				else if ((!xmlStrcmp(attr->name, (const xmlChar *)"path"))){
 					city.imgPath = u2g(val);
 				}
-				else if ((!xmlStrcmp(attr->name, (const xmlChar *)"population"))){
+				/*else if ((!xmlStrcmp(attr->name, (const xmlChar *)"population"))){
 					city.population = atoi(val);
 				}
 				else if ((!xmlStrcmp(attr->name, (const xmlChar *)"description"))){
@@ -225,9 +225,13 @@ vector<CCity> CCity::getCities()
 				}
 				else if ((!xmlStrcmp(attr->name, (const xmlChar *)"weatherCondition"))){
 					city.weatherCondition = u2g(val);
-				};
+				}*/
 				attr = attr->next;
 			}
+			//for test
+			city.temprature = "11度";
+			city.weatherCondition = "晴";
+
 			cities.push_back(city);
 			node = node->next;
 		}

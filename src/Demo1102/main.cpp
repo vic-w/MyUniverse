@@ -607,7 +607,7 @@ bool invoketext2ImageGenerator(LPCTSTR param)
 	}
 }
 
-//把中文字符写到图片上以供显示， 不提供底图，返回透明图（png格式）
+//把中文字符写到图片上以供显示， 不提供底图，返回jpg格式
 bool txt2ImgHelper(int mode, char* myString)
 {
 	if (!myString || (strlen(myString)== 0))
@@ -921,7 +921,6 @@ void main()
             {
             }
 		} 
-		
 
     }
     while(glbUpdateWindow(mainWindow,0));

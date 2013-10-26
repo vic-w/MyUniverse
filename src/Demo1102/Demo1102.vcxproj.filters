@@ -27,6 +27,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="cities.xml" />
+    <None Include="世界文化.xml" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="city.h">
