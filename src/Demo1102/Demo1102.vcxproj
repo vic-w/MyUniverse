@@ -117,6 +117,7 @@ copy "$(ProjectDir)menu\*.*" "$(TargetDir)menu\"</Command>
     </None>
     <None Include="世界文化.xml">
       <DeploymentContent>true</DeploymentContent>
+      <SubType>Designer</SubType>
     </None>
   </ItemGroup>
   <ItemGroup>

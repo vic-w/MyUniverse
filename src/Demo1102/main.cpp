@@ -745,6 +745,10 @@ void main()
 		GlbRotmat rotation;
 		glbAnglePivot2RotMat(g_GlobeRotPivot, g_GlobeRotSpeed, rotation);
 		glbRotmatMul(rotation, GlobeRotMat, GlobeRotMat);
+		if(GlobeRotMat.r11!=GlobeRotMat.r11)
+		{
+			int a=0;//调试用，检测浮点数溢出
+		}
 		g_GlobeRotSpeed *= 0.95;
 
 		//转动菜单
@@ -843,6 +847,10 @@ void main()
 			{
 				g_GlobeRotSpeed = glbAngleBetweenPoints(from3d, to3d);
 				glbPivotBetweenPoints(from3d, to3d, g_GlobeRotPivot);
+				if(g_GlobeRotPivot.m_x != g_GlobeRotPivot.m_x)
+				{
+					int a=0;//调试用，检测浮点数溢出
+				}
 			}
 			else if(HitLayer >LAYER_MENU_START && HitLayer <= LAYER_MENU_START+5)
 			{

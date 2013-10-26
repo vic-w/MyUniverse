@@ -410,6 +410,14 @@ void glbCloneGlbRotmat( GlbRotmat r, GlbRotmat &r_dst )
 
 void glbPivotBetweenPoints( GlbPoint3d p1, GlbPoint3d p2, GlbPivot &pivot)
 {
+	if(p1 == p2)
+	{
+		pivot.m_x = 0;
+		pivot.m_y = 1;
+		pivot.m_z = 0;
+		return;
+	}
+
 	GlbPoint3d axle;//旋转轴（p1叉乘p2）
 	glbCrossMul(p1, p2, axle);
 

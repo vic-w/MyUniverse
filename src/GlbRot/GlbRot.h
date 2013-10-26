@@ -133,6 +133,18 @@ public:
         minusPoint.m_z = -m_z;
         return minusPoint;
     }
+
+	bool operator ==(GlbPoint3d p)
+	{
+		if( p.m_x == m_x && p.m_y == m_y && p.m_z == m_z )
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
 }; 
 
 class GlbCalib
