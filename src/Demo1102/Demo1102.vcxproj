@@ -123,7 +123,13 @@ copy 世界文化.xml "$(TargetDir)"</Command>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="city.h" />
+    <ClInclude Include="global.h" />
     <ClInclude Include="menu_icon.h" />
+    <ClInclude Include="mode1.h" />
+    <ClInclude Include="mode2.h" />
+    <ClInclude Include="mode3.h" />
+    <ClInclude Include="mode4.h" />
+    <ClInclude Include="mode5.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

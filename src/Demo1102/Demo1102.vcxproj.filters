@@ -36,5 +36,23 @@
     <ClInclude Include="menu_icon.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="mode1.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="global.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="mode2.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="mode3.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="mode4.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="mode5.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
