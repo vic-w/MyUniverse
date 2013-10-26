@@ -150,9 +150,70 @@ bool CCity::updateXml()
 	}
 }
 
+vector<CCity> populatetestdata()
+{
+	//kennyzx test
+	vector<CCity> cities;
+	CCity city1;
+	city1.id = 0;
+	city1.name="北京";
+	city1.country = "中国";
+	city1.displayname = "北京";
+	city1.latitude  = 40;
+	city1.longitude = 116;
+	city1.temprature = "3C";
+	city1.weatherCondition = "晴";
+	city1.timezone = 8.0f;
+	city1.folder = "image\\cities\\中国&北京";
+	city1.imgPath = "image\\cities\\中国&北京\\city.jpg";
+	vector<char*> v1;
+	v1.push_back("宗教");
+	v1.push_back("image\\cities\\中国&北京\\宗教\\1.jpg");
+	v1.push_back("image\\cities\\中国&北京\\宗教\\2.jpg");
+	v1.push_back("image\\cities\\中国&北京\\宗教\\3.jpg");
+	vector<char*> v2;
+	v2.push_back("景观");
+	v2.push_back("image\\cities\\中国&北京\\景观\\1.jpg");
+	v2.push_back("image\\cities\\中国&北京\\景观\\2.jpg");
+	v2.push_back("image\\cities\\中国&北京\\景观\\3.jpg");
+	city1.images.push_back(v1);
+	city1.images.push_back(v2);
+
+	CCity city2;
+	city2.id = 1;
+	city1.name="东京";
+	city2.country = "日本";
+	city2.displayname = "东京";
+	city2.latitude  = 36;
+	city2.longitude = 140;
+	city2.temprature = "3C";
+	city2.weatherCondition = "晴";
+	city2.timezone = 9.0f;
+	city2.folder = "image\\cities\\日本&东京";
+	city2.imgPath = "image\\cities\\日本&东京\\city.jpg";
+	vector<char*> v3;
+	v1.push_back("宗教");
+	v1.push_back("image\\cities\\日本&东京\\宗教\\1.jpg");
+	v1.push_back("image\\cities\\日本&东京\\宗教\\2.jpg");
+	v1.push_back("image\\cities\\日本&东京\\宗教\\3.jpg");
+	vector<char*> v4;
+	v2.push_back("景观");
+	v2.push_back("image\\cities\\日本&东京\\景观\\1.jpg");
+	v2.push_back("image\\cities\\日本&东京\\景观\\2.jpg");
+	v2.push_back("image\\cities\\日本&东京\\景观\\3.jpg");
+	city2.images.push_back(v3);
+	city2.images.push_back(v4);
+
+	cities.push_back(city1);
+	cities.push_back(city2);
+	return cities;
+}
 vector<CCity> CCity::getCities()
 {
+	return populatetestdata();
+
 	vector<CCity> cities;
+	//
 	xmlInitParser();
     xmlDocPtr doc = xmlParseFile("世界文化.xml");
 	if (doc)
@@ -212,6 +273,8 @@ vector<CCity> CCity::getCities()
 					city.timezone = atof(val);
 				}
 				else if ((!xmlStrcmp(attr->name, (const xmlChar *)"path"))){
+					
+					city.folder = u2g(val);
 					city.imgPath = u2g(val);
 				}
 				/*else if ((!xmlStrcmp(attr->name, (const xmlChar *)"population"))){
