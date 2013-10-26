@@ -5,6 +5,7 @@ using System.Text;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Configuration;
 using text2ImageGenerator.Properties;
 
 namespace text2ImageGenerator
@@ -105,10 +106,40 @@ namespace text2ImageGenerator
                 //Generate a default image, which is transparent
                 myString = args[0].Replace("$", Environment.NewLine);
                 format = ImageFormat.Png;
-                SizeF size = GetRequiredSize(GetFontFromTextStyle(TextStyleCollection.textStyles["default"]), myString);
+
+                int textalpha = 0, textred = 255, textgreen = 255, textblue = 255;
+                Int32.TryParse(ConfigurationManager.AppSettings["textAlpha"], out textalpha);
+                Int32.TryParse(ConfigurationManager.AppSettings["textRed"], out textred);
+                Int32.TryParse(ConfigurationManager.AppSettings["textGreen"], out textgreen);
+                Int32.TryParse(ConfigurationManager.AppSettings["textBlue"], out textblue);
+
+                float f = 30.0f;
+                Single.TryParse(ConfigurationManager.AppSettings["textFontSize"], out f);
+                TextStyle style = new TextStyle()
+                {
+                    atPoint = new Point(0, 0),
+                    color = Color.FromArgb(textalpha, textred, textgreen, textblue),
+                    fontFamily = new FontFamily(ConfigurationManager.AppSettings["textFont"]),
+                    fontSize = f,
+                    fontStyle = FontStyle.Regular,
+                    overAllAlignment = "TopLeft",
+                    lineAlignment = StringAlignment.Near,
+                    stringAlignment = StringAlignment.Near
+                };
+
+                SizeF size = GetRequiredSize(GetFontFromTextStyle(style), myString);
                 using (Bitmap bitmap = new Bitmap((int)size.Width, (int)size.Height))
                 {
-                    SaveAsImage(TextStyleCollection.textStyles["description"], bitmap, format, myString);
+                    int bgalpha = 0, bgred = 255, bggreen = 255, bgblue = 255;
+                    Int32.TryParse(ConfigurationManager.AppSettings["bgAlpha"], out bgalpha);
+                    Int32.TryParse(ConfigurationManager.AppSettings["bgRed"], out bgred);
+                    Int32.TryParse(ConfigurationManager.AppSettings["bgGreen"], out bggreen);
+                    Int32.TryParse(ConfigurationManager.AppSettings["bgBlue"], out bgblue);
+                    Brush brush = new SolidBrush(Color.FromArgb(bgalpha, bgred,  bggreen, bgblue));
+                    Graphics g = Graphics.FromImage(bitmap);
+                    g.FillRectangle(brush, 0, 0, (int)size.Width, (int)size.Height);
+                    brush.Dispose();
+                    SaveAsImage(style, bitmap, format, myString);
                 }
                 ret = 0;
             }
