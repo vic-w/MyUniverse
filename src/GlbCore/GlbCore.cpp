@@ -87,6 +87,12 @@ GlbImage glbLoadImageFromOpencv(IplImage* pImage, bool bMipmap)
 BOOL bInit = FALSE;
 GlbImage glbLoadImage(const char* filename)  //载入图像（支持dds,jpg,bmp,png）
 {
+	GlbSize size;
+	return glbLoadImage(filename, size);
+}
+
+GlbImage glbLoadImage(const char* filename, GlbSize &size)  //载入图像（支持dds,jpg,bmp,png）
+{
     int fileNameLen = strlen(filename);
     const char* suffix = filename + fileNameLen - 4; //Bug: break with ".jpeg"!
     //printf("filename = %s, suffix = %s\n", filename, suffix);
@@ -103,6 +109,8 @@ GlbImage glbLoadImage(const char* filename)  //载入图像（支持dds,jpg,bmp,
         {
             int nHeight     = pDDSImageData->height;
             int nWidth      = pDDSImageData->width;
+			size.m_x = (float)nHeight;
+			size.m_y = (float)nWidth;
             int nNumMipMaps = pDDSImageData->numMipMaps;
 
             int nBlockSize;
@@ -187,6 +195,8 @@ GlbImage glbLoadImage(const char* filename)  //载入图像（支持dds,jpg,bmp,
 
 		int const width  = ilGetInteger(IL_IMAGE_WIDTH);
 		int const height = ilGetInteger(IL_IMAGE_HEIGHT);
+		size.m_x = (float)height;
+		size.m_y = (float)width;
 		//int const type   = ilGetInteger(IL_IMAGE_TYPE); // matches OpenGL
 		//int const format = ilGetInteger(IL_IMAGE_FORMAT); // matches OpenGL
 
@@ -228,7 +238,8 @@ GlbImage glbLoadImage(const char* filename)  //载入图像（支持dds,jpg,bmp,
     {
         GLuint TextureID = -1;
         IplImage *pImage = cvLoadImage(filename, CV_LOAD_IMAGE_UNCHANGED);//只有加了UNCHANGED参数才能读到png文件的alpha通道，否则会被强制转换为RGB图像
-
+		size.m_x = (float)pImage->height;
+		size.m_y = (float)pImage->width;
         if(!pImage)
         {
             MessageBox(0, "读取图像错误！", NULL, MB_OK);

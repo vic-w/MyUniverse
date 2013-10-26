@@ -1,6 +1,7 @@
 ﻿#include "GlbCore.h"
 #include "GlbTouch.h"
 #include "city.h"
+#include "menu_icon.h"
 
 //全局变量
 int nMode=1;
@@ -48,6 +49,8 @@ public:
 	GlbImage icon_close;
 	GlbImage icon_frwd;
 	GlbImage icon_back;
+
+	CMenuIcon menu_icon;
 
 public:
 	CMode1(GlbRotmat *pGlobeRotMat, GlbWindow *pWindow)
@@ -101,6 +104,9 @@ public:
             glbDrawTexture(icon_frwd, *m_pGlobeRotMat, m_pWindow->m_calib, texPointGeo11, false, texPointGeo10, false, true, 9, 9, LAYER_CITY_DETAIL_FORWARD, GLB_TEX_RECT);
 			//画后退图标
             glbDrawTexture(icon_back, *m_pGlobeRotMat, m_pWindow->m_calib, texPointGeo01, false, texPointGeo00, false, true, 9, 9, LAYER_CITY_DETAIL_BACKWARD, GLB_TEX_RECT);
+            
+			GlbImage menu = menu_icon.getImage("宗教");
+			glbDrawTexture(menu, *m_pGlobeRotMat, m_pWindow->m_calib, texPointGeo01, false, texPointGeo00, false, true, 9, 9, LAYER_CITY_DETAIL_BACKWARD+100, GLB_TEX_RECT);
 
 		}
 	}
@@ -713,6 +719,7 @@ void main()
 	glbCreateGlbRotmat(GlobeRotMat);	//初始化旋转量（北极向上）
 
     glbSwitchWindow(mainWindow);	//切换到窗口（在读取图像之前）
+
 
     GlbImage earth_img = glbLoadImage("image\\earth.jpg");    //读取图像文件
     GlbImage icon_img = glbLoadImage("image\\icon.png");    

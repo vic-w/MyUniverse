@@ -2,7 +2,7 @@
 EXPORTS
 
    glbDetectScreen   @1   NONAME  
-   glbLoadImage   @2   NONAME  
+
    glbReleaseImage   @3   NONAME  
    glbCreateWindow   @4   NONAME  
    glbDestoryWindow   @5   NONAME  

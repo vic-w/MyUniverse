@@ -20,6 +20,7 @@ typedef unsigned int GlbImage;
 
 GLBCORE_API int glbDetectScreen(vector<GlbRect> &screens);//检测屏幕的个数及分辨率，返回屏幕个数
 
+GLBCORE_API GlbImage glbLoadImage(const char* filename, GlbSize &size);    //载入图像（支持dds,jpg,bmp,png）
 GLBCORE_API GlbImage glbLoadImage(const char* filename);    //载入图像（支持dds,jpg,bmp,png）
 GLBCORE_API GlbImage glbLoadImageFromOpencv(IplImage* pImage, bool bMipmap = true);       //从OpenCV图像转换
 GLBCORE_API void glbReleaseImage(GlbImage* pImage);         //释放图像

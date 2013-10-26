@@ -21,12 +21,18 @@
     <ClCompile Include="city.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="menu_icon.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="cities.xml" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="city.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="menu_icon.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

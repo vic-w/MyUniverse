@@ -146,6 +146,7 @@ public:
 typedef GlbPoint3d GlbPivot;
 typedef GlbPoint2d GlbPointRound;
 typedef GlbPoint2d GlbPointTex;
+typedef GlbPoint2d GlbSize;
 
 class GlbEularAngle
 {

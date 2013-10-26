@@ -19,7 +19,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <CharacterSet>Unicode</CharacterSet>
+    <CharacterSet>MultiByte</CharacterSet>
     <UseOfMfc>Dynamic</UseOfMfc>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
@@ -72,7 +72,8 @@ mkdir $(TargetDir)image
 copy "$(ProjectDir)image\*.*" "$(TargetDir)image\"
 mkdir $(TargetDir)image\cities
 copy "$(ProjectDir)image\cities\*.*" "$(TargetDir)image\cities"
-
+mkdir $(TargetDir)menu
+copy "$(ProjectDir)menu\*.*" "$(TargetDir)menu\"
 </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
@@ -100,12 +101,14 @@ copy "$(ProjectDir)image\*.*" "$(TargetDir)image\"
 mkdir $(TargetDir)image\cities
 copy "$(ProjectDir)image\cities\*.*" "$(TargetDir)image\cities"
 copy cities.xml $(TargetDir)
-</Command>
+mkdir $(TargetDir)menu
+copy "$(ProjectDir)menu\*.*" "$(TargetDir)menu\"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="city.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="menu_icon.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="cities.xml">
@@ -115,6 +118,7 @@ copy cities.xml $(TargetDir)
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="city.h" />
+    <ClInclude Include="menu_icon.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
