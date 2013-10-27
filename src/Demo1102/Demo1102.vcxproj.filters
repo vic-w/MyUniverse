@@ -24,6 +24,9 @@
     <ClCompile Include="menu_icon.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="mode1.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="cities.xml" />

@@ -110,6 +110,7 @@ copy 世界文化.xml "$(TargetDir)"</Command>
     <ClCompile Include="city.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="menu_icon.cpp" />
+    <ClCompile Include="mode1.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="cities.xml">

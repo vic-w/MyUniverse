@@ -1,4 +1,8 @@
 #pragma once
+#include "GlbCore.h"
+#include "GlbTouch.h"
+#include "city.h"
+#include "menu_icon.h"
 
 enum ENUM_LAYERS
 {
