@@ -242,8 +242,8 @@ GlbImage glbLoadImage(const char* filename, GlbSize &size)  //载入图像（支
 		{
 			return 0;
 		}
-		size.m_x = (float)pImage->height;
-		size.m_y = (float)pImage->width;
+		size.m_y = (float)pImage->height;
+		size.m_x = (float)pImage->width;
         if(!pImage)
         {
             MessageBox(0, "读取图像错误！", NULL, MB_OK);

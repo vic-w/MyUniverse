@@ -35,7 +35,9 @@ void CMode1::draw()
             glbPivotingPoint(menu13d, city3d, menu_angle1*i, menu_pos3d);
             GlbPointGeo menu_posGeo;
             glbPointRect2PointGeo(menu_pos3d, menu_posGeo);
-            glbDrawTexture(menu_icon.getImage(m_cities[m_nShowCity].images[i][0]), *m_pGlobeRotMat, m_pWindow->m_calib, menu_posGeo, false, N_polarGeo, false, true, 10, 5, LAYER_SUB_MENU_START+i, GLB_TEX_RECT);
+			GlbSize size;
+			GlbImage img = menu_icon.getImage(m_cities[m_nShowCity].images[i][0], size);
+            glbDrawTexture(img, *m_pGlobeRotMat, m_pWindow->m_calib, menu_posGeo, false, N_polarGeo, false, true, size.m_x/15, size.m_y/15, LAYER_SUB_MENU_START+i, GLB_TEX_RECT);
         }
 
 	}

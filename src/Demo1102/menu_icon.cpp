@@ -20,9 +20,11 @@ CMenuIcon::CMenuIcon()
 		{
             string imageFileName = FindFileData.cFileName;
 			path = dir + imageFileName;
-			GlbImage img = glbLoadImage(path.c_str());
+			GlbSize size;
+			GlbImage img = glbLoadImage(path.c_str(), size);
 			string key = imageFileName.substr(0,imageFileName.size()-4);
 			m_icons.insert(map< string, GlbImage >::value_type(key, img)); 
+			m_size.insert(map< string, GlbSize >::value_type(key, size)); 
 
 		}while (FindNextFile(hFind, &FindFileData) != 0);
 	}
@@ -36,7 +38,8 @@ CMenuIcon::~CMenuIcon()
 	}
 }
 
-GlbImage CMenuIcon::getImage(string name)
+GlbImage CMenuIcon::getImage(string name, GlbSize &size)
 {
+	size = m_size.find(name)->second;
 	return m_icons.find(name)->second;
 }
