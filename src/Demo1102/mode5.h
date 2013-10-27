@@ -1,13 +1,16 @@
 #pragma once
 #include "global.h"
-
+#include <shlobj.h>   
+#include <stdio.h>
+#include <string.h>
+#pragma   comment(lib,   "shell32.lib")  
 
 //mode5 天气
 class CMode5
 {
 public:
 	GlbImage m_icon;
-    GlbImage cityView;
+    GlbImage weather;
 	GlbRotmat *m_pGlobeRotMat;
 	GlbWindow *m_pWindow;
 	vector<CCity> m_cities;
@@ -26,55 +29,28 @@ public:
     ~CMode5()
     {
         glbReleaseImage(&m_icon);
-        glbReleaseImage(&cityView);
+        glbReleaseImage(&weather);
     }
     void draw()
 	{
-		vector<CCity>::iterator it;
-		int layer = LAYER_CITY_ICON_START;
-		for(it=m_cities.begin(); it!=m_cities.end(); it++)
+		if(weather)
 		{
-			GlbPointGeo p1(it->latitude, it->longitude);
+			GlbPointGeo p1(0,0);
 			GlbPointGeo p2(90,0);
-			glbDrawTexture(m_icon, *m_pGlobeRotMat, m_pWindow->m_calib, p1, true, p2, true, true, 5, 5, layer++, GLB_TEX_RECT);
-		}
-		if(m_bShowDetail)
-		{
-            GlbPointGeo p1(m_cities[m_nShowCity].latitude, m_cities[m_nShowCity].longitude);
-			GlbPointGeo p2(90,0);
-			glbDrawTexture(cityView, *m_pGlobeRotMat, m_pWindow->m_calib, p1, true, p2, false, true, 40, 30, LAYER_CITY_DETAIL, GLB_TEX_RECT);
+			glbDrawTexture(weather, *m_pGlobeRotMat, m_pWindow->m_calib, p1, true, p2, true, true, 360, 180, LAYER_CITY_DETAIL, GLB_TEX_RECT);
 		}
 	}
 	void reset()
 	{
         m_bShowDetail = false;
-        glbReleaseImage(&cityView);
+        glbReleaseImage(&weather);
+		char path[255];
+		SHGetSpecialFolderPath(0,path,CSIDL_DESKTOPDIRECTORY,0);
+		int len = strlen(path);
+		weather = glbLoadImage(strncat(path, "\\weather.jpg", 14));
 	}
     void onClick(int layer)
     {
-        if(layer >= LAYER_CITY_ICON_START && layer < LAYER_CITY_ICON_START+m_cities.size() && !m_bShowDetail)
-        {
-            m_nShowCity = layer - LAYER_CITY_ICON_START;
-			//kennyzx test
-			char strWeather[32];
-			sprintf(strWeather, "%s %s", 
-				m_cities[m_nShowCity].weatherCondition, m_cities[m_nShowCity].temprature);
-			if (txt2ImgHelper(m_cities[m_nShowCity].imgPath, 5, strWeather))//5为模式
-			{
-				cityView = glbLoadImage( "temp.jpg" );
-			}
-			else
-			{
-				cityView = glbLoadImage("error.png");
-			}
-            
-            m_bShowDetail = true;
-        }
-        else if(layer == LAYER_CITY_DETAIL)
-        {
-            m_bShowDetail = false;
-            glbReleaseImage(&cityView);
-            glbReleaseImage(&cityView);
-        }
+ 
     }
 };

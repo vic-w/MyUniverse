@@ -238,6 +238,10 @@ GlbImage glbLoadImage(const char* filename, GlbSize &size)  //载入图像（支
     {
         GLuint TextureID = -1;
         IplImage *pImage = cvLoadImage(filename, CV_LOAD_IMAGE_UNCHANGED);//只有加了UNCHANGED参数才能读到png文件的alpha通道，否则会被强制转换为RGB图像
+		if(!pImage)
+		{
+			return 0;
+		}
 		size.m_x = (float)pImage->height;
 		size.m_y = (float)pImage->width;
         if(!pImage)
