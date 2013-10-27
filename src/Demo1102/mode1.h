@@ -22,6 +22,7 @@ public:
 	ENUM_MODE1_STAT status;
 	int m_nShowCity;//选择的城市编号
 	int m_nSubClass;//选择的子目录编号
+    int m_nImage;//选择的图像编号
 
 	GlbImage icon_menu;
 	GlbImage icon_close;
@@ -44,6 +45,7 @@ public:
 		icon_frwd = glbLoadImage("image\\frwd.png");
 		icon_back = glbLoadImage("image\\back.png");
 		status = MODE1_NONE;
+        m_nImage = 1;
 	}
     ~CMode1()
     {
@@ -57,25 +59,6 @@ public:
         //m_bShowDetail = false;
         glbReleaseImage(&cityView);
 	}
-    void onClick(int layer)
-    {
-        if(layer >= LAYER_CITY_ICON_START && layer < LAYER_CITY_ICON_START+m_cities.size() && status==MODE1_NONE)
-        {
-            m_nShowCity = layer - LAYER_CITY_ICON_START;
-			
-			//kennyzx test
-			cityView = glbLoadImage(m_cities[m_nShowCity].imgPath); 
-
-            //m_bShowDetail = true;
-			status = MODE1_SHOWMENU;
-        }
-        else if(layer == LAYER_CITY_DETAIL)
-        {
-			status = MODE1_SHOWMENU;
-            //m_bShowDetail = false;
-            glbReleaseImage(&cityView);
-            glbReleaseImage(&cityView);
-        }
-    }
+    void onClick(int layer);
 
 };
