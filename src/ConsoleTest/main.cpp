@@ -16,8 +16,8 @@ void main()
 
     glbSwitchWindow(mainWindow);	//切换到窗口（在读取图像之前）
 
-    GlbImage Image = glbLoadImage("earth.jpg");    //读取图像文件
-    GlbImage Image2 = glbLoadImage("icon.jpg");    
+    GlbImage Image = glbLoadImage("image\\earth.jpg");    //读取图像文件
+    GlbImage Image2 = glbLoadImage("image\\error.png");    
     
     do
     {
