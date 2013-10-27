@@ -64,12 +64,12 @@ public:
 			}
             if(m_bClosed)
             {
-                glbDrawTexture(cityView, *m_pGlobeRotMat, m_pWindow->m_calib, p1, true, p2, false, true, 40, 24, LAYER_CITY_DETAIL, GLB_TEX_RECT);
+                glbDrawTexture(cityView, *m_pGlobeRotMat, m_pWindow->m_calib, p1, true, p2, false, true, 50, 24, LAYER_CITY_DETAIL, GLB_TEX_RECT);
                 GlbPointGeo texPointGeo10,texPointGeo11;
                 GlbPointTex texPoint(0.95,0.05);
-                glbPointTex2PointGeo(*m_pGlobeRotMat, p1, true, p2, false, true, 40, 24, GLB_TEX_RECT, texPoint, false, texPointGeo10);
+                glbPointTex2PointGeo(*m_pGlobeRotMat, p1, true, p2, false, true, 50, 24, GLB_TEX_RECT, texPoint, false, texPointGeo10);
                 texPoint.m_x = 0.95, texPoint.m_y = 0.95;
-                glbPointTex2PointGeo(*m_pGlobeRotMat, p1, true, p2, false, true, 40, 24, GLB_TEX_RECT, texPoint, false, texPointGeo11);
+                glbPointTex2PointGeo(*m_pGlobeRotMat, p1, true, p2, false, true, 50, 24, GLB_TEX_RECT, texPoint, false, texPointGeo11);
                 //»­¹Ø±ÕÍ¼±ê
                 glbDrawTexture(icon_close, *m_pGlobeRotMat, m_pWindow->m_calib, texPointGeo10, false, texPointGeo11, false, true, 5, 5, LAYER_CITY_DETAIL_CLOSE, GLB_TEX_RECT);
 

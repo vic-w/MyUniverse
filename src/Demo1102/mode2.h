@@ -42,7 +42,7 @@ public:
 		{
             GlbPointGeo p1(m_cities[m_nShowCity].latitude, m_cities[m_nShowCity].longitude);
 			GlbPointGeo p2(90,0);
-			glbDrawTexture(cityView, *m_pGlobeRotMat, m_pWindow->m_calib, p1, true, p2, false, true, 40, 30, LAYER_CITY_DETAIL, GLB_TEX_RECT);
+			glbDrawTexture(cityView, *m_pGlobeRotMat, m_pWindow->m_calib, p1, true, p2, false, true, 50, 8, LAYER_CITY_DETAIL, GLB_TEX_RECT);
 		}
 	}
 	void reset()
@@ -52,17 +52,17 @@ public:
 	}
     void onClick(int layer)
     {
-        if(layer >= LAYER_CITY_ICON_START && layer < LAYER_CITY_ICON_START+m_cities.size() && !m_bShowDetail)
+        if(layer >= LAYER_CITY_ICON_START && layer < LAYER_CITY_ICON_START+m_cities.size() /*&& !m_bShowDetail*/)
         {
             m_nShowCity = layer - LAYER_CITY_ICON_START;
 
 			//kennyzx test
 			char strLocalTime[32];
-			sprintf(strLocalTime, "时间%s", 
+			sprintf(strLocalTime, "%s当地时间%s", m_cities[m_nShowCity].displayname,
                 m_cities[m_nShowCity].getLocalTimeString());    
-			if(txt2ImgHelper(m_cities[m_nShowCity].imgPath, 2, strLocalTime))//2为模式
+			if(txt2ImgHelper(4, strLocalTime))//2为模式
 			{
-				cityView = glbLoadImage("temp.jpg"); 
+				cityView = glbLoadImage("temp.png"); 
 			}
 			else
 			{

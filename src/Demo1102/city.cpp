@@ -48,9 +48,8 @@ char* CCity::getLocalTimeString()
 	// Convert to local time provided timezone information.
 	SYSTEMTIME localTime = add(st, timezone*60*60);
 	char* csLocalTime = new char[32];
-	sprintf(csLocalTime, "%02d:%02d:%02d", localTime.wHour,
-							 localTime.wMinute,
-							 localTime.wSecond);
+	sprintf(csLocalTime, "%02d:%02d", localTime.wHour,
+							 localTime.wMinute/*,localTime.wSecond*/);
 	return csLocalTime;
 }
 
