@@ -14,11 +14,14 @@ public:
 	bool m_bClosed;
     vector<GlbPointGeo> polygon;
 	bool m_bIntersect; //多边形自相交
+    float length;//多边形周长
+    GlbImage icon_close;//关闭图标
 public:
 	CMode4(GlbRotmat *pGlobeRotMat, GlbWindow *pWindow)
 	{
 		m_cities = CCity::getCities();
 		m_icon = glbLoadImage("image\\icon.png");
+        icon_close = glbLoadImage("image\\close.png");
 		m_pGlobeRotMat = pGlobeRotMat;
 		m_pWindow = pWindow;
         m_bClosed = false;
@@ -26,6 +29,7 @@ public:
 	}
     ~CMode4()
     {
+        glbReleaseImage(&icon_close);
         glbReleaseImage(&m_icon);
         glbReleaseImage(&cityView);
     }
@@ -39,12 +43,15 @@ public:
 			GlbPointGeo p2(90,0);
 			glbDrawTexture(m_icon, *m_pGlobeRotMat, m_pWindow->m_calib, p1, true, p2, true, true, 5, 5, layer++, GLB_TEX_RECT);
 		}
-        float length = 6371.0f / 180.0f * 3.14f * glbDrawPolygon(polygon, true, m_bClosed, *m_pGlobeRotMat, m_pWindow->m_calib, LAYER_LINES);
+
+        //画多边形
+        length = 6371.0f / 180.0f * 3.14f * glbDrawPolygon(polygon, true, m_bClosed, *m_pGlobeRotMat, m_pWindow->m_calib, LAYER_LINES);
+        
         if(polygon.size()>0)
         {
             glbDrawCircle(polygon[0], true, 3, *m_pGlobeRotMat, m_pWindow->m_calib, LAYER_LINES);
         }
-		if(polygon.size()>1 && m_bClosed)
+		if(polygon.size()>1)
 		{
 			GlbPointGeo p1,p2(90,0);
 			if(m_bClosed)
@@ -55,7 +62,31 @@ public:
 			{
 				p1 = polygon[polygon.size()-1];
 			}
-			glbDrawTexture(cityView, *m_pGlobeRotMat, m_pWindow->m_calib, p1, true, p2, false, true, 40, 16, LAYER_CITY_DETAIL, GLB_TEX_RECT);
+            if(m_bClosed)
+            {
+                glbDrawTexture(cityView, *m_pGlobeRotMat, m_pWindow->m_calib, p1, true, p2, false, true, 40, 24, LAYER_CITY_DETAIL, GLB_TEX_RECT);
+                GlbPointGeo texPointGeo10,texPointGeo11;
+                GlbPointTex texPoint(0.95,0.05);
+                glbPointTex2PointGeo(*m_pGlobeRotMat, p1, true, p2, false, true, 40, 24, GLB_TEX_RECT, texPoint, false, texPointGeo10);
+                texPoint.m_x = 0.95, texPoint.m_y = 0.95;
+                glbPointTex2PointGeo(*m_pGlobeRotMat, p1, true, p2, false, true, 40, 24, GLB_TEX_RECT, texPoint, false, texPointGeo11);
+                //画关闭图标
+                glbDrawTexture(icon_close, *m_pGlobeRotMat, m_pWindow->m_calib, texPointGeo10, false, texPointGeo11, false, true, 5, 5, LAYER_CITY_DETAIL_CLOSE, GLB_TEX_RECT);
+
+            }
+            else
+            {
+			    glbDrawTexture(cityView, *m_pGlobeRotMat, m_pWindow->m_calib, p1, true, p2, false, true, 25, 12, LAYER_CITY_DETAIL, GLB_TEX_RECT);
+                GlbPointGeo texPointGeo10,texPointGeo11;
+                GlbPointTex texPoint(0.9,0.1);
+                glbPointTex2PointGeo(*m_pGlobeRotMat, p1, true, p2, false, true, 25, 12, GLB_TEX_RECT, texPoint, false, texPointGeo10);
+                texPoint.m_x = 0.9, texPoint.m_y = 0.9;
+                glbPointTex2PointGeo(*m_pGlobeRotMat, p1, true, p2, false, true, 25, 12, GLB_TEX_RECT, texPoint, false, texPointGeo11);
+                //画关闭图标
+                glbDrawTexture(icon_close, *m_pGlobeRotMat, m_pWindow->m_calib, texPointGeo10, false, texPointGeo11, false, true, 5, 5, LAYER_CITY_DETAIL_CLOSE, GLB_TEX_RECT);
+
+            }
+
 		}
 	}
 	void reset()
@@ -67,7 +98,11 @@ public:
 	}
     void onClick(int layer, GlbPoint2d point2d_screen)
     {
-        if(layer <= LAYER_LINES && !m_bClosed)
+        if(layer == LAYER_CITY_DETAIL_CLOSE)
+        {
+            reset();
+        }
+        else if( (layer <= LAYER_LINES || layer == LAYER_CITY_DETAIL) && !m_bClosed)
         {
             GlbPoint3d point3d_screen, point3d_globe;
 			glbPointRound2PointRect(point2d_screen, point3d_screen, m_pWindow->m_calib);
@@ -81,6 +116,8 @@ public:
 
 			char msg[64];
 			//计算周长
+            length = 6371.0f / 180.0f * 3.14f * glbDrawPolygon(polygon, true, m_bClosed, *m_pGlobeRotMat, m_pWindow->m_calib, LAYER_LINES);
+
 			if(polygon.size()>2)
 			{
 				GlbPointGeo A,B,C;
@@ -117,24 +154,25 @@ public:
 					}
 					else
 					{
-						sprintf(msg, "多边形的面积为$%d万平方公里\n", (int)(area/10000));
+						sprintf(msg, "多边形的面积为$%d万平方公里$其周长为%d公里", (int)(area/10000), (int)length);
 					}
-                    
-                    //kennyzx test
-			        if (txt2ImgHelper(4, msg))//4为模式
-			        {
-				        cityView = glbLoadImage( "temp.png" );
-			        }
-			        else
-			        {
-				        cityView = glbLoadImage( "error.png" );
-			        }
                 }
                 else//多边形没有闭合
                 {
                     //判断新加入的线段是否和之前的相交
                     m_bIntersect |= polygonIntersect_lastline(polygon, false);
+                    sprintf(msg, "长度为$%d公里\n", (int)(length));
                 }
+                
+                //kennyzx test
+			    if (txt2ImgHelper(4, msg))//4为模式
+			    {
+				    cityView = glbLoadImage( "temp.png" );
+			    }
+			    else
+			    {
+				    cityView = glbLoadImage( "error.png" );
+			    }
             }
 
             //m_bShowDetail = true;

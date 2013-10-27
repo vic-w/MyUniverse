@@ -91,10 +91,17 @@ public:
                 status = 0;
             }
         }
+        else if(layer >= LAYER_CITY_ICON_START && layer < LAYER_CITY_ICON_START+m_cities.size() && status == 2)
+        {
+            city1 = layer - LAYER_CITY_ICON_START;
+            status = 1;
+            glbReleaseImage(&cityView);
+        }
         else if(layer == LAYER_CITY_DETAIL)
         {
             glbReleaseImage(&cityView);
             status =0;
         }
+
     }
 };
