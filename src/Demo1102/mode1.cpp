@@ -27,7 +27,8 @@ void CMode1::draw()
         glbPivotBetweenPoints(city3d, N_polar3d, to_polar_pivot);
 
         GlbPoint3d menu13d;
-        glbPivotingPoint(city3d, to_polar_pivot, 10, menu13d);
+		float menu_radius = 2+2*nSubClasses;
+        glbPivotingPoint(city3d, to_polar_pivot, menu_radius, menu13d);
 
         for(int i=0; i<nSubClasses; i++)
         {
