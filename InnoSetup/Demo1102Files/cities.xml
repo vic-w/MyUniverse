@@ -142,51 +142,7 @@
     <categories />
   </city>
   <city id="61" country="日本" countryDisplayName="日本" name="东京" displayname="东京" displaycountry="false" latitude="35.683333" longitude="139.733333" timezone="9" path="日本&amp;东京">
-    <categories>
-      <category name="动物">
-        <img path="image\cities\日本&amp;东京\动物\正在泡温泉的日本猕猴.jpg" />
-      </category>
-      <category name="宗教">
-        <img path="image\cities\日本&amp;东京\宗教\1.jpg" />
-        <img path="image\cities\日本&amp;东京\宗教\2.jpg" />
-        <img path="image\cities\日本&amp;东京\宗教\3.jpg" />
-        <img path="image\cities\日本&amp;东京\宗教\地拉那教堂.jpg" />
-        <img path="image\cities\日本&amp;东京\宗教\地拉那的阿尔巴尼亚希腊礼天主教会.jpg" />
-      </category>
-      <category name="景观">
-        <img path="image\cities\日本&amp;东京\景观\1.jpg" />
-        <img path="image\cities\日本&amp;东京\景观\2.jpg" />
-        <img path="image\cities\日本&amp;东京\景观\20081028112154659.jpg" />
-        <img path="image\cities\日本&amp;东京\景观\2011050509023355_3.jpg" />
-        <img path="image\cities\日本&amp;东京\景观\3.jpg" />
-        <img path="image\cities\日本&amp;东京\景观\3970232_230122021216_2.jpg" />
-        <img path="image\cities\日本&amp;东京\景观\3970232_230237088045_2.jpg" />
-        <img path="image\cities\日本&amp;东京\景观\a6143e199a39b13c9ff732296767acf0.jpg" />
-        <img path="image\cities\日本&amp;东京\景观\Bunker_in_Albania.jpg" />
-        <img path="image\cities\日本&amp;东京\景观\Tirana_by_Night.jpg" />
-        <img path="image\cities\日本&amp;东京\景观\俯视地拉那盆地.jpg" />
-        <img path="image\cities\日本&amp;东京\景观\地拉那河的峡谷.jpg" />
-      </category>
-      <category name="绘画">
-        <img path="image\cities\日本&amp;东京\绘画\亚当.jpg" />
-        <img path="image\cities\日本&amp;东京\绘画\侄女的画像.jpg" />
-        <img path="image\cities\日本&amp;东京\绘画\女孩的画像.jpg" />
-        <img path="image\cities\日本&amp;东京\绘画\新娘.jpg" />
-        <img path="image\cities\日本&amp;东京\绘画\画像.jpg" />
-        <img path="image\cities\日本&amp;东京\绘画\画家的外祖母.jpg" />
-        <img path="image\cities\日本&amp;东京\绘画\阿尔巴尼亚艺术家豆类谷物“作画”.jpg" />
-      </category>
-      <category name="美食">
-        <img path="image\cities\日本&amp;东京\美食\200795152016467.jpg" />
-        <img path="image\cities\日本&amp;东京\美食\364228619864368540.jpg" />
-        <img path="image\cities\日本&amp;东京\美食\a51075bbhc39914fa6728&amp;690.gif.jpg" />
-        <img path="image\cities\日本&amp;东京\美食\a51075bbhc399164357f7&amp;690.gif.jpg" />
-        <img path="image\cities\日本&amp;东京\美食\u=1663542378,2191682462&amp;fm=15&amp;gp=0.jpg" />
-        <img path="image\cities\日本&amp;东京\美食\u=3928959125,4120222621&amp;fm=21&amp;gp=0.jpg" />
-        <img path="image\cities\日本&amp;东京\美食\u=437176450,620175374&amp;fm=15&amp;gp=0.jpg" />
-        <img path="image\cities\日本&amp;东京\美食\u=860409372,135565681&amp;fm=21&amp;gp=0.jpg" />
-      </category>
-    </categories>
+    <categories />
   </city>
   <city id="62" country="瑞典" countryDisplayName="瑞典" name="斯德哥尔摩" displayname="斯德哥尔摩" displaycountry="false" latitude="59.383333" longitude="0.300000" timezone="0" path="瑞典&amp;斯德哥尔摩">
     <categories />
@@ -235,48 +191,7 @@
   </city>
   <!--<city id="81" country="中国" countryDisplayName="中国" name="澳门" displayname="澳门" displaycountry="false" latitude="22.183333" longitude="113.550000" timezone="7" path="中国&amp;澳门"/>-->
   <city id="82" country="中国" countryDisplayName="中国" name="北京" displayname="北京" displaycountry="false" latitude="39.916667" longitude="116.383333" timezone="7" path="中国&amp;北京">
-    <categories>
-      <category name="宗教">
-        <img path="image\cities\中国&amp;北京\宗教\1.jpg" />
-        <img path="image\cities\中国&amp;北京\宗教\2.jpg" />
-        <img path="image\cities\中国&amp;北京\宗教\3.jpg" />
-        <img path="image\cities\中国&amp;北京\宗教\地拉那教堂.jpg" />
-        <img path="image\cities\中国&amp;北京\宗教\地拉那的阿尔巴尼亚希腊礼天主教会.jpg" />
-      </category>
-      <category name="景观">
-        <img path="image\cities\中国&amp;北京\景观\1.jpg" />
-        <img path="image\cities\中国&amp;北京\景观\2.jpg" />
-        <img path="image\cities\中国&amp;北京\景观\20081028112154659.jpg" />
-        <img path="image\cities\中国&amp;北京\景观\2011050509023355_3.jpg" />
-        <img path="image\cities\中国&amp;北京\景观\3.jpg" />
-        <img path="image\cities\中国&amp;北京\景观\3970232_230122021216_2.jpg" />
-        <img path="image\cities\中国&amp;北京\景观\3970232_230237088045_2.jpg" />
-        <img path="image\cities\中国&amp;北京\景观\a6143e199a39b13c9ff732296767acf0.jpg" />
-        <img path="image\cities\中国&amp;北京\景观\Bunker_in_Albania.jpg" />
-        <img path="image\cities\中国&amp;北京\景观\Tirana_by_Night.jpg" />
-        <img path="image\cities\中国&amp;北京\景观\俯视地拉那盆地.jpg" />
-        <img path="image\cities\中国&amp;北京\景观\地拉那河的峡谷.jpg" />
-      </category>
-      <category name="绘画">
-        <img path="image\cities\中国&amp;北京\绘画\亚当.jpg" />
-        <img path="image\cities\中国&amp;北京\绘画\侄女的画像.jpg" />
-        <img path="image\cities\中国&amp;北京\绘画\女孩的画像.jpg" />
-        <img path="image\cities\中国&amp;北京\绘画\新娘.jpg" />
-        <img path="image\cities\中国&amp;北京\绘画\画像.jpg" />
-        <img path="image\cities\中国&amp;北京\绘画\画家的外祖母.jpg" />
-        <img path="image\cities\中国&amp;北京\绘画\阿尔巴尼亚艺术家豆类谷物“作画”.jpg" />
-      </category>
-      <category name="美食">
-        <img path="image\cities\中国&amp;北京\美食\200795152016467.jpg" />
-        <img path="image\cities\中国&amp;北京\美食\364228619864368540.jpg" />
-        <img path="image\cities\中国&amp;北京\美食\a51075bbhc39914fa6728&amp;690.gif.jpg" />
-        <img path="image\cities\中国&amp;北京\美食\a51075bbhc399164357f7&amp;690.gif.jpg" />
-        <img path="image\cities\中国&amp;北京\美食\u=1663542378,2191682462&amp;fm=15&amp;gp=0.jpg" />
-        <img path="image\cities\中国&amp;北京\美食\u=3928959125,4120222621&amp;fm=21&amp;gp=0.jpg" />
-        <img path="image\cities\中国&amp;北京\美食\u=437176450,620175374&amp;fm=15&amp;gp=0.jpg" />
-        <img path="image\cities\中国&amp;北京\美食\u=860409372,135565681&amp;fm=21&amp;gp=0.jpg" />
-      </category>
-    </categories>
+    <categories />
   </city>
   <city id="83" country="中国" countryDisplayName="中国" name="香港" displayname="香港" displaycountry="false" latitude="22.283333" longitude="114.133333" timezone="7" path="中国&amp;香港">
     <categories />
