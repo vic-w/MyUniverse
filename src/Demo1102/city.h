@@ -15,10 +15,7 @@ public:
 	bool displaycountry; //true: 显示城市所在国家的信息；false: 显示城市的信息
 	
 	char* folder; //城市图集文件夹
-	char* imgPath; //城市图片的相对路径
 	vector<vector<char*>> images;
-
-
 
 	float latitude; //[-90, 90]
 	float longitude; //[-180, 180]
