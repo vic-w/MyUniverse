@@ -117,7 +117,7 @@ bool CCity::updateXml()
 	sei.fMask = SEE_MASK_NOCLOSEPROCESS;
 	sei.hwnd = NULL;
 	sei.lpVerb = TEXT("runas"); //以管理员身份运行，如果XML文件放在C:\Program Files下， 需要以管理员运行才能修改文件。正确的做法是把需要写权限的文件移到AppData或者ProgramData目录下面去。	
-	CString file = GetCurAppFilePath() + TEXT("\\WeatherForecastHelper.exe");
+	CString file = GetCurAppFilePath() + TEXT("\\UpdateFolderStructure.exe");
 	sei.lpFile = file;//使用全路径
 	//sei.lpParameters = TEXT("");
 	sei.nShow = SW_SHOWNORMAL;
@@ -217,7 +217,7 @@ vector<CCity> CCity::getCities()
 	vector<CCity> cities;
 	//
 	xmlInitParser();
-    xmlDocPtr doc = xmlParseFile("世界文化.xml");
+    xmlDocPtr doc = xmlParseFile("cities.xml");
 	if (doc)
 	{
 		xmlXPathContext *xpathCtx = xmlXPathNewContext( doc );

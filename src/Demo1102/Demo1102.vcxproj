@@ -66,8 +66,7 @@
       <UACExecutionLevel>RequireAdministrator</UACExecutionLevel>
     </Link>
     <PostBuildEvent>
-      <Command>copy "$(ProjectDir)cities.xml" "$(TargetDir)"
-copy "$(ProjectDir)image\error.png" "$(TargetDir)"
+      <Command>copy "$(ProjectDir)image\error.png" "$(TargetDir)"
 mkdir $(TargetDir)image
 copy "$(ProjectDir)image\*.*" "$(TargetDir)image\"
 mkdir $(TargetDir)image\cities
