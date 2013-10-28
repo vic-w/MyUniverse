@@ -40,6 +40,11 @@ CMenuIcon::~CMenuIcon()
 
 GlbImage CMenuIcon::getImage(string name, GlbSize &size)
 {
+	map<string,GlbSize>::iterator it_size = m_size.find(name);
+	if(it_size == m_size.end())
+	{
+		return 0;
+	}
 	size = m_size.find(name)->second;
 	return m_icons.find(name)->second;
 }
