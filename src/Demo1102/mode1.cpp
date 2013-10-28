@@ -71,20 +71,25 @@ void CMode1::onClick(int layer)
 {
     if(layer >= LAYER_CITY_ICON_START && layer < LAYER_CITY_ICON_START+m_cities.size())
     {
-        m_nShowCity = layer - LAYER_CITY_ICON_START;
         if(status == MODE1_NONE)
         {
+			m_nShowCity = layer - LAYER_CITY_ICON_START;
 		    status = MODE1_SHOWMENU;
         }
         else if(status == MODE1_SHOWMENU)
         {
-            if(m_nShowCity == layer - LAYER_SUB_MENU_START)
+            if(m_nShowCity == layer - LAYER_CITY_ICON_START)
             {
                 status = MODE1_NONE;
             }
+			else
+			{
+				m_nShowCity = layer - LAYER_CITY_ICON_START;
+			}
         }
         else if(status == MODE1_SHOWDETAIL)
         {
+			m_nShowCity = layer - LAYER_CITY_ICON_START;
             status = MODE1_SHOWMENU;
             glbReleaseImage(&cityView);
         }
