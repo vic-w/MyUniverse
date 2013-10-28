@@ -80,7 +80,7 @@ public:
 				}
 				else
 				{
-					cityView = glbLoadImage("error.png");
+					cityView = glbLoadImage("image\\error.png");
 				}
                 status = 2;
             }
