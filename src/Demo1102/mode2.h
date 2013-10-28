@@ -56,7 +56,7 @@ public:
         {
             m_nShowCity = layer - LAYER_CITY_ICON_START;
 
-			char strLocalTime[32];
+			char strLocalTime[64];
 			sprintf(strLocalTime, "%s当地时间%s", m_cities[m_nShowCity].displayname,
                 m_cities[m_nShowCity].getLocalTimeString());    
 			if(txt2ImgHelper(4, strLocalTime))//2为模式
