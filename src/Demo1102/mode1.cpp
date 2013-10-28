@@ -15,7 +15,7 @@ void CMode1::draw()
 	{
 		int nSubClasses = m_cities[m_nShowCity].images.size();
 		float menu_angle1 = 360.0f/nSubClasses;
-		printf("%d,%f\n", nSubClasses,  menu_angle1);
+		//printf("%d,%f\n", nSubClasses,  menu_angle1);
         GlbPoint3d N_polar3d(0,1,0);
         GlbPointGeo N_polarGeo(90,0);
         GlbPointGeo cityGeoGlobe(m_cities[m_nShowCity].latitude, m_cities[m_nShowCity].longitude);
@@ -78,7 +78,7 @@ void CMode1::onClick(int layer)
         }
         else if(status == MODE1_SHOWMENU)
         {
-            if(m_nSubClass == layer - LAYER_SUB_MENU_START)
+            if(m_nShowCity == layer - LAYER_SUB_MENU_START)
             {
                 status = MODE1_NONE;
             }

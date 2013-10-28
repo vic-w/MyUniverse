@@ -515,7 +515,7 @@ void GL_Init(HDC &hDC, HGLRC &hRC, HWND hWnd, long winWidth, long winHeight, boo
 	pfd.dwFlags    = PFD_DRAW_TO_WINDOW |PFD_SUPPORT_OPENGL | PFD_DOUBLEBUFFER;
 	pfd.iPixelType = PFD_TYPE_RGBA;
 	pfd.cColorBits = 16;
-	pfd.cDepthBits = 16;
+	pfd.cDepthBits = 24;
 
 	hDC = GetDC( hWnd );
 	PixelFormat = ChoosePixelFormat( hDC, &pfd );
