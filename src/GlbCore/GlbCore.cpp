@@ -93,6 +93,11 @@ GlbImage glbLoadImage(const char* filename)  //载入图像（支持dds,jpg,bmp,
 
 GlbImage glbLoadImage(const char* filename, GlbSize &size)  //载入图像（支持dds,jpg,bmp,png）
 {
+	if(!filename)
+	{
+		size.m_x=0; size.m_y=0;
+		return 0;
+	}
     int fileNameLen = strlen(filename);
     const char* suffix = filename + fileNameLen - 4; //Bug: break with ".jpeg"!
     //printf("filename = %s, suffix = %s\n", filename, suffix);
