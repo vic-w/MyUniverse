@@ -56,7 +56,6 @@ public:
         {
             m_nShowCity = layer - LAYER_CITY_ICON_START;
 
-			//kennyzx test
 			char strLocalTime[32];
 			sprintf(strLocalTime, "%s当地时间%s", m_cities[m_nShowCity].displayname,
                 m_cities[m_nShowCity].getLocalTimeString());    

@@ -160,8 +160,7 @@ vector<CCity> populatetestdata()
 	city1.displayname = "北京";
 	city1.latitude  = 40;
 	city1.longitude = 116;
-	city1.temprature = "3C";
-	city1.weatherCondition = "晴";
+	
 	city1.timezone = 8.0f;
 	city1.folder = "image\\cities\\中国&北京";
 	city1.imgPath = "image\\cities\\中国&北京\\city.jpg";
@@ -185,8 +184,7 @@ vector<CCity> populatetestdata()
 	city2.displayname = "东京";
 	city2.latitude  = 36;
 	city2.longitude = 140;
-	city2.temprature = "3C";
-	city2.weatherCondition = "晴";
+
 	city2.timezone = 9.0f;
 	city2.folder = "image\\cities\\日本&东京";
 	city2.imgPath = "image\\cities\\日本&东京\\city.jpg";
@@ -211,6 +209,7 @@ vector<CCity> populatetestdata()
 	cities.push_back(city2);
 	return cities;
 }
+
 vector<CCity> CCity::getCities()
 {
 	return populatetestdata();
@@ -255,48 +254,20 @@ vector<CCity> CCity::getCities()
 					city.displaycountry = (strcmp(val, "true") == 0);
 				}
 				else if ((!xmlStrcmp(attr->name, (const xmlChar *)"latitude"))){
-					/*bool northsphere = (val[strlen(val)-1] == 'N');
-					val[strlen(val)]='\0';*/
 					city.latitude = atof(val);
-					/*if (!northsphere)
-					{
-						city.latitude = -city.latitude;
-					}*/
 				}
 				else if ((!xmlStrcmp(attr->name, (const xmlChar *)"longitude"))){
-					/*bool eastsphere = (val[strlen(val)-1] == 'E');
-					val[strlen(val)]='\0';*/
 					city.longitude = atof(val);
-					/*if (!eastsphere)
-					{
-						city.longitude = -city.longitude;
-					}*/
 				}
 				else if ((!xmlStrcmp(attr->name, (const xmlChar *)"timezone"))){
 					city.timezone = atof(val);
 				}
 				else if ((!xmlStrcmp(attr->name, (const xmlChar *)"path"))){
-					
 					city.folder = u2g(val);
 					city.imgPath = u2g(val);
 				}
-				/*else if ((!xmlStrcmp(attr->name, (const xmlChar *)"population"))){
-					city.population = atoi(val);
-				}
-				else if ((!xmlStrcmp(attr->name, (const xmlChar *)"description"))){
-					city.description = u2g(val);
-				}
-				else if ((!xmlStrcmp(attr->name, (const xmlChar *)"temprature"))){
-					city.temprature = u2g(val);
-				}
-				else if ((!xmlStrcmp(attr->name, (const xmlChar *)"weatherCondition"))){
-					city.weatherCondition = u2g(val);
-				}*/
 				attr = attr->next;
 			}
-			//for test
-			city.temprature = "11度";
-			city.weatherCondition = "晴";
 
 			cities.push_back(city);
 			node = node->next;

@@ -164,7 +164,6 @@ public:
                     sprintf(msg, "长度为$%d公里\n", (int)(length));
                 }
                 
-                //kennyzx test
 			    if (txt2ImgHelper(4, msg))//4为模式
 			    {
 				    cityView = glbLoadImage( "temp.png" );

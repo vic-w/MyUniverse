@@ -23,12 +23,6 @@ public:
 	float latitude; //[-90, 90]
 	float longitude; //[-180, 180]
 	float timezone; //[-12, 12]
-	int population;
-	char* description;
-
-	char* temprature; //当前温度
-	char* weatherCondition; //当前天气描述
-
 
 	char* getLocalTimeString(); //返回当地的时间
 	static char* getTimezoneDiffString(CCity city1, CCity city2); //返回两个城市之间的时差

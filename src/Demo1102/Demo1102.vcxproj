@@ -113,10 +113,6 @@ copy 世界文化.xml "$(TargetDir)"</Command>
     <ClCompile Include="mode1.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="cities.xml">
-      <DeploymentContent>true</DeploymentContent>
-      <SubType>Designer</SubType>
-    </None>
     <None Include="世界文化.xml">
       <DeploymentContent>true</DeploymentContent>
       <SubType>Designer</SubType>

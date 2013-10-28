@@ -74,7 +74,6 @@ public:
             city2 = layer - LAYER_CITY_ICON_START;
             if(city1 != city2)
             {
-				//kennyzx test
 				if (txt2ImgHelper(3, CCity::getTimezoneDiffString(m_cities[city2], m_cities[city1])))//3Ϊģʽ
 				{
 					cityView = glbLoadImage( "temp.png" );
