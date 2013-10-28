@@ -155,7 +155,7 @@ void main()
 		MessageBox(NULL, TEXT("如果桌面上有unsigned.dat生成，请把文件发给我。"), TEXT("用户校验失败"), MB_OK|MB_ICONEXCLAMATION);
 		return;
 	}
-	printf("更新Xml的信息...\n");
+	//printf("更新Xml的信息...\n");
 	//更新Xml的信息
 	/*if (!CCity::updateXml())
 	{
@@ -389,7 +389,7 @@ void main()
 		} 
 
     }
-    while(glbUpdateWindow(mainWindow,0));
+    while(glbUpdateWindow(mainWindow,10));
 
     glbReleaseImage(&earth_img);		//释放临时变量
     glbReleaseImage(&icon_img);
