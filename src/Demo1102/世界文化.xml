@@ -2,7 +2,7 @@
 <cities>
 <!--<city id="0" country="阿尔巴尼亚" countryDisplayName="阿尔巴尼亚" name="地拉那" displayname="地拉那" displaycountry="false" latitude="41.033333" longitude="19.800000" timezone="1" path="阿尔巴尼亚&amp;地拉那"/>-->
 <city id="1" country="阿曼" countryDisplayName="阿曼" name="阿曼" displayname="阿曼" displaycountry="false" latitude="23.600000" longitude="58.616667" timezone="3" path="阿曼"/>
-<city id="2" country="埃及" countryDisplayName="埃及" name="开罗" displayname="开罗" displaycountry="false" latitude="0.500000" longitude="31.283333" timezone="2" path="埃及&amp;开罗"/>
+<city id="2" country="埃及" countryDisplayName="埃及" name="开罗" displayname="开罗" displaycountry="false" latitude="30.500000" longitude="31.283333" timezone="2" path="埃及&amp;开罗"/>
 <city id="3" country="埃塞俄比亚" countryDisplayName="埃塞俄比亚" name="亚的斯亚贝巴" displayname="亚的斯亚贝巴" displaycountry="false" latitude="9.050000" longitude="38.700000" timezone="2" path="埃塞俄比亚&amp;亚的斯亚贝巴"/>
 <!--<city id="4" country="爱尔兰" countryDisplayName="爱尔兰" name="爱尔兰" displayname="爱尔兰" displaycountry="false" latitude="53.433333" longitude="-6.250000" timezone="-1" path="爱尔兰"/>-->
 <city id="5" country="安道尔" countryDisplayName="安道尔" name="安道尔" displayname="安道尔" displaycountry="false" latitude="42.050000" longitude="1.516667" timezone="0" path="安道尔"/>
@@ -50,7 +50,7 @@
 <city id="47" country="美国" countryDisplayName="美国" name="华盛顿" displayname="华盛顿" displaycountry="false" latitude="38.883333" longitude="-77.033333" timezone="-6" path="美国&amp;华盛顿"/>
 <city id="48" country="美国" countryDisplayName="美国" name="洛杉矶" displayname="洛杉矶" displaycountry="false" latitude="34.083333" longitude="-118.366667" timezone="-8" path="美国&amp;洛杉矶"/>
 <city id="49" country="美国" countryDisplayName="美国" name="纽约" displayname="纽约" displaycountry="false" latitude="40.733333" longitude="-73.916667" timezone="-5" path="美国&amp;纽约"/>
-<city id="50" country="美国" countryDisplayName="美国" name="圣佛朗西斯科（旧金山）" displayname="圣佛朗西斯科（旧金山）" displaycountry="false" latitude="37.766667" longitude="-122.433333" timezone="-9" path="美国&amp;圣佛朗西斯科（旧金山）"/>
+<city id="50" country="美国" countryDisplayName="美国" name="旧金山" displayname="旧金山" displaycountry="false" latitude="37.766667" longitude="-122.433333" timezone="-9" path="美国&amp;圣佛朗西斯科（旧金山）"/>
 <city id="51" country="美国" countryDisplayName="美国" name="芝加哥" displayname="芝加哥" displaycountry="false" latitude="41.850000" longitude="-87.683333" timezone="-6" path="美国&amp;芝加哥"/>
 <city id="52" country="孟加拉国" countryDisplayName="孟加拉国" name="孟加拉国" displayname="孟加拉国" displaycountry="false" latitude="22.033333" longitude="91.800000" timezone="6" path="孟加拉国"/>
 <!--<city id="53" country="摩纳哥" countryDisplayName="摩纳哥" name="摩纳哥" displayname="摩纳哥" displaycountry="false" latitude="43.066667" longitude="7.416667" timezone="0" path="摩纳哥"/>-->
