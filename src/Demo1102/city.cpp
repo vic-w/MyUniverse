@@ -165,7 +165,7 @@ vector<CCity> CCity::getCities()
 		xmlNode *node = xpathObj->nodesetval->nodeTab[0];
 		while (node)
 		{
-			if (xmlStrcmp(node->name, (const xmlChar *)"text")) //deal with white space between nodes
+			if (!xmlStrcmp(node->name, (const xmlChar *)"city")) //deal with white space between nodes
 			{
 				CCity city;
 				xmlAttr *attr = node->properties;
@@ -206,7 +206,7 @@ vector<CCity> CCity::getCities()
 				xmlNode *categoriesNode = node->children;
 				if (categoriesNode != NULL)
 				{
-					while (!xmlStrcmp(categoriesNode->name, (const xmlChar *)"text")) //deal with white space between nodes
+					while (xmlStrcmp(categoriesNode->name, (const xmlChar *)"categories")) //deal with white space between nodes
 					{
 						categoriesNode = categoriesNode->next;
 						continue;
@@ -214,7 +214,7 @@ vector<CCity> CCity::getCities()
 
 					xmlNode *categoryNode = categoriesNode->children;
 					while (categoryNode != NULL) {
-						if (xmlStrcmp(categoryNode->name, (const xmlChar *)"text")) //deal with white space between nodes
+						if (!xmlStrcmp(categoryNode->name, (const xmlChar *)"category")) //deal with white space between nodes
 						{
 							vector<char*> vCategory;
 							attr = categoryNode->properties;
@@ -223,7 +223,7 @@ vector<CCity> CCity::getCities()
 							}
 							xmlNode *imgNode = categoryNode->children;
 							while (imgNode != NULL) {
-								if (xmlStrcmp(imgNode->name, (const xmlChar *)"text")) //deal with white space between nodes
+								if (!xmlStrcmp(imgNode->name, (const xmlChar *)"img")) //deal with white space between nodes
 								{
 									attr = imgNode->properties;
 									if ((!xmlStrcmp(attr->name, (const xmlChar *)"path"))){
