@@ -46,17 +46,17 @@ void CMode1::draw()
 	{
         GlbPointGeo p1(m_cities[m_nShowCity].latitude, m_cities[m_nShowCity].longitude);
 		GlbPointGeo p2(90,0);
-		glbDrawTexture(cityView, *m_pGlobeRotMat, m_pWindow->m_calib, p1, true, p2, false, true, 60, 45, LAYER_CITY_DETAIL, GLB_TEX_RECT);
+		glbDrawTexture(cityView, *m_pGlobeRotMat, m_pWindow->m_calib, p1, true, p2, false, true, 90, 66, LAYER_CITY_DETAIL, GLB_TEX_RECT);
 			
 		GlbPointGeo texPointGeo00,texPointGeo01,texPointGeo10,texPointGeo11;
 		GlbPointTex texPoint(0.05,0.05);
-		glbPointTex2PointGeo(*m_pGlobeRotMat, p1, true, p2, false, true, 60, 45, GLB_TEX_RECT, texPoint, false, texPointGeo00);
+		glbPointTex2PointGeo(*m_pGlobeRotMat, p1, true, p2, false, true, 90, 66, GLB_TEX_RECT, texPoint, false, texPointGeo00);
 		texPoint.m_x = 0.95, texPoint.m_y = 0.05;
-		glbPointTex2PointGeo(*m_pGlobeRotMat, p1, true, p2, false, true, 60, 45, GLB_TEX_RECT, texPoint, false, texPointGeo10);
+		glbPointTex2PointGeo(*m_pGlobeRotMat, p1, true, p2, false, true, 90, 66, GLB_TEX_RECT, texPoint, false, texPointGeo10);
 		texPoint.m_x = 0.95, texPoint.m_y = 0.5;
-		glbPointTex2PointGeo(*m_pGlobeRotMat, p1, true, p2, false, true, 60, 45, GLB_TEX_RECT, texPoint, false, texPointGeo11);
+		glbPointTex2PointGeo(*m_pGlobeRotMat, p1, true, p2, false, true, 90, 66, GLB_TEX_RECT, texPoint, false, texPointGeo11);
 		texPoint.m_x = 0.05, texPoint.m_y = 0.5;
-		glbPointTex2PointGeo(*m_pGlobeRotMat, p1, true, p2, false, true, 60, 45, GLB_TEX_RECT, texPoint, false, texPointGeo01);
+		glbPointTex2PointGeo(*m_pGlobeRotMat, p1, true, p2, false, true, 90, 66, GLB_TEX_RECT, texPoint, false, texPointGeo01);
 
         //»­¹Ø±ÕÍ¼±ê
         glbDrawTexture(icon_close, *m_pGlobeRotMat, m_pWindow->m_calib, texPointGeo10, false, texPointGeo11, false, true, 5, 5, LAYER_CITY_DETAIL_CLOSE, GLB_TEX_RECT);
