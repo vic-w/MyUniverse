@@ -151,10 +151,8 @@ bool CCity::updateXml()
 
 vector<CCity> CCity::getCities()
 {
-	//return populatetestdata();
-
 	vector<CCity> cities;
-	//
+
 	xmlInitParser();
 	xmlDocPtr doc = xmlParseFile("cities.xml");
 	if (doc)
@@ -162,86 +160,89 @@ vector<CCity> CCity::getCities()
 		xmlXPathContext *xpathCtx = xmlXPathNewContext( doc );
 		xmlXPathObject * xpathObj =
 			xmlXPathEvalExpression( (xmlChar*)"/cities/city", xpathCtx );
-		xmlNode *node = xpathObj->nodesetval->nodeTab[0];
-		while (node)
-		{
-			if (!xmlStrcmp(node->name, (const xmlChar *)"city")) //deal with white space between nodes
+
+		if(!xmlXPathNodeSetIsEmpty(xpathObj->nodesetval)){
+			xmlNode *node = xpathObj->nodesetval->nodeTab[0];
+			while (node)
 			{
-				CCity city;
-				xmlAttr *attr = node->properties;
-				while ( attr )
+				if (!xmlStrcmp(node->name, (const xmlChar *)"city"))
 				{
-					char* val = (char*)(attr->children->content);
-
-					if ((!xmlStrcmp(attr->name, (const xmlChar *)"id"))){
-						city.id = atoi(val);
-					}
-					else if ((!xmlStrcmp(attr->name, (const xmlChar *)"name"))){
-						city.name = u2g(val);
-					}
-					else if ((!xmlStrcmp(attr->name, (const xmlChar *)"displayname"))){
-						city.displayname = u2g(val);
-					}
-					else if ((!xmlStrcmp(attr->name, (const xmlChar *)"country"))){
-						city.country = u2g(val);
-					}
-					else if ((!xmlStrcmp(attr->name, (const xmlChar *)"displaycountry"))){
-						city.displaycountry = (strcmp(val, "true") == 0);
-					}
-					else if ((!xmlStrcmp(attr->name, (const xmlChar *)"latitude"))){
-						city.latitude = atof(val);
-					}
-					else if ((!xmlStrcmp(attr->name, (const xmlChar *)"longitude"))){
-						city.longitude = atof(val);
-					}
-					else if ((!xmlStrcmp(attr->name, (const xmlChar *)"timezone"))){
-						city.timezone = atof(val);
-					}
-					else if ((!xmlStrcmp(attr->name, (const xmlChar *)"path"))){
-						city.folder = u2g(val);
-					}
-					attr = attr->next;
-				}
-
-				xmlNode *categoriesNode = node->children;
-				if (categoriesNode != NULL)
-				{
-					while (xmlStrcmp(categoriesNode->name, (const xmlChar *)"categories")) //deal with white space between nodes
+					CCity city;
+					xmlAttr *attr = node->properties;
+					while ( attr )
 					{
-						categoriesNode = categoriesNode->next;
-						continue;
+						char* val = (char*)(attr->children->content);
+
+						if ((!xmlStrcmp(attr->name, (const xmlChar *)"id"))){
+							city.id = atoi(val);
+						}
+						else if ((!xmlStrcmp(attr->name, (const xmlChar *)"name"))){
+							city.name = u2g(val);
+						}
+						else if ((!xmlStrcmp(attr->name, (const xmlChar *)"displayname"))){
+							city.displayname = u2g(val);
+						}
+						else if ((!xmlStrcmp(attr->name, (const xmlChar *)"country"))){
+							city.country = u2g(val);
+						}
+						else if ((!xmlStrcmp(attr->name, (const xmlChar *)"displaycountry"))){
+							city.displaycountry = (strcmp(val, "true") == 0);
+						}
+						else if ((!xmlStrcmp(attr->name, (const xmlChar *)"latitude"))){
+							city.latitude = atof(val);
+						}
+						else if ((!xmlStrcmp(attr->name, (const xmlChar *)"longitude"))){
+							city.longitude = atof(val);
+						}
+						else if ((!xmlStrcmp(attr->name, (const xmlChar *)"timezone"))){
+							city.timezone = atof(val);
+						}
+						else if ((!xmlStrcmp(attr->name, (const xmlChar *)"path"))){
+							city.folder = u2g(val);
+						}
+						attr = attr->next;
 					}
 
-					xmlNode *categoryNode = categoriesNode->children;
-					while (categoryNode != NULL) {
-						if (!xmlStrcmp(categoryNode->name, (const xmlChar *)"category")) //deal with white space between nodes
+					xmlNode *categoriesNode = node->children;
+					while (categoriesNode != NULL)
+					{
+						if (!xmlStrcmp(categoriesNode->name, (const xmlChar *)"categories")) 
 						{
-							vector<char*> vCategory;
-							attr = categoryNode->properties;
-							if ((!xmlStrcmp(attr->name, (const xmlChar *)"name"))){
-								vCategory.push_back(u2g((char*)(attr->children->content)));
-							}
-							xmlNode *imgNode = categoryNode->children;
-							while (imgNode != NULL) {
-								if (!xmlStrcmp(imgNode->name, (const xmlChar *)"img")) //deal with white space between nodes
+							xmlNode *categoryNode = categoriesNode->children;
+							while (categoryNode != NULL) {
+								if (!xmlStrcmp(categoryNode->name, (const xmlChar *)"category")) 
 								{
-									attr = imgNode->properties;
-									if ((!xmlStrcmp(attr->name, (const xmlChar *)"path"))){
+									vector<char*> vCategory;
+									attr = categoryNode->properties;
+									if ((!xmlStrcmp(attr->name, (const xmlChar *)"name"))){
 										vCategory.push_back(u2g((char*)(attr->children->content)));
 									}
-								}
-								imgNode = imgNode->next;
-							}
-							city.images.push_back(vCategory);
-						}
-						categoryNode = categoryNode->next;
-					}
-				}
-				cities.push_back(city);
-			}
-			node = node->next;
-		}
+									xmlNode *imgNode = categoryNode->children;
+									while (imgNode != NULL) {
+										if (!xmlStrcmp(imgNode->name, (const xmlChar *)"img")) 
+										{
+											attr = imgNode->properties;
+											if ((!xmlStrcmp(attr->name, (const xmlChar *)"path"))){
+												vCategory.push_back(u2g((char*)(attr->children->content)));
+											}
+										}//if elem name is img
+										imgNode = imgNode->next;
+									}//while (imgNode)
+									city.images.push_back(vCategory);
+								}//if elem name is category
+								categoryNode = categoryNode->next;
+							}//while (categoryNode)
+						} //if elem name is categories
+						categoriesNode = categoriesNode->next;
+					}//while (categoriesNode)
+					cities.push_back(city);
+				} //if elem name is city
+				node = node->next;
+			} //while (node)
+		}//if xpathObj not empty
+		xmlXPathFreeObject(xpathObj);
 		xmlFreeDoc(doc);
 	}
+	xmlCleanupParser();
 	return cities;
 }
