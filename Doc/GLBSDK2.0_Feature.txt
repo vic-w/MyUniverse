@@ -1,0 +1,7 @@
+增加GlbFrame模块
+隔离OpenGL？
+用类表示各种point，并提供互相转换的方法
+GlbImage用类表示，包括素材的宽和高
+GlbObject类，成员包括GlbImage，中心点，指向点，宽度角，高度角（即glbDrawTexture的所有参数）
+
+to be continued...
