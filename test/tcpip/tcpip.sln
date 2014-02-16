@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "tcpip_server", "tcpip_server\tcpip_server.vcxproj", "{5428393E-33F8-4B72-BDEE-675926D3A43B}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "tcpip_client", "tcpip_client\tcpip_client.vcxproj", "{051FD995-0D4D-4187-87AD-10E9D3019E92}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5428393E-33F8-4B72-BDEE-675926D3A43B}.Debug|Win32.ActiveCfg = Debug|Win32
+		{5428393E-33F8-4B72-BDEE-675926D3A43B}.Debug|Win32.Build.0 = Debug|Win32
+		{5428393E-33F8-4B72-BDEE-675926D3A43B}.Release|Win32.ActiveCfg = Release|Win32
+		{5428393E-33F8-4B72-BDEE-675926D3A43B}.Release|Win32.Build.0 = Release|Win32
+		{051FD995-0D4D-4187-87AD-10E9D3019E92}.Debug|Win32.ActiveCfg = Debug|Win32
+		{051FD995-0D4D-4187-87AD-10E9D3019E92}.Debug|Win32.Build.0 = Debug|Win32
+		{051FD995-0D4D-4187-87AD-10E9D3019E92}.Release|Win32.ActiveCfg = Release|Win32
+		{051FD995-0D4D-4187-87AD-10E9D3019E92}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
