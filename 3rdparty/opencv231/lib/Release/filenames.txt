@@ -1,0 +1,14 @@
+opencv_calib3d231.lib
+opencv_contrib231.lib
+opencv_core231.lib
+opencv_features2d231.lib
+opencv_flann231.lib
+opencv_gpu231.lib
+opencv_haartraining_engine.lib
+opencv_highgui231.lib
+opencv_imgproc231.lib
+opencv_legacy231.lib
+opencv_ml231.lib
+opencv_objdetect231.lib
+opencv_ts231.lib
+opencv_video231.lib
