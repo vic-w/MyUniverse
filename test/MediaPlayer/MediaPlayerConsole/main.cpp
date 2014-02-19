@@ -107,6 +107,7 @@ int main(int argc, char* argv[])
 			{
 				img_convert_ctx = sws_getContext(pCodecCtx->width, pCodecCtx->height, pCodecCtx->pix_fmt, pCodecCtx->width, pCodecCtx->height, PIX_FMT_YUV420P, SWS_BICUBIC, NULL, NULL, NULL);
 				sws_scale(img_convert_ctx, (const uint8_t* const*)pFrame->data, pFrame->linesize, 0, pCodecCtx->height, pFrameYUV->data, pFrameYUV->linesize);
+				sws_freeContext(img_convert_ctx);
 
 				SDL_LockYUVOverlay(bmp);
 				bmp->pixels[0] = pFrameYUV->data[0];
