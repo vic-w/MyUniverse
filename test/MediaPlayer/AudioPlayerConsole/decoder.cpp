@@ -198,49 +198,29 @@ int decode_audio(char* no_use)
 				uint8_t *pChunk = audio_chunk + audio_len;
 				uint8_t **ppChunk = &pChunk;
 
-				const uint8_t * pInput = pFrame->data[0];
-				const uint8_t ** ppInput = &pInput;
-
 				const uint8_t ** in = (const uint8_t **)pFrame->data;
+
+				int out_count = (1024*1024*9-audio_len) / pCodecCtx->channels / av_get_bytes_per_sample(AV_SAMPLE_FMT_S16);
+				//int in_count1 = pFrame->linesize[0] / pCodecCtx->channels / av_get_bytes_per_sample((AVSampleFormat)pFrame->format);
+				int in_count = pFrame->nb_samples;
 
 				int len=swr_convert
 					(
 					pSwrCtx,
 					ppChunk,
-					4096 / pCodecCtx->channels / av_get_bytes_per_sample(AV_SAMPLE_FMT_S16),  
+					out_count,  
                     in,
-					pFrame->linesize[0] / pCodecCtx->channels / av_get_bytes_per_sample((AVSampleFormat)pFrame->format)
+					in_count
 					);  
 
                 len=len*pCodecCtx->channels*av_get_bytes_per_sample(AV_SAMPLE_FMT_S16);
 
-				//memcpy(audio_chunk + audio_len, pFrame->data[1], pFrame->linesize[0]);
 				audio_len += len;
 			}
 
-			//for(int i=0; i<4096; i++)
-			//{
-			//	*(audio_chunk+audio_len+i) = pFrame->data[0][i];
-			//}
-			//printf("begin....\n"); 
-			//设置音频数据缓冲,PCM数据
-			//audio_chunk = (Uint8*) pFrame->data[0]; 
-			//设置音频数据长度
-			//audio_len = pFrame->linesize[0];
-			//audio_len = 4096;
-			//播放mp3的时候改为audio_len = 4096
-			//则会比较流畅，但是声音会变调！MP3一帧长度4608
-			//使用一次回调函数（4096字节缓冲）播放不完，所以还要使用一次回调函数，导致播放缓慢。。。
-			//设置初始播放位置
-			
-			//回放音频数据 
-			//printf("don't close, audio playing...\n"); 
-			//---------------------------------------
+
 		}
-		//while(audio_len>0)//等待直到音频数据播放完毕! 
-		//		Sleep(1);
-		// Free the packet that was allocated by av_read_frame
-		//已改
+
 		av_free_packet(packet);
 	}
 	audio_pos = audio_chunk;
@@ -253,7 +233,7 @@ int decode_audio(char* no_use)
 	avcodec_close(pCodecCtx);
 	// Close the video file
 	av_close_input_file(pFormatCtx);
-
+	 swr_free(&pSwrCtx);
 	delete audio_chunk;
 
 	return 0;
