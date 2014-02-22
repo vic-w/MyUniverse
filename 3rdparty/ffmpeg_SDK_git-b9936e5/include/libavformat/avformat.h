@@ -256,7 +256,7 @@
 #include "libavutil/dict.h"
 #include "libavutil/log.h"
 
-#include "avio.h"
+#include "libavformat/avio.h"
 #include "libavformat/version.h"
 
 struct AVFormatContext;
