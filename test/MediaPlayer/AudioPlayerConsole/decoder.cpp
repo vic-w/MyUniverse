@@ -8,10 +8,13 @@
 //
 #include <stdlib.h>
 #include <string.h>
+#include <Windows.h>
+
 extern "C"
 {
 #include "libavcodec/avcodec.h"
 #include "libavformat/avformat.h"
+#include "libswresample/swresample.h"
 //SDL
 #include "SDL.h"
 #include "SDL_thread.h"
@@ -34,15 +37,10 @@ extern "C"
 	len=4096;audio_len=4608;两个相差512！为了这512，还得再调用一次回调函数。。。
 	m4a,aac就不存在此问题(都是4096)！
 	*/ 
-	void  fill_audio(void *udata,Uint8 *stream,int len){ 
-		/*  Only  play  if  we  have  data  left  */ 
-	if(audio_len==0) 
-			return; 
-		/*  Mix  as  much  data  as  possible  */ 
-	len=(len>audio_len?audio_len:len); 
-	SDL_MixAudio(stream,audio_pos,len,SDL_MIX_MAXVOLUME);
-	audio_pos += len; 
-	audio_len -= len; 
+	void  fill_audio(void *udata,Uint8 *stream,int len)
+	{ 
+		memcpy(stream, audio_pos, len);
+		audio_pos += len; 
 	} 
 //-----------------
 
@@ -113,26 +111,6 @@ int decode_audio(char* no_use)
 		return -1;
 	}
 
-	/********* For output file ******************/
-	FILE *pFile;
-#ifdef _WAVE_
-	pFile=fopen("output.wav", "wb");
-	fseek(pFile, 44, SEEK_SET); //预留文件头的位置
-#else
-	pFile=fopen("output.pcm", "wb");
-#endif
-
-	// Open the time stamp file
-	FILE *pTSFile;
-	pTSFile=fopen("audio_time_stamp.txt", "wb");
-	if(pTSFile==NULL)
-	{
-		printf("Could not open output file.\n");
-		return -1;
-	}
-	fprintf(pTSFile, "Time Base: %d/%d\n", pCodecCtx->time_base.num, pCodecCtx->time_base.den);
-
-	/*** Write audio into file ******/
 	//把结构体改为指针
 	AVPacket *packet=(AVPacket *)malloc(sizeof(AVPacket));
 	av_init_packet(packet);
@@ -171,103 +149,112 @@ int decode_audio(char* no_use)
 	printf("time_base  %d \n", pCodecCtx->time_base);
 	printf("声道数  %d \n", pCodecCtx->channels);
 	printf("sample per second  %d \n", pCodecCtx->sample_rate);
-	//新版不再需要
-//	short decompressed_audio_buf[(AVCODEC_MAX_AUDIO_FRAME_SIZE * 3) / 2];
-//	int decompressed_audio_buf_size;
+
 	uint32_t ret,len = 0;
 	int got_picture;
 	int index = 0;
-	while(av_read_frame(pFormatCtx, packet)>=0)
+
+	audio_chunk = new Uint8[1024*1024*10];
+	audio_len = 0;		
+
+
+	int64_t wanted_channel_layout = 0;  
+    int wanted_nb_channels;  
+    wanted_channel_layout =   
+        (pCodecCtx->channel_layout && pCodecCtx->channels == av_get_channel_layout_nb_channels(pCodecCtx->channel_layout)) ? 
+		pCodecCtx->channel_layout 
+		: av_get_default_channel_layout(pCodecCtx->channels);  
+
+    wanted_channel_layout &= ~AV_CH_LAYOUT_STEREO_DOWNMIX;  
+    wanted_nb_channels = av_get_channel_layout_nb_channels(wanted_channel_layout);
+	SwrContext *pSwrCtx = swr_alloc_set_opts
+		(
+		NULL,
+		wanted_channel_layout,
+		AV_SAMPLE_FMT_S16,
+		pCodecCtx->sample_rate,  
+        pCodecCtx->channel_layout,
+		pCodecCtx->sample_fmt,  
+        pCodecCtx->sample_rate,
+		0,
+		NULL
+		);  
+    if(swr_init(pSwrCtx)<0) return -1;  
+
+	while(av_read_frame(pFormatCtx, packet)>=0  && audio_len < 1024*1024*9)
 	{
 		if(packet->stream_index==audioStream)
 		{
-			//decompressed_audio_buf_size = (AVCODEC_MAX_AUDIO_FRAME_SIZE * 3) / 2;
-			//原为avcodec_decode_audio2
-				//ret = avcodec_decode_audio4( pCodecCtx, decompressed_audio_buf,
-				//&decompressed_audio_buf_size, packet.data, packet.size );
-			//改为
-			ret = avcodec_decode_audio4( pCodecCtx, pFrame,
-				&got_picture, packet);
-			if ( ret < 0 ) // if error len = -1
-			{
-                printf("Error in decoding audio frame.\n");
-                exit(0);
-            }
+			int len;
+			if(len = avcodec_decode_audio4( pCodecCtx, pFrame, &got_picture, packet)<0) return -1;
+
 			if ( got_picture > 0 )
 			{
-#if 1
 				printf("index %3d\n", index);
 				printf("pts %5d\n", packet->pts);
 				printf("dts %5d\n", packet->dts);
 				printf("packet_size %5d\n", packet->size);
-				
-				//printf("test %s\n", rtmp->m_inChunkSize);
-#endif
-				//直接写入
-				//注意：数据是data【0】，长度是linesize【0】
-#if 1
-				fwrite(pFrame->data[0], 1, pFrame->linesize[0], pFile);
-				//fwrite(pFrame, 1, got_picture, pFile);
-				//len+=got_picture;
-				index++;
-				//fprintf(pTSFile, "%4d,%5d,%8d\n", index, decompressed_audio_buf_size, packet.pts);
-#endif
+
+				uint8_t *pChunk = audio_chunk + audio_len;
+				uint8_t **ppChunk = &pChunk;
+
+				const uint8_t * pInput = pFrame->data[0];
+				const uint8_t ** ppInput = &pInput;
+
+				const uint8_t ** in = (const uint8_t **)pFrame->data;
+
+				int len=swr_convert
+					(
+					pSwrCtx,
+					ppChunk,
+					4096 / pCodecCtx->channels / av_get_bytes_per_sample(AV_SAMPLE_FMT_S16),  
+                    in,
+					pFrame->linesize[0] / pCodecCtx->channels / av_get_bytes_per_sample((AVSampleFormat)pFrame->format)
+					);  
+
+                len=len*pCodecCtx->channels*av_get_bytes_per_sample(AV_SAMPLE_FMT_S16);
+
+				//memcpy(audio_chunk + audio_len, pFrame->data[1], pFrame->linesize[0]);
+				audio_len += len;
 			}
-#if 1
-			//---------------------------------------
+
+			//for(int i=0; i<4096; i++)
+			//{
+			//	*(audio_chunk+audio_len+i) = pFrame->data[0][i];
+			//}
 			//printf("begin....\n"); 
 			//设置音频数据缓冲,PCM数据
-			audio_chunk = (Uint8*) pFrame->data[0]; 
+			//audio_chunk = (Uint8*) pFrame->data[0]; 
 			//设置音频数据长度
-			audio_len = pFrame->linesize[0];
+			//audio_len = pFrame->linesize[0];
 			//audio_len = 4096;
 			//播放mp3的时候改为audio_len = 4096
 			//则会比较流畅，但是声音会变调！MP3一帧长度4608
 			//使用一次回调函数（4096字节缓冲）播放不完，所以还要使用一次回调函数，导致播放缓慢。。。
 			//设置初始播放位置
-			audio_pos = audio_chunk;
+			
 			//回放音频数据 
-			SDL_PauseAudio(0);
 			//printf("don't close, audio playing...\n"); 
-			while(audio_len>0)//等待直到音频数据播放完毕! 
-				SDL_Delay(1); 
 			//---------------------------------------
-#endif
 		}
+		//while(audio_len>0)//等待直到音频数据播放完毕! 
+		//		Sleep(1);
 		// Free the packet that was allocated by av_read_frame
 		//已改
 		av_free_packet(packet);
 	}
-	//printf("The length of PCM data is %d bytes.\n", len);
+	audio_pos = audio_chunk;
+	SDL_PauseAudio(0);
 
-#ifdef _WAVE_
-	fseek(pFile, 0, SEEK_SET);
-	struct WAVE_HEADER wh;
+	while(1)Sleep(1000);
 
-	memcpy(wh.header.RiffID, "RIFF", 4);
-	wh.header.RiffSize = 36 + len;
-	memcpy(wh.header.RiffFormat, "WAVE", 4);
-
-	memcpy(wh.format.FmtID, "fmt ", 4);
-	wh.format.FmtSize = 16;
-	wh.format.wavFormat.FormatTag = 1;
-	wh.format.wavFormat.Channels = pCodecCtx->channels;
-	wh.format.wavFormat.SamplesRate = pCodecCtx->sample_rate;
-	wh.format.wavFormat.BitsPerSample = 16;
-	calformat(wh.format.wavFormat); //Calculate AvgBytesRate and BlockAlign
-
-	memcpy(wh.data.DataID, "data", 4);
-	wh.data.DataSize = len;
-
-	fwrite(&wh, 1, sizeof(wh), pFile);
-#endif
 	SDL_CloseAudio();//关闭音频设备 
-	// Close file
-	fclose(pFile);
 	// Close the codec
 	avcodec_close(pCodecCtx);
 	// Close the video file
 	av_close_input_file(pFormatCtx);
+
+	delete audio_chunk;
 
 	return 0;
 }
