@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MediaPlayerConsole", "MediaPlayerConsole\MediaPlayerConsole.vcxproj", "{C5140809-614D-4621-B4B5-D2043540C16F}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AudioPlayerConsole", "AudioPlayerConsole\AudioPlayerConsole.vcxproj", "{2E7D6BB1-3217-4CEE-A767-37AC97EF5537}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -13,6 +15,10 @@ Global
 		{C5140809-614D-4621-B4B5-D2043540C16F}.Debug|Win32.Build.0 = Debug|Win32
 		{C5140809-614D-4621-B4B5-D2043540C16F}.Release|Win32.ActiveCfg = Release|Win32
 		{C5140809-614D-4621-B4B5-D2043540C16F}.Release|Win32.Build.0 = Release|Win32
+		{2E7D6BB1-3217-4CEE-A767-37AC97EF5537}.Debug|Win32.ActiveCfg = Debug|Win32
+		{2E7D6BB1-3217-4CEE-A767-37AC97EF5537}.Debug|Win32.Build.0 = Debug|Win32
+		{2E7D6BB1-3217-4CEE-A767-37AC97EF5537}.Release|Win32.ActiveCfg = Release|Win32
+		{2E7D6BB1-3217-4CEE-A767-37AC97EF5537}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
