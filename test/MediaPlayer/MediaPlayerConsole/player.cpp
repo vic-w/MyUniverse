@@ -2,7 +2,8 @@ extern "C"
 {
 #include <libavcodec/avcodec.h> 
 #include <libavformat/avformat.h>
-#include "libswscale/swscale.h"
+#include <libswscale/swscale.h>
+#include <libswresample/swresample.h>
 }
 //SDL
 #include "SDL.h"
@@ -10,6 +11,8 @@ extern "C"
 #include "SDL_audio.h"
 
 int quit = 0;
+
+SwrContext *pSwrCtx;
 
 //ffmpeg的回调函数，用来检测是否有退出消息
 int decode_interrupt_cb(void) 
@@ -100,42 +103,64 @@ static int packet_queue_get(PacketQueue *q, AVPacket *pkt, int block)
 
 int audio_decode_frame(AVCodecContext *pAudioCodecCtx, uint8_t *audio_buf, int buf_size) 
 {     
-	static AVPacket pkt;    
-	static uint8_t *audio_pkt_data = NULL;   
-	static int audio_pkt_size = 0;     
-	int len1, data_size;     
-	for(;;) 
-	{      
-		while(audio_pkt_size > 0) 
-		{       
-			data_size = buf_size;        
-			len1 = avcodec_decode_audio4(pAudioCodecCtx, (int16_t *)audio_buf, &data_size, audio_pkt_data, audio_pkt_size);       
-			if(len1 < 0) 
-			{          
-				audio_pkt_size = 0;     
-				break;       
-			}        
-			audio_pkt_data += len1;       
-			audio_pkt_size -= len1;       
-			if(data_size <= 0) 
-			{          
-				continue;       
-			}              
-			return data_size;     
-		}      
-		if(pkt.data)        
-			av_free_packet(&pkt);       
-		if(quit) 
-		{       
-			return -1;     
-		} 
-		if(packet_queue_get(&audioQueue, &pkt, 1) < 0) 
-		{       
-			return -1;     
-		}      
-		audio_pkt_data = pkt.data;     
-		audio_pkt_size = pkt.size;   
-	} 
+	AVFrame *pAudioFrame=av_frame_alloc();  
+	AVPacket pkt,pkt1;  
+    int frame_finished=0;  
+    int pkt_pos,pkt_len;  
+    int src_len=0,dst_len=0,data_size=0;  
+    float pts=0;  
+    //av_frame_unref(pAudioFrame);  
+  
+    uint8_t *out[]={audio_buf};  
+      
+    for(;!quit;){  
+        if(packet_queue_get(&audioQueue, &pkt, 1) < 0) {  
+            av_free(pAudioFrame);  
+            return -1;  
+        }  
+        pkt1=pkt;  
+        pkt_pos=0;  
+        pkt_len=pkt.size;  
+          
+        while(pkt_pos<pkt.size && !quit)
+		{  
+            if((src_len = avcodec_decode_audio4(pAudioCodecCtx, pAudioFrame, &frame_finished, &pkt1))<0)
+			{  
+                av_free_packet(&pkt);  
+                av_free(pAudioFrame);  
+                return -1;  
+            }  
+              
+            if(frame_finished)
+			{  
+                int len=swr_convert
+					(
+					pSwrCtx,
+					out,
+					buf_size/pAudioCodecCtx->channels/av_get_bytes_per_sample(AV_SAMPLE_FMT_S16),  
+                    (const uint8_t **)pAudioFrame->data,
+					pAudioFrame->nb_samples
+					);  
+                len=len * pAudioCodecCtx->channels * av_get_bytes_per_sample(AV_SAMPLE_FMT_S16);  
+                av_free(pAudioFrame);  
+                av_free_packet(&pkt);  
+                return len;  
+            }
+			else
+			{  
+                if (!pkt1.data && pAudioCodecCtx->codec->capabilities & CODEC_CAP_DELAY)
+				{  
+                    break;  
+                }  
+            }  
+            pkt_pos+=src_len;//已经解码的长度  
+            pkt1.data=pkt.data+pkt_pos;  
+            pkt1.size=pkt.size-pkt_pos;  
+        }  
+        av_free_packet(&pkt);  
+    }  
+    av_free(pAudioFrame);  
+    return dst_len;  
 }
 
 void audio_callback(void *userdata, Uint8 *stream, int len) 
@@ -230,6 +255,30 @@ int main(int argc, char* argv[])
 	//打开音频Codec
 	if(avcodec_open2(pAudioCodecCtx, pAudioCodec, NULL)<0)  return -1;
 
+	//初始化音频重采样模块
+	int64_t wanted_channel_layout = 0;  
+    int wanted_nb_channels;  
+    wanted_channel_layout =   
+        (pAudioCodecCtx->channel_layout && pAudioCodecCtx->channels == av_get_channel_layout_nb_channels(pAudioCodecCtx->channel_layout)) ? 
+		pAudioCodecCtx->channel_layout 
+		: av_get_default_channel_layout(pAudioCodecCtx->channels);  
+
+    wanted_channel_layout &= ~AV_CH_LAYOUT_STEREO_DOWNMIX;  
+    wanted_nb_channels = av_get_channel_layout_nb_channels(wanted_channel_layout);
+	pSwrCtx = swr_alloc_set_opts
+		(
+		NULL,
+		wanted_channel_layout,
+		AV_SAMPLE_FMT_S16,
+		pAudioCodecCtx->sample_rate,  
+        pAudioCodecCtx->channel_layout,
+		pAudioCodecCtx->sample_fmt,  
+        pAudioCodecCtx->sample_rate,
+		0,
+		NULL
+		);  
+    if(swr_init(pSwrCtx)<0) return -1;  
+
 	//申请存放帧的空间
 	AVFrame *pFrame = av_frame_alloc();
 	AVFrame *pFrameYUV = av_frame_alloc();
@@ -313,15 +362,11 @@ int main(int argc, char* argv[])
 				rect.h = pVideoCodecCtx->height;
 				SDL_DisplayYUVOverlay(pOverlay, &rect);
 
-				SDL_Delay(40);
+				//SDL_Delay(40);
 			}
 		}
 		else if(pPacket->stream_index==idxAudioStream) 
 		{  
-			//解析packet
-			int frameFinished;
-			if(avcodec_decode_audio4(pAudioCodecCtx, pFrame, &frameFinished, pPacket)<0) return -1;
-
 			packet_queue_put(&audioQueue, pPacket);   
 		} 
 		else 
