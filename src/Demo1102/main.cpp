@@ -8,7 +8,7 @@
 #include "mode4.h"
 #include "mode5.h"
 
-#define CHECK_LICENSE
+//#define CHECK_LICENSE
 
 //全局变量
 int nMode=1;
