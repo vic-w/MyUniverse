@@ -36,6 +36,17 @@ int glbAddHwndGlbWindowPair(HWND hWnd, GlbWindow *window);
 int glbDeleteHwndGlbWindowPair(GlbWindow *window);
 bool glbGetWindowPtr(const HWND hWnd, GlbWindow **pWindow);
 
+GlbImage glbLoadCopyrightImage()
+{
+    unsigned int texID;
+    glGenTextures(1, &texID);
+    glBindTexture(GL_TEXTURE_2D, texID);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
+    glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+    gluBuild2DMipmaps(GL_TEXTURE_2D, 3, 1400, 70, GL_BGR_EXT, GL_UNSIGNED_BYTE, gImage_copyright);
+    return texID;
+}
 
 GlbImage glbLoadImageFromOpencv(IplImage* pImage, bool bMipmap)
 {

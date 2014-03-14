@@ -41,12 +41,12 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>..\GlbRot;..\GlbCore;..\GlbKt;..\..\3rdparty\libxml2\include;..\..\3rdparty\opencv231\include;..\GlbTouch;..\..\3rdparty\iconv;$(IncludePath)</IncludePath>
+    <IncludePath>..\GlbRot;..\GlbCore;..\GlbKt;..\..\3rdparty\libxml2\include;..\..\3rdparty\opencv231\include;..\GlbTouch;..\..\3rdparty\iconv;..\..\3rdparty\OpenGL;$(IncludePath)</IncludePath>
     <LibraryPath>..\Debug;..\..\3rdparty\libxml2\lib;..\..\3rdparty\iconv;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>..\GlbRot;..\GlbCore;..\GlbKt;..\..\3rdparty\opencv231\include;..\GlbTouch;..\..\3rdparty\libxml2\include;..\..\3rdparty\iconv;$(IncludePath)</IncludePath>
+    <IncludePath>..\GlbRot;..\GlbCore;..\GlbKt;..\..\3rdparty\opencv231\include;..\GlbTouch;..\..\3rdparty\libxml2\include;..\..\3rdparty\iconv;..\..\3rdparty\OpenGL;$(IncludePath)</IncludePath>
     <LibraryPath>..\Release;..\..\3rdparty\libxml2\lib;..\..\3rdparty\iconv;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">

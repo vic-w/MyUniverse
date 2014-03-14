@@ -87,6 +87,7 @@
     <None Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="copyright.h" />
     <ClInclude Include="GlbCore.h" />
     <ClInclude Include="GlbCoreType.h" />
     <ClInclude Include="GlbType.h" />

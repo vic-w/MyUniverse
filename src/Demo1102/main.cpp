@@ -8,6 +8,8 @@
 #include "mode4.h"
 #include "mode5.h"
 
+#define CHECK_LICENSE
+
 //全局变量
 int nMode=1;
 bool bShowMenu=false;
@@ -150,11 +152,15 @@ bool invokeValidatorHelper()
 
 void main()
 {
+
+#ifdef CHECK_LICENSE
 	if (!invokeValidatorHelper())
 	{
 		MessageBox(NULL, TEXT("如果桌面上有unsigned.dat生成，请把文件发给我。"), TEXT("用户校验失败"), MB_OK|MB_ICONEXCLAMATION);
 		return;
 	}
+#endif
+
 	//printf("更新Xml的信息...\n");
 	//更新Xml的信息
 	/*if (!CCity::updateXml())
@@ -184,6 +190,7 @@ void main()
     GlbImage mode3_img = glbLoadImage("image\\mode3.png");    
     GlbImage mode4_img = glbLoadImage("image\\mode4.png");    
     GlbImage mode5_img = glbLoadImage("image\\mode5.png");    
+	GlbImage copyright_img = glbLoadCopyrightImage();
 
 	glbListenTouchSignal(mainWindow, 3333);//在3333端口监听TUIO信号
 
@@ -388,7 +395,18 @@ void main()
             }
 		} 
 
-    }
+#ifndef CHECK_LICENSE
+		//画copyright
+		static float copyright_lng = 0.0;
+		copyright_lng -= 0.1;
+		GlbPointGeo p_center(0, copyright_lng);
+		GlbPointGeo p_dir(90, 0);
+		glbDrawBelt(copyright_img, GlobeRotMat, mainWindow.m_calib, p_center, false, p_dir, false, false, 80, 6, LAYER_COPYRIGHT);
+		p_center.m_lng += 180;
+		glbDrawBelt(copyright_img, GlobeRotMat, mainWindow.m_calib, p_center, false, p_dir, false, false, 80, 6, LAYER_COPYRIGHT);
+#endif
+	
+	}
     while(glbUpdateWindow(mainWindow,10));
 
     glbReleaseImage(&earth_img);		//释放临时变量

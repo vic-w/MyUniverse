@@ -3,5 +3,7 @@
 
 namespace glb
 {
-
+	class Frame
+	{
+	};
 }

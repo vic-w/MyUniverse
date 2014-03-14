@@ -6,6 +6,7 @@
 #include "opencv.hpp"
 #include <afxwin.h>
 #include "GlbCoreType.h"
+#include "copyright.h"
 
 #ifdef GLBCORE_EXPORTS
 #define GLBCORE_API __declspec(dllexport)
@@ -23,6 +24,7 @@ GLBCORE_API int glbDetectScreen(vector<GlbRect> &screens);//检测屏幕的个�
 GLBCORE_API GlbImage glbLoadImage(const char* filename, GlbSize &size);    //载入图像（支持dds,jpg,bmp,png）
 GLBCORE_API GlbImage glbLoadImage(const char* filename);    //载入图像（支持dds,jpg,bmp,png）
 GLBCORE_API GlbImage glbLoadImageFromOpencv(IplImage* pImage, bool bMipmap = true);       //从OpenCV图像转换
+GLBCORE_API GlbImage glbLoadCopyrightImage();
 GLBCORE_API void glbReleaseImage(GlbImage* pImage);         //释放图像
 
 GLBCORE_API int glbCreateWindow(GlbWindow &window, GlbRect windowSize, char *calibFileName, bool fullscreen, bool mirror, HINSTANCE hInstance=0);
