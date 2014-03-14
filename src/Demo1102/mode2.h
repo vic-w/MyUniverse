@@ -22,6 +22,7 @@ public:
 		m_pWindow = pWindow;
         m_bShowDetail = false;
         m_nShowCity = 0;
+		cityView = 0;
 	}
     ~CMode2()
     {
@@ -48,6 +49,7 @@ public:
 	void reset()
 	{
         m_bShowDetail = false;
+		printf("citiview2 %d\n", cityView);
         glbReleaseImage(&cityView);
 	}
     void onClick(int layer)
@@ -56,7 +58,7 @@ public:
         {
             m_nShowCity = layer - LAYER_CITY_ICON_START;
 
-			char strLocalTime[64];
+			char strLocalTime[64]; 
 			sprintf(strLocalTime, "%s当地时间%s", m_cities[m_nShowCity].displayname,
                 m_cities[m_nShowCity].getLocalTimeString());    
 			if(txt2ImgHelper(4, strLocalTime))//2为模式

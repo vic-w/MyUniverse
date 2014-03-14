@@ -280,7 +280,11 @@ GlbImage glbLoadImage(const char* filename, GlbSize &size)  //载入图像（支
 
 void glbReleaseImage(GlbImage* pImage)            //释放图像
 {
-    glDeleteTextures( 1, pImage );
+	if((*pImage) != 0)
+	{
+		glDeleteTextures( 1, pImage );
+	}
+	*pImage = 0;
 }
 
 

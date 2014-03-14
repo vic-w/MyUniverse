@@ -46,6 +46,7 @@ public:
 		icon_back = glbLoadImage("image\\back.png");
 		status = MODE1_NONE;
         m_nImage = 1;
+		cityView = 0;
 	}
     ~CMode1()
     {

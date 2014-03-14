@@ -25,6 +25,7 @@ public:
 		m_pWindow = pWindow;
         m_bShowDetail = false;
         m_nShowCity = 0;
+		weather = 0;
 	}
     ~CMode5()
     {

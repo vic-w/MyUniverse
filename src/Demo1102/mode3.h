@@ -23,6 +23,7 @@ public:
 		m_pGlobeRotMat = pGlobeRotMat;
 		m_pWindow = pWindow;
         status = 0;
+		cityView = 0;
 	}
     ~CMode3()
     {

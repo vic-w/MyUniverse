@@ -26,6 +26,7 @@ public:
 		m_pWindow = pWindow;
         m_bClosed = false;
 		m_bIntersect = false;
+		cityView = 0;
 	}
     ~CMode4()
     {
