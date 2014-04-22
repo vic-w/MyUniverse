@@ -1,17 +1,20 @@
 #pragma once
+#include "glbCurveRect.h"
+#include "glbImage.h"
 
 namespace glb
 {
+
 	class Object
 	{
 	private:
-		int a;
-		int b;
+		CurveRect curveRect;
+		Image image;
 	public:
-		int A;
-		int B;
-	public:
-		Object();
-		int geta();
+		Object(CurveRect curveRect, const char* imageFilename);
+		virtual void Draw(const GlbRotmat &GlobeRotMat, const GlbCalib &calib, const int parentLayer);
 	};
+
+
+
 }

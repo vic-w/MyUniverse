@@ -2,13 +2,20 @@
 
 namespace glb
 {
-	int Object::geta()
+	Object::Object(CurveRect curveRect, const char* imageFilename): image(imageFilename)
 	{
-		return a;
+		this->curveRect.mode = curveRect.mode;
+		this->curveRect.bDirOnGlobe = curveRect.bDirOnGlobe;
+		this->curveRect.bHeadDirect = curveRect.bHeadDirect;
+		this->curveRect.bPointOnGlobe = curveRect.bPointOnGlobe;
+		this->curveRect.width = curveRect.width;
+		this->curveRect.height = curveRect.height;
+		this->curveRect.pGeo = curveRect.pGeo;
+		this->curveRect.pGeoDirect = curveRect.pGeoDirect;
 	}
-	
-	Object::Object()
+
+	void Object::Draw(const GlbRotmat &GlobeRotMat, const GlbCalib &calib, const int parentLayer)
 	{
-		a = 0;
+		image.Draw(GlobeRotMat, calib, curveRect, parentLayer+1);
 	}
 }

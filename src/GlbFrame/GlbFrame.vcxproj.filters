@@ -21,12 +21,30 @@
     <ClInclude Include="glbObject.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="glbContainer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="glbPlanet.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="glbCurveRect.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="glbImage.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GlbFrame.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="glbObject.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="glbImage.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="glbCurveRect.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

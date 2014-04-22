@@ -17,15 +17,17 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
+    <UseOfMfc>Dynamic</UseOfMfc>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
+    <UseOfMfc>Dynamic</UseOfMfc>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -39,9 +41,13 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <IncludePath>..\GlbRot;..\GlbCore;..\GlbKt;..\..\3rdparty\libxml2\include;..\..\3rdparty\opencv231\include;..\GlbTouch;..\..\3rdparty\iconv;..\..\3rdparty\OpenGL;$(IncludePath)</IncludePath>
+    <LibraryPath>..\Debug;..\..\3rdparty\libxml2\lib;..\..\3rdparty\iconv;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
+    <IncludePath>..\GlbRot;..\GlbCore;..\GlbKt;..\..\3rdparty\opencv231\include;..\GlbTouch;..\..\3rdparty\libxml2\include;..\..\3rdparty\iconv;..\..\3rdparty\OpenGL;$(IncludePath)</IncludePath>
+    <LibraryPath>..\Release;..\..\3rdparty\libxml2\lib;..\..\3rdparty\iconv;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -54,6 +60,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>GlbCore.lib;GlbRot.lib;GlbTouch.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -74,11 +81,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="glbContainer.h" />
+    <ClInclude Include="glbCurveRect.h" />
     <ClInclude Include="GlbFrame.h" />
+    <ClInclude Include="glbImage.h" />
     <ClInclude Include="glbObject.h" />
+    <ClInclude Include="glbPlanet.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="glbCurveRect.cpp" />
     <ClCompile Include="GlbFrame.cpp" />
+    <ClCompile Include="glbImage.cpp" />
     <ClCompile Include="glbObject.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
